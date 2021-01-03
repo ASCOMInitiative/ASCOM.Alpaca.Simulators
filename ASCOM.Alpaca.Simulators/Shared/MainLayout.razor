@@ -1,17 +1,25 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<div class="sidebar">
+    <NavMenu />
+</div>
 
-    <div class="main">
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+<div class="main">
+    <BlazoredToasts />
 
-        <div class="content px-4">
+    <div class="content px-1">
+        @if (ServerSettings.UseAuth)
+        {
+            <LoginControl />
+            <AuthorizeView>
+                <Authorized>
+                    @Body
+                </Authorized>
+            </AuthorizeView>
+        }
+        else
+        {
             @Body
-        </div>
+        }
     </div>
 </div>

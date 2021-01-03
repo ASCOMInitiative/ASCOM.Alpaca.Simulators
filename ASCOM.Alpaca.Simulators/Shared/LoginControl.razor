@@ -1,0 +1,62 @@
+﻿@using System.Web;
+
+@inject NavigationManager MyNavigationManager
+<fieldset>
+    <AuthorizeView>
+        <Authorized>
+
+            <b>Logged in as: @context.User.Identity.Name</b>
+
+            <a class="btn btn-primary"
+                href="/logout?returnUrl=/"
+                target="_top"
+                style="float: right;">Logout</a>
+        </Authorized>
+
+        <NotAuthorized>
+
+            <input type="text"
+                    placeholder="User Name"
+                    @bind="@Username" />
+
+            &nbsp;&nbsp;
+
+            <input type="password"
+                    placeholder="Password"
+                    @bind="@Password" />
+
+            &nbsp;&nbsp;
+
+            <button class="btn btn-primary" style="float: right;"
+                    @onclick="NavigateToLogin">
+                Login
+            </button>
+        </NotAuthorized>
+    </AuthorizeView>
+</fieldset>
+
+@code {
+
+    string Username = "";
+
+    string Password = "";
+
+    string Return
+    {
+        get
+        {
+            return new Uri(MyNavigationManager.Uri).LocalPath;
+        }
+    }
+
+    private string Encode(string param)
+
+    {
+        return HttpUtility.UrlEncode(param);
+    }
+
+    private void NavigateToLogin()
+    {
+        MyNavigationManager.NavigateTo($"/login?paramUsername={Encode(Username)}&paramPassword={Encode(Password)}&paramReturnUrl={Encode(Return)}", true);
+    }
+}
