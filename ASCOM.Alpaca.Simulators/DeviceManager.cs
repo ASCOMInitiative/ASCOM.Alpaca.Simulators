@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Alpaca.CoverCalibrator
+namespace ASCOM.Alpaca.Simulators
 {
     internal static class DeviceManager
     {
-        /*private readonly static Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1>();
+        private readonly static Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1>();
 
-
-        static DeviceManager()
+        /*static DeviceManager()
         {
             //Only one instance
             coverCalibratorV1s.Add(0,new ASCOMSimulators.CoverCalibratorSimulator(0, Logging.Log,
@@ -33,21 +32,23 @@ namespace Alpaca.CoverCalibrator
             }
         }
 
+        */
+
         internal static ASCOM.Standard.Interfaces.ICoverCalibratorV1 GetCoverCalibrator(int DeviceID)
         {
-            if(coverCalibratorV1s.ContainsKey(DeviceID))
+            /*if (coverCalibratorV1s.ContainsKey(DeviceID))
             {
                 return coverCalibratorV1s[DeviceID];
             }
             else
-            {
+            {*/
                 throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
-            }
+            //}
         }
 
         internal static List<ASCOM.Standard.Interfaces.ICoverCalibratorV1> GetCoverCalibrators()
         {
             return coverCalibratorV1s.Values.ToList();
-        }*/
+        }
     }
 }

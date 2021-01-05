@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="Authentication\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
   
 </Project>
