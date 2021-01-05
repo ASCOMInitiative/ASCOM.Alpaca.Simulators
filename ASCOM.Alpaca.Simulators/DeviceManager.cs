@@ -46,6 +46,11 @@ namespace ASCOM.Alpaca.Simulators
             //}
         }
 
+        internal static ASCOM.Standard.Interfaces.ITelescopeV3 GetTelescope (int DeviceID)
+        {
+            throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+        }
+
         internal static List<ASCOM.Standard.Interfaces.ICoverCalibratorV1> GetCoverCalibrators()
         {
             return coverCalibratorV1s.Values.ToList();
