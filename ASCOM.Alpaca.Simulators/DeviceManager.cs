@@ -46,11 +46,20 @@ namespace ASCOM.Alpaca.Simulators
             //}
         }
 
+        internal static ASCOM.Standard.Interfaces.IDomeV2 GetDome(int DeviceID)
+        {
+            throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+        }
+
         internal static ASCOM.Standard.Interfaces.IFocuserV3 GetFocuser(int DeviceID)
         {
             throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
         }
 
+        internal static ASCOM.Standard.Interfaces.IRotatorV3 GetRotator(int DeviceID)
+        {
+            throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+        }
 
         internal static ASCOM.Standard.Interfaces.ITelescopeV3 GetTelescope (int DeviceID)
         {

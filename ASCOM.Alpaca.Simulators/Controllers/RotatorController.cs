@@ -104,7 +104,10 @@ namespace ASCOM.Alpaca.Simulators
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                DeviceManager.GetRotator(DeviceNumber).Connected = Connected;
+                if (Connected || !ServerSettings.PreventRemoteDisconnects)
+                {
+                    DeviceManager.GetRotator(DeviceNumber).Connected = Connected;
+                }
                 return new Response() { ClientTransactionID = ClientTransactionID, ServerTransactionID = TransactionID };
             }
             catch (Exception ex)
