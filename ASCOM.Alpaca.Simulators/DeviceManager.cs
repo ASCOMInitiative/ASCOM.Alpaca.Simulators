@@ -71,6 +71,11 @@ namespace ASCOM.Alpaca.Simulators
             throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
         }
 
+        internal static ASCOM.Standard.Interfaces.ISwitchV2 GetSwitch(int DeviceID)
+        {
+            throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+        }
+
         internal static ASCOM.Standard.Interfaces.ITelescopeV3 GetTelescope (int DeviceID)
         {
             throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
