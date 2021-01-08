@@ -51,6 +51,11 @@ namespace ASCOM.Alpaca.Simulators
             throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
         }
 
+        internal static ASCOM.Standard.Interfaces.IFilterWheelV2 GetFilterWheel(int DeviceID)
+        {
+            throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+        }
+
         internal static ASCOM.Standard.Interfaces.IFocuserV3 GetFocuser(int DeviceID)
         {
             throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
