@@ -46,6 +46,11 @@ namespace ASCOM.Alpaca.Simulators
             //}
         }
 
+        internal static ASCOM.Standard.Interfaces.ICameraV3 GetCamera(int DeviceID)
+        {
+            throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+        }
+
         internal static ASCOM.Standard.Interfaces.IDomeV2 GetDome(int DeviceID)
         {
             throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
