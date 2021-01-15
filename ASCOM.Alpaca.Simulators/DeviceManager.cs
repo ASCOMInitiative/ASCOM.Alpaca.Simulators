@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ASCOM.Alpaca.Responses;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace ASCOM.Alpaca.Simulators
     {
         private readonly static Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1>();
 
-        /*static DeviceManager()
+        static DeviceManager()
         {
             //Only one instance
             coverCalibratorV1s.Add(0,new ASCOMSimulators.CoverCalibratorSimulator(0, Logging.Log,
@@ -32,18 +33,30 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        */
+        internal static List<AlpacaConfiguredDevice> GetDevices()
+        {
+            List<AlpacaConfiguredDevice> devices = new List<AlpacaConfiguredDevice>();
+
+            foreach(var cov in coverCalibratorV1s)
+            {
+                devices.Add((cov.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+            }
+
+
+            return devices;
+        }
+
 
         internal static ASCOM.Standard.Interfaces.ICoverCalibratorV1 GetCoverCalibrator(int DeviceID)
         {
-            /*if (coverCalibratorV1s.ContainsKey(DeviceID))
+            if (coverCalibratorV1s.ContainsKey(DeviceID))
             {
                 return coverCalibratorV1s[DeviceID];
             }
             else
-            {*/
+            {
                 throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
-            //}
+            }
         }
 
         internal static ASCOM.Standard.Interfaces.ICameraV3 GetCamera(int DeviceID)

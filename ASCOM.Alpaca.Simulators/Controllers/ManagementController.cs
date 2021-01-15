@@ -40,20 +40,10 @@ namespace ASCOM.Alpaca.Simulators
         [Route("management/v1/configureddevices")]
         public AlpacaConfiguredDevicesResponse ConfiguredDevices(int ClientID = -1, uint ClientTransactionID = 0)
         {
-            List<AlpacaConfiguredDevice> devices = new List<AlpacaConfiguredDevice>();
-            try
-            {
-                    devices.Add((DeviceManager.GetCoverCalibrator(0) as IAlpacaDevice).Configuration);
-            }
-            catch(Exception ex)
-            {
-                Logging.LogError(ex.Message);
-            }
-
             var TransactionID = ServerManager.ServerTransactionID;
             Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
 
-            return new AlpacaConfiguredDevicesResponse(ClientTransactionID, TransactionID, devices);
+            return new AlpacaConfiguredDevicesResponse(ClientTransactionID, TransactionID, DeviceManager.GetDevices());
         }
     }
 }
