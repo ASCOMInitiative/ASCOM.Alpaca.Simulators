@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocuserSimulator", "Focuser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObservingConditionsSimulator", "ObservingConditionsSimulator\ObservingConditionsSimulator.csproj", "{AB200ECD-5C24-4F46-B780-4349CD272A3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotatorSimulator", "RotatorSimulator\RotatorSimulator.csproj", "{2C4FFFDE-DD9E-4A2B-BFEB-3B0A2837A0DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{AB200ECD-5C24-4F46-B780-4349CD272A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB200ECD-5C24-4F46-B780-4349CD272A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB200ECD-5C24-4F46-B780-4349CD272A3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C4FFFDE-DD9E-4A2B-BFEB-3B0A2837A0DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C4FFFDE-DD9E-4A2B-BFEB-3B0A2837A0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C4FFFDE-DD9E-4A2B-BFEB-3B0A2837A0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C4FFFDE-DD9E-4A2B-BFEB-3B0A2837A0DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

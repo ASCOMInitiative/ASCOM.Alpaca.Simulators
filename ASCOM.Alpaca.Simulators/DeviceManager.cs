@@ -13,6 +13,7 @@ namespace ASCOM.Alpaca.Simulators
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2> filterWheelV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFocuserV3> focuserV3s = new Dictionary<int, ASCOM.Standard.Interfaces.IFocuserV3>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IObservingConditions> observingConditions = new Dictionary<int, ASCOM.Standard.Interfaces.IObservingConditions>();
+        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IRotatorV3> rotatorV3s = new Dictionary<int, ASCOM.Standard.Interfaces.IRotatorV3>();
 
         static DeviceManager()
         {
@@ -28,6 +29,9 @@ namespace ASCOM.Alpaca.Simulators
 
             observingConditions.Add(0, new ASCOM.Simulators.ObservingConditions(0, Logging.Log,
                 new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "ObservingConditions", 0)));
+
+            rotatorV3s.Add(0, new ASCOM.Simulators.Rotator(0, Logging.Log,
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Rotator", 0)));
         }
 
         internal static void Reset()
@@ -65,6 +69,11 @@ namespace ASCOM.Alpaca.Simulators
             }
 
             foreach (var dev in observingConditions)
+            {
+                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+            }
+
+            foreach (var dev in rotatorV3s)
             {
                 devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
             }
@@ -133,7 +142,14 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static ASCOM.Standard.Interfaces.IRotatorV3 GetRotator(int DeviceID)
         {
-            throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+            if (rotatorV3s.ContainsKey(DeviceID))
+            {
+                return rotatorV3s[DeviceID];
+            }
+            else
+            {
+                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+            }
         }
 
         internal static ASCOM.Standard.Interfaces.ISafetyMonitor GetSafetyMonitor(int DeviceID)

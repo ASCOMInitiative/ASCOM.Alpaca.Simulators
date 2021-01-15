@@ -24,6 +24,7 @@
     <ProjectReference Include="..\FilterWheelSimulator\FilterWheelSimulator.csproj" />
     <ProjectReference Include="..\FocuserSimulator\FocuserSimulator.csproj" />
     <ProjectReference Include="..\ObservingConditionsSimulator\ObservingConditionsSimulator.csproj" />
+    <ProjectReference Include="..\RotatorSimulator\RotatorSimulator.csproj" />
   </ItemGroup>
   
 </Project>
