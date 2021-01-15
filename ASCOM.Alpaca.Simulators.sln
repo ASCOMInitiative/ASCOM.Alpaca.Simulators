@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterWheelSimulator", "Fil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocuserSimulator", "FocuserSimulator\FocuserSimulator.csproj", "{7364A79D-21CC-49D9-8380-C5A718E8F6BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObservingConditionsSimulator", "ObservingConditionsSimulator\ObservingConditionsSimulator.csproj", "{AB200ECD-5C24-4F46-B780-4349CD272A3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{7364A79D-21CC-49D9-8380-C5A718E8F6BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7364A79D-21CC-49D9-8380-C5A718E8F6BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7364A79D-21CC-49D9-8380-C5A718E8F6BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB200ECD-5C24-4F46-B780-4349CD272A3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB200ECD-5C24-4F46-B780-4349CD272A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB200ECD-5C24-4F46-B780-4349CD272A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB200ECD-5C24-4F46-B780-4349CD272A3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
