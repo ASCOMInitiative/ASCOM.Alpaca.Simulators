@@ -4,6 +4,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Drawing;
 using ASCOM.Standard.Interfaces;
+using System.Timers;
 
 namespace ASCOM.Simulators
 {
@@ -72,6 +73,11 @@ namespace ASCOM.Simulators
 
         #endregion
 
+        static Timer timer = new Timer(100)
+        {
+            AutoReset = true,
+        };
+
         //
         // Constructor - initialize state
         //
@@ -83,6 +89,13 @@ namespace ASCOM.Simulators
             m_aiFocusOffsets = new int[8];
             m_acFilterColours = new Color[8];
 
+            timer.Elapsed += OnTimedEvent;
+            timer.Start();
+        }
+
+        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            UpdateState();
         }
 
         #region Properties and Methods
