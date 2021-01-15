@@ -11,6 +11,7 @@ namespace ASCOM.Alpaca.Simulators
     {
         private readonly static Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2> filterWheelV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2>();
+        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFocuserV3> focuserV3s = new Dictionary<int, ASCOM.Standard.Interfaces.IFocuserV3>();
 
         static DeviceManager()
         {
@@ -20,6 +21,9 @@ namespace ASCOM.Alpaca.Simulators
 
             filterWheelV2s.Add(0, new ASCOM.Simulators.FilterWheel(0, Logging.Log,
                 new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "FilterWheel", 0)));
+
+            focuserV3s.Add(0, new ASCOM.Simulators.Focuser(0, Logging.Log,
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Focuser", 0)));
         }
 
         internal static void Reset()
@@ -51,6 +55,10 @@ namespace ASCOM.Alpaca.Simulators
                 devices.Add((filter.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
             }
 
+            foreach (var dev in focuserV3s)
+            {
+                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+            }
 
             return devices;
         }
@@ -92,7 +100,14 @@ namespace ASCOM.Alpaca.Simulators
         
         internal static ASCOM.Standard.Interfaces.IFocuserV3 GetFocuser(int DeviceID)
         {
-            throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+            if (focuserV3s.ContainsKey(DeviceID))
+            {
+                return focuserV3s[DeviceID];
+            }
+            else
+            {
+                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+            }
         }
 
         internal static ASCOM.Standard.Interfaces.IObservingConditions GetObservingConditions(int DeviceID)
