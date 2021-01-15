@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoverCalibratorSimulator\CoverCalibratorSimulator.csproj" />
+    <ProjectReference Include="..\FilterWheelSimulator\FilterWheelSimulator.csproj" />
   </ItemGroup>
   
 </Project>

@@ -10,12 +10,16 @@ namespace ASCOM.Alpaca.Simulators
     internal static class DeviceManager
     {
         private readonly static Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1>();
+        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2> filterWheelV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2>();
 
         static DeviceManager()
         {
             //Only one instance
             coverCalibratorV1s.Add(0,new ASCOMSimulators.CoverCalibratorSimulator(0, Logging.Log,
                 new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "CoverCalibrator", 0)));
+
+            filterWheelV2s.Add(0, new ASCOM.Simulators.FilterWheel(0, Logging.Log,
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "FilterWheel", 0)));
         }
 
         internal static void Reset()
@@ -40,6 +44,11 @@ namespace ASCOM.Alpaca.Simulators
             foreach(var cov in coverCalibratorV1s)
             {
                 devices.Add((cov.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+            }
+
+            foreach (var filter in filterWheelV2s)
+            {
+                devices.Add((filter.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
             }
 
 
@@ -71,7 +80,14 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static ASCOM.Standard.Interfaces.IFilterWheelV2 GetFilterWheel(int DeviceID)
         {
-            throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+            if (filterWheelV2s.ContainsKey(DeviceID))
+            {
+                return filterWheelV2s[DeviceID];
+            }
+            else
+            {
+                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+            }
         }
         
         internal static ASCOM.Standard.Interfaces.IFocuserV3 GetFocuser(int DeviceID)
