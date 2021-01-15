@@ -1,4 +1,4 @@
-﻿using ASCOM.Standard.Discovery;
+using ASCOM.Standard.Discovery;
 using System;
 using System.Collections.Generic;
 using System.Linq;

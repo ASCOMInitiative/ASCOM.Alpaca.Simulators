@@ -1,0 +1,503 @@
+﻿@page "/setup"
+
+@inject IToastService toastService
+@inject NavigationManager NavManager
+
+<fieldset>
+    <legend>Server Settings</legend>
+    <p>Version @ServerVersion</p>
+    <div class="grid-container-two">
+        <div class="grid-item-right">
+            <span>Server Location:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="text" @bind="Location" style="width:21ch;">
+        </div>
+        <div class="grid-item-right">
+            <span>Allow Remote Access:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox" @bind="RemoteAccess">
+        </div>
+
+        <div class="grid-item-right">
+            <span>Server (Alpaca) Port:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="number" @bind="ServerPort" min="1" max="65535" style="width:20ch;">
+        </div>
+
+        <div class="grid-item-right">
+            <span>Open Browser on Start:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox" @bind="StartBrowser">
+        </div>
+
+        <div class="grid-item-right">
+        </div>
+        <div class="grid-item-right">
+            <button @onclick="SaveServerSettings" style="min-width:12ch; vertical-align:middle;">Save</button>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>Bound Addresses</legend>
+
+    <table>
+        <tr>
+            <th>Addresses server is listening on.</th>
+        </tr>
+
+        @if (ServerSettings.AllowRemoteAccess)
+        {
+            try
+            {
+                @foreach (var address in ASCOM.Alpaca.Simulators.Discovery.DiscoveryManager.AdapterAddress)
+                {
+                    <tr>
+                        <td>@address</td>
+                    </tr>
+                }
+            }
+            catch
+            {
+
+            }
+        }
+        else
+        {
+            @foreach (var address in Startup.Addresses)
+            {
+                <tr>
+                    <td>@address</td>
+                </tr>
+            }
+        }
+
+    </table>
+</fieldset>
+
+<fieldset>
+    <legend>Driver Settings</legend>
+    <div class="grid-container-two">
+        <div class="grid-item-right">
+            <span>Prevent Disconnects:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox" @bind="PreventRemoteDisconnects">
+        </div>
+        <div class="grid-item-right">
+            <span>Prevent Disposes:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox" @bind="PreventRemoteDisposes">
+        </div>
+        <div class="grid-item-right">
+        </div>
+        <div class="grid-item-right">
+            <button @onclick="SaveDriverSettings" style="min-width:12ch; vertical-align:middle;">Save</button>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>Alpaca Discovery Settings</legend>
+    <div class="grid-container-two">
+        <div class="grid-item-right">
+            <span>Allow Discovery:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox" @bind="Discovery">
+        </div>
+
+        <div class="grid-item-right">
+            <span>Discovery Port:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="number" @bind="DiscoveryPort" min="1" max="65535" style="width:20ch;">
+        </div>
+
+        <div class="grid-item-right">
+            <span>Respond to localhost on loopback only:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox" @bind="LocalHostOnlyOnHost">
+        </div>
+
+        <div class="grid-item-right">
+        </div>
+        <div class="grid-item-right">
+            <button @onclick="SaveDiscovery" style="min-width:12ch; vertical-align:middle;">Save</button>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>Security Settings</legend>
+    <div class="grid-container-two">
+        <div class="grid-item-right">
+            <span>Require Authorization:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox" @bind="RequireAuthorization">
+        </div>
+
+        <div class="grid-item-right">
+            <span>User Name:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="text" @bind="UserName" style="width:21ch;" disabled="@DisableAuth">
+        </div>
+
+        <div class="grid-item-right">
+            <span>Password:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="password" @bind="Password" style="width:21ch;" disabled="@DisableAuth">
+        </div>
+
+        <div class="grid-item-right">
+            <span>Repeat:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="password" @bind="Password2" style="width:21ch;" disabled="@DisableAuth">
+        </div>
+
+        <div class="grid-item-right">
+        </div>
+        <div class="grid-item-right">
+            <button @onclick="SaveSecuritySettings" style="min-width:12ch; vertical-align:middle;">Save</button>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>Log Settings</legend>
+    <p>The logging system will log out at or above the specified level.</p>
+    <div class="grid-container-two">
+        <div class="grid-item-right">
+            <span>Log Level:</span>
+        </div>
+        <div class="grid-item-left">
+            <select @bind="LoggingLevel">
+                <option value="@ASCOM.Standard.Interfaces.LogLevel.Verbose">Verbose</option>
+                <option value="@ASCOM.Standard.Interfaces.LogLevel.Debug">Debug</option>
+                <option value="@ASCOM.Standard.Interfaces.LogLevel.Information">Information</option>
+                <option value="@ASCOM.Standard.Interfaces.LogLevel.Warning">Warning</option>
+                <option value="@ASCOM.Standard.Interfaces.LogLevel.Error">Error</option>
+                <option value="@ASCOM.Standard.Interfaces.LogLevel.Fatal">Fatal</option>
+            </select>
+            <button @onclick="LoggingLevelChanged" style="min-width:12ch; vertical-align:middle;">Save</button>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>Run OpenAPI / Swagger</legend>
+    <p>The OpenAPI / Swagger integration allows for the Alpaca API documentation to be shown by this server. It also allows calls to be made directly in the browser. Note that this will apply on the next time this driver runs.</p>
+    <div class="grid-container-two">
+        <div class="grid-item-right">
+            <span>Run OpenAPI:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox" @bind="RunSwagger">
+            <button @onclick="SaveSwaggerSettings" style="min-width:12ch; vertical-align:middle;">Save</button>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>Shutdown Driver</legend>
+    <div class="grid-container-two">
+        <div class="grid-item-right">
+            <span>Shutdown:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox"
+                   @bind="EnableShutdown">
+            <button @onclick="Shutdown" style="min-width:12ch; vertical-align:middle;" disabled="@AllowShutdown">Shutdown</button>
+        </div>
+    </div>
+</fieldset>
+
+@code {
+
+    bool Discovery
+    {
+        get;
+        set;
+    } = ServerSettings.AllowDiscovery;
+
+    UInt16 DiscoveryPort
+    {
+        get;
+        set;
+    } = ServerSettings.DiscoveryPort;
+
+    bool LocalHostOnlyOnHost
+    {
+        get;
+        set;
+    } = ServerSettings.LocalRespondOnlyToLocalHost;
+
+    bool RemoteAccess
+    {
+        get;
+        set;
+    } = ServerSettings.AllowRemoteAccess;
+
+    UInt16 ServerPort
+    {
+        get;
+        set;
+    } = ServerSettings.ServerPort;
+
+    bool StartBrowser
+    {
+        get;
+        set;
+    } = ServerSettings.AutoStartBrowser;
+
+    bool EnableShutdown
+    {
+        get;
+        set;
+    } = false;
+
+    string Location
+    {
+        get;
+        set;
+    } = ServerSettings.Location;
+
+    bool AllowShutdown
+    {
+        get
+        {
+            return !EnableShutdown;
+        }
+    }
+
+    bool PreventRemoteDisconnects
+    {
+        get;
+        set;
+    } = ServerSettings.PreventRemoteDisconnects;
+
+    bool PreventRemoteDisposes
+    {
+        get;
+        set;
+    } = ServerSettings.PreventRemoteDisposes;
+
+    bool RequireAuthorization
+    {
+        get;
+        set;
+    } = ServerSettings.UseAuth;
+
+    bool DisableAuth => !RequireAuthorization;
+
+    string UserName
+    {
+        get;
+        set;
+    } = ServerSettings.UserName;
+
+    ASCOM.Standard.Interfaces.LogLevel LoggingLevel
+    {
+        get;
+        set;
+    } = ServerSettings.LoggingLevel;
+
+
+    string Password
+    {
+        get;
+        set;
+    }
+
+    string Password2
+    {
+        get;
+        set;
+    }
+
+    bool RunSwagger
+    {
+        get;
+        set;
+    } = ServerSettings.RunSwagger;
+
+    void SaveDiscovery()
+    {
+        try
+        {
+            ServerSettings.AllowDiscovery = Discovery;
+
+            ServerSettings.DiscoveryPort = DiscoveryPort;
+
+            ServerSettings.LocalRespondOnlyToLocalHost = LocalHostOnlyOnHost;
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void SaveServerSettings()
+    {
+        try
+        {
+            bool SettingsChanged = false;
+
+            if (ServerSettings.AllowRemoteAccess != RemoteAccess)
+            {
+                ServerSettings.AllowRemoteAccess = RemoteAccess;
+                SettingsChanged = true;
+            }
+
+            if (ServerSettings.ServerPort != ServerPort)
+            {
+                ServerSettings.ServerPort = ServerPort;
+                SettingsChanged = true;
+            }
+
+            ServerSettings.Location = Location;
+
+            ServerSettings.AutoStartBrowser = StartBrowser;
+
+            if (SettingsChanged) //If any core settings change call a restart.
+            {
+                Program.Main(null);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void SaveDriverSettings()
+    {
+        try
+        {
+            ServerSettings.PreventRemoteDisconnects = PreventRemoteDisconnects;
+            ServerSettings.PreventRemoteDisposes = PreventRemoteDisposes;
+
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void LoggingLevelChanged()
+    {
+        try
+        {
+            ServerSettings.LoggingLevel = LoggingLevel;
+        }
+        catch(Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void SaveSecuritySettings()
+    {
+        try
+        {
+            if (RequireAuthorization)
+            {
+                if (UserName == null || UserName == string.Empty)
+                {
+                    DisplayWarning("You must set a User Name");
+                    return;
+                }
+
+                if (Password == null || Password == string.Empty)
+                {
+                    DisplayWarning("You must set a Password");
+                    return;
+                }
+
+                if (Password != Password2)
+                {
+                    DisplayWarning("Passwords do not match");
+                    return;
+                }
+
+                ServerSettings.UserName = UserName;
+                ServerSettings.Password = Password;
+                ServerSettings.UseAuth = RequireAuthorization;
+
+                NavManager.NavigateTo("/");
+            }
+            else
+            {
+                ServerSettings.UseAuth = RequireAuthorization;
+            }
+
+
+            DisplaySuccess("Security Saved!");
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+
+    void SaveSwaggerSettings()
+    {
+        try
+        {
+            ServerSettings.RunSwagger = RunSwagger;
+
+            DisplaySuccess("Open API Settings saved!");
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void Shutdown()
+    {
+        try
+        {
+            Startup.Lifetime.StopApplication();
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    public void DisplayError(string message)
+    {
+        toastService.ShowError(message);
+    }
+
+    public void DisplayWarning(string message)
+    {
+        toastService.ShowWarning(message);
+    }
+
+    public void DisplaySuccess(string message)
+    {
+        toastService.ShowSuccess(message);
+    }
+
+    string ServerVersion
+    {
+        get
+        {
+            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+        }
+    }
+}

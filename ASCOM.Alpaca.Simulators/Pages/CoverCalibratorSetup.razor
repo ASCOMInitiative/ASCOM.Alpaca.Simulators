@@ -1,0 +1,180 @@
+﻿@page "/setup/v1/covercalibrator/{InstanceID:int}/setup"
+
+@inject IToastService toastService
+
+<body>
+    <fieldset>
+        <legend>Calibrator Settings</legend>
+        <div class="grid-container-two">
+            <div class="grid-item-right">
+                <span>Max Brightness:</span>
+            </div>
+            <div class="grid-item-left">
+                <input type="number" class="number-narrow"
+                       min="1" max="2147483647" @bind="@MaxBrightness">
+            </div>
+
+            <div class="grid-item-right">
+                <span>Stabilization Time:</span>
+            </div>
+            <div class="grid-item-left">
+                <input type="number" step="0.1" class="number-narrow"
+                       min="0.0" max="100.0" @bind="CalStabTime">
+            </div>
+
+            <div class="grid-item-right">
+                <span>Calibrator Status:</span>
+            </div>
+            <div class="grid-item-left">
+                <select id="devicetype" @bind="CalStatus" style="width:100%;max-width:21ch;">
+                    @foreach (var calStatus in (ASCOM.Standard.Interfaces.CalibratorStatus[])Enum.GetValues(typeof(ASCOM.Standard.Interfaces.CalibratorStatus)))
+                    {
+                        <option value="@calStatus">@calStatus.ToString()</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Cover Settings</legend>
+        <div class="grid-container-two">
+
+            <div class="grid-item-right">
+                <span>Opening Time:</span>
+            </div>
+            <div class="grid-item-left">
+                <input type="number" step="0.1" class="number-narrow"
+                       min="0.0" max="100.0" @bind="OpeningTime">
+            </div>
+
+            <div class="grid-item-right">
+                <span>Cover Status:</span>
+            </div>
+            <div class="grid-item-left">
+                <select id="devicetype" @bind="CoverStatus" style="width:100%;max-width:21ch;">
+                    @foreach (var coverStatus in (ASCOM.Standard.Interfaces.CoverStatus[])Enum.GetValues(typeof(ASCOM.Standard.Interfaces.CoverStatus)))
+                    {
+                        <option value="@coverStatus">@coverStatus.ToString()</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Settings</legend>
+        <div class="grid-container-two">
+
+            <div class="grid-item-left">
+                <button @onclick="Reset">Reset</button>
+            </div>
+            <div class="grid-item-right">
+                <button @onclick="SaveDeviceSettings">Save</button>
+            </div>
+        </div>
+    </fieldset>
+</body>
+
+@code {
+    [Parameter]
+    public int InstanceID { get; set; }
+
+    /// <summary>
+    /// This access the device type not the interface to allow the device specific settigns to be accessed.
+    /// </summary>
+    private ASCOMSimulators.CoverCalibratorSimulator Device
+    {
+        get
+        {
+            return DeviceManager.GetCoverCalibrator(InstanceID) as ASCOMSimulators.CoverCalibratorSimulator;
+        }
+    }
+
+    public int MaxBrightness
+    {
+        get
+        {
+            return Device.MaxBrightnessValue;
+        }
+        set
+        {
+            Device.MaxBrightnessValue = value;
+        }
+    }
+
+    public double CalStabTime
+    {
+        get
+        {
+            return Device.CalibratorStablisationTimeValue;
+        }
+        set
+        {
+            Device.CalibratorStablisationTimeValue = value;
+        }
+    }
+
+    public ASCOM.Standard.Interfaces.CalibratorStatus CalStatus
+    {
+        get
+        {
+            return Device.CalibratorStateInitialisationValue;
+        }
+        set
+        {
+            Device.CalibratorStateInitialisationValue = value;
+        }
+    }
+
+    public double OpeningTime
+    {
+        get
+        {
+            return Device.CoverOpeningTimeValue;
+        }
+        set
+        {
+            Device.CoverOpeningTimeValue = value;
+        }
+    }
+
+    public ASCOM.Standard.Interfaces.CoverStatus CoverStatus
+    {
+        get
+        {
+            return Device.CoverStateInitialisationValue;
+        }
+        set
+        {
+            Device.CoverStateInitialisationValue = value;
+        }
+    }
+
+    public void SaveDeviceSettings()
+    {
+        try
+        {
+            Device.WriteProfile();
+
+            toastService.ShowSuccess("Settings Saved");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+
+    public void Reset()
+    {
+        try
+        {
+            Device.ResetSettings();
+
+            toastService.ShowSuccess("Settings Reset");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+}

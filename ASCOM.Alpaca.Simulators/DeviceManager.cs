@@ -1,4 +1,4 @@
-﻿using ASCOM.Alpaca.Responses;
+using ASCOM.Alpaca.Responses;
 using System;
 using System.Collections;
 using System.Collections.Generic;
