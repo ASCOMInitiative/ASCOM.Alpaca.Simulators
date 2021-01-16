@@ -9,13 +9,14 @@ namespace ASCOM.Alpaca.Simulators
 {
     internal static class DeviceManager
     {
-        private readonly static Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1>();
+        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IDomeV2> domeV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IDomeV2>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2> filterWheelV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFocuserV3> focuserV3s = new Dictionary<int, ASCOM.Standard.Interfaces.IFocuserV3>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IObservingConditions> observingConditions = new Dictionary<int, ASCOM.Standard.Interfaces.IObservingConditions>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IRotatorV3> rotatorV3s = new Dictionary<int, ASCOM.Standard.Interfaces.IRotatorV3>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ISafetyMonitor> safetyMonitors = new Dictionary<int, ASCOM.Standard.Interfaces.ISafetyMonitor>();
+        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ISwitchV2> switchV2s = new Dictionary<int, ASCOM.Standard.Interfaces.ISwitchV2>();
 
         static DeviceManager()
         {
@@ -39,7 +40,10 @@ namespace ASCOM.Alpaca.Simulators
                 new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Rotator", 0)));
 
             safetyMonitors.Add(0, new ASCOM.Simulators.SafetyMonitor(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "SafetyMonitor", 0)));          
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "SafetyMonitor", 0)));
+
+            switchV2s.Add(0, new ASCOM.Simulators.Switch(0, Logging.Log,
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Switch", 0)));
         }
 
         internal static void Reset()
@@ -92,6 +96,11 @@ namespace ASCOM.Alpaca.Simulators
             }
 
             foreach (var dev in safetyMonitors)
+            {
+                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+            }
+
+            foreach (var dev in switchV2s)
             {
                 devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
             }
@@ -191,7 +200,14 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static ASCOM.Standard.Interfaces.ISwitchV2 GetSwitch(int DeviceID)
         {
-            throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+            if (switchV2s.ContainsKey(DeviceID))
+            {
+                return switchV2s[DeviceID];
+            }
+            else
+            {
+                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+            }
         }
 
         internal static ASCOM.Standard.Interfaces.ITelescopeV3 GetTelescope (int DeviceID)

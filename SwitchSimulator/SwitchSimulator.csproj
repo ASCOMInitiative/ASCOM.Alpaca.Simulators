@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ASCOM.Exceptions" Version="6.5.1" />
+    <PackageReference Include="ASCOM.Standard.Types" Version="1.0.0-alpha12" />
+  </ItemGroup>
+
+</Project>

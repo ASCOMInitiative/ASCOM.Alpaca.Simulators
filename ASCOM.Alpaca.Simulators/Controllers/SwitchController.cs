@@ -301,7 +301,9 @@ namespace ASCOM.Alpaca.Simulators
             }
             catch (Exception ex)
             {
-                return ResponseHelpers.ExceptionResponseBuilder<StringResponse>(ex, ClientTransactionID, TransactionID);
+                var temp = ResponseHelpers.ExceptionResponseBuilder<StringResponse>(ex, ClientTransactionID, TransactionID);
+                temp.Value = string.Empty;
+                return temp;
             }
         }
 
@@ -317,7 +319,9 @@ namespace ASCOM.Alpaca.Simulators
             }
             catch (Exception ex)
             {
-                return ResponseHelpers.ExceptionResponseBuilder<StringResponse>(ex, ClientTransactionID, TransactionID);
+                var temp = ResponseHelpers.ExceptionResponseBuilder<StringResponse>(ex, ClientTransactionID, TransactionID);
+                temp.Value = string.Empty;
+                return temp;
             }
         }
 
