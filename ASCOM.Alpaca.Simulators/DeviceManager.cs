@@ -10,6 +10,7 @@ namespace ASCOM.Alpaca.Simulators
     internal static class DeviceManager
     {
         private readonly static Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1>();
+        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IDomeV2> domeV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IDomeV2>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2> filterWheelV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFocuserV3> focuserV3s = new Dictionary<int, ASCOM.Standard.Interfaces.IFocuserV3>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IObservingConditions> observingConditions = new Dictionary<int, ASCOM.Standard.Interfaces.IObservingConditions>();
@@ -20,6 +21,9 @@ namespace ASCOM.Alpaca.Simulators
             //Only one instance
             coverCalibratorV1s.Add(0,new ASCOMSimulators.CoverCalibratorSimulator(0, Logging.Log,
                 new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "CoverCalibrator", 0)));
+
+            domeV2s.Add(0, new ASCOM.Simulators.Dome(0, Logging.Log,
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Dome", 0)));
 
             filterWheelV2s.Add(0, new ASCOM.Simulators.FilterWheel(0, Logging.Log,
                 new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "FilterWheel", 0)));
@@ -56,6 +60,11 @@ namespace ASCOM.Alpaca.Simulators
             foreach(var cov in coverCalibratorV1s)
             {
                 devices.Add((cov.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+            }
+
+            foreach (var dev in domeV2s)
+            {
+                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
             }
 
             foreach (var filter in filterWheelV2s)
@@ -101,7 +110,14 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static ASCOM.Standard.Interfaces.IDomeV2 GetDome(int DeviceID)
         {
-            throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+            if (domeV2s.ContainsKey(DeviceID))
+            {
+                return domeV2s[DeviceID];
+            }
+            else
+            {
+                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+            }
         }
 
         internal static ASCOM.Standard.Interfaces.IFilterWheelV2 GetFilterWheel(int DeviceID)

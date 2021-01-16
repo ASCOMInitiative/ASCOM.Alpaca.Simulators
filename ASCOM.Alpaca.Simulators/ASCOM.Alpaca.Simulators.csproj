@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoverCalibratorSimulator\CoverCalibratorSimulator.csproj" />
+    <ProjectReference Include="..\DomeSimulator\DomeSimulator.csproj" />
     <ProjectReference Include="..\FilterWheelSimulator\FilterWheelSimulator.csproj" />
     <ProjectReference Include="..\FocuserSimulator\FocuserSimulator.csproj" />
     <ProjectReference Include="..\ObservingConditionsSimulator\ObservingConditionsSimulator.csproj" />
