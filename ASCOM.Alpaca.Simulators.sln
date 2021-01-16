@@ -21,6 +21,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SafetyMonitorSimulator", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchSimulator", "SwitchSimulator\SwitchSimulator.csproj", "{6DD00D19-BE31-4C79-8D22-6C41CB0608C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelescopeSimulator", "TelescopeSimulator\TelescopeSimulator.csproj", "{A8B888F5-789F-4098-8596-418816D60912}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsBase.Vector", "WindowsBase.Vector\WindowsBase.Vector\WindowsBase.Vector.csproj", "{2535B18B-4C8F-4AD4-BF4A-15F379FC4B43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +67,14 @@ Global
 		{6DD00D19-BE31-4C79-8D22-6C41CB0608C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DD00D19-BE31-4C79-8D22-6C41CB0608C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DD00D19-BE31-4C79-8D22-6C41CB0608C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8B888F5-789F-4098-8596-418816D60912}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8B888F5-789F-4098-8596-418816D60912}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8B888F5-789F-4098-8596-418816D60912}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8B888F5-789F-4098-8596-418816D60912}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2535B18B-4C8F-4AD4-BF4A-15F379FC4B43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2535B18B-4C8F-4AD4-BF4A-15F379FC4B43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2535B18B-4C8F-4AD4-BF4A-15F379FC4B43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2535B18B-4C8F-4AD4-BF4A-15F379FC4B43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
