@@ -26,6 +26,7 @@
     <ProjectReference Include="..\FocuserSimulator\FocuserSimulator.csproj" />
     <ProjectReference Include="..\ObservingConditionsSimulator\ObservingConditionsSimulator.csproj" />
     <ProjectReference Include="..\RotatorSimulator\RotatorSimulator.csproj" />
+    <ProjectReference Include="..\SafetyMonitorSimulator\SafetyMonitorSimulator.csproj" />
   </ItemGroup>
   
 </Project>
