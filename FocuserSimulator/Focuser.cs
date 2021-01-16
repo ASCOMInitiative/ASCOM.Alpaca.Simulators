@@ -22,9 +22,6 @@ namespace ASCOM.Simulators
     /// ASCOM Focuser Driver for a Focuser.
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
-    [Guid("24C040F2-2FA5-4DA4-B87B-6C1101828D2A")]
-    [ClassInterface(ClassInterfaceType.None)]
-    [ComVisible(true)]
     public class Focuser : IFocuserV3, IDisposable, IAlpacaDevice
     {
         #region Constants
