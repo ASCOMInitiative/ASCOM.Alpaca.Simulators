@@ -309,6 +309,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/biny")]
         public IntResponse BinY(int DeviceNumber, int ClientID = -1, uint ClientTransactionID = 0)
@@ -351,7 +352,7 @@ namespace ASCOM.Alpaca.Simulators
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new IntResponse(ClientTransactionID, TransactionID, (int) DeviceManager.GetCamera(DeviceNumber).CameraState);
+                return new IntResponse(ClientTransactionID, TransactionID, (int)DeviceManager.GetCamera(DeviceNumber).CameraState);
             }
             catch (Exception ex)
             {
@@ -528,7 +529,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/cooleron")]
         public Response CoolerOn(int DeviceNumber, [FromForm] bool cooleron, [FromForm] int ClientID = -1, [FromForm] uint ClientTransactionID = 0)
-        { 
+        {
             var TransactionID = ServerManager.ServerTransactionID;
             try
             {
@@ -785,8 +786,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        /*
-        [HttpGet]
+        /*[HttpGet]
         [Route(APIRoot + "{DeviceNumber}/imagearray")]
         public Image ImageArray(int DeviceNumber, int ClientID = -1, uint ClientTransactionID = 0)
         {
@@ -816,8 +816,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 return ResponseHelpers.ExceptionResponseBuilder<DoubleResponse>(ex, ClientTransactionID, TransactionID);
             }
-        }
-        */
+        }*/
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/imageready")]
@@ -1311,6 +1310,41 @@ namespace ASCOM.Alpaca.Simulators
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
 
                 DeviceManager.GetCamera(DeviceNumber).StartY = (short)starty;
+
+                return new Response() { ClientTransactionID = ClientTransactionID, ServerTransactionID = TransactionID };
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelpers.ExceptionResponseBuilder<Response>(ex, ClientTransactionID, TransactionID);
+            }
+        }
+
+        [HttpGet]
+        [Route(APIRoot + "{DeviceNumber}/SubExposureDuration")]
+        public DoubleResponse SubExposureDuration(int DeviceNumber, int ClientID = -1, uint ClientTransactionID = 0)
+        {
+            var TransactionID = ServerManager.ServerTransactionID;
+            try
+            {
+                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
+                return new DoubleResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).SubExposureDuration);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelpers.ExceptionResponseBuilder<DoubleResponse>(ex, ClientTransactionID, TransactionID);
+            }
+        }
+
+        [HttpPut]
+        [Route(APIRoot + "{DeviceNumber}/subexposureduration")]
+        public Response SubExposureDuration(int DeviceNumber, [FromForm] double SubExposureDuration, [FromForm] int ClientID = -1, [FromForm] uint ClientTransactionID = 0)
+        {
+            var TransactionID = ServerManager.ServerTransactionID;
+            try
+            {
+                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
+
+                DeviceManager.GetCamera(DeviceNumber).SubExposureDuration = SubExposureDuration;
 
                 return new Response() { ClientTransactionID = ClientTransactionID, ServerTransactionID = TransactionID };
             }

@@ -19,11 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomeSimulator", "DomeSimula
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SafetyMonitorSimulator", "SafetyMonitorSimulator\SafetyMonitorSimulator.csproj", "{445EB98A-BDB9-404B-9255-DE10456CADAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchSimulator", "SwitchSimulator\SwitchSimulator.csproj", "{6DD00D19-BE31-4C79-8D22-6C41CB0608C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwitchSimulator", "SwitchSimulator\SwitchSimulator.csproj", "{6DD00D19-BE31-4C79-8D22-6C41CB0608C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelescopeSimulator", "TelescopeSimulator\TelescopeSimulator.csproj", "{A8B888F5-789F-4098-8596-418816D60912}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelescopeSimulator", "TelescopeSimulator\TelescopeSimulator.csproj", "{A8B888F5-789F-4098-8596-418816D60912}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsBase.Vector", "WindowsBase.Vector\WindowsBase.Vector\WindowsBase.Vector.csproj", "{2535B18B-4C8F-4AD4-BF4A-15F379FC4B43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraSimulator", "Camera.Simulator\CameraSimulator.csproj", "{2DFE7546-629C-453E-8F56-4E624DFDE8F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{2535B18B-4C8F-4AD4-BF4A-15F379FC4B43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2535B18B-4C8F-4AD4-BF4A-15F379FC4B43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2535B18B-4C8F-4AD4-BF4A-15F379FC4B43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DFE7546-629C-453E-8F56-4E624DFDE8F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DFE7546-629C-453E-8F56-4E624DFDE8F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DFE7546-629C-453E-8F56-4E624DFDE8F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DFE7546-629C-453E-8F56-4E624DFDE8F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

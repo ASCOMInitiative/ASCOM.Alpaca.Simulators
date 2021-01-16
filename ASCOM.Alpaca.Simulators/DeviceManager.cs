@@ -9,6 +9,7 @@ namespace ASCOM.Alpaca.Simulators
 {
     internal static class DeviceManager
     {
+        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ICameraV3> cameraV3s = new Dictionary<int, ASCOM.Standard.Interfaces.ICameraV3>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IDomeV2> domeV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IDomeV2>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2> filterWheelV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2>();
@@ -49,6 +50,10 @@ namespace ASCOM.Alpaca.Simulators
             telescopeV3s.Add(0, new ASCOM.Simulators.Telescope(0, Logging.Log,
                 new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Telescope", 0)));
             
+            cameraV3s.Add(0, new ASCOM.Simulators.Camera(0, Logging.Log,
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Camera", 0)));
+
+
         }
 
         internal static void Reset()
@@ -70,9 +75,14 @@ namespace ASCOM.Alpaca.Simulators
         {
             List<AlpacaConfiguredDevice> devices = new List<AlpacaConfiguredDevice>();
 
-            foreach(var cov in coverCalibratorV1s)
+            foreach (var dev in cameraV3s)
             {
-                devices.Add((cov.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+            }
+
+            foreach (var dev in coverCalibratorV1s)
+            {
+                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
             }
 
             foreach (var dev in domeV2s)
@@ -80,9 +90,9 @@ namespace ASCOM.Alpaca.Simulators
                 devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
             }
 
-            foreach (var filter in filterWheelV2s)
+            foreach (var dev in filterWheelV2s)
             {
-                devices.Add((filter.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
             }
 
             foreach (var dev in focuserV3s)
@@ -118,6 +128,17 @@ namespace ASCOM.Alpaca.Simulators
             return devices;
         }
 
+        internal static ASCOM.Standard.Interfaces.ICameraV3 GetCamera(int DeviceID)
+        {
+            if (cameraV3s.ContainsKey(DeviceID))
+            {
+                return cameraV3s[DeviceID];
+            }
+            else
+            {
+                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+            }
+        }
 
         internal static ASCOM.Standard.Interfaces.ICoverCalibratorV1 GetCoverCalibrator(int DeviceID)
         {
@@ -129,11 +150,6 @@ namespace ASCOM.Alpaca.Simulators
             {
                 throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
-        }
-
-        internal static ASCOM.Standard.Interfaces.ICameraV3 GetCamera(int DeviceID)
-        {
-            throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
         }
 
         internal static ASCOM.Standard.Interfaces.IDomeV2 GetDome(int DeviceID)
