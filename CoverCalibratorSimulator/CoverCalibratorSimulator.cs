@@ -1,4 +1,3 @@
-using ASCOM;
 using ASCOM.Alpaca.Responses;
 using ASCOM.Standard.Interfaces;
 using System;
@@ -6,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace ASCOMSimulators
+namespace ASCOM.Simulators
 {
     /// <summary>
     /// ASCOM CoverCalibrator Driver for Simulator.

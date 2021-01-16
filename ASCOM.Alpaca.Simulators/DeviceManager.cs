@@ -20,7 +20,7 @@ namespace ASCOM.Alpaca.Simulators
         static DeviceManager()
         {
             //Only one instance
-            coverCalibratorV1s.Add(0,new ASCOMSimulators.CoverCalibratorSimulator(0, Logging.Log,
+            coverCalibratorV1s.Add(0,new ASCOM.Simulators.CoverCalibratorSimulator(0, Logging.Log,
                 new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "CoverCalibrator", 0)));
 
             domeV2s.Add(0, new ASCOM.Simulators.Dome(0, Logging.Log,
@@ -48,7 +48,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 try
                 {
-                    (covcal.Value as ASCOMSimulators.CoverCalibratorSimulator)?.ResetSettings();
+                    (covcal.Value as ASCOM.Simulators.CoverCalibratorSimulator)?.ResetSettings();
                 }
                 catch(Exception ex)
                 {
