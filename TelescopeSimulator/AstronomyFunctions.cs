@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 
-namespace ASCOM.Simulator
+namespace ASCOM.Simulators
 {
     public static class AstronomyFunctions
     {

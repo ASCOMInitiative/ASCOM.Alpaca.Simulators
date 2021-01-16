@@ -28,7 +28,7 @@ using ASCOM.Standard.Interfaces;
 using System.Collections.Generic;
 using ASCOM.Alpaca.Responses;
 
-namespace ASCOM.Simulator
+namespace ASCOM.Simulators
 {
     //
     // Your driver's ID is ASCOM.Telescope.Telescope
@@ -67,6 +67,10 @@ namespace ASCOM.Simulator
         {
             try
             {
+                TelescopeHardware.TL = logger;
+                TelescopeHardware.s_Profile = profile;
+
+                TelescopeHardware.Init();
                 m_AxisRates = new AxisRates[3];
                 m_AxisRates[0] = new AxisRates(TelescopeAxis.Primary);
                 m_AxisRates[1] = new AxisRates(TelescopeAxis.Secondary);
@@ -96,6 +100,8 @@ namespace ASCOM.Simulator
                 logger.LogInformation($"Telescope {deviceNumber} - UUID of {UniqueID}");
 
                 Configuration = new AlpacaConfiguredDevice(Name, "Telescope", deviceNumber, UniqueID);
+
+                TelescopeHardware.Start();
 
                 TelescopeHardware.LogMessage("New", "Instance ID: " + objectId + ", new: " + "Driver ID: " + driverID);
             }

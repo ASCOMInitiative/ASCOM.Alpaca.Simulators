@@ -17,6 +17,7 @@ namespace ASCOM.Alpaca.Simulators
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IRotatorV3> rotatorV3s = new Dictionary<int, ASCOM.Standard.Interfaces.IRotatorV3>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ISafetyMonitor> safetyMonitors = new Dictionary<int, ASCOM.Standard.Interfaces.ISafetyMonitor>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ISwitchV2> switchV2s = new Dictionary<int, ASCOM.Standard.Interfaces.ISwitchV2>();
+        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ITelescopeV3> telescopeV3s = new Dictionary<int, ASCOM.Standard.Interfaces.ITelescopeV3>();
 
         static DeviceManager()
         {
@@ -44,6 +45,10 @@ namespace ASCOM.Alpaca.Simulators
 
             switchV2s.Add(0, new ASCOM.Simulators.Switch(0, Logging.Log,
                 new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Switch", 0)));
+
+            telescopeV3s.Add(0, new ASCOM.Simulators.Telescope(0, Logging.Log,
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Telescope", 0)));
+            
         }
 
         internal static void Reset()
@@ -101,6 +106,11 @@ namespace ASCOM.Alpaca.Simulators
             }
 
             foreach (var dev in switchV2s)
+            {
+                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+            }
+
+            foreach (var dev in telescopeV3s)
             {
                 devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
             }
@@ -212,7 +222,14 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static ASCOM.Standard.Interfaces.ITelescopeV3 GetTelescope (int DeviceID)
         {
-            throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+            if (telescopeV3s.ContainsKey(DeviceID))
+            {
+                return telescopeV3s[DeviceID];
+            }
+            else
+            {
+                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+            }
         }
 
         internal static List<ASCOM.Standard.Interfaces.ICoverCalibratorV1> GetCoverCalibrators()

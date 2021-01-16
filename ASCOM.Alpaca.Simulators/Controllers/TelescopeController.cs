@@ -934,7 +934,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/RightAscension")]
-        public DoubleResponse RightAscensionn(int DeviceNumber, int ClientID = -1, uint ClientTransactionID = 0)
+        public DoubleResponse RightAscension(int DeviceNumber, int ClientID = -1, uint ClientTransactionID = 0)
         {
             var TransactionID = ServerManager.ServerTransactionID;
             try
@@ -1486,13 +1486,13 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/TrackingRate")]
-        public Response TrackingRate(int DeviceNumber, [FromForm] DriveRate TrackingRate, [FromForm] int ClientID = -1, [FromForm] uint ClientTransactionID = 0)
+        public Response TrackingRate(int DeviceNumber, [FromForm] int TrackingRate, [FromForm] int ClientID = -1, [FromForm] uint ClientTransactionID = 0)
         {
             var TransactionID = ServerManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                DeviceManager.GetTelescope(DeviceNumber).TrackingRate = TrackingRate;
+                DeviceManager.GetTelescope(DeviceNumber).TrackingRate = (DriveRate) TrackingRate;
 
                 return new Response() { ClientTransactionID = ClientTransactionID, ServerTransactionID = TransactionID };
             }

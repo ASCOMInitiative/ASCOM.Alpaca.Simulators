@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows;
 using ASCOM.Standard.Interfaces;
 
-namespace ASCOM.Simulator
+namespace ASCOM.Simulators
 {
     /// <summary>
     /// These functions convert between the axis positions and Ra/dec aand Alt Azm

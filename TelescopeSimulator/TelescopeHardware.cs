@@ -26,7 +26,7 @@ using System.Globalization;
 using System.Threading;
 using System.Windows;
 
-namespace ASCOM.Simulator
+namespace ASCOM.Simulators
 {
     public static class TelescopeHardware
     {
@@ -86,7 +86,7 @@ namespace ASCOM.Simulator
 
         private static readonly object getIdLockObj = new object();
 
-        private static IProfile s_Profile;
+        public static IProfile s_Profile;
         private static bool onTop;
         public static ILogger TL;
 
@@ -301,6 +301,11 @@ namespace ASCOM.Simulator
         /// </summary>
         static TelescopeHardware()
         {
+            
+        }
+
+        public static void Init()
+        {
             try
             {
                 s_wTimer = new System.Timers.Timer();
@@ -320,7 +325,7 @@ namespace ASCOM.Simulator
                 StartupOptions = new List<string>() { STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION, STARTUP_OPTION_LASTUSED_POSITION, STARTUP_OPTION_START_POSITION, STARTUP_OPTION_PARKED_POSITION, STARTUP_OPTION_HOME_POSITION };
 
                 // check if the profile settings are correct
-                if (s_Profile.GetValue("RegVer") != SharedResources.REGISTRATION_VERSION)
+                if (s_Profile.GetValue("RegVer", string.Empty) != SharedResources.REGISTRATION_VERSION)
                 {
                     // load the default settings
                     //Main Driver Settings
@@ -1737,7 +1742,7 @@ namespace ASCOM.Simulator
         private static Vector HcMoves()
         {
             Vector change = new Vector();
-            if (SlewDirection == Simulator.SlewDirection.SlewNone)
+            if (SlewDirection == SlewDirection.SlewNone)
             {
                 return change;
             }
@@ -1780,7 +1785,7 @@ namespace ASCOM.Simulator
                     change.X = -delta;
                     break;
 
-                case Simulator.SlewDirection.SlewNone:
+                case SlewDirection.SlewNone:
                     break;
             }
             return change;
