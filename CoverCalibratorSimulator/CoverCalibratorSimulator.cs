@@ -14,7 +14,7 @@ namespace ASCOM.Simulators
     public class CoverCalibratorSimulator : ICoverCalibratorV1, IAlpacaDevice
     {
         // Private simulator constants
-        private const string DRIVER_DESCRIPTION = "ASCOM CoverCalibrator Simulator"; // Driver description that displays in the ASCOM Chooser.
+        private const string DRIVER_DESCRIPTION = "Alpaca CoverCalibrator Simulator"; // Driver description that displays in the ASCOM Chooser.
 
         public const double SYNCHRONOUS_BEHAVIOUR_LIMIT = 0.5; // Threshold (seconds) above which state changes will be handled asynchronously
 
@@ -83,7 +83,7 @@ namespace ASCOM.Simulators
                 TL.LogInformation($"CoverCalibrator {deviceNumber} - Starting initialisation");
 
                 //This should be replaced by the next bit of code but is semi-unique as a default.
-                string UniqueID = Name + deviceNumber.ToString();
+                string UniqueID = DRIVER_DESCRIPTION + deviceNumber.ToString();
                 //Create a Unique ID if it does not exist
                 try
                 {
@@ -101,7 +101,7 @@ namespace ASCOM.Simulators
 
                 TL.LogInformation($"CoverCalibrator {deviceNumber} - UUID of {UniqueID}");
 
-                Configuration = new AlpacaConfiguredDevice(Name, "CoverCalibrator", deviceNumber, UniqueID);
+                Configuration = new AlpacaConfiguredDevice(DRIVER_DESCRIPTION, "CoverCalibrator", deviceNumber, UniqueID);
 
                 // Initialise remaining components
                 calibratorTimer = new System.Timers.Timer();

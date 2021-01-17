@@ -74,7 +74,7 @@ namespace ASCOM.Simulators
         // Constants
         public static string ALERT_TITLE = "ASCOM Dome Simulator .NET";
 
-        public static string INSTRUMENT_NAME = "Simulator";
+        public static string INSTRUMENT_NAME = "Alpaca Dome Sim";
         public static string INSTRUMENT_DESCRIPTION = "ASCOM Dome Simulator .NET";
 
         public static double INVALID_COORDINATE = -100000.0;

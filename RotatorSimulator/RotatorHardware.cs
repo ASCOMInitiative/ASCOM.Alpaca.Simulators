@@ -35,7 +35,7 @@ namespace ASCOM.Simulators
 		private static bool s_bDirection;
 		private static float s_fTargetPosition;
 		private static int s_iUpdateInterval = 250;			// Milliseconds, default, set by main form
-        private static string _rotatorName = "ASCOM.Simulator.Rotator";
+        private static string _rotatorName = "Alpaca Rotator Sim";
         private static string _description = "ASCOM Rotator Driver for RotatorSimulator";
         private static string _driverInfo = "ASCOM.Simulator.Rotator";
         private static string _driverVersion = "6.4";
