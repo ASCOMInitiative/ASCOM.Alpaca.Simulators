@@ -15,7 +15,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [AllowAnonymous]
         [Route("management/apiversions")]
-        public IntListResponse ApiVersions(int ClientID = -1, uint ClientTransactionID = 0)
+        public IntListResponse ApiVersions(uint ClientID = 0, uint ClientTransactionID = 0)
         {
             var TransactionID = ServerManager.ServerTransactionID;
             Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -25,7 +25,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [AllowAnonymous]
         [Route("management/v1/description")]
-        public AlpacaDescriptionResponse Description(int ClientID = -1, uint ClientTransactionID = 0)
+        public AlpacaDescriptionResponse Description(uint ClientID = 0, uint ClientTransactionID = 0)
         {
 
 
@@ -38,7 +38,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [AllowAnonymous]
         [Route("management/v1/configureddevices")]
-        public AlpacaConfiguredDevicesResponse ConfiguredDevices(int ClientID = -1, uint ClientTransactionID = 0)
+        public AlpacaConfiguredDevicesResponse ConfiguredDevices(uint ClientID = 0, uint ClientTransactionID = 0)
         {
             var TransactionID = ServerManager.ServerTransactionID;
             Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);

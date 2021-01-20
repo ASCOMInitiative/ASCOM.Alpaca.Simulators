@@ -9,7 +9,7 @@ namespace ASCOM.Alpaca.Simulators
 {
     internal static class Logging
     {
-        internal static ASCOM.Standard.Utilities.TraceLogger Log
+        internal static ILogger Log
         {
             get;
             private set;
@@ -31,12 +31,12 @@ namespace ASCOM.Alpaca.Simulators
             ASCOM.Standard.Utilities.Logger.LogInformation(message);
         }
 
-        internal static void LogAPICall(IPAddress remoteIpAddress, string request, int clientID, uint clientTransactionID, uint transactionID)
+        internal static void LogAPICall(IPAddress remoteIpAddress, string request, uint clientID, uint clientTransactionID, uint transactionID)
         {
             Log.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request}");
         }
 
-        internal static void LogAPICall(IPAddress remoteIpAddress, string request, int clientID, uint clientTransactionID, uint transactionID, string payload)
+        internal static void LogAPICall(IPAddress remoteIpAddress, string request, uint clientID, uint clientTransactionID, uint transactionID, string payload)
         {
             Log.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request} with payload {payload}");
         }
