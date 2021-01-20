@@ -345,6 +345,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/camerastate")]
         public IntResponse CameraState(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -360,6 +361,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/cameraxsize")]
         public IntResponse CameraXSize(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -375,6 +377,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/cameraysize")]
         public IntResponse CameraYSize(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -390,6 +393,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/canabortexposure")]
         public BoolResponse CanAbortExposure(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -405,6 +409,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/canasymmetricbin")]
         public BoolResponse CanAsymmetricBin(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -420,6 +425,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/canfastreadout")]
         public BoolResponse CanFastReadout(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -435,6 +441,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/cangetcoolerpower")]
         public BoolResponse CanGetCoolerPower(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -450,6 +457,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/canpulseguide")]
         public BoolResponse CanPulseGuide(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -465,6 +473,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/cansetccdtemperature")]
         public BoolResponse CanSetCCDTemperature(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -480,6 +489,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/canstopexposure")]
         public BoolResponse CanStopExposure(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -511,6 +521,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/cooleron")]
         public BoolResponse CoolerOn(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -625,7 +636,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/fastreadout")]
         public BoolResponse FastReadout(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -676,6 +687,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/gain")]
         public IntResponse Gain(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -710,6 +722,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/gainmax")]
         public IntResponse GainMax(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -725,6 +738,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/gainmin")]
         public IntResponse GainMin(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -740,6 +754,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/gains")]
         public StringListResponse Gains(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
@@ -755,6 +770,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/hasshutter")]
         public BoolResponse HasShutter(int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
