@@ -274,6 +274,25 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
+        /// Used to set the IsSafe value in the profile. Public so the settings UI has access.
+        /// </summary>
+        /// <param name="value">If the driver should report safe</param>
+        public void SetIsSafeProfile(bool value)
+        {
+            Profile.WriteValue("SafetyMonitor", value.ToString());
+
+            _isSafe = value;
+        }
+
+        /// <summary>
+        /// Reset settings to default.
+        /// </summary>
+        public void ResetProfile()
+        {
+            Profile.Clear();
+        }
+
+        /// <summary>
         /// Delete all settings io the profile for this driver ID
         /// </summary>
         private void DeleteProfileSettings()

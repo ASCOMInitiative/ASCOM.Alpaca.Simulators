@@ -1,0 +1,70 @@
+﻿@page "/setup/v1/SafetyMonitor/{InstanceID:int}/setup"
+
+@inject IToastService toastService
+
+<body>
+    <fieldset>
+        <legend>SafetyMonitor Settings</legend>
+        <div class="grid-container-two">
+            <div class="grid-item-right">
+                <span>Is Safe Value:</span>
+            </div>
+            <div class="grid-item-left">
+                <input type="checkbox" @bind="@IsSafe">
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Settings</legend>
+        <div class="grid-container-two">
+
+            <div class="grid-item-left">
+                <button @onclick="Reset">Reset</button>
+            </div>
+            <div class="grid-item-right">
+            </div>
+        </div>
+    </fieldset>
+</body>
+
+@code {
+    [Parameter]
+    public int InstanceID { get; set; }
+
+    /// <summary>
+    /// This access the device type not the interface to allow the device specific settigns to be accessed.
+    /// </summary>
+    private ASCOM.Simulators.SafetyMonitor Device
+    {
+        get
+        {
+            return DeviceManager.GetSafetyMonitor(InstanceID) as ASCOM.Simulators.SafetyMonitor;
+        }
+    }
+
+    public bool IsSafe
+    {
+        get
+        {
+            return Device.IsSafe;
+        }
+        set
+        {
+            Device.SetIsSafeProfile(value);
+        }
+    }
+
+    public void Reset()
+    {
+        try
+        {
+            Device.ResetProfile();
+
+            toastService.ShowSuccess("Settings Reset");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+}
