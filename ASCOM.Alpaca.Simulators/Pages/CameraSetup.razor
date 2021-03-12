@@ -1,0 +1,44 @@
+﻿@page "/setup/v1/Camera/{InstanceID:int}/setup"
+
+@inject IToastService toastService
+
+<body>
+    <fieldset>
+        <legend>Camera Settings</legend>
+        <div class="grid-container-two">
+            <div class="grid-item-right">
+            </div>
+            <div class="grid-item-left">
+            </div>
+        </div>
+    </fieldset>
+</body>
+
+@code {
+    [Parameter]
+    public int InstanceID { get; set; }
+
+    /// <summary>
+    /// This access the device type not the interface to allow the device specific settigns to be accessed.
+    /// </summary>
+    private ASCOM.Simulators.Camera Device
+    {
+        get
+        {
+            return DeviceManager.GetCamera(InstanceID) as ASCOM.Simulators.Camera;
+        }
+    }
+
+
+    public void Reset()
+    {
+        try
+        {
+            toastService.ShowSuccess("Settings Reset");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+}
