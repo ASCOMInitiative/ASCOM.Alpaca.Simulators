@@ -7,6 +7,17 @@
         <legend>SafetyMonitor Settings</legend>
         <div class="grid-container-two">
             <div class="grid-item-right">
+                <button @onclick="Connect">@ConnectText</button>
+            </div>
+            <div class="grid-item-left">
+                <svg width="30" height="30">
+                    <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="grid-container-two">
+            <div class="grid-item-right">
                 <span>Is Safe Value:</span>
             </div>
             <div class="grid-item-left">
@@ -35,6 +46,43 @@
         {
             return DeviceManager.GetSafetyMonitor(InstanceID) as ASCOM.Simulators.SafetyMonitor;
         }
+    }
+
+    public bool Connected
+    {
+        get
+        {
+            return Device.Connected;
+        }
+    }
+
+    public string ConnectionColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                return "red";
+            }
+            return "gray";
+        }
+    }
+
+    public string ConnectText
+    {
+        get
+        {
+            if (Device.Connected)
+            {
+                return "Disconnect";
+            }
+            return "Connect";
+        }
+    }
+
+    public void Connect()
+    {
+        Device.Connected = !Device.Connected;
     }
 
     public bool IsSafe
