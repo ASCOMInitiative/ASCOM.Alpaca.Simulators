@@ -9,6 +9,7 @@ namespace ASCOM.Alpaca.Simulators
 {
     internal static class DeviceManager
     {
+        // These store the actual instance of the device drivers. They are keyed to the Device Number
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ICameraV3> cameraV3s = new Dictionary<int, ASCOM.Standard.Interfaces.ICameraV3>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IDomeV2> domeV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IDomeV2>();
@@ -22,7 +23,7 @@ namespace ASCOM.Alpaca.Simulators
 
         static DeviceManager()
         {
-            //Only one instance
+            //Only one instance of each in this simulator
             coverCalibratorV1s.Add(0,new ASCOM.Simulators.CoverCalibratorSimulator(0, Logging.Log,
                 new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "CoverCalibrator", 0)));
 
@@ -56,6 +57,10 @@ namespace ASCOM.Alpaca.Simulators
 
         }
 
+
+        /// <summary>
+        /// Reset all device settings profiles.
+        /// </summary>
         internal static void Reset()
         {
             foreach (var covcal in coverCalibratorV1s)
@@ -71,6 +76,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        //Returns a list of every single device type for the Management API
         internal static List<AlpacaConfiguredDevice> GetDevices()
         {
             List<AlpacaConfiguredDevice> devices = new List<AlpacaConfiguredDevice>();
@@ -127,6 +133,8 @@ namespace ASCOM.Alpaca.Simulators
 
             return devices;
         }
+
+        //These methods allow access to specific devices for the API controllers and the device Blazor UI Pages  
 
         internal static ASCOM.Standard.Interfaces.ICameraV3 GetCamera(int DeviceID)
         {
@@ -246,11 +254,6 @@ namespace ASCOM.Alpaca.Simulators
             {
                 throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
-        }
-
-        internal static List<ASCOM.Standard.Interfaces.ICoverCalibratorV1> GetCoverCalibrators()
-        {
-            return coverCalibratorV1s.Values.ToList();
         }
     }
 }
