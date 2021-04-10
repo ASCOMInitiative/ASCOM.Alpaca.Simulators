@@ -172,7 +172,7 @@ namespace ASCOM.Simulators
         public string Action(string actionName, string actionParameters)
         {
             LogVerbose("", "Action {0}, parameters {1} not implemented", actionName, actionParameters);
-            throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
+            throw new ASCOM.ActionNotImplementedException(actionName);
         }
 
         public void CommandBlind(string command, bool raw)
