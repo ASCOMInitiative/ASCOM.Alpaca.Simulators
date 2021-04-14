@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -18,7 +19,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/action")]
-        public StringResponse PutAction([DefaultValue(0)]int DeviceNumber, [FromForm] string Action, [FromForm] string Parameters, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public StringResponse PutAction([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Action, [FromForm] string Parameters, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             var TransactionID = ServerManager.ServerTransactionID;
             try
@@ -34,7 +35,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/commandblind")]
-        public Response PutCommandBlind([DefaultValue(0)]int DeviceNumber, [FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public Response PutCommandBlind([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             var TransactionID = ServerManager.ServerTransactionID;
             try
@@ -51,7 +52,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/commandbool")]
-        public BoolResponse PutCommandBool([DefaultValue(0)]int DeviceNumber, [FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public BoolResponse PutCommandBool([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             var TransactionID = ServerManager.ServerTransactionID;
             try
@@ -67,7 +68,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/commandstring")]
-        public StringResponse PutCommandString([DefaultValue(0)]int DeviceNumber, [FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public StringResponse PutCommandString([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             var TransactionID = ServerManager.ServerTransactionID;
             try
