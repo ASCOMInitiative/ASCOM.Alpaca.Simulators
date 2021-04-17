@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,7 +40,7 @@ namespace ASCOM.Alpaca.Simulators
             //This should probably be changed to a Mutex or another similar lock
             if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1)
             {
-                ServerManager.StartBrowser(ServerSettings.ServerPort);
+                StartBrowser(ServerSettings.ServerPort);
                 return;
             }
 
@@ -90,6 +91,16 @@ namespace ASCOM.Alpaca.Simulators
             {
                 Logging.LogError(ex.Message);
             }
+        }
+
+        internal static void StartBrowser(int port)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = string.Format("http://localhost:{0}", port),
+                UseShellExecute = true
+            };
+            Process.Start(psi);
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

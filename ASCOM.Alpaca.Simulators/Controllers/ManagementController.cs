@@ -17,7 +17,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("management/apiversions")]
         public IntListResponse ApiVersions(uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
             return new IntListResponse(ClientTransactionID, TransactionID, ServerSettings.APIVersions);
         }
@@ -29,7 +29,7 @@ namespace ASCOM.Alpaca.Simulators
         {
 
 
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
 
             return new AlpacaDescriptionResponse(ClientTransactionID, TransactionID, new AlpacaDeviceDescription(ServerSettings.ServerName, ServerSettings.Manufacturer, ServerSettings.Version, ServerSettings.Location));
@@ -40,7 +40,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("management/v1/configureddevices")]
         public AlpacaConfiguredDevicesResponse ConfiguredDevices(uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
 
             return new AlpacaConfiguredDevicesResponse(ClientTransactionID, TransactionID, DeviceManager.GetDevices());

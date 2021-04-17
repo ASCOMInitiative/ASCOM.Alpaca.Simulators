@@ -21,7 +21,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/action")]
         public StringResponse PutAction([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Action, [FromForm] string Parameters = "", [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -37,7 +37,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/commandblind")]
         public Response PutCommandBlind([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -54,7 +54,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/commandbool")]
         public BoolResponse PutCommandBool([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -70,7 +70,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/commandstring")]
         public StringResponse PutCommandString([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -86,7 +86,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/connected")]
         public BoolResponse GetConnected([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -102,7 +102,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/connected")]
         public Response PutConnected([DefaultValue(0)]int DeviceNumber, [FromForm] bool Connected, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -122,7 +122,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/description")]
         public StringResponse GetDescription([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -138,7 +138,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/driverinfo")]
         public StringResponse GetDriverInfo([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -154,7 +154,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/driverversion")]
         public StringResponse GetDriverVersion([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -170,7 +170,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/interfaceversion")]
         public IntResponse GetInterfaceVersion([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -186,7 +186,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/name")]
         public StringResponse GetName([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -202,7 +202,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/supportedactions")]
         public StringListResponse GetSupportedActions([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -220,7 +220,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/canreverse")]
         public BoolResponse GetCanReverse([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -236,7 +236,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/ismoving")]
         public BoolResponse GetIsMoving([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -252,7 +252,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/position")]
         public DoubleResponse GetPosition([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -268,7 +268,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/mechanicalposition")]
         public DoubleResponse GetMechanicalPosition([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -284,7 +284,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/reverse")]
         public BoolResponse GetReverse([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -300,7 +300,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/reverse")]
         public Response PutReverse([DefaultValue(0)]int DeviceNumber, [FromForm] bool Reverse, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -317,7 +317,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/stepsize")]
         public DoubleResponse GetStepSize([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -333,7 +333,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/targetposition")]
         public DoubleResponse GetTargetPosition([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -349,7 +349,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/halt")]
         public Response PutHalt([DefaultValue(0)]int DeviceNumber, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -366,7 +366,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/move")]
         public Response PutMove([DefaultValue(0)]int DeviceNumber, [FromForm] double Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -383,7 +383,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/moveabsolute")]
         public Response PutMoveAbsolute([DefaultValue(0)]int DeviceNumber, [FromForm] double Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -400,7 +400,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/movemechanical")]
         public Response PutMoveMechanical([DefaultValue(0)]int DeviceNumber, [FromForm] double Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -417,7 +417,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/sync")]
         public Response PutSync([DefaultValue(0)]int DeviceNumber, [FromForm] double Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = ServerManager.ServerTransactionID;
+            var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);

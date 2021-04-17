@@ -9,6 +9,17 @@ namespace ASCOM.Alpaca.Simulators
 {
     internal static class DeviceManager
     {
+        private static uint transactionID = 0;
+
+        internal static uint ServerTransactionID
+        {
+            get
+            {
+                return transactionID++;
+            }
+        }
+
+
         // These store the actual instance of the device drivers. They are keyed to the Device Number
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ICameraV3> cameraV3s = new Dictionary<int, ASCOM.Standard.Interfaces.ICameraV3>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1>();

@@ -176,7 +176,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     if (ServerSettings.AutoStartBrowser) //AutoStart Browser
                     {
-                        ServerManager.StartBrowser(port);
+                        Program.StartBrowser(port);
                     }
                 }
                 catch (Exception ex)
