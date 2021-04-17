@@ -19,7 +19,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/Action")]
-        public StringResponse Action([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Action, [FromForm] string Parameters, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public StringResponse Action([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Action, [FromForm] string Parameters = "", [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             var TransactionID = ServerManager.ServerTransactionID;
             try
