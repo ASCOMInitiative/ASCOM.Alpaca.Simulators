@@ -1,5 +1,6 @@
 ﻿using ASCOM.Alpaca.Responses;
 using ASCOM.Standard.Helpers;
+using ASCOM.Standard.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -51,6 +52,38 @@ namespace Alpaca
             }
         }
 
+        internal ActionResult<DriveRatesResponse> ProcessRequest(Func<ITrackingRates> p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
+        {
+            try
+            {
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, payload);
+
+                var rates = p.Invoke();
+
+                IList<DriveRate> res = new List<DriveRate>();
+
+                foreach(DriveRate rate in rates)
+                {
+                    res.Add(rate);
+                }
+
+                return Ok(new DriveRatesResponse()
+                {
+                    ClientTransactionID = ClientTransactionID,
+                    ServerTransactionID = TransactionID,
+                    Value = res
+                });
+            }
+            catch (DeviceNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseHelpers.ExceptionResponseBuilder<DriveRatesResponse>(ex, ClientTransactionID, TransactionID));
+            }
+        }
+
         internal ActionResult<DoubleResponse> ProcessRequest(Func<double> p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
         {
             try
@@ -71,6 +104,38 @@ namespace Alpaca
             catch (Exception ex)
             {
                 return Ok(ResponseHelpers.ExceptionResponseBuilder<DoubleResponse>(ex, ClientTransactionID, TransactionID));
+            }
+        }
+
+        internal ActionResult<AxisRatesResponse> ProcessRequest(Func<IAxisRates> p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
+        {
+            try
+            {
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, payload);
+
+                var rates = p.Invoke();
+
+                IList<AxisRate> res = new List<AxisRate>();
+
+                foreach (IRate rate in rates)
+                {
+                    res.Add(new AxisRate(rate.Minimum, rate.Maximum));
+                }
+
+                return Ok(new AxisRatesResponse()
+                {
+                    ClientTransactionID = ClientTransactionID,
+                    ServerTransactionID = TransactionID,
+                    Value = res
+                });
+            }
+            catch (DeviceNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseHelpers.ExceptionResponseBuilder<AxisRatesResponse>(ex, ClientTransactionID, TransactionID));
             }
         }
 
