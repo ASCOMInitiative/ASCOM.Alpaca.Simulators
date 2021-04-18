@@ -1,19 +1,14 @@
-﻿using ASCOM.Alpaca.Responses;
-using ASCOM.Standard.Helpers;
+﻿using Alpaca;
+using ASCOM.Alpaca.Responses;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-
 
 namespace ASCOM.Alpaca.Simulators
 {
     [ServiceFilter(typeof(AuthorizationFilter))]
     [ApiController]
-    public class FilterWheelController : Controller
+    public class FilterWheelController : AlpacaController
     {
         private const string APIRoot = "api/v1/filterwheel/";
 
@@ -21,223 +16,103 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/Action")]
-        public StringResponse Action([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Action, [FromForm] string Parameters = "", [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> Action([DefaultValue(0)] int DeviceNumber, [Required][FromForm] string Action, [FromForm] string Parameters = "", [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new StringResponse(ClientTransactionID, TransactionID, DeviceManager.GetFilterWheel(DeviceNumber).Action(Action, Parameters));
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<StringResponse>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).Action(Action, Parameters), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Action: {Action}, Parameters {Parameters}");
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/CommandBlind")]
-        public Response CommandBlind([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> CommandBlind([DefaultValue(0)] int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                DeviceManager.GetFilterWheel(DeviceNumber).CommandBlind(Command, Raw);
-                return new Response() { ClientTransactionID = ClientTransactionID, ServerTransactionID = TransactionID };
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<Response>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).CommandBlind(Command, Raw), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Command {Command}, Raw {Raw}");
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/CommandBool")]
-        public BoolResponse CommandBool([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> CommandBool([DefaultValue(0)] int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new BoolResponse(ClientTransactionID, TransactionID, DeviceManager.GetFilterWheel(DeviceNumber).CommandBool(Command, Raw));
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<BoolResponse>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).CommandBool(Command, Raw), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Command={Command}, Raw={Raw}");
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/CommandString")]
-        public StringResponse CommandString([DefaultValue(0)]int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> CommandString([DefaultValue(0)] int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new StringResponse(ClientTransactionID, TransactionID, DeviceManager.GetFilterWheel(DeviceNumber).CommandString(Command, Raw));
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<StringResponse>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).CommandString(Command, Raw), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Command={Command}, Raw={Raw}");
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/Connected")]
-        public BoolResponse Connected([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> Connected([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new BoolResponse(ClientTransactionID, TransactionID, DeviceManager.GetFilterWheel(DeviceNumber).Connected);
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<BoolResponse>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).Connected, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/Connected")]
-        public Response Connected([DefaultValue(0)]int DeviceNumber, [FromForm] bool Connected, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Connected([DefaultValue(0)] int DeviceNumber, [Required][FromForm] bool Connected, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
+            if (Connected || !ServerSettings.PreventRemoteDisconnects)
             {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                if (Connected || !ServerSettings.PreventRemoteDisconnects)
-                {
-                    DeviceManager.GetFilterWheel(DeviceNumber).Connected = Connected;
-                }
-
-                return new Response() { ClientTransactionID = ClientTransactionID, ServerTransactionID = TransactionID };
+                return ProcessRequest(() => { DeviceManager.GetFilterWheel(DeviceNumber).Connected = Connected; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Connected={Connected}");
             }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<Response>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => { }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/Description")]
-        public StringResponse Description([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> Description([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new StringResponse(ClientTransactionID, TransactionID, DeviceManager.GetFilterWheel(DeviceNumber).Description);
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<StringResponse>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).Description, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/DriverInfo")]
-        public StringResponse DriverInfo([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> DriverInfo([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new StringResponse(ClientTransactionID, TransactionID, DeviceManager.GetFilterWheel(DeviceNumber).DriverInfo);
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<StringResponse>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).DriverInfo, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/DriverVersion")]
-        public StringResponse DriverVersion([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> DriverVersion([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new StringResponse(ClientTransactionID, TransactionID, DeviceManager.GetFilterWheel(DeviceNumber).DriverVersion);
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<StringResponse>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).DriverVersion, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/InterfaceVersion")]
-        public IntResponse InterfaceVersion([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<IntResponse> InterfaceVersion([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new IntResponse(ClientTransactionID, TransactionID, DeviceManager.GetFilterWheel(DeviceNumber).InterfaceVersion);
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<IntResponse>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).InterfaceVersion, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/Name")]
-        public StringResponse Name([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> Name([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new StringResponse(ClientTransactionID, TransactionID, DeviceManager.GetFilterWheel(DeviceNumber).Name);
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<StringResponse>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).Name, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/SupportedActions")]
-        public StringListResponse SupportedActions([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringListResponse> SupportedActions([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new StringListResponse(ClientTransactionID, TransactionID, new List<string>(DeviceManager.GetFilterWheel(DeviceNumber).SupportedActions.Cast<string>().ToList()));
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<StringListResponse>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).SupportedActions, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         #region IDisposable Members
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/Dispose")]
-        public Response Dispose([DefaultValue(0)]int DeviceNumber, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Dispose([DefaultValue(0)] int DeviceNumber, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
+            if (!ServerSettings.PreventRemoteDisposes)
             {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                if (!ServerSettings.PreventRemoteDisposes)
-                {
-                    DeviceManager.GetFilterWheel(DeviceNumber).Dispose();
-                }
-
-                return new Response() { ClientTransactionID = ClientTransactionID, ServerTransactionID = TransactionID };
+                return ProcessRequest(() => { DeviceManager.GetFilterWheel(DeviceNumber).Dispose(); }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
             }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<Response>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => { }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         #endregion IDisposable Members
@@ -246,68 +121,30 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/focusoffsets")]
-        public IntListResponse FocusOffsets([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<IntListResponse> FocusOffsets([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new IntListResponse(ClientTransactionID, TransactionID, DeviceManager.GetFilterWheel(DeviceNumber).FocusOffsets);
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<IntListResponse>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).FocusOffsets, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/names")]
-        public StringListResponse Names([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringListResponse> Names([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new StringListResponse(ClientTransactionID, TransactionID, DeviceManager.GetFilterWheel(DeviceNumber).Names);
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<StringListResponse>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).Names, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/position")]
-        public IntResponse Position([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<IntResponse> Position([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                return new IntResponse(ClientTransactionID, TransactionID, DeviceManager.GetFilterWheel(DeviceNumber).Position);
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<IntResponse>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).Position, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/position")]
-        public Response Position([DefaultValue(0)]int DeviceNumber, [FromForm] short position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Position([DefaultValue(0)]int DeviceNumber, [FromForm] short position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            var TransactionID = DeviceManager.ServerTransactionID;
-            try
-            {
-                Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                DeviceManager.GetFilterWheel(DeviceNumber).Position = position;
-
-                return new Response() { ClientTransactionID = ClientTransactionID, ServerTransactionID = TransactionID };
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelpers.ExceptionResponseBuilder<Response>(ex, ClientTransactionID, TransactionID);
-            }
+            return ProcessRequest(() => { DeviceManager.GetFilterWheel(DeviceNumber).Position = position; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
     }
 }
