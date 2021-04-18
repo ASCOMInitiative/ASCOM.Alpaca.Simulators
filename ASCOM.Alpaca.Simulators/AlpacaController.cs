@@ -74,6 +74,29 @@ namespace Alpaca
             }
         }
 
+        internal ActionResult<IntArray2DResponse> ProcessRequest(Func<int[,]> p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
+        {
+            try
+            {
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, payload);
+
+                return Ok(new IntArray2DResponse()
+                {
+                    ClientTransactionID = ClientTransactionID,
+                    ServerTransactionID = TransactionID,
+                    Value = p.Invoke()
+                });
+            }
+            catch (DeviceNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseHelpers.ExceptionResponseBuilder<IntArray2DResponse>(ex, ClientTransactionID, TransactionID));
+            }
+        }
+
         internal ActionResult<StringListResponse> ProcessRequest(Func<IList<string>> p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
         {
             try
