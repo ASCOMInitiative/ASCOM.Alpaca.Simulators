@@ -390,6 +390,30 @@ namespace ASCOM.Simulators
 
         }
 
+        public static void SaveSettings(int slots, double seconds, string[] names, int[] offsets, string[] colors, bool implementsNames, bool implementsOffsets, bool preemptMoves)
+        {
+            int i = 0;
+            g_Profile.WriteValue("Slots", slots.ToString());
+            // Convert secs to millisecs
+            try { i = Convert.ToInt32(seconds * 1000); }
+            catch { i = 1000; }
+            g_Profile.WriteValue("Time", i.ToString());
+            for (i = 0; i <= 7; i++)
+            {
+                g_Profile.WriteValue($"FilterNames {i}", names[i]);
+                g_Profile.WriteValue($"FocusOffsets {i}", offsets[i].ToString());
+                g_Profile.WriteValue($"FilterColours {i}", colors[i]);
+            }
+            g_Profile.WriteValue("ImplementsNames", implementsNames.ToString());
+            g_Profile.WriteValue("ImplementsOffsets", implementsOffsets.ToString());
+            g_Profile.WriteValue("PreemptMoves", preemptMoves.ToString());
+        }
+
+        public static void ResetProfile()
+        {
+            g_Profile.Clear();
+        }
+
         //
         // Settings support
         //
