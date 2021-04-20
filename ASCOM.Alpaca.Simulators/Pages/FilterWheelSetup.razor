@@ -1,0 +1,106 @@
+﻿@page "/setup/v1/FilterWheel/{InstanceID:int}/setup"
+
+@inject IToastService toastService
+
+<body>
+    <fieldset>
+        <legend>Filter Wheel Settings</legend>
+        <label for="filters">Number of Filters:</label>
+
+        <select name="filters" id="filters" @bind="NumberOfFilters">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+        </select>
+    </fieldset>
+</body>
+
+@code {
+    [Parameter]
+    public int InstanceID { get; set; }
+
+    /// <summary>
+    /// This access the device type not the interface to allow the device specific settigns to be accessed.
+    /// </summary>
+    private ASCOM.Simulators.FilterWheel Device
+    {
+        get
+        {
+            return DeviceManager.GetFilterWheel(InstanceID) as ASCOM.Simulators.FilterWheel;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        NumberOfFilters = ASCOM.Simulators.FilterWheelHardware.FilterNames.Count();
+        base.OnInitialized();
+    }
+
+    #region Connection
+
+    public bool Connected
+    {
+        get
+        {
+            return Device.Connected;
+        }
+    }
+
+    public string ConnectionColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                return "red";
+            }
+            return "gray";
+        }
+    }
+
+    public string ConnectText
+    {
+        get
+        {
+            if (Device.Connected)
+            {
+                return "Disconnect";
+            }
+            return "Connect";
+        }
+    }
+
+    public void Connect()
+    {
+        Device.Connected = !Device.Connected;
+    }
+
+    #endregion
+
+    #region Settings
+    int NumberOfFilters
+    {
+        get;
+        set;
+    }
+    #endregion
+
+    public void Reset()
+    {
+        try
+        {
+            ASCOM.Simulators.FilterWheelHardware.ResetProfile();
+
+            toastService.ShowSuccess("Settings Reset");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+}
