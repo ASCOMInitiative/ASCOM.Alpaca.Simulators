@@ -11,7 +11,7 @@ namespace ASCOM.Simulators
     // 
     // Implements the simulated hardware
     //
-    public class SimulatedHardware
+    public class FilterWheelHardware
     {
 
         #region variables
@@ -81,7 +81,7 @@ namespace ASCOM.Simulators
         //
         // Constructor - initialize state
         //
-        static SimulatedHardware()
+        static FilterWheelHardware()
         {
             m_bMoving = false;
 

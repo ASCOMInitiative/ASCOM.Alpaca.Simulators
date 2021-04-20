@@ -64,9 +64,9 @@ namespace ASCOM.Simulators
         {
             logger.LogInformation($"FilterWheel {deviceNumber} - Starting initialization");
 
-            SimulatedHardware.g_Profile = profile;
+            FilterWheelHardware.g_Profile = profile;
 
-            SimulatedHardware.Initialize();
+            FilterWheelHardware.Initialize();
 
             //This should be replaced by the next bit of code but is semi-unique as a default.
             string UniqueID = Name + deviceNumber.ToString();
@@ -100,11 +100,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return SimulatedHardware.Connected;
+                return FilterWheelHardware.Connected;
             }
             set
             {
-                SimulatedHardware.Connected = value;
+                FilterWheelHardware.Connected = value;
             }
         }
 
@@ -186,11 +186,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-               return SimulatedHardware.Position;
+               return FilterWheelHardware.Position;
             }
             set
             {
-                SimulatedHardware.Position = value;
+                FilterWheelHardware.Position = value;
             }
         }
 
@@ -198,7 +198,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return SimulatedHardware.FocusOffsets;
+                return FilterWheelHardware.FocusOffsets;
             }
         }
 
@@ -206,7 +206,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return SimulatedHardware.FilterNames;
+                return FilterWheelHardware.FilterNames;
             }
         }
 
@@ -214,7 +214,7 @@ namespace ASCOM.Simulators
 
         public void SetupDialog()
         {
-            SimulatedHardware.DoSetup();
+            FilterWheelHardware.DoSetup();
         }
 
 
@@ -225,7 +225,7 @@ namespace ASCOM.Simulators
         // ---------------------------------------------------------------------
         private void check_connected()
         {
-            if (!SimulatedHardware.Connected)
+            if (!FilterWheelHardware.Connected)
                 throw new NotConnectedException(MSG_NOT_CONNECTED);
         }
     }
