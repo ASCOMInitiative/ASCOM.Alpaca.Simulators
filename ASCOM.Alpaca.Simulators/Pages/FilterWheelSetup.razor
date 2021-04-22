@@ -1,6 +1,7 @@
 ﻿@page "/setup/v1/FilterWheel/{InstanceID:int}/setup"
 
 @inject IToastService toastService
+@inject NavigationManager uriHelper;
 
 <body>
     <fieldset>
@@ -59,19 +60,32 @@
 
             @for (int i = 0; i < 8; i++)
             {
-            <tr>
-                <td>Slot @i</td>
-                <td><input type="text" @bind="FilterNames[i]"/></td>
-                <td><input type="number" min="0" step="1" @bind="FilterOffsets[i]" /></td>
-            </tr>
+                <tr>
+                    <td>Slot @i</td>
+                    <td><input type="text" @bind="FilterNames[i]" /></td>
+                    <td><input type="number" min="0" step="1" @bind="FilterOffsets[i]" /></td>
+                </tr>
             }
         </table>
+    </fieldset>
+
+    <fieldset>
+        <legend>Save</legend>
+        <div class="grid-container-two">
+
+            <div class="grid-item-left">
+                <button @onclick="Reset">Reset</button>
+            </div>
+            <div class="grid-item-right">
+                <button @onclick="SaveDeviceSettings">Save</button>
+            </div>
+        </div>
     </fieldset>
 </body>
 
 @code {
-        [Parameter]
-        public int InstanceID { get; set; }
+    [Parameter]
+    public int InstanceID { get; set; }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settigns to be accessed.
@@ -197,6 +211,25 @@
             ASCOM.Simulators.FilterWheelHardware.ResetProfile();
 
             toastService.ShowSuccess("Settings Reset");
+
+            var timer = new System.Threading.Timer(new System.Threading.TimerCallback(_ =>
+            {
+                uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+            }), null, 2000, 2000);
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+
+    public void SaveDeviceSettings()
+    {
+        try
+        {
+            ASCOM.Simulators.FilterWheelHardware.SaveSettings(NumberOfFilters, TimeDelay, FilterNames, FilterOffsets, ASCOM.Simulators.FilterWheelHardware.FullFilterColours, ImplementsFilterNames, ImplementsFocusOffsets, PreemptMoves);
+
+            toastService.ShowSuccess("Settings Saved");
         }
         catch (Exception ex)
         {
