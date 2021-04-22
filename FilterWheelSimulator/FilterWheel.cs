@@ -210,11 +210,9 @@ namespace ASCOM.Simulators
             }
         }
 
-
-
         public void SetupDialog()
         {
-            FilterWheelHardware.DoSetup();
+
         }
 
 

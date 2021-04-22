@@ -319,19 +319,6 @@ namespace ASCOM.Simulators
             }
         }
 
-        public static void DoSetup()
-        {
-            //lock (s_objSync)
-            {
-                LogTraffic("SetupDialog...");
-
-                if (m_bConnected)
-                    throw new ASCOM.DriverException(MSG_SETUP_NOT_ALLOWED, SCODE_SETUP_NOT_ALLOWED);
-                else
-                    ShowSetup();
-            }
-        }
-
 
         #endregion
 
@@ -343,54 +330,63 @@ namespace ASCOM.Simulators
         //
         private static void UpdateSettings()
         {
-            int i;
-
-            if (g_Profile.GetValue("RegVer", string.Empty) != m_sRegVer)
+            try
             {
-                //
-                // initialize variables that are not present
-                //
-                // Create some 'realistic' defaults
-                //
-                Color[] colours = new Color[8] {Color.Red, Color.Green, Color.Blue, Color.Gray,
-                                                Color.DarkRed, Color.Teal, Color.Violet, Color.Black};
-                string[] names = new string[8] { "Red", "Green", "Blue", "Clear", "Ha", "OIII", "LPR", "Dark" };
-                Random rand = new Random();
-
-                g_Profile.WriteValue("RegVer", m_sRegVer);
-                g_Profile.WriteValue("Position", "0");
-                g_Profile.WriteValue("Slots", "6");
-                g_Profile.WriteValue("Time", "1000");
-                g_Profile.WriteValue("ImplementsNames", "true");
-                g_Profile.WriteValue("ImplementsOffsets", "true");
-                g_Profile.WriteValue("PreemptMoves", "false");
-                for (i = 0; i < 8; i++)
+                if (g_Profile.GetValue("RegVer", string.Empty) != m_sRegVer)
                 {
-                    g_Profile.WriteValue($"FilterNames {i}", names[i]);
-                    g_Profile.WriteValue($"FocusOffsets {i}", rand.Next(10000).ToString());
-                    g_Profile.WriteValue($"FilterColours {i}", ColorTranslator.ToWin32(colours[i]).ToString());
+                    SetDefaultSettings();
+                }
+
+                // Read the hardware & driver config
+                m_iSlots = Convert.ToInt32(GetSetting("Slots", "6"));
+                if (m_iSlots < 1 || m_iSlots > 8) m_iSlots = 6;
+                m_sPosition = Convert.ToInt16(GetSetting("Position", "0"));
+                if (m_sPosition < 0 || m_sPosition >= m_iSlots) m_sPosition = 0;
+                m_iTimeInterval = Convert.ToInt32(GetSetting("Time", "1000"));
+                m_bImplementsNames = Convert.ToBoolean(GetSetting("ImplementsNames", "true"));
+                m_bImplementsOffsets = Convert.ToBoolean(GetSetting("ImplementsOffsets", "true"));
+                m_bPreemptMoves = Convert.ToBoolean(GetSetting("PreemptMoves", "false"));
+                for (int i = 0; i <= 7; i++)
+                {
+                    m_asFilterNames[i] = g_Profile.GetValue($"FilterNames {i}");
+                    m_aiFocusOffsets[i] = Convert.ToInt32(g_Profile.GetValue($"FocusOffsets {i}"));
+                    m_acFilterColours[i] = ColorTranslator.FromWin32(Convert.ToInt32(g_Profile.GetValue($"FilterColours {i}")));
                 }
             }
-
-            // Read the hardware & driver config
-            m_iSlots = Convert.ToInt32(GetSetting("Slots", "6"));
-            if (m_iSlots < 1 || m_iSlots > 8) m_iSlots = 6;
-            m_sPosition = Convert.ToInt16(GetSetting("Position", "0"));
-            if (m_sPosition < 0 || m_sPosition >= m_iSlots) m_sPosition = 0;
-            m_iTimeInterval = Convert.ToInt32(GetSetting("Time", "1000"));
-            m_bImplementsNames = Convert.ToBoolean(GetSetting("ImplementsNames", "true"));
-            m_bImplementsOffsets = Convert.ToBoolean(GetSetting("ImplementsOffsets", "true"));
-            m_bPreemptMoves = Convert.ToBoolean(GetSetting("PreemptMoves", "false"));
-            for (i = 0; i <= 7; i++)
+            catch
             {
-                m_asFilterNames[i] = g_Profile.GetValue($"FilterNames {i}");
-                m_aiFocusOffsets[i] = Convert.ToInt32(g_Profile.GetValue($"FocusOffsets {i}"));
-                m_acFilterColours[i] = ColorTranslator.FromWin32(Convert.ToInt32(g_Profile.GetValue($"FilterColours {i}")));
+                SetDefaultSettings();
             }
-
         }
 
-        public static void SaveSettings(int slots, double seconds, string[] names, int[] offsets, string[] colors, bool implementsNames, bool implementsOffsets, bool preemptMoves)
+        private static void SetDefaultSettings()
+        {
+            //
+            // initialize variables that are not present
+            //
+            // Create some 'realistic' defaults
+            //
+            Color[] colours = new Color[8] {Color.Red, Color.Green, Color.Blue, Color.Gray,
+                                                Color.DarkRed, Color.Teal, Color.Violet, Color.Black};
+            string[] names = new string[8] { "Red", "Green", "Blue", "Clear", "Ha", "OIII", "LPR", "Dark" };
+            Random rand = new Random();
+
+            g_Profile.WriteValue("RegVer", m_sRegVer);
+            g_Profile.WriteValue("Position", "0");
+            g_Profile.WriteValue("Slots", "6");
+            g_Profile.WriteValue("Time", "1000");
+            g_Profile.WriteValue("ImplementsNames", "true");
+            g_Profile.WriteValue("ImplementsOffsets", "true");
+            g_Profile.WriteValue("PreemptMoves", "false");
+            for (int i = 0; i < 8; i++)
+            {
+                g_Profile.WriteValue($"FilterNames {i}", names[i]);
+                g_Profile.WriteValue($"FocusOffsets {i}", rand.Next(10000).ToString());
+                g_Profile.WriteValue($"FilterColours {i}", ColorTranslator.ToWin32(colours[i]).ToString());
+            }
+        }
+
+        public static void SaveSettings(int slots, double seconds, string[] names, int[] offsets, Color[] colors, bool implementsNames, bool implementsOffsets, bool preemptMoves)
         {
             int i = 0;
             g_Profile.WriteValue("Slots", slots.ToString());
@@ -402,7 +398,7 @@ namespace ASCOM.Simulators
             {
                 g_Profile.WriteValue($"FilterNames {i}", names[i]);
                 g_Profile.WriteValue($"FocusOffsets {i}", offsets[i].ToString());
-                g_Profile.WriteValue($"FilterColours {i}", colors[i]);
+                g_Profile.WriteValue($"FilterColours {i}", ColorTranslator.ToWin32(colors[i]).ToString());
             }
             g_Profile.WriteValue("ImplementsNames", implementsNames.ToString());
             g_Profile.WriteValue("ImplementsOffsets", implementsOffsets.ToString());
@@ -412,6 +408,7 @@ namespace ASCOM.Simulators
         public static void ResetProfile()
         {
             g_Profile.Clear();
+            UpdateSettings();
         }
 
         //
@@ -427,22 +424,6 @@ namespace ASCOM.Simulators
         private static void CheckConnected()
         {
             if (!m_bConnected) throw new ASCOM.DriverException(MSG_NOT_CONNECTED, SCODE_NOT_CONNECTED);
-        }
-
-
-        private static void ShowSetup()
-        {
-
-            /*
-            SetupDialog.Slots = SimulatedHardware.Slots;
-            SetupDialog.Time = SimulatedHardware.Interval;
-            SetupDialog.Names = SimulatedHardware.FullFilterNames;
-            SetupDialog.Offsets = SimulatedHardware.FullFocusOffsets;
-            SetupDialog.Colours = SimulatedHardware.FullFilterColours;
-            SetupDialog.ImplementsNames = SimulatedHardware.ImplementsNames;
-            SetupDialog.ImplementsOffsets = SimulatedHardware.ImplementsOffsets;
-            SetupDialog.PreemptsMoves = SimulatedHardware.PreemptMoves;
-            */
         }
 
         private static void LogTraffic(string Text)
