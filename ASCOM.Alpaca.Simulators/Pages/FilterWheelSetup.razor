@@ -47,11 +47,31 @@
             <label for="preemptmoves"> Allow Pre-emption of Moves</label><br>
         </div>
     </fieldset>
+
+    <fieldset>
+        <legend>Filter Setup</legend>
+        <table style="width:100%">
+            <tr>
+                <th></th>
+                <th>Filter Name</th>
+                <th>Focus Offset</th>
+            </tr>
+
+            @for (int i = 0; i < 8; i++)
+            {
+            <tr>
+                <td>Slot @i</td>
+                <td><input type="text" @bind="FilterNames[i]"/></td>
+                <td><input type="number" min="0" step="1" @bind="FilterOffsets[i]" /></td>
+            </tr>
+            }
+        </table>
+    </fieldset>
 </body>
 
 @code {
-    [Parameter]
-    public int InstanceID { get; set; }
+        [Parameter]
+        public int InstanceID { get; set; }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settigns to be accessed.
@@ -72,6 +92,14 @@
         ImplementsFilterNames = ASCOM.Simulators.FilterWheelHardware.ImplementsNames;
         ImplementsFocusOffsets = ASCOM.Simulators.FilterWheelHardware.ImplementsOffsets;
         PreemptMoves = ASCOM.Simulators.FilterWheelHardware.PreemptMoves;
+
+
+        for (int i = 0; i < 8; i++)
+        {
+            FilterNames[i] = ASCOM.Simulators.FilterWheelHardware.FullFilterNames[i];
+            FilterOffsets[i] = ASCOM.Simulators.FilterWheelHardware.FullFocusOffsets[i];
+        }
+
         base.OnInitialized();
     }
 
@@ -146,6 +174,20 @@
         get;
         set;
     }
+    #endregion
+
+    #region Filter Setup
+    string[] FilterNames
+    {
+        get;
+        set;
+    } = new string[8];
+
+    int[] FilterOffsets
+    {
+        get;
+        set;
+    } = new int[8];
     #endregion
 
     public void Reset()
