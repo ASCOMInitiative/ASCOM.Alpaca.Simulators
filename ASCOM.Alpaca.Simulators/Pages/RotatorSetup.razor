@@ -27,6 +27,19 @@
         <input name="reverse" id="reverse" type="checkbox" @bind="Reverse" />
 
     </fieldset>
+
+    <fieldset>
+        <legend>Save</legend>
+        <div class="grid-container-two">
+
+            <div class="grid-item-left">
+                <button @onclick="Reset">Reset</button>
+            </div>
+            <div class="grid-item-right">
+                <button @onclick="SaveDeviceSettings">Save</button>
+            </div>
+        </div>
+    </fieldset>
 </body>
 
 @code {
