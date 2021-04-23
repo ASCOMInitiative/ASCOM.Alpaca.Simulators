@@ -1,0 +1,141 @@
+﻿@page "/setup/v1/Rotator/{InstanceID:int}/setup"
+
+@inject IToastService toastService
+@inject NavigationManager uriHelper;
+
+<body>
+    <fieldset>
+        <legend>Rotator Settings</legend>
+
+        <div>
+            <label for="rotationrate">Rotation Rate (deg/sec):</label>
+            <input name="rotationrate" id="rotationrate" type="number" min="0" step=".1" @bind="RotationRate" />
+        </div>
+
+        <div>
+            <label for="syncoffset">Sync Offset (deg):</label>
+            <input name="syncoffset" id="syncoffset" type="number" step=".1" @bind="SyncOffset" />
+        </div>
+
+        <p>Step size .8 deg. (4 steps/sec.)</p>
+        <div>
+            <label for="canreverse">Can Reverse</label>
+            <input name="canreverse" id="canreverse" type="checkbox" @bind="CanReverse" />
+        </div>
+
+        <label for="reverse">Reverse</label>
+        <input name="reverse" id="reverse" type="checkbox" @bind="Reverse" />
+
+    </fieldset>
+</body>
+
+@code {
+    [Parameter]
+    public int InstanceID { get; set; }
+
+    /// <summary>
+    /// This access the device type not the interface to allow the device specific settigns to be accessed.
+    /// </summary>
+    private ASCOM.Simulators.Rotator Device
+    {
+        get
+        {
+            return DeviceManager.GetRotator(InstanceID) as ASCOM.Simulators.Rotator;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        SyncOffset = Device.Offset;
+        RotationRate = ASCOM.Simulators.RotatorHardware.RotationRate;
+        CanReverse = ASCOM.Simulators.RotatorHardware.CanReverse;
+        Reverse = ASCOM.Simulators.RotatorHardware.Reverse;
+
+        base.OnInitialized();
+    }
+
+    #region Connection
+
+    public bool Connected
+    {
+        get
+        {
+            return Device.Connected;
+        }
+    }
+
+    public string ConnectionColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                return "red";
+            }
+            return "gray";
+        }
+    }
+
+    public string ConnectText
+    {
+        get
+        {
+            if (Device.Connected)
+            {
+                return "Disconnect";
+            }
+            return "Connect";
+        }
+    }
+
+    public void Connect()
+    {
+        Device.Connected = !Device.Connected;
+    }
+
+    #endregion
+
+    #region Settings
+
+    double RotationRate
+    {
+        get;
+        set;
+    }
+
+    double SyncOffset
+    {
+        get;
+        set;
+    }
+
+    bool CanReverse
+    {
+        get;
+        set;
+    }
+
+    bool Reverse
+    {
+        get;
+        set;
+    }
+    #endregion
+
+    public void Reset()
+    {
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+
+    public void SaveDeviceSettings()
+    {
+
+    }
+}
