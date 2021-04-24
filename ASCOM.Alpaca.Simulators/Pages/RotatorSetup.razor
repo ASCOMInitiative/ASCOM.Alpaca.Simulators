@@ -156,6 +156,15 @@
 
     public void SaveDeviceSettings()
     {
+        try
+        {
+            ASCOM.Simulators.RotatorHardware.SaveProfile(RotationRate, CanReverse, Reverse);
 
+            toastService.ShowSuccess("Settings Saved");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
     }
 }

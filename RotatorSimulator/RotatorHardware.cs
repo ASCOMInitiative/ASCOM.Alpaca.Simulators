@@ -99,15 +99,11 @@ namespace ASCOM.Simulators
 			Profile.Clear();
 		}
 
-		public static void SaveProfile()  // "Finalize" exists in parent
+		public static void SaveProfile(double rate, bool canreverse, bool reverse)  // "Finalize" exists in parent
 		{
-			/*
-			profile.DeviceType = "Rotator";
-			profile.WriteValue(s_sProgID, "Position", s_fPosition.ToString(CultureInfo.InvariantCulture), "");
-			profile.WriteValue(s_sProgID, "RotationRate", RotationRate.ToString(CultureInfo.InvariantCulture), "");
-			profile.WriteValue(s_sProgID, "CanReverse", s_bCanReverse.ToString(), "");
-			profile.WriteValue(s_sProgID, "Reverse", s_bReverse.ToString(), "");
-			*/
+			Profile.WriteValue("RotationRate", rate.ToString(CultureInfo.InvariantCulture));
+			Profile.WriteValue("CanReverse", canreverse.ToString());
+			Profile.WriteValue( "Reverse", reverse.ToString());
 		}
 
 		//
