@@ -47,6 +47,11 @@ namespace ASCOM.Simulators
 		//
 		private static object s_objSync = new object(); // Better than lock(this) - Jeffrey Richter, MSDN Jan 2003
 
+		private static IProfile Profile {
+			get;
+			set;
+		}
+
 		//
 		// Timer to update status
 		//
@@ -80,6 +85,7 @@ namespace ASCOM.Simulators
 		//
 		public static void Initialize(IProfile profile)
 		{
+			Profile = profile;
 			s_fPosition = Convert.ToSingle(profile.GetValue("Position", "0.0"), CultureInfo.InvariantCulture);
 			s_fTargetPosition = s_fPosition;
 			RotationRate = Convert.ToSingle(profile.GetValue("RotationRate", "3.0"), CultureInfo.InvariantCulture);
@@ -88,7 +94,12 @@ namespace ASCOM.Simulators
 
 		}
 
-		public static void Finalize_()  // "Finalize" exists in parent
+		public static void ResetProfile()
+        {
+			Profile.Clear();
+		}
+
+		public static void SaveProfile()  // "Finalize" exists in parent
 		{
 			/*
 			profile.DeviceType = "Rotator";
