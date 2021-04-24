@@ -1,6 +1,7 @@
 ﻿@page "/setup/v1/covercalibrator/{InstanceID:int}/setup"
 
 @inject IToastService toastService
+@inject NavigationManager uriHelper;
 
 <body>
     <fieldset>
@@ -171,6 +172,11 @@
             Device.ResetSettings();
 
             toastService.ShowSuccess("Settings Reset");
+
+            var timer = new System.Threading.Timer(new System.Threading.TimerCallback(_ =>
+            {
+                uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+            }), null, 2000, 2000);
         }
         catch (Exception ex)
         {
