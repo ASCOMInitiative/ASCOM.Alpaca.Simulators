@@ -1,0 +1,126 @@
+﻿@page "/setup/v1/Focuser/{InstanceID:int}/setup"
+
+@inject IToastService toastService
+@inject NavigationManager uriHelper;
+
+<body>
+    <fieldset>
+        <legend>Focuser Settings</legend>
+
+        
+    </fieldset>
+        <fieldset>
+        <legend>Capabilities</legend>
+
+        
+    </fieldset>
+        <fieldset>
+        <legend>Temperature Simulator</legend>
+
+        
+    </fieldset>
+        <fieldset>
+        <legend>Type</legend>
+
+        
+    </fieldset>
+
+    
+</body>
+
+@code {
+    [Parameter]
+    public int InstanceID { get; set; }
+
+    /// <summary>
+    /// This access the device type not the interface to allow the device specific settings to be accessed.
+    /// </summary>
+    private ASCOM.Simulators.Focuser Device
+    {
+        get
+        {
+            return DeviceManager.GetFocuser(InstanceID) as ASCOM.Simulators.Focuser;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+
+
+        base.OnInitialized();
+    }
+
+    #region Connection
+
+    public bool Connected
+    {
+        get
+        {
+            return Device.Connected;
+        }
+    }
+
+    public string ConnectionColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                return "red";
+            }
+            return "gray";
+        }
+    }
+
+    public string ConnectText
+    {
+        get
+        {
+            if (Device.Connected)
+            {
+                return "Disconnect";
+            }
+            return "Connect";
+        }
+    }
+
+    public void Connect()
+    {
+        Device.Connected = !Device.Connected;
+    }
+
+    #endregion
+
+    #region Settings
+    
+    #endregion
+
+    public void Reset()
+    {
+        try
+        {
+            toastService.ShowSuccess("Settings Reset");
+
+            var timer = new System.Threading.Timer(new System.Threading.TimerCallback(_ =>
+            {
+                uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+            }), null, 2000, 2000);
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+
+    public void SaveDeviceSettings()
+    {
+        try
+        {
+            toastService.ShowSuccess("Settings Saved");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+}
