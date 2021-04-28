@@ -7,25 +7,37 @@
     <fieldset>
         <legend>Focuser Settings</legend>
 
-        
+
     </fieldset>
-        <fieldset>
+    <fieldset>
         <legend>Capabilities</legend>
 
-        
+
     </fieldset>
-        <fieldset>
+    <fieldset>
         <legend>Temperature Simulator</legend>
 
-        
+
     </fieldset>
-        <fieldset>
+    <fieldset>
         <legend>Type</legend>
 
-        
+
     </fieldset>
 
-    
+    <fieldset>
+        <div class="grid-container-two">
+
+            <div class="grid-item-left">
+                <button @onclick="Reset">Reset</button>
+            </div>
+            <div class="grid-item-right">
+                <button @onclick="SaveDeviceSettings">Save</button>
+            </div>
+        </div>
+    </fieldset>
+
+
 </body>
 
 @code {
