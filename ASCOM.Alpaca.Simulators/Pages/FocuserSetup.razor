@@ -7,21 +7,66 @@
     <fieldset>
         <legend>Focuser Settings</legend>
 
+        <input type="number" id="maxPosition" name="maxPosition" min="0" @bind="maxPosition">
+        <label for="maxPosition"> Maximum Pos (steps):</label><br>
 
+        <input type="number" id="stepSize" name="stepSize" min="0" @bind="stepSize">
+        <label for="stepSize"> Step Size (microns):</label><br>
+
+        <input type="number" id="maxIncrement" name="maxIncrement" min="0" @bind="maxIncrement">
+        <label for="maxIncrement"> Maximum Increment:</label><br>
+
+        <input type="number" id="settleTime" name="settleTime" min="0" @bind="settleTime">
+        <label for="settleTime"> Settle Time (ms):</label><br>
     </fieldset>
     <fieldset>
         <legend>Capabilities</legend>
 
+        <input type="checkbox" id="tempProbe" name="tempProbe" @bind="tempProbe">
+        <label for="tempProbe"> Temperature Probe</label><br>
+
+        <input type="checkbox" id="tempComp" name="tempComp" @bind="tempComp">
+        <label for="tempComp"> Temperature Compensation</label><br>
+
+        <input type="checkbox" id="implementsStepSize" name="implementsStepSize" @bind="ImplementsStepSize">
+        <label for="implementsStepSize">Step Size</label><br>
+
+        <input type="checkbox" id="halt" name="halt" @bind="Halt">
+        <label for="halt"> Halt</label><br>
+
+        <input type="checkbox" id="synchronous" name="synchronous" @bind="Synchronous">
+        <label for="synchronous"> Synchronous</label><br>
+
+        <input type="checkbox" id="logging" name="logging" @bind="Logging">
+        <label for="logging"> Logging</label><br>
 
     </fieldset>
     <fieldset>
         <legend>Temperature Simulator</legend>
 
+        <input type="number" id="currentTemp"min="0" @bind="CurrentTemperature">
+        <label for="currentTemp"> Current Temperature:</label><br>
+
+        <input type="number" id="maxTemp" min="0" @bind="MaxTemperature">
+        <label for="maxTemp"> Maximum Temperature:</label><br>
+
+        <input type="number" id="minTemp" min="0" @bind="MinimumTemperature">
+        <label for="minTemp"> Minimum Temperature:</label><br>
+
+        <input type="number" id="cyclePeriod" min="0" @bind="CyclePeriod">
+        <label for="cyclePeriod"> Cycle Period (sec):</label><br>
+
+        <input type="number" id="steps" min="0" @bind="StepsPerC">
+        <label for="steps"> Steps / C:</label><br>
 
     </fieldset>
     <fieldset>
         <legend>Type</legend>
 
+        <input type="radio" id="absolute" @bind="Absolute">
+        <label for="absolute">Absolute</label><br>
+        <input type="radio" id="relative" @bind="Relative">
+        <label for="relative">Relative</label><br>
 
     </fieldset>
 
@@ -104,7 +149,109 @@
     #endregion
 
     #region Settings
-    
+
+    int maxPosition
+    {
+        get;
+        set;
+    }
+
+    int stepSize
+    {
+        get;
+        set;
+    }
+
+    int maxIncrement
+    {
+        get;
+        set;
+    }
+
+    int settleTime
+    {
+        get;
+        set;
+    }
+
+    bool tempProbe
+    {
+        get;
+        set;
+    }
+
+    bool tempComp
+    {
+        get;
+        set;
+    }
+
+    bool ImplementsStepSize
+    {
+        get;
+        set;
+    }
+
+    bool Halt
+    {
+        get;
+        set;
+    }
+
+    bool Synchronous
+    {
+        get;
+        set;
+    }
+
+    bool Logging
+    {
+        get;
+        set;
+    }
+
+    double CurrentTemperature
+    {
+        get;
+        set;
+    }
+
+    double MaxTemperature
+    {
+        get;
+        set;
+    }
+
+    double MinimumTemperature
+    {
+        get;
+        set;
+    }
+
+    int CyclePeriod
+    {
+        get;
+        set;
+    }
+
+    int StepsPerC
+    {
+        get;
+        set;
+    }
+
+    bool Absolute
+    {
+        get;
+        set;
+    }
+
+    bool Relative
+    {
+        get;
+        set;
+    }
+
     #endregion
 
     public void Reset()
