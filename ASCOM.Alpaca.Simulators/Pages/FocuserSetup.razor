@@ -37,9 +37,6 @@
         <input type="checkbox" id="synchronous" name="synchronous" @bind="Synchronous">
         <label for="synchronous"> Synchronous</label><br>
 
-        <input type="checkbox" id="logging" name="logging" @bind="Logging">
-        <label for="logging"> Logging</label><br>
-
     </fieldset>
     <fieldset>
         <legend>Temperature Simulator</legend>
@@ -63,9 +60,9 @@
     <fieldset>
         <legend>Type</legend>
 
-        <input type="radio" id="absolute" @bind="Absolute">
+        <input type="checkbox" id="absolute" @bind="Absolute">
         <label for="absolute">Absolute</label><br>
-        <input type="radio" id="relative" @bind="Relative">
+        <input type="checkbox" id="relative" @bind="Relative">
         <label for="relative">Relative</label><br>
 
     </fieldset>
@@ -102,7 +99,36 @@
 
     protected override void OnInitialized()
     {
+        maxPosition = Device.MaxStep;
+        stepSize = Device.StepSize;
 
+        maxIncrement = Device.MaxIncrement;
+
+        settleTime = Device.SettleTime;
+
+        tempProbe = Device.TempProbe;
+
+        tempComp = Device.TempComp;
+
+        ImplementsStepSize = Device.CanStepSize;
+
+        Halt = Device.CanHalt;
+
+        Synchronous = Device.Synchronous;
+
+        CurrentTemperature = Device.Temperature;
+
+        MaxTemperature = Device.TempMax;
+
+        MinimumTemperature = Device.TempMin;
+
+        CyclePeriod = Device.TempPeriod;
+
+        StepsPerC = Device.TempSteps;
+
+        Absolute = Device.Absolute;
+
+        Relative = !Device.Absolute;
 
         base.OnInitialized();
     }
@@ -156,7 +182,7 @@
         set;
     }
 
-    int stepSize
+    double stepSize
     {
         get;
         set;
@@ -204,12 +230,6 @@
         set;
     }
 
-    bool Logging
-    {
-        get;
-        set;
-    }
-
     double CurrentTemperature
     {
         get;
@@ -228,7 +248,7 @@
         set;
     }
 
-    int CyclePeriod
+    double CyclePeriod
     {
         get;
         set;

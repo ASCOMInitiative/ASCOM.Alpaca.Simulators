@@ -7,7 +7,9 @@ using System.Globalization;
 using ASCOM.Standard.Interfaces;
 using System.Collections.Generic;
 using ASCOM.Alpaca.Responses;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 namespace ASCOM.Simulators
 {
     //
@@ -22,6 +24,7 @@ namespace ASCOM.Simulators
     /// ASCOM Focuser Driver for a Focuser.
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
+    /// 
     public class Focuser : IFocuserV3, IDisposable, IAlpacaDevice
     {
         #region Constants
@@ -93,7 +96,6 @@ namespace ASCOM.Simulators
         }
 
         private MotorState motorState = MotorState.idle;
-        internal int settleTime;
         private DateTime settleFinishTime;
 
         #endregion
@@ -204,6 +206,7 @@ namespace ASCOM.Simulators
         internal int TempSteps { get; set; }
         internal int RateOfChange { get; set; }
         internal DateTime MouseDownTime { get; set; }
+        internal int SettleTime { get; set; }
 
         #endregion
 
@@ -605,8 +608,8 @@ namespace ASCOM.Simulators
                     if (_position == Target)
                     {
                         motorState = MotorState.settling;
-                        settleFinishTime = DateTime.Now + TimeSpan.FromMilliseconds(settleTime);
-                        LogMessage("MoveTimer", "Settle start, time " + settleTime.ToString());
+                        settleFinishTime = DateTime.Now + TimeSpan.FromMilliseconds(SettleTime);
+                        LogMessage("MoveTimer", "Settle start, time " + SettleTime.ToString());
                     }
                     return;
                 case MotorState.settling:
@@ -659,7 +662,7 @@ namespace ASCOM.Simulators
             TempPeriod = Convert.ToDouble(Profile.GetValue("TempPeriod", "3"), CultureInfo.InvariantCulture);
             TempProbe = Convert.ToBoolean(Profile.GetValue("TempProbe", "true"), CultureInfo.InvariantCulture);
             TempSteps = Convert.ToInt32(Profile.GetValue("TempSteps", "10"), CultureInfo.InvariantCulture);
-            settleTime = Convert.ToInt32(Profile.GetValue("SettleTime", "500"), CultureInfo.InvariantCulture);
+            SettleTime = Convert.ToInt32(Profile.GetValue("SettleTime", "500"), CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -689,7 +692,7 @@ namespace ASCOM.Simulators
             Profile.WriteValue("TempPeriod", TempPeriod.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue("TempProbe", TempProbe.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue("TempSteps", TempSteps.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("SettleTime", settleTime.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue("SettleTime", SettleTime.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
