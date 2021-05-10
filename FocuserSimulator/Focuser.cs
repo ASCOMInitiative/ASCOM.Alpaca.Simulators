@@ -695,6 +695,12 @@ namespace ASCOM.Simulators
             Profile.WriteValue("SettleTime", SettleTime.ToString(CultureInfo.InvariantCulture));
         }
 
+        internal void Reset()
+        {
+            Profile.Clear();
+            LoadFocuserKeyValues();
+        }
+
         /// <summary>
         /// Log a message making sure that the TraceLogger exists.
         /// This is to work round an issue with the form timers that seem to fire after the form and trace logger have been disposed

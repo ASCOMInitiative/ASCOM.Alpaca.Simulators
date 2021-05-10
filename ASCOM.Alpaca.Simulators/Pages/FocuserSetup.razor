@@ -268,8 +268,15 @@
 
     bool Relative
     {
-        get;
-        set;
+        get
+        {
+            return !Absolute;
+        }
+
+        set
+        {
+            Absolute = !value;
+        }
     }
 
     #endregion
@@ -278,6 +285,7 @@
     {
         try
         {
+            Device.Reset();
             toastService.ShowSuccess("Settings Reset");
 
             var timer = new System.Threading.Timer(new System.Threading.TimerCallback(_ =>
@@ -295,6 +303,29 @@
     {
         try
         {
+            Device.MaxStep = maxPosition;
+            Device.StepSize = stepSize;
+            Device.MaxIncrement = maxIncrement;
+            Device.SettleTime = settleTime;
+            Device.TempProbe = tempProbe;
+            Device.TempComp = tempComp;
+            Device.CanStepSize = ImplementsStepSize;
+            Device.CanHalt = Halt;
+            Device.Synchronous = Synchronous;
+            Device.Temperature = CurrentTemperature;
+
+            Device.TempMax = MaxTemperature;
+
+            Device.TempMin = MinimumTemperature;
+
+            Device.TempPeriod = CyclePeriod;
+
+            Device.TempSteps = StepsPerC;
+
+            Device.Absolute = Absolute;
+
+            Device.SaveProfileSettings();
+
             toastService.ShowSuccess("Settings Saved");
         }
         catch (Exception ex)
