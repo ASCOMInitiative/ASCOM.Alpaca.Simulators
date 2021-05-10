@@ -23,7 +23,9 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using ASCOM.Standard.Interfaces;
 using ASCOM.Alpaca.Responses;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 namespace ASCOM.Simulators
 {
     //
@@ -265,7 +267,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// list of switches used for simulation
         /// </summary>
-        internal static List<LocalSwitch> switches;
+        internal List<LocalSwitch> switches;
 
         /// <summary>
         /// The number of switches managed by this driver

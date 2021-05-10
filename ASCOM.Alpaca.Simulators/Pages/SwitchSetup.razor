@@ -6,7 +6,40 @@
 <body>
     <fieldset>
         <legend>Switch Settings</legend>
-    
+
+        <table style="width:100%">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Value</th>
+                <th>Min</th>
+                <th>Max</th>
+                <th>Step</th>
+                <th>Can Write</th>
+            </tr>
+            @{
+                int i = 0;
+                @foreach (var dev in Device.switches)
+                {
+                    int index = i;
+                    <tr>
+                        <th>@i</th>
+                        <th>@dev.Name</th>
+                        <th>@dev.Description</th>
+                        <th>@dev.Value</th>
+                        <th>@dev.Minimum</th>
+                        <th>@dev.Maximum</th>
+                        <th>@dev.StepSize</th>
+                        <th><input type="checkbox" value="@dev.CanWrite" @onchange="(Microsoft.AspNetCore.Components.ChangeEventArgs args) => SetCanWrite(index, (bool)args.Value)" maxlength="8"></th>
+                    </tr>
+
+                    i++;
+                }
+            }
+
+        </table>
+
     </fieldset>
 
     <fieldset>
@@ -87,10 +120,14 @@
 
     #region Settings
 
+    void SetCanWrite(int index, bool value)
+        {
+
+        }
 
     #endregion
 
-    public void Reset()
+        public void Reset()
     {
         try
         {
