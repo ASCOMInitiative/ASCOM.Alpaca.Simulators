@@ -539,6 +539,11 @@ namespace ASCOM.Simulators
             }
         }
 
+        internal void ResetProfile()
+        {
+            Profile.Clear();
+        }
+
         /// <summary>
         /// Loads a default set of switches.
         /// </summary>

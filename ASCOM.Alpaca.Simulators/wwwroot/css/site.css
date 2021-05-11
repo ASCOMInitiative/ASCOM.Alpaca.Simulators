@@ -173,6 +173,10 @@ fieldset {
         max-width: 22ch;
     }
 
+.switch-number {
+    max-width: 3.5em;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

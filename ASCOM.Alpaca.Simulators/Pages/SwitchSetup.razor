@@ -20,18 +20,18 @@
             </tr>
             @{
                 int i = 0;
-                @foreach (var dev in Device.switches)
+                @foreach (var dev in Switches)
                 {
                     int index = i;
                     <tr>
                         <th>@i</th>
-                        <th>@dev.Name</th>
-                        <th>@dev.Description</th>
-                        <th>@dev.Value</th>
-                        <th>@dev.Minimum</th>
-                        <th>@dev.Maximum</th>
-                        <th>@dev.StepSize</th>
-                        <th><input type="checkbox" value="@dev.CanWrite" @onchange="(Microsoft.AspNetCore.Components.ChangeEventArgs args) => SetCanWrite(index, (bool)args.Value)" maxlength="8"></th>
+                        <th><input type="text" @bind="@Switches[index].Name" style="max-width:10ch"></th>
+                        <th><input type="text" @bind="@Switches[index].Description"></th>
+                        <th><input type="number" @bind="@Switches[index].Value" class="switch-number"></th>
+                        <th><input type="number" @bind="@Switches[index].Minimum" class="switch-number"></th>
+                        <th><input type="number" @bind="@Switches[index].Maximum" class="switch-number"></th>
+                        <th><input type="number" @bind="@Switches[index].StepSize" class="switch-number"></th>
+                        <th><input type="checkbox" @bind="@Switches[index].CanWrite" class="switch-number"></th>
                     </tr>
 
                     i++;
@@ -72,8 +72,17 @@
         }
     }
 
+    List<ASCOM.Simulators.LocalSwitch> Switches
+    {
+        get;
+    } = new List<ASCOM.Simulators.LocalSwitch>();
+
     protected override void OnInitialized()
     {
+        foreach(var device in Device.switches)
+        {
+            Switches.Add(device);
+        }
         base.OnInitialized();
     }
 
@@ -119,18 +128,14 @@
     #endregion
 
     #region Settings
-
-    void SetCanWrite(int index, bool value)
-        {
-
-        }
-
     #endregion
 
-        public void Reset()
+    public void Reset()
     {
         try
         {
+            Device.ResetProfile();
+            Device.ReadProfile();
             toastService.ShowSuccess("Settings Reset");
 
             var timer = new System.Threading.Timer(new System.Threading.TimerCallback(_ =>
@@ -148,6 +153,32 @@
     {
         try
         {
+            int index = 0;
+            foreach (var dev in Switches)
+            {
+                if(!dev.IsValid(out string reason))
+                {
+                    var name = dev.Name ?? string.Empty;
+
+                    if(name == string.Empty)
+                    {
+                        name = $"Switch {index}";
+                    }
+
+                    toastService.ShowWarning($"{name} is not valid because {reason}");
+                    return;
+                }
+                index++;
+            }
+            Device.switches.Clear();
+
+            foreach (var dev in Switches)
+            {
+                Device.switches.Add(dev);
+            }
+
+            Device.WriteProfile();
+
             toastService.ShowSuccess("Settings Saved");
         }
         catch (Exception ex)

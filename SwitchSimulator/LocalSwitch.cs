@@ -161,7 +161,7 @@ namespace ASCOM.Simulators
         /// <returns>
         ///   <c>true</c> if the switch parameters are valid; otherwise, <c>false</c>.
         /// </returns>
-        internal bool IsValid(out string reason)
+        public bool IsValid(out string reason)
         {
             return IsValid(this.Name, this.Maximum, this.Minimum, this.StepSize, this.Value, out reason);
         }
@@ -193,32 +193,32 @@ namespace ASCOM.Simulators
         {
             if (string.IsNullOrEmpty(name))
             {
-                reason = "No switch device name is defined";
+                reason = "no switch device name is defined";
                 return false;
             }
             if (min >= max)
             {
-                reason = "Maximum not greater than Minimum";
+                reason = $"the Maximum ({max}) not greater than Minimum ({min})";
                 return false;
             }
             if (step <= 0)
             {
-                reason = "Step size must be greater than zero";
+                reason = "the Step size must be greater than zero";
                 return false;
             }
             if ((max - min) / step < 1)
             {
-                reason = "Step size gives less than two states";
+                reason = "the Step size gives less than two states";
                 return false;
             }
             if (Math.Abs(Math.IEEERemainder((max - min) / step, 1.0)) > step / 10)
             {
-                reason = "The number of states is not an integer.";
+                reason = "the number of states is not an integer.";
                 return false;
             }
             if (value < min || value > max)
             {
-                reason = "Value not between Minimum and Maximum";
+                reason = $"the Value ({value}) is not between Minimum ({min}) and Maximum ({max})";
                 return false;
             }
             reason = string.Empty;
