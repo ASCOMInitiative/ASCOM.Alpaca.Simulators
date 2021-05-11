@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace Alpaca
 {
@@ -62,7 +60,7 @@ namespace Alpaca
 
                 IList<DriveRate> res = new List<DriveRate>();
 
-                foreach(DriveRate rate in rates)
+                foreach (DriveRate rate in rates)
                 {
                     res.Add(rate);
                 }
@@ -298,7 +296,6 @@ namespace Alpaca
     {
         internal DeviceNotFoundException(string message) : base(message)
         {
-
         }
     }
 }

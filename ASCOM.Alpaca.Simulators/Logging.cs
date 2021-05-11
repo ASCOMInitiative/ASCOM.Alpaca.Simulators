@@ -1,9 +1,5 @@
 using ASCOM.Standard.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -21,7 +17,7 @@ namespace ASCOM.Alpaca.Simulators
 
             Log.SetMinimumLoggingLevel(ServerSettings.LoggingLevel);
 
-            //Set platform logging 
+            //Set platform logging
             //In this case the platform uses the same logger as the driver.
             ASCOM.Standard.Utilities.Logger.SetLogProvider(Log);
         }

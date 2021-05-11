@@ -75,7 +75,6 @@
                 </tr>
             }
         }
-
     </table>
 </fieldset>
 
@@ -312,7 +311,6 @@
         set;
     } = ServerSettings.LoggingLevel;
 
-
     string Password
     {
         get;
@@ -448,7 +446,6 @@
                 ServerSettings.UseAuth = RequireAuthorization;
             }
 
-
             DisplaySuccess("Security Saved!");
         }
         catch (Exception ex)
@@ -456,7 +453,6 @@
             DisplayError(ex.Message);
         }
     }
-
 
     void SaveSwaggerSettings()
     {

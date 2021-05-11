@@ -1,5 +1,4 @@
-﻿
-using ASCOM.Alpaca.Simulators;
+﻿using ASCOM.Alpaca.Simulators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +13,7 @@ namespace ASCOM.Alpaca
     {
         public string BasicRealm { get; set; }
 
-        IUserService userService;
+        private IUserService userService;
 
         public AuthorizationFilter(IUserService _userService)
         {
@@ -39,7 +38,7 @@ namespace ASCOM.Alpaca
             {
                 return;
             }
-            
+
             // Check for Authorization header and allow through if correct
             var req = filterContext.HttpContext.Request;
             var auth = req.Headers["Authorization"];

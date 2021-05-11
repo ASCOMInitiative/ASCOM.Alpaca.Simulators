@@ -35,7 +35,6 @@ namespace ASCOM.Alpaca.Pages
             {
                 returnUrl = Url.Content("~/");
             }
-                
 
             try
             {

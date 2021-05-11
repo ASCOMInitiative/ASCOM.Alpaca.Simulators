@@ -1,9 +1,6 @@
 using ASCOM.Alpaca.Responses;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -19,10 +16,10 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-
         // These store the actual instance of the device drivers. They are keyed to the Device Number
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ICameraV3> cameraV3s = new Dictionary<int, ASCOM.Standard.Interfaces.ICameraV3>();
-        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int,ASCOM.Standard.Interfaces.ICoverCalibratorV1>();
+
+        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int, ASCOM.Standard.Interfaces.ICoverCalibratorV1>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IDomeV2> domeV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IDomeV2>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2> filterWheelV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFocuserV3> focuserV3s = new Dictionary<int, ASCOM.Standard.Interfaces.IFocuserV3>();
@@ -35,7 +32,7 @@ namespace ASCOM.Alpaca.Simulators
         static DeviceManager()
         {
             //Only one instance of each in this simulator
-            coverCalibratorV1s.Add(0,new ASCOM.Simulators.CoverCalibratorSimulator(0, Logging.Log,
+            coverCalibratorV1s.Add(0, new ASCOM.Simulators.CoverCalibratorSimulator(0, Logging.Log,
                 new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "CoverCalibrator", 0)));
 
             domeV2s.Add(0, new ASCOM.Simulators.Dome(0, Logging.Log,
@@ -61,13 +58,10 @@ namespace ASCOM.Alpaca.Simulators
 
             telescopeV3s.Add(0, new ASCOM.Simulators.Telescope(0, Logging.Log,
                 new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Telescope", 0)));
-            
+
             cameraV3s.Add(0, new ASCOM.Simulators.Camera(0, Logging.Log,
                 new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Camera", 0)));
-
-
         }
-
 
         /// <summary>
         /// Reset all device settings profiles.
@@ -80,7 +74,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     (covcal.Value as ASCOM.Simulators.CoverCalibratorSimulator)?.ResetSettings();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logging.LogError(ex.Message);
                 }
@@ -145,7 +139,7 @@ namespace ASCOM.Alpaca.Simulators
             return devices;
         }
 
-        //These methods allow access to specific devices for the API controllers and the device Blazor UI Pages  
+        //These methods allow access to specific devices for the API controllers and the device Blazor UI Pages
 
         internal static ASCOM.Standard.Interfaces.ICameraV3 GetCamera(int DeviceID)
         {
@@ -194,7 +188,7 @@ namespace ASCOM.Alpaca.Simulators
                 throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
         }
-        
+
         internal static ASCOM.Standard.Interfaces.IFocuserV3 GetFocuser(int DeviceID)
         {
             if (focuserV3s.ContainsKey(DeviceID))
@@ -255,7 +249,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ASCOM.Standard.Interfaces.ITelescopeV3 GetTelescope (int DeviceID)
+        internal static ASCOM.Standard.Interfaces.ITelescopeV3 GetTelescope(int DeviceID)
         {
             if (telescopeV3s.ContainsKey(DeviceID))
             {

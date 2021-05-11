@@ -1,9 +1,6 @@
 using ASCOM.Standard.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -24,7 +21,6 @@ namespace ASCOM.Alpaca.Simulators
                 }
                 catch
                 {
-
                 }
                 return "1.0.0-Error";
             }
@@ -54,7 +50,7 @@ namespace ASCOM.Alpaca.Simulators
                 return Profile.GetValue("Location", "Unknown");
             }
             set
-            {            
+            {
                 Profile.WriteValue("Location", value.ToString());
             }
         }
@@ -63,7 +59,6 @@ namespace ASCOM.Alpaca.Simulators
         {
             get
             {
-  
                 if (bool.TryParse(Profile.GetValue("AutoStartBrowser", true.ToString()), out bool result))
                 {
                     return result;
@@ -251,7 +246,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             get
             {
-                if(Enum.TryParse(Profile.GetValue("LoggingLevel", LogLevel.Information.ToString()), out LogLevel result))
+                if (Enum.TryParse(Profile.GetValue("LoggingLevel", LogLevel.Information.ToString()), out LogLevel result))
                 {
                     return result;
                 }
@@ -279,6 +274,5 @@ namespace ASCOM.Alpaca.Simulators
                 Profile.WriteValue("RunSwagger", value.ToString());
             }
         }
-
     }
 }

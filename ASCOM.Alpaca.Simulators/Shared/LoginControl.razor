@@ -8,22 +8,22 @@
             <b>Logged in as: @context.User.Identity.Name</b>
 
             <a class="btn btn-primary"
-                href="/logout?returnUrl=/"
-                target="_top"
-                style="float: right;">Logout</a>
+               href="/logout?returnUrl=/"
+               target="_top"
+               style="float: right;">Logout</a>
         </Authorized>
 
         <NotAuthorized>
 
             <input type="text"
-                    placeholder="User Name"
-                    @bind="@Username" />
+                   placeholder="User Name"
+                   @bind="@Username" />
 
             &nbsp;&nbsp;
 
             <input type="password"
-                    placeholder="Password"
-                    @bind="@Password" />
+                   placeholder="Password"
+                   @bind="@Password" />
 
             &nbsp;&nbsp;
 

@@ -121,91 +121,91 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/canreverse")]
-        public ActionResult<BoolResponse> CanReverse([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> CanReverse([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetRotator(DeviceNumber).CanReverse, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/ismoving")]
-        public ActionResult<BoolResponse> IsMoving([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> IsMoving([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetRotator(DeviceNumber).IsMoving, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/position")]
-        public ActionResult<DoubleResponse> Position([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<DoubleResponse> Position([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetRotator(DeviceNumber).Position, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/mechanicalposition")]
-        public ActionResult<DoubleResponse> MechanicalPosition([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<DoubleResponse> MechanicalPosition([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetRotator(DeviceNumber).MechanicalPosition, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/reverse")]
-        public ActionResult<BoolResponse> Reverse([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> Reverse([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetRotator(DeviceNumber).Reverse, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/reverse")]
-        public ActionResult<Response> Reverse([DefaultValue(0)]int DeviceNumber, [Required][FromForm] bool Reverse, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Reverse([DefaultValue(0)] int DeviceNumber, [Required][FromForm] bool Reverse, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetRotator(DeviceNumber).Reverse = Reverse; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/stepsize")]
-        public ActionResult<DoubleResponse> StepSize([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<DoubleResponse> StepSize([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetRotator(DeviceNumber).StepSize, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/targetposition")]
-        public ActionResult<DoubleResponse> TargetPosition([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<DoubleResponse> TargetPosition([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetRotator(DeviceNumber).TargetPosition, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/halt")]
-        public ActionResult<Response> Halt([DefaultValue(0)]int DeviceNumber, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Halt([DefaultValue(0)] int DeviceNumber, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetRotator(DeviceNumber).Halt(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/move")]
-        public ActionResult<Response> Move([DefaultValue(0)]int DeviceNumber, [Required][DefaultValue(0)][FromForm] double Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Move([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(0)][FromForm] double Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetRotator(DeviceNumber).Move((float)Position), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/moveabsolute")]
-        public ActionResult<Response> MoveAbsolute([DefaultValue(0)]int DeviceNumber, [Required][DefaultValue(0)][FromForm] double Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> MoveAbsolute([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(0)][FromForm] double Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetRotator(DeviceNumber).MoveAbsolute((float)Position), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/movemechanical")]
-        public ActionResult<Response> MoveMechanical([DefaultValue(0)]int DeviceNumber, [Required][DefaultValue(0)][FromForm] double Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> MoveMechanical([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(0)][FromForm] double Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetRotator(DeviceNumber).MoveMechanical((float)Position), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/sync")]
-        public ActionResult<Response> Sync([DefaultValue(0)]int DeviceNumber, [Required][DefaultValue(0)][FromForm] double Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Sync([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(0)][FromForm] double Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetRotator(DeviceNumber).Sync((float)Position), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }

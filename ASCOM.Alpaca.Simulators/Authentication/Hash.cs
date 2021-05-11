@@ -1,10 +1,6 @@
 ﻿using ASCOM.Alpaca.Simulators;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 
 namespace ASCOM.Alpaca
 {
@@ -13,6 +9,7 @@ namespace ASCOM.Alpaca
         internal const int iters = 1000;
         internal const int salt_length = 16;
         internal const int key_length = 20;
+
         internal static string GetStoragePassword(string password)
         {
             byte[] salt;
@@ -46,7 +43,7 @@ namespace ASCOM.Alpaca
 
                 return same;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logging.LogError(ex.Message);
             }

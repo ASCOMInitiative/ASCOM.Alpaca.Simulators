@@ -1,10 +1,6 @@
 ﻿using ASCOM.Alpaca.Responses;
-using ASCOM.Standard.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -27,8 +23,6 @@ namespace ASCOM.Alpaca.Simulators
         [Route("management/v1/description")]
         public AlpacaDescriptionResponse Description(uint ClientID = 0, uint ClientTransactionID = 0)
         {
-
-
             var TransactionID = DeviceManager.ServerTransactionID;
             Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
 

@@ -121,63 +121,63 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/Absolute")]
-        public ActionResult<BoolResponse> Absolute([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> Absolute([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).Absolute, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/IsMoving")]
-        public ActionResult<BoolResponse> IsMoving([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> IsMoving([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).IsMoving, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/Link")]
-        public ActionResult<BoolResponse> Link([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> Link([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).Link, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/Link")]
-        public ActionResult<Response> Link([DefaultValue(0)]int DeviceNumber, [FromForm] bool Link, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Link([DefaultValue(0)] int DeviceNumber, [FromForm] bool Link, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetFocuser(DeviceNumber).Link = Link; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/MaxIncrement")]
-        public ActionResult<IntResponse> MaxIncrement([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<IntResponse> MaxIncrement([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).MaxIncrement, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/MaxStep")]
-        public ActionResult<IntResponse> MaxStep([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<IntResponse> MaxStep([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).MaxStep, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/Position")]
-        public ActionResult<IntResponse> Position([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<IntResponse> Position([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).Position, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/StepSize")]
-        public ActionResult<DoubleResponse> StepSize([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<DoubleResponse> StepSize([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).StepSize, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/TempComp")]
-        public ActionResult<BoolResponse> TempComp([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> TempComp([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).TempComp, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -191,28 +191,28 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/TempCompAvailable")]
-        public ActionResult<BoolResponse> TempCompAvailable([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> TempCompAvailable([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).TempCompAvailable, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/Temperature")]
-        public ActionResult<DoubleResponse> Temperature([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<DoubleResponse> Temperature([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).Temperature, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/Halt")]
-        public ActionResult<Response> Halt([DefaultValue(0)]int DeviceNumber, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Halt([DefaultValue(0)] int DeviceNumber, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).Halt(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/Move")]
-        public ActionResult<Response> Move([DefaultValue(0)]int DeviceNumber, [FromForm] int Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Move([DefaultValue(0)] int DeviceNumber, [FromForm] int Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).Move(Position), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }

@@ -121,28 +121,28 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/focusoffsets")]
-        public ActionResult<IntListResponse> FocusOffsets([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<IntListResponse> FocusOffsets([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).FocusOffsets, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/names")]
-        public ActionResult<StringListResponse> Names([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringListResponse> Names([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).Names, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/position")]
-        public ActionResult<IntResponse> Position([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<IntResponse> Position([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFilterWheel(DeviceNumber).Position, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/position")]
-        public ActionResult<Response> Position([DefaultValue(0)]int DeviceNumber, [FromForm] short position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Position([DefaultValue(0)] int DeviceNumber, [FromForm] short position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetFilterWheel(DeviceNumber).Position = position; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }

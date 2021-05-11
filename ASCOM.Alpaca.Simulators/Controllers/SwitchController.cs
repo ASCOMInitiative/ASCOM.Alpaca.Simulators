@@ -30,7 +30,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/CommandBool")]
-        public  ActionResult<BoolResponse> CommandBool([DefaultValue(0)] int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> CommandBool([DefaultValue(0)] int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).CommandBool(Command, Raw), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Command={Command}, Raw={Raw}");
         }
@@ -44,7 +44,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/Connected")]
-        public  ActionResult<BoolResponse> Connected([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> Connected([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).Connected, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -121,7 +121,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/maxswitch")]
-        public ActionResult<IntResponse> MaxSwitch([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<IntResponse> MaxSwitch([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).MaxSwitch, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -135,70 +135,70 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/getswitch")]
-        public ActionResult<BoolResponse> GetSwitch([DefaultValue(0)]int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> GetSwitch([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).CanWrite(id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/getswitchdescription")]
-        public ActionResult<StringResponse> GetSwitchDescription([DefaultValue(0)]int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> GetSwitchDescription([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).GetSwitchDescription(id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/getswitchname")]
-        public ActionResult<StringResponse> GetSwitchName([DefaultValue(0)]int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> GetSwitchName([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).GetSwitchName(id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/getswitchvalue")]
-        public ActionResult<DoubleResponse> GetSwitchValue([DefaultValue(0)]int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<DoubleResponse> GetSwitchValue([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).GetSwitchValue(id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/minswitchvalue")]
-        public ActionResult<DoubleResponse> MinSwitchValue([DefaultValue(0)]int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<DoubleResponse> MinSwitchValue([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).MinSwitchValue(id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/maxswitchvalue")]
-        public ActionResult<DoubleResponse> MaxSwitchValue([DefaultValue(0)]int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<DoubleResponse> MaxSwitchValue([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).MaxSwitchValue(id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/switchstep")]
-        public ActionResult<DoubleResponse> SwitchStep([DefaultValue(0)]int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<DoubleResponse> SwitchStep([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SwitchStep(id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/setswitch")]
-        public ActionResult<Response> SetSwitch([DefaultValue(0)]int DeviceNumber, [FromForm] [Required][DefaultValue(0)] short id, [FromForm][Required] bool State, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SetSwitch([DefaultValue(0)] int DeviceNumber, [FromForm][Required][DefaultValue(0)] short id, [FromForm][Required] bool State, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetSwitch(id, State), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/setswitchname")]
-        public ActionResult<Response> SetSwitchName([DefaultValue(0)]int DeviceNumber, [FromForm] [Required][DefaultValue(0)] short id, [Required][FromForm] string name, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SetSwitchName([DefaultValue(0)] int DeviceNumber, [FromForm][Required][DefaultValue(0)] short id, [Required][FromForm] string name, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetSwitchName(id, name), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route(APIRoot + "{DeviceNumber}/setswitchvalue")]
-        public ActionResult<Response> SetSwitchValue([DefaultValue(0)]int DeviceNumber, [FromForm][Required][DefaultValue(0)] short id, [Required][FromForm] double value, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SetSwitchValue([DefaultValue(0)] int DeviceNumber, [FromForm][Required][DefaultValue(0)] short id, [Required][FromForm] double value, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetSwitchValue(id, value), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }

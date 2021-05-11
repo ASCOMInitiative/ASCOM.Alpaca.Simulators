@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 
 namespace ASCOM.Alpaca.Simulators.Discovery
 {
@@ -34,7 +33,6 @@ namespace ASCOM.Alpaca.Simulators.Discovery
                     IPInterfaceProperties adapterProperties = adapter.GetIPProperties();
                     if (adapterProperties == null)
                         continue;
-
 
                     UnicastIPAddressInformationCollection uniCast = adapterProperties.UnicastAddresses;
                     if (uniCast.Count > 0)

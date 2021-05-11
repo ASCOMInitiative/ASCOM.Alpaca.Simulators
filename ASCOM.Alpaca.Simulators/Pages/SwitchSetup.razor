@@ -37,9 +37,7 @@
                     i++;
                 }
             }
-
         </table>
-
     </fieldset>
 
     <fieldset>
@@ -53,8 +51,6 @@
             </div>
         </div>
     </fieldset>
-
-
 </body>
 
 @code {
@@ -79,7 +75,7 @@
 
     protected override void OnInitialized()
     {
-        foreach(var device in Device.switches)
+        foreach (var device in Device.switches)
         {
             Switches.Add(device);
         }
@@ -156,11 +152,11 @@
             int index = 0;
             foreach (var dev in Switches)
             {
-                if(!dev.IsValid(out string reason))
+                if (!dev.IsValid(out string reason))
                 {
                     var name = dev.Name ?? string.Empty;
 
-                    if(name == string.Empty)
+                    if (name == string.Empty)
                     {
                         name = $"Switch {index}";
                     }

@@ -121,7 +121,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/issafe")]
-        public ActionResult<BoolResponse> IsSafe([DefaultValue(0)]int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> IsSafe([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSafetyMonitor(DeviceNumber).IsSafe, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
