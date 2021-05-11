@@ -363,85 +363,161 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/imagearray")]
-        public string ImageArray([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult ImageArray([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
 
+                var rawresponse = string.Empty;
+
                 if (DeviceManager.GetCamera(DeviceNumber).ImageArray is int[,])
                 {
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new IntArray2DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as int[,]));
+                    rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new IntArray2DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as int[,]));
                 }
                 else if (DeviceManager.GetCamera(DeviceNumber).ImageArray is int[,,])
                 {
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new IntArray3DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as int[,,]));
+                    rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new IntArray3DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as int[,,]));
                 }
                 else if (DeviceManager.GetCamera(DeviceNumber).ImageArray is double[,])
                 {
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new DoubleArray2DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as double[,]));
+                    rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new DoubleArray2DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as double[,]));
                 }
                 else if (DeviceManager.GetCamera(DeviceNumber).ImageArray is double[,,])
                 {
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new DoubleArray3DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as double[,,]));
+                    rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new DoubleArray3DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as double[,,]));
                 }
                 else if (DeviceManager.GetCamera(DeviceNumber).ImageArray is short[,])
                 {
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new ShortArray2DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as short[,]));
+                    rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new ShortArray2DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as short[,]));
                 }
                 else if (DeviceManager.GetCamera(DeviceNumber).ImageArray is short[,,])
                 {
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new ShortArray3DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as short[,,]));
+                    rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new ShortArray3DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as short[,,]));
+                }
+                else
+                {
+                    throw new Exception("Failed to read ImageArray type from camera");
                 }
 
-                throw new Exception("Failed to read ImageArray type from camera");
+                return Content(rawresponse, "application/json; charset=utf-8");
+            }
+            catch (DeviceNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return Newtonsoft.Json.JsonConvert.SerializeObject(ResponseHelpers.ExceptionResponseBuilder<IntArray2DResponse>(ex, ClientTransactionID, TransactionID));
+                return Ok(ResponseHelpers.ExceptionResponseBuilder<AxisRatesResponse>(ex, ClientTransactionID, TransactionID));
             }
         }
 
         [HttpGet]
         [Route(APIRoot + "{DeviceNumber}/imagearrayvariant")]
-        public object ImageArrayVariant([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult ImageArrayVariant([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             var TransactionID = DeviceManager.ServerTransactionID;
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-                if (DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant is int[,])
+
+                var rawresponse = string.Empty;
+
+                Array raw_data = (Array)DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant;
+
+                var type = raw_data.GetValue(0, 0).GetType();
+
+                if (type == typeof(int))
                 {
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new IntArray2DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant as int[,]));
+                    if (raw_data.Rank == 2)
+                    {
+                        rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new IntArray2DResponse(ClientTransactionID, TransactionID, To2DArray<int>(raw_data)));
+                    }
+                    else if (raw_data.Rank == 3)
+                    {
+                        rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new IntArray3DResponse(ClientTransactionID, TransactionID, To3DArray<int>(raw_data)));
+                    }
+                    else
+                    {
+                        throw new Exception("Failed to read valid Rank from camera");
+                    }
                 }
-                else if (DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant is int[,,])
+                else if (type == typeof(short))
                 {
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new IntArray3DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant as int[,,]));
+                    if (raw_data.Rank == 2)
+                    {
+                        rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new ShortArray2DResponse(ClientTransactionID, TransactionID, To2DArray<short>(raw_data)));
+                    }
+                    else if (raw_data.Rank == 3)
+                    {
+                        rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new ShortArray3DResponse(ClientTransactionID, TransactionID, To3DArray<short>(raw_data)));
+                    }
+                    else
+                    {
+                        throw new Exception("Failed to read valid Rank from camera");
+                    }
                 }
-                else if (DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant is double[,])
+                else if (type == typeof(double))
                 {
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new DoubleArray2DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant as double[,]));
+                    if (raw_data.Rank == 2)
+                    {
+                        rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new DoubleArray2DResponse(ClientTransactionID, TransactionID, To2DArray<double>(raw_data)));
+                    }
+                    else if (raw_data.Rank == 3)
+                    {
+                        rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new DoubleArray3DResponse(ClientTransactionID, TransactionID, To3DArray<double>(raw_data)));
+                    }
+                    else
+                    {
+                        throw new Exception("Failed to read valid Rank from camera");
+                    }
                 }
-                else if (DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant is double[,,])
+                else
                 {
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new DoubleArray3DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant as double[,,]));
-                }
-                else if (DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant is short[,])
-                {
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new ShortArray2DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant as short[,]));
-                }
-                else if (DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant is short[,,])
-                {
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new ShortArray3DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant as short[,,]));
+                    throw new Exception("Failed to read ImageArrayVariant type from camera");
                 }
 
-                throw new Exception("Failed to read ImageArray type from camera");
+                return Content(rawresponse, "application/json; charset=utf-8");
+            }
+            catch (DeviceNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return Newtonsoft.Json.JsonConvert.SerializeObject(ResponseHelpers.ExceptionResponseBuilder<IntArray2DResponse>(ex, ClientTransactionID, TransactionID));
+                return Ok(ResponseHelpers.ExceptionResponseBuilder<AxisRatesResponse>(ex, ClientTransactionID, TransactionID));
             }
+        }
+
+        private static T[,] To2DArray<T>(Array raw)
+        {
+            T[,] result = new T[raw.GetLength(0), raw.GetLength(1)];
+
+            for (int i = 0; i < raw.GetLength(0); ++i)
+            {
+                Array.Copy(raw, i * raw.GetLength(1), result, i * result.GetLength(1), raw.GetLength(1));
+            }
+
+            return result;
+        }
+
+        private static T[,,] To3DArray<T>(Array raw)
+        {
+            T[,,] result = new T[raw.GetLength(0), raw.GetLength(1), raw.GetLength(2)];
+
+            for (int i = 0; i < raw.GetLength(0); ++i)
+            {
+                for (int j = 0; j < raw.GetLength(0); ++j)
+                {
+                    for (int k = 0; k < raw.GetLength(0); ++k)
+                    {
+                        result[i, j, k] = (T)raw.GetValue(i, j, k);
+                    }
+                }
+            }
+
+            return result;
         }
 
         [HttpGet]
