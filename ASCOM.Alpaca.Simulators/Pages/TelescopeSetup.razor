@@ -1,0 +1,121 @@
+﻿@page "/setup/v1/Telescope/{InstanceID:int}/setup"
+
+@inject IToastService toastService
+@inject NavigationManager uriHelper;
+
+<body>
+    <fieldset>
+        <legend>Dome Settings</legend>
+
+    </fieldset>  
+
+    <fieldset>
+        <div class="grid-container-two">
+
+            <div class="grid-item-left">
+                <button @onclick="Reset">Reset</button>
+            </div>
+            <div class="grid-item-right">
+                <button @onclick="SaveDeviceSettings">Save</button>
+            </div>
+        </div>
+    </fieldset>
+
+
+</body>
+
+@code {
+    [Parameter]
+    public int InstanceID { get; set; }
+
+    /// <summary>
+    /// This access the device type not the interface to allow the device specific settings to be accessed.
+    /// </summary>
+    private ASCOM.Simulators.Telescope Device
+    {
+        get
+        {
+            return DeviceManager.GetTelescope(InstanceID) as ASCOM.Simulators.Telescope;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+
+        base.OnInitialized();
+    }
+
+    #region Connection
+
+    public bool Connected
+    {
+        get
+        {
+            return Device.Connected;
+        }
+    }
+
+    public string ConnectionColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                return "red";
+            }
+            return "gray";
+        }
+    }
+
+    public string ConnectText
+    {
+        get
+        {
+            if (Device.Connected)
+            {
+                return "Disconnect";
+            }
+            return "Connect";
+        }
+    }
+
+    public void Connect()
+    {
+        Device.Connected = !Device.Connected;
+    }
+
+    #endregion
+
+    #region Settings
+
+    #endregion
+
+    public void Reset()
+    {
+        try
+        {
+            toastService.ShowSuccess("Settings Reset");
+
+            var timer = new System.Threading.Timer(new System.Threading.TimerCallback(_ =>
+            {
+                uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+            }), null, 2000, 2000);
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+
+    public void SaveDeviceSettings()
+    {
+        try
+        {
+            toastService.ShowSuccess("Settings Saved");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+}
