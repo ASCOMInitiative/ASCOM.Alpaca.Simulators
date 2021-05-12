@@ -5,7 +5,77 @@
 
 <body>
     <fieldset>
-        <legend>Dome Settings</legend>
+        <legend>Shutter Control</legend>
+
+        <input type="number" id="ShutterSlewRate" @bind="ShutterSlewRate">
+        <label for="ShutterSlewRate">Slew Rate (deg/sec)</label><br>
+
+        <input type="number" id="ShutterOpenCloseTime" @bind="ShutterOpenCloseTime">
+        <label for="ShutterOpenCloseTime">Open/Close time (sec)</label><br>
+
+        <input type="number" id="ShutterMaximumAltitude" @bind="ShutterMaximumAltitude">
+        <label for="ShutterMaximumAltitude">Maximum Altitude (deg)</label><br>
+
+        <input type="number" id="ShutterMinimumAltitude" @bind="ShutterMinimumAltitude">
+        <label for="ShutterMinimumAltitude">Minimum Altitude (deg)</label><br>
+    </fieldset>
+
+
+    <fieldset>
+        <legend>Azimuth Control</legend>
+
+        <input type="number" id="AzimuthSlewRate" @bind="AzimuthSlewRate">
+        <label for="AzimuthSlewRate">Slew Rate (deg/sec)</label><br>
+
+        <input type="number" id="AzimuthStepSize" @bind="AzimuthStepSize">
+        <label for="AzimuthStepSize">Step Size (deg)</label><br>
+
+        <input type="number" id="AzimuthPark" @bind="AzimuthPark">
+        <label for="AzimuthPark">Park Position (deg)</label><br>
+
+        <input type="number" id="AzimuthHome" @bind="AzimuthHome">
+        <label for="AzimuthHome">Home Position (deg)</label><br>
+    </fieldset>
+
+    <fieldset>
+        <legend>Interface Capabilities</legend>
+
+        <input type="checkbox" id="CanFindHome" @bind="CanFindHome">
+        <label for="CanFindHome">Can Find Home</label><br>
+
+        <input type="checkbox" id="CanPark" @bind="CanPark">
+        <label for="CanPark">Can Park</label><br>
+
+        <input type="checkbox" id="CanSlewAltitude" @bind="CanSlewAltitude">
+        <label for="CanSlewAltitude">Can Slew Altitude</label><br>
+
+        <input type="checkbox" id="CanSlewAzimuth" @bind="CanSlewAzimuth">
+        <label for="CanSlewAzimuth">Can Slew Azimuth</label><br>
+
+        <input type="checkbox" id="CanOpenCloseShutter" @bind="CanOpenCloseShutter">
+        <label for="CanOpenCloseShutter">Can Open Close Shutter</label><br>
+
+        <input type="checkbox" id="CanSetPark" @bind="CanSetPark">
+        <label for="CanSetPark">Can Set Park</label><br>
+
+        <input type="checkbox" id="CanSyncAzimuth" @bind="CanSyncAzimuth">
+        <label for="CanSyncAzimuth">Can Sync Azimuth</label><br>
+    </fieldset>
+
+    <fieldset>
+        <legend>Nonstandard Behavior</legend>
+
+        <input type="checkbox" id="AtHomeWithoutFindHome" @bind="AtHomeWithoutFindHome">
+        <label for="AtHomeWithoutFindHome">AtHome without FindHome</label><br>
+
+        <input type="checkbox" id="AtParkWithoutPark" @bind="AtParkWithoutPark">
+        <label for="AtParkWithoutPark">At Park without Park()</label><br>
+
+        <input type="checkbox" id="StartUpWithShutterError" @bind="StartUpWithShutterError">
+        <label for="StartUpWithShutterError">Start up with Shutter Error</label><br>
+
+        <input type="checkbox" id="SlewingOnOpenClose" @bind="SlewingOnOpenClose">
+        <label for="SlewingOnOpenClose">Slewing on Open/Close</label><br>
     </fieldset>
 
     <fieldset>
@@ -83,6 +153,113 @@
 
     #endregion
 
+    double ShutterSlewRate
+    {
+        get;
+        set;
+    }
+
+    double ShutterOpenCloseTime
+    {
+        get;
+        set;
+    }
+
+    double ShutterMaximumAltitude
+    {
+        get;
+        set;
+    }
+
+    double ShutterMinimumAltitude
+    {
+        get;
+        set;
+    }
+
+    double AzimuthSlewRate
+    {
+        get;
+        set;
+    }
+
+    double AzimuthStepSize
+    {
+        get;
+        set;
+    }
+
+    double AzimuthPark
+    {
+        get;
+        set;
+    }
+
+    double AzimuthHome
+    {
+        get;
+        set;
+    }
+
+    bool CanFindHome
+    {
+        get;
+        set;
+    }
+    bool CanPark
+    {
+        get;
+        set;
+    }
+    bool CanSlewAltitude
+    {
+        get;
+        set;
+    }
+    bool CanSlewAzimuth
+    {
+        get;
+        set;
+    }
+    bool CanOpenCloseShutter
+    {
+        get;
+        set;
+    }
+    bool CanSetPark
+    {
+        get;
+        set;
+    }
+    bool CanSyncAzimuth
+    {
+        get;
+        set;
+    }
+
+    bool AtHomeWithoutFindHome
+    {
+        get;
+        set;
+    }
+
+    bool AtParkWithoutPark
+    {
+        get;
+        set;
+    }
+
+    bool StartUpWithShutterError
+    {
+        get;
+        set;
+    }
+
+    bool SlewingOnOpenClose
+    {
+        get;
+        set;
+    }
     #region Settings
 
     #endregion
