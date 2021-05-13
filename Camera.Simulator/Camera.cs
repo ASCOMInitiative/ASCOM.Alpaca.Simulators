@@ -45,7 +45,9 @@ using System.Timers;
 using System.Collections.Generic;
 using ASCOM.Standard.Interfaces;
 using ASCOM.Alpaca.Responses;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 namespace ASCOM.Simulators
 {
     /// <summary>
@@ -2459,7 +2461,7 @@ namespace ASCOM.Simulators
 
         #region Private
 
-        private void ReadFromProfile()
+        internal void ReadFromProfile()
         {
 
             // Read cooler configuration properties
@@ -2594,7 +2596,7 @@ namespace ASCOM.Simulators
         /// <summary>
         ///  Save all variables to the Profile store, including cooler variables
         /// </summary>
-        private void SaveToProfile()
+        internal void SaveToProfile()
         {
 
             // Save camera configuration to the Profile
@@ -2683,6 +2685,11 @@ namespace ASCOM.Simulators
             }
 
             SaveCoolerToProfile(); // Save the cooler profile as well
+        }
+
+        internal void ClearProfile()
+        {
+            Profile.Clear();
         }
 
         /// <summary>

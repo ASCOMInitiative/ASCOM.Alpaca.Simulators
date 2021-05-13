@@ -1,14 +1,202 @@
 ﻿@page "/setup/v1/Camera/{InstanceID:int}/setup"
 
 @inject IToastService toastService
+@inject NavigationManager uriHelper;
 
 <body>
     <fieldset>
-        <legend>Camera Settings</legend>
+        <legend>Pixel Settings</legend>
+
+        <label for="PixelWidth">Width (microns):</label>
+        <input type="number" id="PixelWidth" @bind="PixelWidth">
+        <br>
+
+        <label for="PixelHeight">Height (microns)</label>
+        <input type="number" id="PixelHeight" @bind="PixelHeight">
+        <br>
+
+        <label for="MaxADU">Maximum ADU</label>
+        <input type="number" id="MaxADU" @bind="MaxADU">
+        <br>
+
+        <label for="EperADU">e- per ADU</label>
+        <input type="number" id="EperADU" @bind="EperADU">
+        <br>
+    </fieldset>
+
+    <fieldset>
+        <legend>CCD Settings</legend>
+
+        <label for="CCDWidth">Width (Pixels)</label>
+        <input type="number" id="CCDWidth" @bind="CCDWidth">
+        <br>
+
+        <label for="CCDHeight">Height (Pixels)</label>
+        <input type="number" id="CCDHeight" @bind="CCDHeight">
+        <br>
+
+        <label for="MaxBinX">Max Bin X</label>
+        <input type="number" id="MaxBinX" @bind="MaxBinX">
+        <br>
+
+        <label for="MaxBinY">Max Bin Y</label>
+        <input type="number" id="MaxBinY" @bind="MaxBinY">
+        <br>
+
+        <input type="checkbox" id="CanAsymmetricBin" @bind="CanAsymmetricBin">
+        <label for="CanAsymmetricBin">Can Asymmetric Bin</label><br>
+
+        <input type="checkbox" id="OmitOddBins" @bind="OmitOddBins">
+        <label for="OmitOddBins">Omit Odd Bins</label><br>
+
+        <input type="checkbox" id="HasShutter" @bind="HasShutter">
+        <label for="HasShutter">Has Shutter</label><br>
+
+        <label for="Name">Name</label>
+        <input type="text" id="Name" @bind="Name">
+        <br>
+
+        <label for="SenorType">Sensor Type</label>
+        <select id="SenorType" @bind="SensorType">
+            <option value="Monochrome">Monochrome</option>
+            <option value="Color">Color</option>
+            <option value="RGGB">RGGB</option>
+            <option value="CMYG">CMYG</option>
+            <option value="CMYG2">CMYG2</option>
+            <option value="LRGB">LRGB</option>
+        </select>
+        <br>
+
+        <label for="BayerOffsetX">Bayer Offset X</label>
+        <input type="number" id="BayerOffsetX" @bind="BayerOffsetX">
+        <br>
+
+        <label for="BayerOffsetY">Bayer Offset Y</label>
+        <input type="number" id="BayerOffsetY" @bind="BayerOffsetY">
+        <br>
+    </fieldset>
+
+    <fieldset>
+        <legend>Cooling Settings</legend>
+
+        <input type="checkbox" id="HasCooler" @bind="HasCooler">
+        <label for="HasCooler">Has Cooler</label><br>
+
+        <input type="checkbox" id="CanSetCCDTemperature" @bind="CanSetCCDTemperature">
+        <label for="CanSetCCDTemperature">Can Set CCD Temperature</label><br>
+
+        <input type="checkbox" id="CanGetCoolerPower" @bind="CanGetCoolerPower">
+        <label for="CanGetCoolerPower">Can Get Cooler Power</label><br>
+
+        <p>Setup Coming Soon!</p>
+    </fieldset>
+
+    <fieldset>
+        <legend>Gain Settings</legend>
+
+        <label for="GainMode">Gain Mode</label>
+        <select id="GainMode" @bind="GainMode">
+            <option value="None">None</option>
+            <option value="Gains">Gain Names</option>
+            <option value="GainMinMax">Gain Min Max</option>
+        </select>
+        <br>
+
+        <label for="GainMin">Gain Min</label>
+        <input type="number" id="GainMin" @bind="GainMin">
+        <br>
+
+        <label for="GainMax">Gain Max</label>
+        <input type="number" id="GainMax" @bind="GainMax">
+        <br>
+    </fieldset>
+
+    <fieldset>
+        <legend>Readout Settings</legend>
+
+        <input type="checkbox" id="CanDoFastReadout" @bind="CanDoFastReadout">
+        <label for="CanDoFastReadout">Can Do Fast Readout</label><br>
+
+        <input type="checkbox" id="MultipleReadoutModes" @bind="MultipleReadoutModes">
+        <label for="MultipleReadoutModes">Multiple Readout Modes</label><br>
+    </fieldset>
+
+    <fieldset>
+        <legend>Exposure Settings</legend>
+
+        <input type="checkbox" id="CanAbortExposure" @bind="CanAbortExposure">
+        <label for="CanAbortExposure">Can Abort Exposure</label><br>
+
+        <input type="checkbox" id="CanStopExposure" @bind="CanStopExposure">
+        <label for="CanStopExposure">Can Stop Exposure</label><br>
+
+        <label for="MinExposure">Min Exposure</label>
+        <input type="number" id="MinExposure" @bind="MinExposure">
+        <br>
+
+        <label for="MaxExposure">Max Exposure</label>
+        <input type="number" id="MaxExposure" @bind="MaxExposure">
+        <br>
+
+        <input type="checkbox" id="HasSubExposure" @bind="HasSubExposure">
+        <label for="HasSubExposure">Has Sub Exposure</label><br>
+
+        <label for="SubExposure">Sub Exposure</label>
+        <input type="number" id="SubExposure" @bind="SubExposure">
+        <br>
+    </fieldset>
+
+    <fieldset>
+        <legend>Simulator Settings</legend>
+
+        <label for="InterfaceVersion">Interface Version</label>
+        <select id="InterfaceVersion" @bind="InterfaceVersion">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+        <br>
+    </fieldset>
+
+    <fieldset>
+        <legend>Offset Settings</legend>
+
+        <label for="OffsetMode">Gain Mode</label>
+        <select id="OffsetMode" @bind="OffsetMode">
+            <option value="None">None</option>
+            <option value="Offsets">Offset Names</option>
+            <option value="OffsetMinMax">Offset Min Max</option>
+        </select>
+        <br>
+
+        <label for="OffsetMin">Offset Min</label>
+        <input type="number" id="OffsetMin" @bind="OffsetMin">
+        <br>
+
+        <label for="OffsetMax">Offset Max</label>
+        <input type="number" id="OffsetMax" @bind="OffsetMax">
+    </fieldset>
+
+    <fieldset>
+        <legend>Guiding Settings</legend>
+
+        <input type="checkbox" id="CanPulseGuide" @bind="CanPulseGuide">
+        <label for="CanPulseGuide">Can Pulse Guide</label><br>
+    </fieldset>
+
+    <fieldset>
+        <legend>Simulated Image</legend>
+        <p>Coming Soon!</p>
+    </fieldset>
+
+    <fieldset>
         <div class="grid-container-two">
-            <div class="grid-item-right">
-            </div>
+
             <div class="grid-item-left">
+                <button @onclick="Reset">Reset</button>
+            </div>
+            <div class="grid-item-right">
+                <button @onclick="SaveDeviceSettings">Save</button>
             </div>
         </div>
     </fieldset>
@@ -29,11 +217,389 @@
         }
     }
 
+    protected override void OnInitialized()
+    {
+        InterfaceVersion = (int)Device.InterfaceVersion;
+
+        PixelWidth = Device.pixelSizeX;
+
+        PixelHeight = Device.pixelSizeY;
+
+        MaxADU = Device.maxADU;
+
+        EperADU = Device.electronsPerADU;
+
+        CCDWidth = Device.cameraXSize;
+
+        CCDHeight = Device.cameraYSize;
+
+        MaxBinX = Device.maxBinX;
+
+        MaxBinY = Device.maxBinY;
+
+        CanAsymmetricBin = Device.canAsymmetricBin;
+
+        OmitOddBins = Device.omitOddBins;
+
+        HasShutter = Device.hasShutter;
+
+        Name = Device.sensorName;
+
+        SensorType = Device.sensorType;
+
+        BayerOffsetX = Device.bayerOffsetX;
+
+        BayerOffsetY = Device.bayerOffsetY;
+
+        HasCooler = Device.hasCooler;
+
+        CanSetCCDTemperature = Device.canSetCcdTemperature;
+
+        CanGetCoolerPower = Device.canGetCoolerPower;
+
+        GainMode = Device.gainMode;
+
+        GainMin = Device.gainMin;
+
+        GainMax = Device.gainMax;
+
+        CanDoFastReadout = Device.canFastReadout;
+
+        MultipleReadoutModes = Device.readoutModes.Count > 1;
+
+        CanAbortExposure = Device.canAbortExposure;
+
+        CanStopExposure = Device.canStopExposure;
+
+        MinExposure = Device.exposureMin;
+
+        MaxExposure = Device.exposureMax;
+
+        HasSubExposure = Device.hasSubExposure;
+
+        SubExposure = Device.subExposureInterval;
+
+        OffsetMode = Device.offsetMode;
+
+        OffsetMin = Device.offsetMin;
+
+        OffsetMax = Device.offsetMax;
+
+        CanPulseGuide = Device.canPulseGuide;
+
+        base.OnInitialized();
+    }
+
+    #region Settings
+
+    int InterfaceVersion
+    {
+        get;
+        set;
+    }
+
+    double PixelWidth
+    {
+        get;
+        set;
+    }
+
+    double PixelHeight
+    {
+        get;
+        set;
+    }
+
+    int MaxADU
+    {
+        get;
+        set;
+    }
+
+    double EperADU
+    {
+        get;
+        set;
+    }
+
+    int CCDWidth
+    {
+        get;
+        set;
+    }
+
+    int CCDHeight
+    {
+        get;
+        set;
+    }
+
+    short MaxBinX
+    {
+        get;
+        set;
+    }
+
+    short MaxBinY
+    {
+        get;
+        set;
+    }
+
+    bool CanAsymmetricBin
+    {
+        get;
+        set;
+    }
+
+    bool OmitOddBins
+    {
+        get;
+        set;
+    }
+
+    bool HasShutter
+    {
+        get;
+        set;
+    }
+
+    string Name
+    {
+        get;
+        set;
+    }
+
+    ASCOM.Standard.Interfaces.SensorType SensorType
+    {
+        get;
+        set;
+    }
+
+    short BayerOffsetX
+    {
+        get;
+        set;
+    }
+
+    short BayerOffsetY
+    {
+        get;
+        set;
+    }
+
+    bool HasCooler
+    {
+        get;
+        set;
+    }
+
+    bool CanSetCCDTemperature
+    {
+        get;
+        set;
+    }
+
+    bool CanGetCoolerPower
+    {
+        get;
+        set;
+    }
+
+    ASCOM.Simulators.Camera.GainMode GainMode
+    {
+        get;
+        set;
+    }
+
+    short GainMin
+    {
+        get;
+        set;
+    }
+
+    short GainMax
+    {
+        get;
+        set;
+    }
+
+    bool CanDoFastReadout
+    {
+        get;
+        set;
+    }
+
+    bool MultipleReadoutModes
+    {
+        get;
+        set;
+    }
+
+    bool CanAbortExposure
+    {
+        get;
+        set;
+    }
+
+    bool CanStopExposure
+    {
+        get;
+        set;
+    }
+
+    double MinExposure
+    {
+        get;
+        set;
+    }
+
+    double MaxExposure
+    {
+        get;
+        set;
+    }
+
+    bool HasSubExposure
+    {
+        get;
+        set;
+    }
+
+    double SubExposure
+    {
+        get;
+        set;
+    }
+
+    ASCOM.Simulators.Camera.OffsetMode OffsetMode
+    {
+        get;
+        set;
+    }
+
+    int OffsetMin
+    {
+        get;
+        set;
+    }
+
+    int OffsetMax
+    {
+        get;
+        set;
+    }
+
+    bool CanPulseGuide
+    {
+        get;
+        set;
+    }
+
+    #endregion
+
     public void Reset()
     {
         try
         {
+            Device.ClearProfile();
+            Device.ReadFromProfile();
+
             toastService.ShowSuccess("Settings Reset");
+
+            var timer = new System.Threading.Timer(new System.Threading.TimerCallback(_ =>
+            {
+                uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+            }), null, 2000, 2000);
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+
+    public void SaveDeviceSettings()
+    {
+        try
+        {
+            Device.interfaceVersion = (short)InterfaceVersion;
+
+            Device.pixelSizeX = PixelWidth;
+
+            Device.pixelSizeY = PixelHeight;
+
+            Device.maxADU = MaxADU;
+
+            Device.electronsPerADU = EperADU;
+
+            Device.cameraXSize = CCDWidth;
+
+            Device.cameraYSize = CCDHeight;
+
+            Device.maxBinX = MaxBinX;
+
+            Device.maxBinY = MaxBinY;
+
+            Device.canAsymmetricBin = CanAsymmetricBin;
+
+            Device.omitOddBins = OmitOddBins;
+
+            Device.hasShutter = HasShutter;
+
+            Device.sensorName = Name;
+
+            Device.sensorType = SensorType;
+
+            Device.bayerOffsetX = BayerOffsetX;
+
+            Device.bayerOffsetY = BayerOffsetY;
+
+            Device.hasCooler = HasCooler;
+
+            Device.canSetCcdTemperature = CanSetCCDTemperature;
+
+            Device.canGetCoolerPower = CanGetCoolerPower;
+
+            Device.gainMode = GainMode;
+
+            Device.gainMin = GainMin;
+
+            Device.gainMax = GainMax;
+
+            Device.canFastReadout = CanDoFastReadout;
+
+            if (MultipleReadoutModes)
+            {
+                Device.readoutModes = new System.Collections.Generic.List<string>() { "Raw Monochrome", "Live View", "Raw To Hard Drive" };
+            }
+            else
+            {
+                Device.readoutModes = new System.Collections.Generic.List<string>() { "Default" };
+            }
+
+            Device.canAbortExposure = CanAbortExposure; ;
+
+            Device.canStopExposure = CanStopExposure;
+
+            Device.exposureMin = MinExposure;
+
+            Device.exposureMax = MaxExposure;
+
+            Device.hasSubExposure = HasSubExposure;
+
+            Device.subExposureInterval = SubExposure;
+
+            Device.offsetMode = OffsetMode;
+
+            Device.offsetMin = OffsetMin;
+
+            Device.offsetMax = OffsetMax;
+
+            Device.canPulseGuide = CanPulseGuide;
+
+            Device.SaveToProfile();
+
+            toastService.ShowSuccess("Settings Saved");
         }
         catch (Exception ex)
         {
