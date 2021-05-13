@@ -28,21 +28,23 @@ using ASCOM.Alpaca.Responses;
 using ASCOM.Standard.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
+
 namespace ASCOM.Simulators
 {
     public class Dome : IDomeV2, IDisposable, IAlpacaDevice
     {
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
-        ILogger Logger;
+        private ILogger Logger;
+        private IProfile Profile;
 
         public Dome(int deviceNumber, ILogger logger, IProfile profile)
         {
             Logger = logger;
+            Profile = profile;
 
             LogMessage("New", "Log started");
 
@@ -58,7 +60,6 @@ namespace ASCOM.Simulators
                 }
                 UniqueID = profile.GetValue(UNIQUE_ID_PROFILE_NAME);
             }
-
             catch (Exception ex)
             {
                 logger.LogError($"Dome {deviceNumber} - {ex.Message}");
@@ -68,39 +69,47 @@ namespace ASCOM.Simulators
 
             Configuration = new AlpacaConfiguredDevice(Name, "Dome", deviceNumber, UniqueID);
 
+            LoadConfig();
 
+            LogMessage("New", "Starting thread");
+
+            LogMessage("New", "New completed OK");
+        }
+
+        internal void LoadConfig()
+        {
             Hardware.g_dOCProgress = 0;
             Hardware.g_dOCDelay = 0;
 
-            Hardware.g_dOCDelay = System.Convert.ToDouble(profile.GetValue("OCDelay", "3"));
-            Hardware.g_dSetPark = System.Convert.ToDouble(profile.GetValue("SetPark", "180"));
-            Hardware.g_dSetHome = System.Convert.ToDouble(profile.GetValue("SetHome", "0"));
-            Hardware.g_dAltRate = System.Convert.ToDouble(profile.GetValue("AltRate", "30"));
-            Hardware.g_dAzRate = System.Convert.ToDouble(profile.GetValue("AzRate", "15"));
-            Hardware.g_dStepSize = System.Convert.ToDouble(profile.GetValue("StepSize", "5"));
-            Hardware.g_dMaxAlt = System.Convert.ToDouble(profile.GetValue("MaxAlt", "90"));
-            Hardware.g_dMinAlt = System.Convert.ToDouble(profile.GetValue("MinAlt", "0"));
-            Hardware.g_bStartShutterError = System.Convert.ToBoolean(profile.GetValue("StartShutterError", "False"));
-            Hardware.g_bSlewingOpenClose = System.Convert.ToBoolean(profile.GetValue("SlewingOpenClose", "False"));
-            Hardware.g_bStandardAtHome = !System.Convert.ToBoolean(profile.GetValue("NonFragileAtHome", "False"));
-            Hardware.g_bStandardAtPark = !System.Convert.ToBoolean(profile.GetValue("NonFragileAtPark", "False"));
+            Hardware.g_dOCDelay = System.Convert.ToDouble(Profile.GetValue("OCDelay", "3"));
+            Hardware.g_dSetPark = System.Convert.ToDouble(Profile.GetValue("SetPark", "180"));
+            Hardware.g_dSetHome = System.Convert.ToDouble(Profile.GetValue("SetHome", "0"));
+            Hardware.g_dAltRate = System.Convert.ToDouble(Profile.GetValue("AltRate", "30"));
+            Hardware.g_dAzRate = System.Convert.ToDouble(Profile.GetValue("AzRate", "15"));
+            Hardware.g_dStepSize = System.Convert.ToDouble(Profile.GetValue("StepSize", "5"));
+            Hardware.g_dMaxAlt = System.Convert.ToDouble(Profile.GetValue("MaxAlt", "90"));
+            Hardware.g_dMinAlt = System.Convert.ToDouble(Profile.GetValue("MinAlt", "0"));
+            Hardware.g_bStartShutterError = System.Convert.ToBoolean(Profile.GetValue("StartShutterError", "False"));
+            Hardware.g_bSlewingOpenClose = System.Convert.ToBoolean(Profile.GetValue("SlewingOpenClose", "False"));
+            Hardware.g_bStandardAtHome = !System.Convert.ToBoolean(Profile.GetValue("NonFragileAtHome", "False"));
+            Hardware.g_bStandardAtPark = !System.Convert.ToBoolean(Profile.GetValue("NonFragileAtPark", "False"));
 
             // Get Can capabilities
-            Hardware.g_bCanFindHome = System.Convert.ToBoolean(profile.GetValue("CanFindHome", "True"));
-            Hardware.g_bCanPark = System.Convert.ToBoolean(profile.GetValue("CanPark", "True"));
-            Hardware.g_bCanSetAltitude = System.Convert.ToBoolean(profile.GetValue("CanSetAltitude", "True"));
-            Hardware.g_bCanSetAzimuth = System.Convert.ToBoolean(profile.GetValue("CanSetAzimuth", "True"));
-            Hardware.g_bCanSetPark = System.Convert.ToBoolean(profile.GetValue("CanSetPark", "True"));
-            Hardware.g_bCanSetShutter = System.Convert.ToBoolean(profile.GetValue("CanSetShutter", "True"));
-            Hardware.g_bCanSyncAzimuth = System.Convert.ToBoolean(profile.GetValue("CanSyncAzimuth", "True"));
+            Hardware.g_bCanFindHome = System.Convert.ToBoolean(Profile.GetValue("CanFindHome", "True"));
+            Hardware.g_bCanPark = System.Convert.ToBoolean(Profile.GetValue("CanPark", "True"));
+            Hardware.g_bCanSetAltitude = System.Convert.ToBoolean(Profile.GetValue("CanSetAltitude", "True"));
+            Hardware.g_bCanSetAzimuth = System.Convert.ToBoolean(Profile.GetValue("CanSetAzimuth", "True"));
+            Hardware.g_bCanSetPark = System.Convert.ToBoolean(Profile.GetValue("CanSetPark", "True"));
+            Hardware.g_bCanSetShutter = System.Convert.ToBoolean(Profile.GetValue("CanSetShutter", "True"));
+            Hardware.g_bCanSyncAzimuth = System.Convert.ToBoolean(Profile.GetValue("CanSyncAzimuth", "True"));
 
             // Get Conform test variables, these should always be set to False for correct production behaviour
-            Hardware.g_bConformInvertedCanBehaviour = System.Convert.ToBoolean(profile.GetValue("InvertedCanBehaviour", "False"));
-            Hardware.g_bConformReturnWrongException = System.Convert.ToBoolean(profile.GetValue("ReturnWrongException", "False"));
+            Hardware.g_bConformInvertedCanBehaviour = System.Convert.ToBoolean(Profile.GetValue("InvertedCanBehaviour", "False"));
+            Hardware.g_bConformReturnWrongException = System.Convert.ToBoolean(Profile.GetValue("ReturnWrongException", "False"));
 
             // get and range dome state
-            Hardware.g_dDomeAz = System.Convert.ToDouble(profile.GetValue("DomeAz", System.Convert.ToString(Hardware.INVALID_COORDINATE)));
-            Hardware.g_dDomeAlt = System.Convert.ToDouble(profile.GetValue("DomeAlt", System.Convert.ToString(Hardware.INVALID_COORDINATE)));
+            Hardware.g_dDomeAz = System.Convert.ToDouble(Profile.GetValue("DomeAz", System.Convert.ToString(Hardware.INVALID_COORDINATE)));
+            Hardware.g_dDomeAlt = System.Convert.ToDouble(Profile.GetValue("DomeAlt", System.Convert.ToString(Hardware.INVALID_COORDINATE)));
             if (Hardware.g_dDomeAlt < Hardware.g_dMinAlt)
                 Hardware.g_dDomeAlt = Hardware.g_dMinAlt;
             if (Hardware.g_dDomeAlt > Hardware.g_dMaxAlt)
@@ -114,7 +123,7 @@ namespace ASCOM.Simulators
                 Hardware.g_eShutterState = ShutterState.Error;
             else
             {
-                string ret = profile.GetValue("ShutterState", "1");       // ShutterClosed
+                string ret = Profile.GetValue("ShutterState", "1");       // ShutterClosed
                 Hardware.g_eShutterState = (ShutterState)Enum.Parse(typeof(ShutterState), ret);
             }
 
@@ -124,15 +133,40 @@ namespace ASCOM.Simulators
                 Hardware.g_bAtHome = false;                   // Standard: home is set by home() method, never wake up homed!
             else
                 Hardware.g_bAtHome = Hardware.HW_AtHome;// Non standard, position, OK to wake up homed
+        }
 
-            // Hardware.g_timer.Interval = TIMER_INTERVAL * 1000
+        internal void ResetConfig()
+        {
+            Profile.Clear();
+        }
 
-            // Hardware.g_handBox.LabelButtons()
-            // Hardware.g_handBox.RefreshLeds()
+        internal void SaveConfig()
+        {
+            Profile.WriteValue("OCDelay", System.Convert.ToString(Hardware.g_dOCDelay));
+            Profile.WriteValue("SetPark", System.Convert.ToString(Hardware.g_dSetPark));
+            Profile.WriteValue("SetHome", System.Convert.ToString(Hardware.g_dSetHome));
+            Profile.WriteValue("AltRate", System.Convert.ToString(Hardware.g_dAltRate));
+            Profile.WriteValue("AzRate", System.Convert.ToString(Hardware.g_dAzRate));
+            Profile.WriteValue("StepSize", System.Convert.ToString(Hardware.g_dStepSize));
+            Profile.WriteValue("MaxAlt", System.Convert.ToString(Hardware.g_dMaxAlt));
+            Profile.WriteValue("MinAlt", System.Convert.ToString(Hardware.g_dMinAlt));
+            Profile.WriteValue("StartShutterError", System.Convert.ToString(Hardware.g_bStartShutterError));
+            Profile.WriteValue("SlewingOpenClose", System.Convert.ToString(Hardware.g_bSlewingOpenClose));
+            Profile.WriteValue("NonFragileAtHome", System.Convert.ToString(!Hardware.g_bStandardAtHome));
+            Profile.WriteValue("NonFragileAtPark", System.Convert.ToString(!Hardware.g_bStandardAtPark));
 
-            LogMessage("New", "Starting thread");
+            Profile.WriteValue("DomeAz", System.Convert.ToString(Hardware.g_dDomeAz));
+            Profile.WriteValue("DomeAlt", System.Convert.ToString(Hardware.g_dDomeAlt));
 
-            LogMessage("New", "New completed OK");
+            Profile.WriteValue("ShutterState", System.Convert.ToString(Hardware.g_eShutterState));
+
+            Profile.WriteValue("CanFindHome", System.Convert.ToString(Hardware.g_bCanFindHome));
+            Profile.WriteValue("CanPark", System.Convert.ToString(Hardware.g_bCanPark));
+            Profile.WriteValue("CanSetAltitude", System.Convert.ToString(Hardware.g_bCanSetAltitude));
+            Profile.WriteValue("CanSetAzimuth", System.Convert.ToString(Hardware.g_bCanSetAzimuth));
+            Profile.WriteValue("CanSetPark", System.Convert.ToString(Hardware.g_bCanSetPark));
+            Profile.WriteValue("CanSetShutter", System.Convert.ToString(Hardware.g_bCanSetShutter));
+            Profile.WriteValue("CanSyncAzimuth", System.Convert.ToString(Hardware.g_bCanSyncAzimuth));
         }
 
         public AlpacaConfiguredDevice Configuration
@@ -150,7 +184,6 @@ namespace ASCOM.Simulators
             {
                 if (disposing)
                 {
-
                 }
             }
             this.disposedValue = true;
@@ -220,7 +253,7 @@ namespace ASCOM.Simulators
         public double Altitude
         {
             get
-            {           
+            {
                 if (!Hardware.g_bCanSetAltitude)
                     throw new PropertyNotImplementedException("Altitude", false);
 
@@ -229,7 +262,7 @@ namespace ASCOM.Simulators
                 if (Hardware.g_eShutterState == ShutterState.Error)
                     LogMessage("Altitude", "Shutter in ErrorState");
                 if (Hardware.g_eShutterState != ShutterState.Open)
-                    LogMessage("Altitude","Shutter not Open");
+                    LogMessage("Altitude", "Shutter not Open");
 
                 return Hardware.g_dDomeAlt;
             }
@@ -663,7 +696,7 @@ namespace ASCOM.Simulators
 
         private void LogMessage(string message, string details)
         {
-            Logger.LogVerbose(message + " - " + details); 
+            Logger.LogVerbose(message + " - " + details);
         }
     }
 }

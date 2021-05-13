@@ -140,9 +140,9 @@
 
         CanSyncAzimuth = ASCOM.Simulators.Hardware.g_bCanSyncAzimuth;
 
-        AtHomeWithoutFindHome = ASCOM.Simulators.Hardware.g_bStandardAtHome;
+        AtHomeWithoutFindHome = !ASCOM.Simulators.Hardware.g_bStandardAtHome;
 
-        AtParkWithoutPark = ASCOM.Simulators.Hardware.g_bStandardAtPark;
+        AtParkWithoutPark = !ASCOM.Simulators.Hardware.g_bStandardAtPark;
 
         StartUpWithShutterError = ASCOM.Simulators.Hardware.g_bStartShutterError;
 
@@ -307,6 +307,8 @@
     {
         try
         {
+            Device.ResetConfig();
+            Device.LoadConfig();
             toastService.ShowSuccess("Settings Reset");
 
             var timer = new System.Threading.Timer(new System.Threading.TimerCallback(_ =>
@@ -324,6 +326,47 @@
     {
         try
         {
+
+            ASCOM.Simulators.Hardware.g_dAltRate = ShutterSlewRate;
+
+            ASCOM.Simulators.Hardware.g_dOCDelay = ShutterOpenCloseTime;
+
+            ASCOM.Simulators.Hardware.g_dMaxAlt = ShutterMaximumAltitude;
+
+            ASCOM.Simulators.Hardware.g_dMinAlt = ShutterMinimumAltitude;
+
+            ASCOM.Simulators.Hardware.g_dAzRate = AzimuthSlewRate;
+
+            ASCOM.Simulators.Hardware.g_dStepSize = AzimuthStepSize;
+
+            ASCOM.Simulators.Hardware.g_dSetPark = AzimuthPark;
+
+            ASCOM.Simulators.Hardware.g_dSetHome = AzimuthHome;
+
+            ASCOM.Simulators.Hardware.g_bCanFindHome = CanFindHome;
+
+            ASCOM.Simulators.Hardware.g_bCanPark = CanPark;
+
+            ASCOM.Simulators.Hardware.g_bCanSetAltitude = CanSlewAltitude;
+
+            ASCOM.Simulators.Hardware.g_bCanSetAzimuth = CanSlewAzimuth;
+
+            ASCOM.Simulators.Hardware.g_bCanSetShutter = CanOpenCloseShutter;
+
+            ASCOM.Simulators.Hardware.g_bCanSetPark = CanSetPark;
+
+            ASCOM.Simulators.Hardware.g_bCanSyncAzimuth = CanSyncAzimuth;
+
+            ASCOM.Simulators.Hardware.g_bStandardAtHome = AtHomeWithoutFindHome;
+
+            ASCOM.Simulators.Hardware.g_bStandardAtPark = AtParkWithoutPark;
+
+            ASCOM.Simulators.Hardware.g_bStartShutterError = StartUpWithShutterError;
+
+            ASCOM.Simulators.Hardware.g_bSlewingOpenClose = SlewingOnOpenClose;
+
+            Device.SaveConfig();
+
             toastService.ShowSuccess("Settings Saved");
         }
         catch (Exception ex)
