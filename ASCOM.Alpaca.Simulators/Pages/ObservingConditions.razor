@@ -1,0 +1,157 @@
+﻿@page "/setup/v1/ObservingConditions/{InstanceID:int}/setup"
+
+@inject IToastService toastService
+@inject NavigationManager uriHelper;
+
+<body>
+    <fieldset>
+        <legend>Sensor Settings</legend>
+
+        <table style="width:100%">
+            <tr>
+                <th></th>
+                <th>Enabled</th>
+                <th>Min</th>
+                <th>Max</th>
+                <th>Unit</th>
+                <th>Time</th>
+                <th>Delay</th>
+            </tr>
+            @{
+                int i = 0;
+                @foreach (var dev in Sensors)
+                {
+                    int index = i;
+                    <tr>
+                        <th>@dev.Value.SensorName</th>
+                        <th><input type="checkbox" @bind="@Sensors[dev.Key].IsImplemented"></th>
+                        <th><input type="number" @bind="@Sensors[dev.Key].SimFromValue" class="switch-number"></th>
+                        <th><input type="number" @bind="@Sensors[dev.Key].SimToValue" class="switch-number"></th>
+                        <th>Unit</th>
+                        <th><input type="number" @bind="@Sensors[dev.Key].ValueCycleTime" class="switch-number"></th>
+                        <th><input type="number" @bind="@Sensors[dev.Key].NotReadyDelay" class="switch-number"></th>
+                    </tr>
+
+                    i++;
+                }
+            }
+        </table>
+    </fieldset>
+
+    <fieldset>
+        <div class="grid-container-two">
+
+            <div class="grid-item-left">
+                <button @onclick="Reset">Reset</button>
+            </div>
+            <div class="grid-item-right">
+                <button @onclick="SaveDeviceSettings">Save</button>
+            </div>
+        </div>
+    </fieldset>
+</body>
+
+@code {
+    [Parameter]
+    public int InstanceID { get; set; }
+
+    /// <summary>
+    /// This access the device type not the interface to allow the device specific settings to be accessed.
+    /// </summary>
+    private ASCOM.Simulators.ObservingConditions Device
+    {
+        get
+        {
+            return DeviceManager.GetObservingConditions(InstanceID) as ASCOM.Simulators.ObservingConditions;
+        }
+    }
+
+    Dictionary<string, ASCOM.Simulators.Sensor> Sensors
+    {
+        get;
+    } = new Dictionary<string, ASCOM.Simulators.Sensor>();
+
+    protected override void OnInitialized()
+    {
+        var interfaceversion = Device.InterfaceVersion;
+        foreach (var sensor in ASCOM.Simulators.OCSimulator.Sensors)
+        {
+            Sensors.Add(sensor.Key, sensor.Value);
+        }
+        base.OnInitialized();
+    }
+
+    #region Connection
+
+    public bool Connected
+    {
+        get
+        {
+            return Device.Connected;
+        }
+    }
+
+    public string ConnectionColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                return "red";
+            }
+            return "gray";
+        }
+    }
+
+    public string ConnectText
+    {
+        get
+        {
+            if (Device.Connected)
+            {
+                return "Disconnect";
+            }
+            return "Connect";
+        }
+    }
+
+    public void Connect()
+    {
+        Device.Connected = !Device.Connected;
+    }
+
+    #endregion
+
+    #region Settings
+    #endregion
+
+    public void Reset()
+    {
+        try
+        {
+            toastService.ShowSuccess("Settings Reset");
+
+            var timer = new System.Threading.Timer(new System.Threading.TimerCallback(_ =>
+            {
+                uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+            }), null, 2000, 2000);
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+
+    public void SaveDeviceSettings()
+    {
+        try
+        {
+
+            toastService.ShowSuccess("Settings Saved");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
+}
