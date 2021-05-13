@@ -26,9 +26,12 @@
 using ASCOM.Standard.Interfaces;
 using System;
 using System.Timers;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 namespace ASCOM.Simulators
 {
+
     public enum Going
     {
         slewCCW = -1        // just running till halt

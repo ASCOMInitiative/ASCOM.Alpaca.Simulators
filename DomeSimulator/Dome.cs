@@ -29,7 +29,9 @@ using ASCOM.Standard.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 namespace ASCOM.Simulators
 {
     public class Dome : IDomeV2, IDisposable, IAlpacaDevice

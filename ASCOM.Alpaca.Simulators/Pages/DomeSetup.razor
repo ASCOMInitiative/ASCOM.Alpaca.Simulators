@@ -108,6 +108,45 @@
 
     protected override void OnInitialized()
     {
+        var temp = Device.InterfaceVersion;
+
+        ShutterSlewRate = ASCOM.Simulators.Hardware.g_dAltRate;
+
+        ShutterOpenCloseTime = ASCOM.Simulators.Hardware.g_dOCDelay;
+
+        ShutterMaximumAltitude = ASCOM.Simulators.Hardware.g_dMaxAlt;
+
+        ShutterMinimumAltitude = ASCOM.Simulators.Hardware.g_dMinAlt;
+
+        AzimuthSlewRate = ASCOM.Simulators.Hardware.g_dAzRate;
+
+        AzimuthStepSize = ASCOM.Simulators.Hardware.g_dStepSize;
+
+        AzimuthPark = ASCOM.Simulators.Hardware.g_dSetPark;
+
+        AzimuthHome = ASCOM.Simulators.Hardware.g_dSetHome;
+
+        CanFindHome = ASCOM.Simulators.Hardware.g_bCanFindHome;
+
+        CanPark = ASCOM.Simulators.Hardware.g_bCanPark;
+
+        CanSlewAltitude = ASCOM.Simulators.Hardware.g_bCanSetAltitude;
+
+        CanSlewAzimuth = ASCOM.Simulators.Hardware.g_bCanSetAzimuth;
+
+        CanOpenCloseShutter = ASCOM.Simulators.Hardware.g_bCanSetShutter;
+
+        CanSetPark = ASCOM.Simulators.Hardware.g_bCanSetPark;
+
+        CanSyncAzimuth = ASCOM.Simulators.Hardware.g_bCanSyncAzimuth;
+
+        AtHomeWithoutFindHome = ASCOM.Simulators.Hardware.g_bStandardAtHome;
+
+        AtParkWithoutPark = ASCOM.Simulators.Hardware.g_bStandardAtPark;
+
+        StartUpWithShutterError = ASCOM.Simulators.Hardware.g_bStartShutterError;
+
+        SlewingOnOpenClose = ASCOM.Simulators.Hardware.g_bSlewingOpenClose;
 
         base.OnInitialized();
     }
