@@ -5,6 +5,22 @@
 
 <body>
     <fieldset>
+        <legend>General Settings</legend>
+
+        <label for="SensorQueryInterval">Sensor Query Interval (seconds)</label>
+        <input type="number" id="SensorQueryInterval" @bind="SensorQueryInterval">
+        <br>
+
+        <label for="AveragePeriod">Average Period (hours)</label>
+        <input type="number" id="AveragePeriod" @bind="AveragePeriod">
+        <br>
+
+        <label for="NumberOfReadings">Number of readings in average period</label>
+        <input type="number" id="NumberOfReadings" @bind="NumberOfReadings">
+        <br>
+
+    </fieldset>
+    <fieldset>
         <legend>Sensor Settings</legend>
 
         <table style="width:100%">
@@ -74,6 +90,13 @@
     protected override void OnInitialized()
     {
         var interfaceversion = Device.InterfaceVersion;
+
+        SensorQueryInterval = ASCOM.Simulators.OCSimulator.SensorQueryInterval;
+
+        AveragePeriod = ASCOM.Simulators.OCSimulator.AveragePeriod;
+
+        NumberOfReadings = ASCOM.Simulators.OCSimulator.NumberOfReadingsToAverage;
+
         foreach (var sensor in ASCOM.Simulators.OCSimulator.Sensors)
         {
             Sensors.Add(sensor.Key, sensor.Value);
@@ -123,6 +146,24 @@
     #endregion
 
     #region Settings
+    double SensorQueryInterval
+    {
+        get;
+        set;
+    }
+
+    double AveragePeriod
+    {
+        get;
+        set;
+    }
+
+    double NumberOfReadings
+    {
+        get;
+        set;
+    }
+
     #endregion
 
     public void Reset()
