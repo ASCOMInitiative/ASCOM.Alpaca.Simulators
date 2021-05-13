@@ -187,6 +187,22 @@ namespace ASCOM.Simulators
             {PROPERTY_WINDSPEED, 100.0}
         };
 
+        public static Dictionary<string, string> UnitString = new Dictionary<string, string>()
+        {
+            {PROPERTY_CLOUDCOVER, "Percent"},
+            {PROPERTY_HUMIDITY, "Percent"},
+            {PROPERTY_PRESSURE, "hPa"},
+            {PROPERTY_RAINRATE, "mm/hr"},
+            {PROPERTY_SKYBRIGHTNESS, "Lux"},
+            {PROPERTY_SKYQUALITY, "Mag/arcsec^2"},
+            {PROPERTY_STARFWHM, "arcsec"},
+            {PROPERTY_SKYTEMPERATURE, "Celsius"},
+            {PROPERTY_TEMPERATURE, "Celsius"},
+            {PROPERTY_WINDDIRECTION, "Degrees"},
+            {PROPERTY_WINDGUST, "mph"},
+            {PROPERTY_WINDSPEED, "mph"}
+        };
+
         #endregion Public variables and constants
 
         #region Public Enums and Structs

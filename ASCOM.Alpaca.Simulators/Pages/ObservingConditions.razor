@@ -43,7 +43,7 @@
                         <th><input type="checkbox" @bind="@Sensors[dev.Key].IsImplemented"></th>
                         <th><input type="number" @bind="@Sensors[dev.Key].SimFromValue" class="switch-number"></th>
                         <th><input type="number" @bind="@Sensors[dev.Key].SimToValue" class="switch-number"></th>
-                        <th>Unit</th>
+                        <th>@Sensors[dev.Key].Unit</th>
                         <th><input type="number" @bind="@Sensors[dev.Key].ValueCycleTime" class="switch-number"></th>
                         <th><input type="number" @bind="@Sensors[dev.Key].NotReadyDelay" class="switch-number"></th>
                     </tr>

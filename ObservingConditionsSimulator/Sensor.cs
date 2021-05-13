@@ -36,6 +36,21 @@ namespace ASCOM.Simulators
         public bool Override { get; set; }
         public double OverrideValue { get; set; }
 
+        public string Unit
+        {
+            get
+            {
+                try
+                {
+                    return OCSimulator.UnitString[SensorName];
+                }
+                catch
+                {
+                    return "Unknown";
+                }
+            }
+        }
+
         public void ReadProfile(IProfile driverProfile)
         {
             OCSimulator.LogMessage("Sensor.ReadProfile", "Starting to read profile values");
