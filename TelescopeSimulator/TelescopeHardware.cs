@@ -306,6 +306,11 @@ namespace ASCOM.Simulators
             
         }
 
+        public static void ClearProfile()
+        {
+            s_Profile.Clear();
+        }
+
         public static void Init()
         {
             try

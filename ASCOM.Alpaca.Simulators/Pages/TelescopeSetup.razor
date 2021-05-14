@@ -767,6 +767,8 @@
     {
         try
         {
+            TelescopeHardware.ClearProfile();
+            TelescopeHardware.Init();
             toastService.ShowSuccess("Settings Reset");
 
             var timer = new System.Threading.Timer(new System.Threading.TimerCallback(_ =>
