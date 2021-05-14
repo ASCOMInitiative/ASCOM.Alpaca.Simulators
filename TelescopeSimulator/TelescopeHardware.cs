@@ -1576,6 +1576,18 @@ namespace ASCOM.Simulators
             }
         }
 
+        public static string StartUpMode
+        {
+            get
+            {
+                return startupMode;
+            }
+            set
+            {
+                startupMode = value;
+            }
+        }
+
         internal static void LogMessage(string identifier, string format, params object[] args)
         {
             //LogMessage(identifier, string.Format(CultureInfo.InvariantCulture, format, args));

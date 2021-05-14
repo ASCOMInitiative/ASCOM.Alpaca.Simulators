@@ -1,7 +1,8 @@
-﻿@page "/setup/v1/Telescope/{InstanceID:int}/setup"
+@page "/setup/v1/Telescope/{InstanceID:int}/setup"
 
 @inject IToastService toastService
 @inject NavigationManager uriHelper;
+@using ASCOM.Simulators; 
 
 <body>
     <fieldset>
@@ -130,8 +131,8 @@
         </select>
         <br>
 
-        <input type="checkbox" id="LatLongEla" @bind="LatLongEla">
-        <label for="LatLongEla">Lat/Long/Elavatiion</label>
+        <input type="checkbox" id="LatLongElev" @bind="LatLongElev">
+        <label for="LatLongElev">Lat/Long/Elavatiion</label>
         <br>
 
         <input type="checkbox" id="Optics" @bind="Optics">
@@ -281,6 +282,115 @@
 
     protected override void OnInitialized()
     {
+        var interfaceversion = Device.InterfaceVersion;
+
+        AutoUnpark = TelescopeHardware.AutoTrack;
+
+        NoCoordinates = TelescopeHardware.NoCoordinatesAtPark;
+
+        DisconnectOnPark = TelescopeHardware.DisconnectOnPark;
+
+        SlewRate = TelescopeHardware.MaximumSlewRate;
+
+        RefractionOn = TelescopeHardware.Refraction;
+
+        LatitudeSign = Math.Sign(TelescopeHardware.Latitude);
+
+        LatitudeDegrees = (int)TelescopeHardware.Latitude;
+
+        LatitudeMinutes = (TelescopeHardware.Latitude - (int)TelescopeHardware.Latitude) * 60;
+
+        LongitudeSign = Math.Sign(TelescopeHardware.Longitude);
+
+        LongitudeDegrees = (int)TelescopeHardware.Longitude;
+
+        LongitudeMinutes = (TelescopeHardware.Longitude - (int)TelescopeHardware.Longitude) * 60;
+
+        Elevation = TelescopeHardware.Elevation;
+
+        ASCOM.Standard.Interfaces.AlignmentMode MountType = TelescopeHardware.AlignmentMode;
+
+        Aperture = TelescopeHardware.ApertureDiameter;
+
+        ApertureArea = TelescopeHardware.ApertureArea;
+
+        FocalLength = TelescopeHardware.FocalLength;
+
+        StartupMode = TelescopeHardware.StartUpMode;
+
+        StartupAzimuth = TelescopeHardware.StartCoordinates.X;
+
+        StartupAltitude = TelescopeHardware.StartCoordinates.Y;
+
+        ParkAzimuth = TelescopeHardware.ParkAzimuth;
+
+        ParkAltitude = TelescopeHardware.ParkAltitude;
+
+        HomeAzimuth = TelescopeHardware.HomePosition.X;
+
+        HomeAltitude = TelescopeHardware.HomePosition.Y;
+
+        AltAzCoordinates = TelescopeHardware.CanAltAz;
+
+        AltAzSlewing = TelescopeHardware.CanSlewAltAz;
+
+        AltAzSync = TelescopeHardware.CanSyncAltAz;
+
+        AltAzAsynchronous = TelescopeHardware.CanSlewAltAzAsync;
+
+        EquatorialCoordinates = TelescopeHardware.CanEquatorial;
+
+        EquatorialSlewing = TelescopeHardware.CanSlew;
+
+        EquatorialSync = TelescopeHardware.CanSync;
+
+        EquatorialAsynchronous = TelescopeHardware.CanSlewAsync;
+
+        FindHome = TelescopeHardware.CanFindHome;
+
+        Parking = TelescopeHardware.CanPark;
+
+        SetParkPosition = TelescopeHardware.CanSetPark;
+
+        Unparking = TelescopeHardware.CanUnpark;
+
+        NumberAxis = TelescopeHardware.NumberMoveAxis;
+
+        LatLongElev = TelescopeHardware.CanLatLongElev;
+
+        Optics = TelescopeHardware.CanOptics;
+
+        AlignmentMode = TelescopeHardware.CanAlignmentMode;
+
+        SideOfPier = TelescopeHardware.CanPointingState;
+
+        SetSideOfPier = TelescopeHardware.CanSetPointingState;
+
+        DestinationSideOfPier = TelescopeHardware.CanDestinationSideofPier;
+
+        RefractionSupport = TelescopeHardware.CanDoesRefraction;
+
+        EquatorialSystem = TelescopeHardware.EquatorialSystem;
+
+        DateTimeOn = TelescopeHardware.CanDateTime;
+
+        SiderealTime = TelescopeHardware.CanSiderealTime;
+
+        TrackingOnOff = TelescopeHardware.CanSetTracking;
+
+        TrackingRates = TelescopeHardware.CanTrackingRates;
+
+        GuideRates = TelescopeHardware.CanSetGuideRates;
+
+        PulseGuide = TelescopeHardware.CanPulseGuide;
+
+        DualAxisPulseGuide = TelescopeHardware.CanDualAxisPulseGuide;
+
+        RaDecRates = TelescopeHardware.CanSetEquatorialRates;
+
+        NoSyncMeridian = TelescopeHardware.NoSyncPastMeridian;
+
+        Version1Interface = TelescopeHardware.VersionOneOnly;
 
         base.OnInitialized();
     }
@@ -346,7 +456,7 @@
         set;
     }
 
-    double SlewRate
+    int SlewRate
     {
         get;
         set;
@@ -394,7 +504,7 @@
         set;
     }
 
-    int Elevation
+    double Elevation
     {
         get;
         set;
@@ -544,7 +654,7 @@
         set;
     }
 
-    bool LatLongEla
+    bool LatLongElev
     {
         get;
         set;
