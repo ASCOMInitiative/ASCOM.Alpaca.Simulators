@@ -7,17 +7,21 @@
     <fieldset>
         <legend>Focuser Settings</legend>
 
+        <label for="maxPosition"> Maximum Pos (steps):</label>
         <input type="number" id="maxPosition" name="maxPosition" min="0" @bind="maxPosition">
-        <label for="maxPosition"> Maximum Pos (steps):</label><br>
+        <br>
 
+        <label for="stepSize"> Step Size (microns):</label>
         <input type="number" id="stepSize" name="stepSize" min="0" @bind="stepSize">
-        <label for="stepSize"> Step Size (microns):</label><br>
+        <br>
 
+        <label for="maxIncrement"> Maximum Increment:</label>
         <input type="number" id="maxIncrement" name="maxIncrement" min="0" @bind="maxIncrement">
-        <label for="maxIncrement"> Maximum Increment:</label><br>
+        <br>
 
+        <label for="settleTime"> Settle Time (ms):</label>
         <input type="number" id="settleTime" name="settleTime" min="0" @bind="settleTime">
-        <label for="settleTime"> Settle Time (ms):</label><br>
+        <br>
     </fieldset>
     <fieldset>
         <legend>Capabilities</legend>
@@ -40,20 +44,25 @@
     <fieldset>
         <legend>Temperature Simulator</legend>
 
-        <input type="number" id="currentTemp"min="0" @bind="CurrentTemperature">
-        <label for="currentTemp"> Current Temperature:</label><br>
+        <label for="currentTemp"> Current Temperature:</label>
+        <input type="number" id="currentTemp" min="0" @bind="CurrentTemperature">
+        <br>
 
+        <label for="maxTemp"> Maximum Temperature:</label>
         <input type="number" id="maxTemp" min="0" @bind="MaxTemperature">
-        <label for="maxTemp"> Maximum Temperature:</label><br>
+        <br>
 
+        <label for="minTemp"> Minimum Temperature:</label>
         <input type="number" id="minTemp" min="0" @bind="MinimumTemperature">
-        <label for="minTemp"> Minimum Temperature:</label><br>
+        <br>
 
+        <label for="cyclePeriod"> Cycle Period (sec):</label>
         <input type="number" id="cyclePeriod" min="0" @bind="CyclePeriod">
-        <label for="cyclePeriod"> Cycle Period (sec):</label><br>
+        <br>
 
+        <label for="steps"> Steps / C:</label>
         <input type="number" id="steps" min="0" @bind="StepsPerC">
-        <label for="steps"> Steps / C:</label><br>
+        <br>
     </fieldset>
     <fieldset>
         <legend>Type</legend>

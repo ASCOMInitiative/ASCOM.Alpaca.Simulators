@@ -7,34 +7,42 @@
     <fieldset>
         <legend>Shutter Control</legend>
 
+        <label for="ShutterSlewRate">Slew Rate (deg/sec)</label>
         <input type="number" id="ShutterSlewRate" @bind="ShutterSlewRate">
-        <label for="ShutterSlewRate">Slew Rate (deg/sec)</label><br>
+        <br>
 
+        <label for="ShutterOpenCloseTime">Open/Close time (sec)</label>
         <input type="number" id="ShutterOpenCloseTime" @bind="ShutterOpenCloseTime">
-        <label for="ShutterOpenCloseTime">Open/Close time (sec)</label><br>
+        <br>
 
+        <label for="ShutterMaximumAltitude">Maximum Altitude (deg)</label>
         <input type="number" id="ShutterMaximumAltitude" @bind="ShutterMaximumAltitude">
-        <label for="ShutterMaximumAltitude">Maximum Altitude (deg)</label><br>
+        <br>
 
+        <label for="ShutterMinimumAltitude">Minimum Altitude (deg)</label>
         <input type="number" id="ShutterMinimumAltitude" @bind="ShutterMinimumAltitude">
-        <label for="ShutterMinimumAltitude">Minimum Altitude (deg)</label><br>
+        <br>
     </fieldset>
 
 
     <fieldset>
         <legend>Azimuth Control</legend>
 
+        <label for="AzimuthSlewRate">Slew Rate (deg/sec)</label>
         <input type="number" id="AzimuthSlewRate" @bind="AzimuthSlewRate">
-        <label for="AzimuthSlewRate">Slew Rate (deg/sec)</label><br>
+        <br>
 
+        <label for="AzimuthStepSize">Step Size (deg)</label>
         <input type="number" id="AzimuthStepSize" @bind="AzimuthStepSize">
-        <label for="AzimuthStepSize">Step Size (deg)</label><br>
+        <br>
 
+        <label for="AzimuthPark">Park Position (deg)</label>
         <input type="number" id="AzimuthPark" @bind="AzimuthPark">
-        <label for="AzimuthPark">Park Position (deg)</label><br>
+        <br>
 
+        <label for="AzimuthHome">Home Position (deg)</label>
         <input type="number" id="AzimuthHome" @bind="AzimuthHome">
-        <label for="AzimuthHome">Home Position (deg)</label><br>
+        <br>
     </fieldset>
 
     <fieldset>
