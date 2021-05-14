@@ -2,8 +2,55 @@
 
 @inject IToastService toastService
 @inject NavigationManager uriHelper;
+@using System.Timers;
 
 <body>
+    <fieldset>
+        <legend>Cover Calibrator</legend>
+        <div class="grid-container-two">
+
+            <div class="grid-item-left">
+                <svg width="30" height="30">
+                    <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
+                </svg>
+                <button @onclick="Connect">@ConnectText</button>
+            </div>
+            <div class="grid-item-left">
+            </div>
+        </div>
+
+        <div class="grid-container-one">
+            <div class="grid-item-center">
+                <p>Calibrator Status: @CalStatus</p>
+            </div>
+            <div class="grid-item-center">
+                <svg width="128" height="128">
+                    <rect width="128" height="128" style="fill:@BrightnessString;stroke-width:3;stroke:rgb(0,0,0)" />
+                </svg>
+            </div>
+            <div class="grid-item-center">
+                <input type="range" min="0" max="@MaxBrightness" step="1" disabled="@CalibratorDisabled" @bind-value="Brightness" />
+            </div>
+
+            <div class="grid-item-center">
+                <label for="brightness">Brightness:</label>
+                <input type="number" id="brightness" name="brightness" min="0" max="@MaxBrightness" @bind-value="Brightness" disabled="@CalibratorDisabled">
+            </div>
+
+            <div class="grid-item-center">
+                <button @onclick="CalOff" disabled="@CalibratorDisabled">Calibrator Off</button>
+            </div>
+
+            <div class="grid-item-center">
+                <p>Cover Status: @CoverStatus</p>
+            </div>
+
+            <div class="grid-item-center">
+                <button @onclick="OpenClose" disabled="@CoverDisabled">@OpenCloseText</button>
+                <button @onclick="Halt" disabled="@CoverDisabled">Halt</button>
+            </div>
+        </div>
+    </fieldset>
     <fieldset>
         <legend>Calibrator Settings</legend>
         <div class="grid-container-two">
@@ -90,6 +137,246 @@
             return DeviceManager.GetCoverCalibrator(InstanceID) as ASCOM.Simulators.CoverCalibratorSimulator;
         }
     }
+
+    Timer timer = new Timer(100);
+
+    public void Dispose()
+    {
+        timer.Elapsed -= OnPageRefresh;
+        timer.Stop();
+    }
+
+    protected override void OnInitialized()
+    {
+        timer.Elapsed += OnPageRefresh;
+        timer.AutoReset = true;
+        timer.Enabled = true;
+        base.OnInitialized();
+    }
+
+    private void OnPageRefresh(Object source, ElapsedEventArgs e)
+    {
+        try
+        {
+            // Note that the following line is necessary because otherwise
+            // Blazor would not recognize the state change and not refresh the UI
+            InvokeAsync(() =>
+            {
+                try
+                {
+                    StateHasChanged();
+                }
+                catch
+                {
+
+                }
+            });
+        }
+        catch
+        {
+
+        }
+    }
+
+    #region Control
+
+    public string BrightnessString
+    {
+        get
+        {
+            var hex = EightBitBrightness.ToString("X2");
+            return string.Format("#{0}{0}{0}", hex);
+        }
+    }
+
+    public int EightBitBrightness
+    {
+        get
+        {
+            if (!CalibratorDisabled)
+            {
+                return (Brightness * 255) / Device.MaxBrightness;
+            }
+            return 0;
+        }
+    }
+
+    public int Brightness
+    {
+        get
+        {
+            if (!CalibratorDisabled)
+            {
+                return Device.Brightness;
+            }
+            return 0;
+        }
+        set
+        {
+            if (!CalibratorDisabled)
+            {
+                try
+                {
+                    Device.CalibratorOn(value);
+                }
+                catch (Exception ex)
+                {
+                    DisplayError(ex.Message);
+                }
+            }
+        }
+    }
+
+
+    public bool CalibratorDisabled
+    {
+        get
+        {
+            if (!Connected)
+            {
+                return true;
+            }
+            if (CalStatus == ASCOM.Standard.Interfaces.CalibratorStatus.NotPresent)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public bool CoverDisabled
+    {
+        get
+        {
+            if (!Connected)
+            {
+                return true;
+            }
+            if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.NotPresent)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public bool Connected
+    {
+        get
+        {
+            return Device.Connected;
+        }
+    }
+
+    public string ConnectionColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                return "red";
+            }
+            return "gray";
+        }
+    }
+
+    public string ConnectText
+    {
+        get
+        {
+            if (Device.Connected)
+            {
+                return "Disconnect";
+            }
+            return "Connect";
+        }
+    }
+
+    public void Connect()
+    {
+        Device.Connected = !Device.Connected;
+    }
+
+    public void CalOff()
+    {
+        try
+        {
+            Device.CalibratorOff();
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    public void OpenClose()
+    {
+        try
+        {
+            if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Open)
+            {
+                Device.CloseCover();
+            }
+            else if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Closed)
+            {
+                Device.OpenCover();
+            }
+            else if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Unknown)
+            {
+                Device.CloseCover();
+            }
+            else if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Error)
+            {
+                Device.CloseCover();
+            }
+
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    public void Halt()
+    {
+        try
+        {
+            if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Moving)
+            {
+                Device.HaltCover();
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    public string OpenCloseText
+    {
+        get
+        {
+            if (!Connected)
+            {
+                return "Open";
+            }
+            if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Closed)
+            {
+                return "Open";
+            }
+            if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Open)
+            {
+                return "Close";
+            }
+            if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Moving)
+            {
+                return "Moving";
+            }
+            return "Open";
+        }
+    }
+
+    #endregion
 
     public int MaxBrightness
     {
@@ -182,5 +469,10 @@
         {
             toastService.ShowError(ex.Message);
         }
+    }
+
+    public void DisplayError(string error)
+    {
+        toastService.ShowError(error);
     }
 }
