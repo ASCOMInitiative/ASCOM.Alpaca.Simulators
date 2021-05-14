@@ -41,11 +41,11 @@
                     <tr>
                         <th>@dev.Value.SensorName</th>
                         <th><input type="checkbox" @bind="@Sensors[dev.Key].IsImplemented"></th>
-                        <th><input type="number" @bind="@Sensors[dev.Key].SimFromValue" class="switch-number"></th>
-                        <th><input type="number" @bind="@Sensors[dev.Key].SimToValue" class="switch-number"></th>
+                        <th><input type="number" @bind="@Sensors[dev.Key].SimFromValue" class="oc-number"></th>
+                        <th><input type="number" @bind="@Sensors[dev.Key].SimToValue" class="oc-number"></th>
                         <th>@Sensors[dev.Key].Unit</th>
-                        <th><input type="number" @bind="@Sensors[dev.Key].ValueCycleTime" class="switch-number"></th>
-                        <th><input type="number" @bind="@Sensors[dev.Key].NotReadyDelay" class="switch-number"></th>
+                        <th><input type="number" @bind="@Sensors[dev.Key].ValueCycleTime" class="oc-number"></th>
+                        <th><input type="number" @bind="@Sensors[dev.Key].NotReadyDelay" class="oc-number"></th>
                     </tr>
 
                     i++;
@@ -158,7 +158,7 @@
         set;
     }
 
-    double NumberOfReadings
+    int NumberOfReadings
     {
         get;
         set;
@@ -170,6 +170,8 @@
     {
         try
         {
+            ASCOM.Simulators.OCSimulator.ClearProfile();
+            ASCOM.Simulators.OCSimulator.Init();
             toastService.ShowSuccess("Settings Reset");
 
             var timer = new System.Threading.Timer(new System.Threading.TimerCallback(_ =>
@@ -187,6 +189,29 @@
     {
         try
         {
+            ASCOM.Simulators.OCSimulator.SensorQueryInterval = SensorQueryInterval;
+
+            ASCOM.Simulators.OCSimulator.AveragePeriod = AveragePeriod;
+
+            ASCOM.Simulators.OCSimulator.NumberOfReadingsToAverage = NumberOfReadings;
+
+            foreach (var sensor in Sensors)
+            {
+                ASCOM.Simulators.OCSimulator.Sensors[sensor.Key].SimFromValue = sensor.Value.SimFromValue;
+                ASCOM.Simulators.OCSimulator.Sensors[sensor.Key].SimToValue = sensor.Value.SimToValue;
+                ASCOM.Simulators.OCSimulator.Sensors[sensor.Key].IsImplemented = sensor.Value.IsImplemented;
+                ASCOM.Simulators.OCSimulator.Sensors[sensor.Key].NotReadyDelay = sensor.Value.NotReadyDelay;
+                ASCOM.Simulators.OCSimulator.Sensors[sensor.Key].ValueCycleTime = sensor.Value.ValueCycleTime;
+            }
+
+
+            ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].SimFromValue = ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].SimFromValue;
+            ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].SimToValue = ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].SimToValue;
+            ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].IsImplemented = ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].IsImplemented;
+            ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].NotReadyDelay = ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].NotReadyDelay;
+            ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].ValueCycleTime = ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].ValueCycleTime;
+
+            ASCOM.Simulators.OCSimulator.WriteProfile();
 
             toastService.ShowSuccess("Settings Saved");
         }

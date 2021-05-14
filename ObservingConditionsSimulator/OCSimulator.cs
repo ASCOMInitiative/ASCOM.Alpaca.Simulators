@@ -19,8 +19,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
+[assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 namespace ASCOM.Simulators
 {
     /// <summary>
@@ -275,6 +277,7 @@ namespace ASCOM.Simulators
         {
             try
             {
+                Sensors.Clear();
                 // Create sensor objects ready to be populated from the Profile
                 // This must be done before reading the Profile
                 foreach (string Property in DriverProperties)
@@ -976,6 +979,11 @@ namespace ASCOM.Simulators
                 LogMessage("WriteProfile", "Writing profile for: " + Property);
                 Sensors[Property].WriteProfile(driverProfile);
             }
+        }
+
+        public static void ClearProfile()
+        {
+            driverProfile.Clear();
         }
 
         #endregion Profile management
