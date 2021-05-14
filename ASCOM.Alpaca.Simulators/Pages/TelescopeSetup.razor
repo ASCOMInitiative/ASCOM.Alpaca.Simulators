@@ -784,6 +784,106 @@
     {
         try
         {
+            TelescopeHardware.AutoTrack = AutoUnpark;
+
+            TelescopeHardware.NoCoordinatesAtPark = NoCoordinates;
+
+            TelescopeHardware.DisconnectOnPark = DisconnectOnPark; ;
+
+            TelescopeHardware.MaximumSlewRate = SlewRate;
+
+            TelescopeHardware.Refraction = RefractionOn; ;
+
+            TelescopeHardware.Latitude = LatitudeSign * (LatitudeDegrees + LatitudeMinutes / 60);
+
+            TelescopeHardware.Longitude = LongitudeSign * (LongitudeDegrees + LongitudeMinutes / 60);
+
+            TelescopeHardware.Elevation = Elevation; ;
+
+            TelescopeHardware.AlignmentMode = MountType;
+
+            TelescopeHardware.ApertureDiameter = Aperture;
+
+            TelescopeHardware.ApertureArea = ApertureArea;
+
+            TelescopeHardware.FocalLength = FocalLength;
+
+            TelescopeHardware.StartUpMode = StartupMode;
+
+            TelescopeHardware.StartCoordinates.X = StartupAzimuth;
+
+            TelescopeHardware.StartCoordinates.Y = StartupAltitude;
+
+            TelescopeHardware.ParkAzimuth = ParkAzimuth;
+
+            TelescopeHardware.ParkAltitude = ParkAltitude;
+
+            TelescopeHardware.HomePosition.X = HomeAzimuth;
+
+            TelescopeHardware.HomePosition.Y = HomeAltitude;
+
+            TelescopeHardware.CanAltAz = AltAzCoordinates;
+
+            TelescopeHardware.CanSlewAltAz = AltAzSlewing;
+
+            TelescopeHardware.CanSyncAltAz = AltAzSync;
+
+            TelescopeHardware.CanSlewAltAzAsync = AltAzAsynchronous;
+
+            TelescopeHardware.CanEquatorial = EquatorialCoordinates;
+
+            TelescopeHardware.CanSlew = EquatorialSlewing;
+
+            TelescopeHardware.CanSync = EquatorialSync;
+
+            TelescopeHardware.CanSlewAsync = EquatorialAsynchronous;
+
+            TelescopeHardware.CanFindHome = FindHome;
+
+            TelescopeHardware.CanPark = Parking;
+
+            TelescopeHardware.CanSetPark = SetParkPosition;
+
+            TelescopeHardware.CanUnpark = Unparking;
+
+            TelescopeHardware.NumberMoveAxis = NumberAxis;
+
+            TelescopeHardware.CanLatLongElev = LatLongElev;
+
+            TelescopeHardware.CanOptics = Optics;
+
+            TelescopeHardware.CanAlignmentMode = AlignmentMode;
+
+            TelescopeHardware.CanPointingState = SideOfPier;
+
+            TelescopeHardware.CanSetPointingState = SetSideOfPier;
+
+            TelescopeHardware.CanDestinationSideofPier = DestinationSideOfPier;
+
+            TelescopeHardware.CanDoesRefraction = RefractionSupport;
+
+            TelescopeHardware.EquatorialSystem = EquatorialSystem;
+
+            TelescopeHardware.CanDateTime = DateTimeOn;
+
+            TelescopeHardware.CanSiderealTime = SiderealTime;
+
+            TelescopeHardware.CanSetTracking = TrackingOnOff;
+
+            TelescopeHardware.CanTrackingRates = TrackingRates;
+
+            TelescopeHardware.CanSetGuideRates = GuideRates;
+
+            TelescopeHardware.CanPulseGuide = PulseGuide;
+
+            TelescopeHardware.CanDualAxisPulseGuide = DualAxisPulseGuide;
+
+            TelescopeHardware.CanSetEquatorialRates = RaDecRates;
+
+            TelescopeHardware.NoSyncPastMeridian = NoSyncMeridian;
+
+            TelescopeHardware.VersionOneOnly = Version1Interface;
+
             toastService.ShowSuccess("Settings Saved");
         }
         catch (Exception ex)
