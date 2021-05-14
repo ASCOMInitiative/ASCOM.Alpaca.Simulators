@@ -23,9 +23,11 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
 
+[assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 namespace ASCOM.Simulators
 {
     public static class TelescopeHardware
@@ -249,7 +251,7 @@ namespace ASCOM.Simulators
         /// </summary>
         internal static Vector HomePosition;
 
-        internal static List<string> StartupOptions;
+        internal static List<string> StartupOptions = new List<string>() { STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION, STARTUP_OPTION_LASTUSED_POSITION, STARTUP_OPTION_START_POSITION, STARTUP_OPTION_PARKED_POSITION, STARTUP_OPTION_HOME_POSITION };
 
         #endregion Internal variables
 
@@ -320,9 +322,6 @@ namespace ASCOM.Simulators
                 LogMessage("TelescopeHardware", string.Format("Alignment mode 1: {0}", alignmentMode));
                 connectStates = new ConcurrentDictionary<long, bool>();
                 idCount = 0; // Initialise count to zero
-
-                // Populate the startup options collection
-                StartupOptions = new List<string>() { STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION, STARTUP_OPTION_LASTUSED_POSITION, STARTUP_OPTION_START_POSITION, STARTUP_OPTION_PARKED_POSITION, STARTUP_OPTION_HOME_POSITION };
 
                 // check if the profile settings are correct
                 if (s_Profile.GetValue("RegVer", string.Empty) != SharedResources.REGISTRATION_VERSION)

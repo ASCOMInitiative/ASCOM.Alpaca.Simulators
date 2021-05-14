@@ -6,18 +6,78 @@
 <body>
     <fieldset>
         <legend>Telescope Settings</legend>
+
+        <input type="checkbox" id="AutoUnpark" @bind="AutoUnpark">
+        <label for="AutoUnpark">Auto Unpark / Track on Start</label>
+        <br>
+
+        <input type="checkbox" id="NoCoordinates" @bind="NoCoordinates">
+        <label for="NoCoordinates">No Coordinates while Parked</label>
+        <br>
+
+        <input type="checkbox" id="DisconnectOnPark" @bind="DisconnectOnPark">
+        <label for="DisconnectOnPark">Disconnect On Park</label>
+        <br>
+
+        <label for="SlewRate">Slew Rate (deg/sec)</label>
+        <input type="number" id="SlewRate" @bind="SlewRate">
+        <br>
+
+        <input type="checkbox" id="RefractionOn" @bind="RefractionOn">
+        <label for="RefractionOn">Refraction On</label>
+        <br>
+
     </fieldset>
 
     <fieldset>
         <legend>Site Information</legend>
+
+        <label for="LatitudeSign">Latitude</label>
+        <select id="LatitudeSign" @bind="LatitudeSign">
+            <option value="1">N</option>
+            <option value="-1">S</option>
+        </select>
+        <input type="number" @bind="LatitudeDegrees">
+        <input type="number" @bind="LatitudeMinutes">
+        <br>
+
+        <label for="LongitudeSign">Longitude</label>
+        <select id="LongitudeSign" @bind="LongitudeSign">
+            <option value="1">E</option>
+            <option value="-1">W</option>
+        </select>
+        <input type="number" @bind="LongitudeDegrees">
+        <input type="number" @bind="LongitudeMinutes">
+        <br>
+
+        <label for="Elevation">Elevation</label>
+        <input type="number" id="Elevation" @bind="Elevation">
+        <br>
     </fieldset>
 
     <fieldset>
         <legend>Mount Type</legend>
+        <select id="MountType" @bind="MountType">
+            <option value="AltAz">Alt-Azimuth</option>
+            <option value="Polar">Equatorial</option>
+            <option value="GermanPolar">German Equatorial</option>
+        </select>
     </fieldset>
 
     <fieldset>
         <legend>Optics</legend>
+
+        <label for="Aperture">Aperture (m)</label>
+        <input type="number" id="Aperture" @bind="Aperture">
+        <br>
+
+        <label for="ApertureArea">ApertureArea (m^2)</label>
+        <input type="number" id="ApertureArea" @bind="ApertureArea">
+        <br>
+
+        <label for="FocalLength">FocalLength (m)</label>
+        <input type="number" id="FocalLength" @bind="FocalLength">
+        <br>
     </fieldset>
 
     <fieldset>
@@ -26,6 +86,57 @@
 
     <fieldset>
         <legend>Park, Home and Startup</legend>
+
+        <label for="StartupMode">Startup Mode</label>
+        <select id="StartupMode" @bind="StartupMode">
+            @foreach (var mode in ASCOM.Simulators.TelescopeHardware.StartupOptions)
+            {
+                <option value="@mode">@mode</option>
+            }
+        </select>
+        <br>
+
+        <label>Startup Position</label>
+        <br>
+
+
+        <input type="number" id="StartupAzimuth" @bind="StartupAzimuth">
+        <label for="StartupAzimuth">Azimuth (deg)</label>
+        <br>
+
+        <input type="number" id="StartupAltitude" @bind="StartupAltitude">
+        <label for="StartupAltitude">Altitude  (deg)</label>
+
+        <br>
+        <br>
+
+
+        <label>Park Position</label>
+        <br>
+
+
+        <input type="number" id="ParkAzimuth" @bind="ParkAzimuth">
+        <label for="ParkAzimuth">Azimuth (deg)</label>
+        <br>
+
+        <input type="number" id="ParkAltitude" @bind="ParkAltitude">
+        <label for="ParkAltitude">Altitude  (deg)</label>
+
+        <br>
+        <br>
+
+        <label>Home Position</label>
+        <br>
+
+        <input type="number" id="HomeAzimuth" @bind="HomeAzimuth">
+        <label for="HomeAzimuth">Azimuth (deg)</label>
+        <br>
+
+        <input type="number" id="HomeAltitude" @bind="HomeAltitude">
+        <label for="HomeAltitude">Altitude  (deg)</label>
+
+        <br>
+
     </fieldset>
 
     <fieldset>
@@ -105,6 +216,143 @@
 
     #region Settings
 
+    bool AutoUnpark
+    {
+        get;
+        set;
+    }
+
+    bool NoCoordinates
+    {
+        get;
+        set;
+    }
+
+    bool DisconnectOnPark
+    {
+        get;
+        set;
+    }
+
+    double SlewRate
+    {
+        get;
+        set;
+    }
+
+    bool RefractionOn
+    {
+        get;
+        set;
+    }
+
+    int LatitudeSign
+    {
+        get;
+        set;
+    }
+
+    int LatitudeDegrees
+    {
+        get;
+        set;
+    }
+
+    double LatitudeMinutes
+    {
+        get;
+        set;
+    }
+
+    int LongitudeSign
+    {
+        get;
+        set;
+    }
+
+    int LongitudeDegrees
+    {
+        get;
+        set;
+    }
+
+    double LongitudeMinutes
+    {
+        get;
+        set;
+    }
+
+    int Elevation
+    {
+        get;
+        set;
+    }
+
+    ASCOM.Standard.Interfaces.AlignmentMode MountType
+    {
+        get;
+        set;
+    }
+
+    double Aperture
+    {
+        get;
+        set;
+    }
+
+    double ApertureArea
+    {
+        get;
+        set;
+    }
+
+    double FocalLength
+    {
+        get;
+        set;
+    }
+
+    string StartupMode
+    {
+        get;
+        set;
+    }
+
+    double StartupAzimuth
+    {
+        get;
+        set;
+    }
+
+    double StartupAltitude
+    {
+        get;
+        set;
+    }
+
+    double ParkAzimuth
+    {
+        get;
+        set;
+    }
+
+    double ParkAltitude
+    {
+        get;
+        set;
+    }
+
+    double HomeAzimuth
+    {
+        get;
+        set;
+    }
+
+    double HomeAltitude
+    {
+        get;
+        set;
+    }
     #endregion
 
     public void Reset()
