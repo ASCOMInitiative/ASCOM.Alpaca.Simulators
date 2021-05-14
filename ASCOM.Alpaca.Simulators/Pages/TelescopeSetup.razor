@@ -26,7 +26,6 @@
         <input type="checkbox" id="RefractionOn" @bind="RefractionOn">
         <label for="RefractionOn">Refraction On</label>
         <br>
-
     </fieldset>
 
     <fieldset>
@@ -82,6 +81,122 @@
 
     <fieldset>
         <legend>Interface</legend>
+
+        <input type="checkbox" id="AltAzCoordinates" @bind="AltAzCoordinates">
+        <label for="AltAzCoordinates">Alt / Az Coordinates</label>
+        <br>
+        <input type="checkbox" id="AltAzSlewing" @bind="AltAzSlewing">
+        <label for="AltAzSlewing">Alt / Az Slewing</label>
+        <br>
+        <input type="checkbox" id="AltAzSync" @bind="AltAzSync">
+        <label for="AltAzSync">Alt / Az Sync</label>
+        <br>
+        <input type="checkbox" id="AltAzAsynchronous" @bind="AltAzAsynchronous">
+        <label for="AltAzAsynchronous">Alt / Az Asynchronous</label>
+        <br>
+
+        <input type="checkbox" id="EquatorialCoordinates" @bind="EquatorialCoordinates">
+        <label for="EquatorialCoordinates">Equatorial Coordinates</label>
+        <br>
+        <input type="checkbox" id="EquatorialSlewing" @bind="EquatorialSlewing">
+        <label for="EquatorialSlewing">Equatorial Slewing</label>
+        <br>
+        <input type="checkbox" id="EquatorialSync" @bind="EquatorialSync">
+        <label for="EquatorialSync">Equatorial Sync</label>
+        <br>
+        <input type="checkbox" id="EquatorialAsynchronous" @bind="EquatorialAsynchronous">
+        <label for="EquatorialAsynchronous">Equatorial Asynchronous</label>
+        <br>
+
+        <input type="checkbox" id="FindHome" @bind="FindHome">
+        <label for="FindHome">Find Home</label>
+        <br>
+        <input type="checkbox" id="Parking" @bind="Parking">
+        <label for="Parking">Parking</label>
+        <br>
+        <input type="checkbox" id="SetParkPosition" @bind="SetParkPosition">
+        <label for="SetParkPosition">Set Park Position</label>
+        <br>
+        <input type="checkbox" id="Unparking" @bind="Unparking">
+        <label for="Unparking">Unparking</label>
+        <br>
+
+        <label for="NumberAxis">Axis for Move</label>
+        <select id="NumberAxis" @bind="NumberAxis">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+        <br>
+
+        <input type="checkbox" id="LatLongEla" @bind="LatLongEla">
+        <label for="LatLongEla">Lat/Long/Elavatiion</label>
+        <br>
+
+        <input type="checkbox" id="Optics" @bind="Optics">
+        <label for="Optics">Optics</label>
+        <br>
+
+        <input type="checkbox" id="AlignmentMode" @bind="AlignmentMode">
+        <label for="AlignmentMode">Alignment Mode</label>
+        <br>
+        <input type="checkbox" id="SideOfPier" @bind="SideOfPier">
+        <label for="SideOfPier">Side of Pier</label>
+        <br>
+        <input type="checkbox" id="SetSideOfPier" @bind="SetSideOfPier">
+        <label for="BlahSetSideOfPier">Set Side of Pier</label>
+        <br>
+        <input type="checkbox" id="DestinationSideOfPier" @bind="DestinationSideOfPier">
+        <label for="DestinationSideOfPier">Destination Side of Pier</label>
+        <br>
+        <input type="checkbox" id="RefractionSupport" @bind="RefractionSupport">
+        <label for="RefractionSupport">Refraction Support</label>
+        <br>
+
+        <label for="EquatorialSystem">Equatorial System</label>
+        <select id="EquatorialSystem" @bind="EquatorialSystem">
+            <option value="1">Local</option>
+            <option value="4">B1950</option>
+            <option value="2">J2000</option>
+            <option value="3">J2050</option>
+            <option value="0">Other</option>
+        </select>
+        <br>
+
+        <input type="checkbox" id="DateTimeOn" @bind="DateTimeOn">
+        <label for="DateTimeOn">Date Time (UTC)</label>
+        <br>
+
+        <input type="checkbox" id="SiderealTime" @bind="SiderealTime">
+        <label for="SiderealTime">Sidereal Time</label>
+        <br>
+
+        <input type="checkbox" id="TrackingOnOff" @bind="TrackingOnOff">
+        <label for="BlaTrackingOnOffh">Tracking On / Off</label>
+        <br>
+        <input type="checkbox" id="TrackingRates" @bind="TrackingRates">
+        <label for="TrackingRates">Tracking Rates</label>
+        <br>
+        <input type="checkbox" id="GuideRates" @bind="GuideRates">
+        <label for="GuideRates">Guide Rates</label>
+        <br>
+        <input type="checkbox" id="PulseGuide" @bind="PulseGuide">
+        <label for="PulseGuide">Pulse Guide</label>
+        <br>
+        <input type="checkbox" id="DualAxisPulseGuide" @bind="DualAxisPulseGuide">
+        <label for="DualAxisPulseGuide">Dual Axis Pulse Guide</label>
+        <br>
+        <input type="checkbox" id="RaDecRates" @bind="RaDecRates">
+        <label for="RaDecRates">RA / Dec Rates</label>
+        <br>
+
+        <input type="checkbox" id="NoSyncMeridian" @bind="NoSyncMeridian">
+        <label for="NoSyncMeridian">No Sync past meridian</label>
+        <br>
+        <input type="checkbox" id="Version1Interface" @bind="Version1Interface">
+        <label for="Version1Interface">Version 1 Interface</label>
+        <br>
     </fieldset>
 
     <fieldset>
@@ -95,10 +210,10 @@
             }
         </select>
         <br>
+        <br>
 
         <label>Startup Position</label>
         <br>
-
 
         <input type="number" id="StartupAzimuth" @bind="StartupAzimuth">
         <label for="StartupAzimuth">Azimuth (deg)</label>
@@ -110,10 +225,8 @@
         <br>
         <br>
 
-
         <label>Park Position</label>
         <br>
-
 
         <input type="number" id="ParkAzimuth" @bind="ParkAzimuth">
         <label for="ParkAzimuth">Azimuth (deg)</label>
@@ -136,7 +249,6 @@
         <label for="HomeAltitude">Altitude  (deg)</label>
 
         <br>
-
     </fieldset>
 
     <fieldset>
@@ -349,6 +461,192 @@
     }
 
     double HomeAltitude
+    {
+        get;
+        set;
+    }
+
+    bool AltAzCoordinates
+    {
+        get;
+        set;
+    }
+
+    bool AltAzSlewing
+    {
+        get;
+        set;
+    }
+
+    bool AltAzSync
+    {
+        get;
+        set;
+    }
+
+    bool AltAzAsynchronous
+    {
+        get;
+        set;
+    }
+
+    bool EquatorialCoordinates
+    {
+        get;
+        set;
+    }
+
+    bool EquatorialSlewing
+    {
+        get;
+        set;
+    }
+
+    bool EquatorialSync
+    {
+        get;
+        set;
+    }
+
+    bool EquatorialAsynchronous
+    {
+        get;
+        set;
+    }
+
+    bool FindHome
+    {
+        get;
+        set;
+    }
+
+    bool Parking
+    {
+        get;
+        set;
+    }
+
+    bool SetParkPosition
+    {
+        get;
+        set;
+    }
+
+    bool Unparking
+    {
+        get;
+        set;
+    }
+
+    int NumberAxis
+    {
+        get;
+        set;
+    }
+
+    bool LatLongEla
+    {
+        get;
+        set;
+    }
+
+    bool Optics
+    {
+        get;
+        set;
+    }
+
+    bool AlignmentMode
+    {
+        get;
+        set;
+    }
+
+    bool SideOfPier
+    {
+        get;
+        set;
+    }
+
+    bool SetSideOfPier
+    {
+        get;
+        set;
+    }
+
+    bool DestinationSideOfPier
+    {
+        get;
+        set;
+    }
+
+    bool RefractionSupport
+    {
+        get;
+        set;
+    }
+
+    int EquatorialSystem
+    {
+        get;
+        set;
+    }
+
+    bool DateTimeOn
+    {
+        get;
+        set;
+    }
+
+    bool SiderealTime
+    {
+        get;
+        set;
+    }
+
+    bool TrackingOnOff
+    {
+        get;
+        set;
+    }
+
+    bool TrackingRates
+    {
+        get;
+        set;
+    }
+
+    bool GuideRates
+    {
+        get;
+        set;
+    }
+
+    bool PulseGuide
+    {
+        get;
+        set;
+    }
+
+    bool DualAxisPulseGuide
+    {
+        get;
+        set;
+    }
+
+    bool RaDecRates
+    {
+        get;
+        set;
+    }
+
+    bool NoSyncMeridian
+    {
+        get;
+        set;
+    }
+
+    bool Version1Interface
     {
         get;
         set;
