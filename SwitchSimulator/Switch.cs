@@ -342,9 +342,8 @@ namespace ASCOM.Simulators
         public bool GetSwitch(short id)
         {
             Validate("GetSwitch", id);
-            LocalSwitch sw = switches[id];
             // returns true if the value is closer to the maximum than the minimum
-            return sw.Maximum - sw.Value <= sw.Value - sw.Minimum;
+            return switches[id].Maximum - switches[id].Value <= switches[id].Value - switches[id].Minimum;
         }
 
         /// <summary>
@@ -356,8 +355,7 @@ namespace ASCOM.Simulators
         public void SetSwitch(short id, bool state)
         {
             Validate("SetSwitch", id);
-            LocalSwitch sw = switches[id];
-            sw.SetValue(state ? sw.Maximum : sw.Minimum, "SetSwitch");
+            switches[id].SetValue(state ? switches[id].Maximum : switches[id].Minimum, "SetSwitch");
         }
 
         #endregion boolean switch members
