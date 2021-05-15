@@ -1,0 +1,1 @@
+dotnet publish -c Release -r osx-x64 --self-contained true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:PublishReadyToRunShowWarnings=true -o ./bin/ASCOM.Alpaca.Simulators.macos-x64

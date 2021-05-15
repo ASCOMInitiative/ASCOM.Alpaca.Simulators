@@ -1,0 +1,7 @@
+<Project>
+ <PropertyGroup>
+	<!-- This is the solution level version for Nuget packages, This should be x.x.x semver (or x.x.x-suffix for pre-release -->
+	<!-- https://docs.microsoft.com/en-us/nuget/concepts/package-versioning -->
+   <Version>0.0.1-alpha1</Version>
+ </PropertyGroup>
+</Project>
