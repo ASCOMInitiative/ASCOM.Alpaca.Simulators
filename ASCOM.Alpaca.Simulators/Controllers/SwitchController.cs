@@ -137,7 +137,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/getswitch")]
         public ActionResult<BoolResponse> GetSwitch([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(0)] short id, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).CanWrite(id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).GetSwitch(id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
