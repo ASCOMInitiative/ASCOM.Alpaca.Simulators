@@ -40,7 +40,6 @@ namespace ASCOM.Simulators
         private static string _driverInfo = "ASCOM.Simulator.Rotator";
         private static string _driverVersion = "6.4";
         private static short _interfaceVersion = 3;
-        private static string s_sProgID = "ASCOM.Simulator.Rotator";
 
 		//
 		// Sync object

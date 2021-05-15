@@ -42,7 +42,6 @@ namespace ASCOM.Simulators
 		/// <summary>
 		/// Driver ID - ClassID and used in the profile
 		/// </summary>
-		private string driverID = "ASCOM.Simulator.Rotator";
 		private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
 		//

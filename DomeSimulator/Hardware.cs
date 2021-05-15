@@ -88,9 +88,6 @@ namespace ASCOM.Simulators
         // ASCOM Identifiers
         public static string ID = "ASCOM.Simulator.Dome";
 
-        private static string DESC = "Dome Simulator .NET";
-        private static string RegVer = "1.0";
-
         // State Variables
         public static double g_dAltRate;                 // degrees per sec
 
@@ -303,11 +300,17 @@ namespace ASCOM.Simulators
         {
             get
             {
-                // slewing is true if either Alt or Az are in motion
-                return (g_eSlewing != Going.slewNowhere) | (g_dDomeAlt != g_dTargetAlt);
+
                 // Non-standard, Slewing true if shutter is opening/closing
                 if (g_bSlewingOpenClose)
+                {
                     return HW_Slewing | (g_eShutterState == ShutterState.Closing) | (g_eShutterState == ShutterState.Opening);
+                }
+                else
+                {
+                    // slewing is true if either Alt or Az are in motion
+                    return (g_eSlewing != Going.slewNowhere) | (g_dDomeAlt != g_dTargetAlt);
+                }
             }
         }
 

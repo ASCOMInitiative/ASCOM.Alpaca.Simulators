@@ -600,7 +600,7 @@ namespace ASCOM.Simulators
             }
             catch (Exception ex)
             {
-                //EventLogCode.LogEvent("ASCOM.Simulator.Telescope", "TelescopeHardware Initialiser Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.TelescopeSimulatorNew, ex.ToString());
+                TL.LogError($"TelescopeHardware Initialiser Exception: {ex.Message}");
             }
         }
 
@@ -1296,7 +1296,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                //LogMessage("AtHome", "Distance from Home: {0}, AtHome: {1}", (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared, (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared < 0.01);
+                LogMessage("AtHome", "Distance from Home: {0}, AtHome: {1}", (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared, (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared < 0.01);
                 return (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared < 0.01;
             }
         }
@@ -1595,7 +1595,7 @@ namespace ASCOM.Simulators
 
         internal static void LogMessage(string identifier, string format, params object[] args)
         {
-            //LogMessage(identifier, string.Format(CultureInfo.InvariantCulture, format, args));
+            TL.LogInformation($"{identifier}: {string.Format(CultureInfo.InvariantCulture, format, args)}");
         }
 
         /// <summary>

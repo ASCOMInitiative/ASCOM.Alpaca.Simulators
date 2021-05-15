@@ -59,7 +59,6 @@ namespace ASCOM.Simulators
     public class Camera : ICameraV3, IAlpacaDevice
     {
         // Driver ID and descriptive string that shows in the Chooser
-        private static string s_csDriverID = "ASCOM.Simulator.Camera";
         private static string s_csDriverDescription = "Camera V3 simulator";
 
         #region Profile string constants
@@ -316,6 +315,7 @@ namespace ASCOM.Simulators
         public Camera(int deviceNumber, ILogger logger, IProfile profile)
         {
             Profile = profile;
+            Log.log = logger;
 
             InitialiseSimulator();
 

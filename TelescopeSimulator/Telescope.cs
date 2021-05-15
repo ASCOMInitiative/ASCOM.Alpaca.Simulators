@@ -46,7 +46,6 @@ namespace ASCOM.Simulators
         private AxisRates[] m_AxisRates;
         private TrackingRates m_TrackingRates;
         private TrackingRatesSimple m_TrackingRatesSimple;
-        private string driverID;
         private long objectId;
 
         const string SlewToHA = "SlewToHA"; const string SlewToHAUpper = "SLEWTOHA";
@@ -68,6 +67,7 @@ namespace ASCOM.Simulators
             try
             {
                 TelescopeHardware.TL = logger;
+                Logger = logger;
                 TelescopeHardware.s_Profile = profile;
 
                 TelescopeHardware.Init();
@@ -103,7 +103,7 @@ namespace ASCOM.Simulators
 
                 TelescopeHardware.Start();
 
-                TelescopeHardware.LogMessage("New", "Instance ID: " + objectId + ", new: " + "Driver ID: " + driverID);
+                TelescopeHardware.LogMessage("New", "Instance ID: " + objectId + ", new: " + "Driver ID: Alpaca Simulator");
             }
             catch (Exception ex)
             {

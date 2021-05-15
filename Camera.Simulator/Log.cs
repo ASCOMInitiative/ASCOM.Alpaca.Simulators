@@ -8,8 +8,7 @@ namespace ASCOM.Simulators
 {
     internal static class Log
     {
-        private static ILogger log;
-        private static bool started;
+        internal static ILogger log;
 
 
         internal static void LogMessage(string identifier, string message, params object[] args)

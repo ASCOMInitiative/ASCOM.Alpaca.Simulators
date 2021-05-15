@@ -72,7 +72,6 @@ namespace System.Windows {
 		{
 			if (source == null)
 				throw new ArgumentNullException ("source");
-			Size value;
 			if (source.Trim () == "Empty")
 			{
 				return Empty;

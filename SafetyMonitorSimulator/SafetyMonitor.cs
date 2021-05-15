@@ -84,6 +84,7 @@ namespace ASCOM.Simulators
         public SafetyMonitor(int deviceNumber, ILogger logger, IProfile profile)
         {
             Profile = profile;
+            Logger = logger;
 
             if (CheckSafetyMonitorKeyValue())
             {
