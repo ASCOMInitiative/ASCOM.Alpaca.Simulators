@@ -18,7 +18,7 @@ namespace ASCOM.Alpaca.Simulators
                 Console.WriteLine("Reseting Server settings");
                 ServerSettings.Reset();
                 Console.WriteLine("Reseting Device settings");
-                //DeviceManager.Reset();
+                DeviceManager.Reset();
                 Console.WriteLine("Settings reset, shutting down");
                 Logging.LogInformation("Settings reset, shutting down");
                 return;

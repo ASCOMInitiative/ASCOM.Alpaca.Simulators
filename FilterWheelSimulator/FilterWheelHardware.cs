@@ -408,7 +408,6 @@ namespace ASCOM.Simulators
         public static void ResetProfile()
         {
             g_Profile.Clear();
-            UpdateSettings();
         }
 
         //

@@ -71,16 +71,112 @@ namespace ASCOM.Alpaca.Simulators
         /// </summary>
         internal static void Reset()
         {
-            foreach (var covcal in coverCalibratorV1s)
+            foreach (var dev in cameraV3s.Values)
             {
                 try
                 {
-                    (covcal.Value as ASCOM.Simulators.CoverCalibratorSimulator)?.ResetSettings();
+                    (dev as ASCOM.Simulators.Camera)?.ClearProfile();
                 }
                 catch (Exception ex)
                 {
-                    Logging.LogError(ex.Message);
+                    Logging.LogError($"Failed to reset Camera settings with error: {ex.Message}");
                 }
+            }
+
+            foreach (var dev in coverCalibratorV1s.Values)
+            {
+                try
+                {
+                    (dev as ASCOM.Simulators.CoverCalibratorSimulator)?.ResetSettings();
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogError($"Failed to reset CoverCalibrator settings with error: {ex.Message}");
+                }
+            }
+
+            foreach (var dev in domeV2s.Values)
+            {
+                try
+                {
+                    (dev as ASCOM.Simulators.Dome)?.ResetConfig();
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogError($"Failed to reset Dome settings with error: {ex.Message}");
+                }
+            }
+
+            try
+            {
+                ASCOM.Simulators.FilterWheelHardware.ResetProfile();
+            }
+            catch (Exception ex)
+            {
+                Logging.LogError($"Failed to reset Filter Wheel settings with error: {ex.Message}");
+            }
+
+            foreach (var dev in focuserV3s.Values)
+            {
+                try
+                {
+                    (dev as ASCOM.Simulators.Focuser)?.Reset();
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogError($"Failed to reset Focuser settings with error: {ex.Message}");
+                }
+            }
+
+            try
+            {
+                ASCOM.Simulators.OCSimulator.ClearProfile();
+            }
+            catch (Exception ex)
+            {
+                Logging.LogError($"Failed to reset Observing Conditions settings with error: {ex.Message}");
+            }
+
+            try
+            {
+                ASCOM.Simulators.RotatorHardware.ResetProfile();
+            }
+            catch (Exception ex)
+            {
+                Logging.LogError($"Failed to reset Rotator settings with error: {ex.Message}");
+            }
+
+            foreach (var dev in safetyMonitors.Values)
+            {
+                try
+                {
+                    (dev as ASCOM.Simulators.SafetyMonitor)?.ResetProfile();
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogError($"Failed to reset SafetyMonitor settings with error: {ex.Message}");
+                }
+            }
+
+            foreach (var dev in switchV2s.Values)
+            {
+                try
+                {
+                    (dev as ASCOM.Simulators.Switch)?.ResetProfile();
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogError($"Failed to reset Switch settings with error: {ex.Message}");
+                }
+            }
+
+            try
+            {
+                ASCOM.Simulators.TelescopeHardware.ClearProfile();
+            }
+            catch(Exception ex)
+            {
+                Logging.LogError($"Failed to reset Telescope settings with error: {ex.Message}");
             }
         }
 
