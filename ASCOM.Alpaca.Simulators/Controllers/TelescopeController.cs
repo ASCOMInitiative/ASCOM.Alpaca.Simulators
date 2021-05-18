@@ -664,7 +664,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route(APIRoot + "{DeviceNumber}/UTCDate")]
         public ActionResult<StringResponse> UTCDate([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).UTCDate.ToString(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).UTCDate.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
