@@ -307,6 +307,36 @@
     {
         try
         {
+            if(MinimumTemperature >= MaxTemperature)
+            {
+                toastService.ShowWarning("The minimum temperature must be less then the maximum.");
+                return;
+            }
+
+            if(maxPosition <= 0)
+            {
+                toastService.ShowWarning("The maximum position must be greater then 0.");
+                return;
+            }
+
+            if (maxIncrement <= 0 || maxIncrement > maxPosition)
+            {
+                toastService.ShowWarning("The maximum increment must be between zero and the maximum position.");
+                return;
+            }
+
+            if (stepSize <= 0)
+            {
+                toastService.ShowWarning("The step size must be greater then 0.");
+                return;
+            }
+
+            if (settleTime <= 0)
+            {
+                toastService.ShowWarning("The settle time must be greater then 0.");
+                return;
+            }
+
             Device.MaxStep = maxPosition;
             Device.StepSize = stepSize;
             Device.MaxIncrement = maxIncrement;
