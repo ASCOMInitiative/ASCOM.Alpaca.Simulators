@@ -68,7 +68,7 @@ namespace ASCOM.Simulators
         private const string sCsDriverDescription = "ASCOM Simulator Focuser Driver";
 
         /// <summary>
-        /// Sets up the permenant store for saved settings
+        /// Sets up the permanent store for saved settings
         /// </summary>
         private readonly IProfile Profile;
 
@@ -573,7 +573,7 @@ namespace ASCOM.Simulators
             if (Target > MaxStep) Target = MaxStep; // Condition target within the acceptable range
             if (Target < 0) Target = 0;
 
-            if (_position != Target) //Actually move the focuse if necessary
+            if (_position != Target) //Actually move the focuser if necessary
             {
                 LogMessage("Moving", "LastOffset, Position, Target RateOfChange " + LastOffset + " " + _position + " " + Target + " " + RateOfChange);
 

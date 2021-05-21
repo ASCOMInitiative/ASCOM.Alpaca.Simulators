@@ -45,15 +45,15 @@
         <legend>Temperature Simulator</legend>
 
         <label for="currentTemp"> Current Temperature:</label>
-        <input type="number" id="currentTemp" min="0" @bind="CurrentTemperature">
+        <input type="number" id="currentTemp" min="-273" max="100" @bind="CurrentTemperature">
         <br>
 
         <label for="maxTemp"> Maximum Temperature:</label>
-        <input type="number" id="maxTemp" min="0" @bind="MaxTemperature">
+        <input type="number" id="maxTemp" min="-273" max="100" @bind="MaxTemperature">
         <br>
 
         <label for="minTemp"> Minimum Temperature:</label>
-        <input type="number" id="minTemp" min="0" @bind="MinimumTemperature">
+        <input type="number" id="minTemp" min="-273" max="100" @bind="MinimumTemperature">
         <br>
 
         <label for="cyclePeriod"> Cycle Period (sec):</label>
@@ -61,7 +61,7 @@
         <br>
 
         <label for="steps"> Steps / C:</label>
-        <input type="number" id="steps" min="0" @bind="StepsPerC">
+        <input type="number" id="steps" @bind="StepsPerC">
         <br>
     </fieldset>
     <fieldset>
