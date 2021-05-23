@@ -77,8 +77,8 @@
 </body>
 
 @code {
-    [Parameter]
-    public int InstanceID { get; set; }
+        [Parameter]
+        public int InstanceID { get; set; }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -99,7 +99,14 @@
         }
         set
         {
-            Device.MaxBrightnessValue = value;
+            if (MaxBrightness < 1)
+            {
+                Device.MaxBrightnessValue = value;
+            }
+            else
+            {
+                toastService.ShowWarning("Max Brightness must be greater then zero.");
+            }
         }
     }
 
@@ -111,7 +118,14 @@
         }
         set
         {
-            Device.CalibratorStablisationTimeValue = value;
+            if (value > 0)
+            {
+                Device.CalibratorStablisationTimeValue = value;
+            }
+            else
+            {
+                toastService.ShowWarning("The Calibration Stablisation time must be greater then zero.");
+            }
         }
     }
 
@@ -135,7 +149,14 @@
         }
         set
         {
-            Device.CoverOpeningTimeValue = value;
+            if (value > 0)
+            {
+                Device.CoverOpeningTimeValue = value;
+            }
+            else
+            {
+                toastService.ShowWarning("Opening Time must be greater the 0.");
+            }
         }
     }
 
