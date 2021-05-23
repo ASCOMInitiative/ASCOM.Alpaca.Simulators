@@ -8,15 +8,15 @@
         <legend>Shutter Control</legend>
 
         <label for="ShutterSlewRate">Slew Rate (deg/sec)</label>
-        <input type="number" id="ShutterSlewRate" @bind="ShutterSlewRate">
+        <input type="number" id="ShutterSlewRate" min="0" @bind="ShutterSlewRate">
         <br>
 
         <label for="ShutterOpenCloseTime">Open/Close time (sec)</label>
-        <input type="number" id="ShutterOpenCloseTime" @bind="ShutterOpenCloseTime">
+        <input type="number" id="ShutterOpenCloseTime" min="0" @bind="ShutterOpenCloseTime">
         <br>
 
         <label for="ShutterMaximumAltitude">Maximum Altitude (deg)</label>
-        <input type="number" id="ShutterMaximumAltitude" @bind="ShutterMaximumAltitude">
+        <input type="number" id="ShutterMaximumAltitude" min="0" @bind="ShutterMaximumAltitude">
         <br>
 
         <label for="ShutterMinimumAltitude">Minimum Altitude (deg)</label>
@@ -29,11 +29,11 @@
         <legend>Azimuth Control</legend>
 
         <label for="AzimuthSlewRate">Slew Rate (deg/sec)</label>
-        <input type="number" id="AzimuthSlewRate" @bind="AzimuthSlewRate">
+        <input type="number" id="AzimuthSlewRate" min="0" @bind="AzimuthSlewRate">
         <br>
 
         <label for="AzimuthStepSize">Step Size (deg)</label>
-        <input type="number" id="AzimuthStepSize" @bind="AzimuthStepSize">
+        <input type="number" id="AzimuthStepSize" min="0" @bind="AzimuthStepSize">
         <br>
 
         <label for="AzimuthPark">Park Position (deg)</label>
@@ -334,6 +334,47 @@
     {
         try
         {
+            if (ShutterSlewRate <= 0)
+            {
+                toastService.ShowWarning("The Shutter Slew Rate must be greater then 0.");
+                return;
+            }
+
+            if (ShutterOpenCloseTime <= 0)
+            {
+                toastService.ShowWarning("The Shutter Open Close Time must be greater then 0.");
+                return;
+            }
+
+            if (ShutterMaximumAltitude <= ShutterMinimumAltitude)
+            {
+                toastService.ShowWarning("The Maximum Altitude must be greater then the Minimum.");
+                return;
+            }
+
+            if (AzimuthSlewRate <= 0)
+            {
+                toastService.ShowWarning("The Azimuth Slew Rate must be greater then 0.");
+                return;
+            }
+
+            if (AzimuthStepSize <= 0)
+            {
+                toastService.ShowWarning("The Azimuth Step Size must be greater then 0.");
+                return;
+            }
+
+            if (AzimuthPark < 0 || AzimuthPark > 360)
+            {
+                toastService.ShowWarning("The Azimuth Park postion must be between 0 and 360.");
+                return;
+            }
+
+            if (AzimuthHome < 0 || AzimuthHome > 360)
+            {
+                toastService.ShowWarning("The Azimuth Home postion must be between 0 and 360.");
+                return;
+            }
 
             ASCOM.Simulators.Hardware.g_dAltRate = ShutterSlewRate;
 
