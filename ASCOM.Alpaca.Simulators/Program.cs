@@ -13,22 +13,20 @@ namespace ASCOM.Alpaca.Simulators
             //Reset all stored settings if requested
             if (args?.Any(str => str.Contains("--reset")) ?? false)
             {
-                Console.WriteLine("Reseting stored settings");
-                Logging.LogInformation("Reseting stored settings");
-                Console.WriteLine("Reseting Server settings");
+                WriteAndLog("Reseting stored settings");
+                WriteAndLog("Reseting Server settings");
                 ServerSettings.Reset();
-                Console.WriteLine("Reseting Device settings");
+                WriteAndLog("Reseting Device settings");
                 DeviceManager.Reset();
-                Console.WriteLine("Settings reset, shutting down");
-                Logging.LogInformation("Settings reset, shutting down");
+                WriteAndLog("Settings reset, shutting down");
                 return;
             }
 
             if (args?.Any(str => str.Contains("--reset-auth")) ?? false)
             {
-                Console.WriteLine("Turning off Authentication to allow password reset.");
+                WriteAndLog("Turning off Authentication to allow password reset.");
                 ServerSettings.UseAuth = false;
-                Console.WriteLine("You can change the password and then re-enable Authentication.");
+                WriteAndLog("Authentication off, you can change the password and then re-enable Authentication.");
             }
 
             //Already running, start the browser
@@ -36,6 +34,7 @@ namespace ASCOM.Alpaca.Simulators
             //This should probably be changed to a Mutex or another similar lock
             if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1)
             {
+                WriteAndLog("Detected driver already running, starting web browser on IP and Port");
                 StartBrowser(ServerSettings.ServerPort);
                 return;
             }
@@ -48,7 +47,7 @@ namespace ASCOM.Alpaca.Simulators
                     args = new string[0];
                 }
 
-                Console.WriteLine("No startup url args detected, binding to saved server settings.");
+                WriteAndLog("No startup url args detected, binding to saved server settings.");
 
                 var temparray = new string[args.Length + 1];
 
@@ -67,8 +66,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 startupURLArg += ":" + ServerSettings.ServerPort;
 
-                Console.WriteLine("Startup URL args: " + startupURLArg);
-                Logging.LogInformation("Startup URL args: " + startupURLArg);
+                WriteAndLog("Startup URL args: " + startupURLArg);
 
                 temparray[args.Length] = startupURLArg;
 
@@ -105,5 +103,11 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+        private static void WriteAndLog(string message)
+        {
+            Console.WriteLine(message);
+            Logging.LogInformation(message);
+        }
     }
 }
