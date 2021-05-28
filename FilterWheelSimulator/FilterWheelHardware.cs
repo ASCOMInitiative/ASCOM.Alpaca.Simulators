@@ -105,7 +105,7 @@ namespace ASCOM.Simulators
         //
         public static void Initialize()
         {
-            UpdateSettings();
+            LoadSettings();
         }
 
         public static void Finalize_()	// "Finalize" exists in parent
@@ -328,7 +328,7 @@ namespace ASCOM.Simulators
         //
         // Get Settings from Registry
         //
-        private static void UpdateSettings()
+        private static void LoadSettings()
         {
             try
             {
@@ -403,6 +403,8 @@ namespace ASCOM.Simulators
             g_Profile.WriteValue("ImplementsNames", implementsNames.ToString());
             g_Profile.WriteValue("ImplementsOffsets", implementsOffsets.ToString());
             g_Profile.WriteValue("PreemptMoves", preemptMoves.ToString());
+
+            LoadSettings();
         }
 
         public static void ResetProfile()
