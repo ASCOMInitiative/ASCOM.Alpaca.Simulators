@@ -1,3 +1,5 @@
+@using Blazored.Toast.Configuration
+
 @inherits LayoutComponentBase
 
 <div class="sidebar">
@@ -5,21 +7,22 @@
 </div>
 
 <div class="main">
-    <BlazoredToasts />
 
     <div class="content px-1">
+
         @if (ServerSettings.UseAuth)
         {
-            <LoginControl />
-            <AuthorizeView>
-                <Authorized>
-                    @Body
-                </Authorized>
-            </AuthorizeView>
+        <LoginControl />
+        <AuthorizeView>
+            <Authorized>
+                @Body
+            </Authorized>
+        </AuthorizeView>
         }
         else
         {
-            @Body
+        @Body
         }
     </div>
+    <BlazoredToasts Position="ToastPosition.TopLeft" />
 </div>
