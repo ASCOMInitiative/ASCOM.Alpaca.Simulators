@@ -118,13 +118,13 @@
         }
         set
         {
-            if (value > 0)
+            if (value >= 0)
             {
                 Device.CalibratorStablisationTimeValue = value;
             }
             else
             {
-                toastService.ShowWarning("The Calibration Stablisation time must be greater then zero.");
+                toastService.ShowWarning("The Calibration Stablisation time must be positive.");
             }
         }
     }
@@ -149,13 +149,13 @@
         }
         set
         {
-            if (value > 0)
+            if (value >= 0)
             {
                 Device.CoverOpeningTimeValue = value;
             }
             else
             {
-                toastService.ShowWarning("Opening Time must be greater the 0.");
+                toastService.ShowWarning("Opening Time must be must be positive.");
             }
         }
     }
