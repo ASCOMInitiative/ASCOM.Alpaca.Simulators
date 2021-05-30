@@ -8,19 +8,19 @@
         <legend>Pixel Settings</legend>
 
         <label for="PixelWidth">Width (microns):</label>
-        <input type="number" id="PixelWidth" @bind="PixelWidth">
+        <input type="number" id="PixelWidth" min="0" max="100" step="1" @bind="PixelWidth">
         <br>
 
         <label for="PixelHeight">Height (microns)</label>
-        <input type="number" id="PixelHeight" @bind="PixelHeight">
+        <input type="number" id="PixelHeight" min="0" max="100" step="1" @bind="PixelHeight">
         <br>
 
         <label for="MaxADU">Maximum ADU</label>
-        <input type="number" id="MaxADU" @bind="MaxADU">
+        <input type="number" id="MaxADU" min="0" max="65535" step="1" @bind="MaxADU">
         <br>
 
         <label for="EperADU">e- per ADU</label>
-        <input type="number" id="EperADU" @bind="EperADU">
+        <input type="number" id="EperADU" min="0" max="10" step=".1" @bind="EperADU">
         <br>
     </fieldset>
 
@@ -28,19 +28,19 @@
         <legend>CCD Settings</legend>
 
         <label for="CCDWidth">Width (Pixels)</label>
-        <input type="number" id="CCDWidth" @bind="CCDWidth">
+        <input type="number" id="CCDWidth" min="0" max="4000" step="1" @bind="CCDWidth">
         <br>
 
         <label for="CCDHeight">Height (Pixels)</label>
-        <input type="number" id="CCDHeight" @bind="CCDHeight">
+        <input type="number" id="CCDHeight" min="0" max="4000" step="1" @bind="CCDHeight">
         <br>
 
         <label for="MaxBinX">Max Bin X</label>
-        <input type="number" id="MaxBinX" @bind="MaxBinX">
+        <input type="number" id="MaxBinX" min="1" max="10" step="1" @bind="MaxBinX">
         <br>
 
         <label for="MaxBinY">Max Bin Y</label>
-        <input type="number" id="MaxBinY" @bind="MaxBinY">
+        <input type="number" id="MaxBinY" min="1" max="10" step="1" @bind="MaxBinY">
         <br>
 
         <input type="checkbox" id="CanAsymmetricBin" @bind="CanAsymmetricBin">
@@ -68,11 +68,11 @@
         <br>
 
         <label for="BayerOffsetX">Bayer Offset X</label>
-        <input type="number" id="BayerOffsetX" @bind="BayerOffsetX">
+        <input type="number" id="BayerOffsetX" min="0" max="10" step="1" @bind="BayerOffsetX">
         <br>
 
         <label for="BayerOffsetY">Bayer Offset Y</label>
-        <input type="number" id="BayerOffsetY" @bind="BayerOffsetY">
+        <input type="number" id="BayerOffsetY" min="0" max="10" step="1" @bind="BayerOffsetY">
         <br>
     </fieldset>
 
@@ -103,11 +103,11 @@
         <br>
 
         <label for="GainMin">Gain Min</label>
-        <input type="number" id="GainMin" @bind="GainMin">
+        <input type="number" id="GainMin" min="0" max="10" step="1" @bind="GainMin">
         <br>
 
         <label for="GainMax">Gain Max</label>
-        <input type="number" id="GainMax" @bind="GainMax">
+        <input type="number" id="GainMax" min="0" max="10" step="1" @bind="GainMax">
         <br>
     </fieldset>
 
@@ -131,18 +131,18 @@
         <label for="CanStopExposure">Can Stop Exposure</label><br>
 
         <label for="MinExposure">Min Exposure</label>
-        <input type="number" id="MinExposure" @bind="MinExposure">
+        <input type="number" id="MinExposure" min="0" max="3600" step="1" @bind="MinExposure">
         <br>
 
         <label for="MaxExposure">Max Exposure</label>
-        <input type="number" id="MaxExposure" @bind="MaxExposure">
+        <input type="number" id="MaxExposure" min="0" max="3600" step="1" @bind="MaxExposure">
         <br>
 
         <input type="checkbox" id="HasSubExposure" @bind="HasSubExposure">
         <label for="HasSubExposure">Has Sub Exposure</label><br>
 
         <label for="SubExposure">Sub Exposure</label>
-        <input type="number" id="SubExposure" @bind="SubExposure">
+        <input type="number" id="SubExposure" min="0" max="30" step=".1" @bind="SubExposure">
         <br>
     </fieldset>
 
@@ -170,11 +170,11 @@
         <br>
 
         <label for="OffsetMin">Offset Min</label>
-        <input type="number" id="OffsetMin" @bind="OffsetMin">
+        <input type="number" id="OffsetMin" min="0" step="1" @bind="OffsetMin">
         <br>
 
         <label for="OffsetMax">Offset Max</label>
-        <input type="number" id="OffsetMax" @bind="OffsetMax">
+        <input type="number" id="OffsetMax" min="0" step="1" @bind="OffsetMax">
     </fieldset>
 
     <fieldset>
