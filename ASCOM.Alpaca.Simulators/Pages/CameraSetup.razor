@@ -522,6 +522,102 @@
     {
         try
         {
+            if (PixelWidth <= 0)
+            {
+                toastService.ShowWarning("The Pixel Width must be greater then 0.");
+                return;
+            }
+
+            if (PixelHeight <= 0)
+            {
+                toastService.ShowWarning("The Pixel Height must be greater then 0.");
+                return;
+            }
+
+            if (MaxADU <= 0 || MaxADU > 65535)
+            {
+                toastService.ShowWarning("The Max ADU must be between 0 and 65535.");
+                return;
+            }
+
+            if (EperADU <= 0 || EperADU > 10)
+            {
+                toastService.ShowWarning("The Electrons per ADU must be between 0 and 10.");
+                return;
+            }
+
+            if (CCDWidth < 1 || CCDWidth > 4000)
+            {
+                toastService.ShowWarning("The CCD Width must be between 1 and 4000.");
+                return;
+            }
+
+            if (CCDHeight < 1 || CCDHeight > 4000)
+            {
+                toastService.ShowWarning("The CCD Height must be between 1 and 4000.");
+                return;
+            }
+
+            if (MaxBinX < 1 || MaxBinX > 4)
+            {
+                toastService.ShowWarning("The Max Bin X must be between 1 and 4.");
+                return;
+            }
+
+            if (MaxBinY < 1 || MaxBinY > 4)
+            {
+                toastService.ShowWarning("The Max Bin Y must be between 1 and 4.");
+                return;
+            }
+
+            if (BayerOffsetX < 0 || BayerOffsetX > 10)
+            {
+                toastService.ShowWarning("The Bayer Offset X must be between 0 and 10.");
+                return;
+            }
+
+            if (BayerOffsetY < 0 || BayerOffsetY > 10)
+            {
+                toastService.ShowWarning("The Bayer Offset Y must be between 0 and 10.");
+                return;
+            }
+
+            if (GainMin < 0 || GainMin > 10 || GainMin > GainMax)
+            {
+                toastService.ShowWarning("The Gain Min must be between 0 and 10 and less then Gain Max.");
+                return;
+            }
+
+            if (GainMax < 0 || GainMax > 10 || GainMin > GainMax)
+            {
+                toastService.ShowWarning("The Gain Max must be between 0 and 10 and more the Gain Min.");
+                return;
+            }
+
+            if (MinExposure <= 0 || MinExposure > 3600 || MinExposure > MaxExposure)
+            {
+                toastService.ShowWarning("The Min Exposure must be between 1 and 3600 and be less the the Max Exposure.");
+                return;
+            }
+
+            if (MaxExposure <= 0 || MaxExposure > 3600 || MinExposure > MaxExposure)
+            {
+                toastService.ShowWarning("The Min Exposure must be between 1 and 3600 and be more the the Min Exposure.");
+                return;
+            }
+
+            if (OffsetMin < 0 || OffsetMin > OffsetMax)
+            {
+                toastService.ShowWarning("The Offset Min must be greater then 0 and less then the Offset Max.");
+                return;
+            }
+
+            if (OffsetMax < 0 || OffsetMin > OffsetMax)
+            {
+                toastService.ShowWarning("The Offset Min must be greater then 0 and greater then the Offset Min.");
+                return;
+            }
+
             Device.interfaceVersion = (short)InterfaceVersion;
 
             Device.pixelSizeX = PixelWidth;
