@@ -298,13 +298,13 @@
 
         LatitudeDegrees = (int)Math.Abs(TelescopeHardware.Latitude);
 
-        LatitudeMinutes = Math.Abs((TelescopeHardware.Latitude - (int)TelescopeHardware.Latitude) * 60);
+        LatitudeMinutes = double.Parse(Math.Abs((TelescopeHardware.Latitude - (int)TelescopeHardware.Latitude) * 60).ToString("00.000"));
 
         LongitudeSign = Math.Sign(TelescopeHardware.Longitude);
 
         LongitudeDegrees = Math.Abs((int)TelescopeHardware.Longitude);
 
-        LongitudeMinutes = Math.Abs((TelescopeHardware.Longitude - (int)TelescopeHardware.Longitude) * 60);
+        LongitudeMinutes = double.Parse(Math.Abs((TelescopeHardware.Longitude - (int)TelescopeHardware.Longitude) * 60).ToString("00.000"));
 
         Elevation = TelescopeHardware.Elevation;
 
