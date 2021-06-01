@@ -61,8 +61,8 @@
             {
                 <tr>
                     <td>Slot @i</td>
-                    <td><input type="text" @bind="FilterNames[i]" /></td>
-                    <td><input type="number" step="1" @bind="FilterOffsets[i]" /></td>
+                    <td><input type="text" @bind="FilterNames[i]" disabled="@SlotDisabled(i)"/></td>
+                    <td><input type="number" step="1" @bind="FilterOffsets[i]" disabled="@SlotDisabled(i)" /></td>
                 </tr>
             }
         </table>
@@ -83,8 +83,8 @@
 </body>
 
 @code {
-    [Parameter]
-    public int InstanceID { get; set; }
+        [Parameter]
+        public int InstanceID { get; set; }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -200,6 +200,12 @@
         get;
         set;
     } = new int[8];
+
+    bool SlotDisabled(int filter)
+    {
+        return NumberOfFilters <= filter;
+
+    }
     #endregion
 
     public void Reset()
