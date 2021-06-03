@@ -8,15 +8,15 @@
         <legend>General Settings</legend>
 
         <label for="SensorQueryInterval">Sensor Query Interval (seconds)</label>
-        <input type="number" id="SensorQueryInterval" @bind="SensorQueryInterval">
+        <input type="number" id="SensorQueryInterval" min="0" max="300" step="1" @bind="SensorQueryInterval">
         <br>
 
         <label for="AveragePeriod">Average Period (hours)</label>
-        <input type="number" id="AveragePeriod" @bind="AveragePeriod">
+        <input type="number" id="AveragePeriod" min="0" max="24" step=".1" @bind="AveragePeriod">
         <br>
 
         <label for="NumberOfReadings">Number of readings in average period</label>
-        <input type="number" id="NumberOfReadings" @bind="NumberOfReadings">
+        <input type="number" id="NumberOfReadings" min="0" max="128" step="1" @bind="NumberOfReadings">
         <br>
 
     </fieldset>
@@ -41,11 +41,11 @@
                     <tr>
                         <th>@dev.Value.SensorName</th>
                         <th><input type="checkbox" @bind="@Sensors[dev.Key].IsImplemented"></th>
-                        <th><input type="number" @bind="@Sensors[dev.Key].SimFromValue" class="oc-number"></th>
-                        <th><input type="number" @bind="@Sensors[dev.Key].SimToValue" class="oc-number"></th>
+                        <th><input type="number" @bind="@Sensors[dev.Key].SimFromValue" max="@Sensors[dev.Key].SimToValue" class="oc-number"></th>
+                        <th><input type="number" @bind="@Sensors[dev.Key].SimToValue"  min="@Sensors[dev.Key].SimFromValue" class="oc-number"></th>
                         <th>@Sensors[dev.Key].Unit</th>
-                        <th><input type="number" @bind="@Sensors[dev.Key].ValueCycleTime" class="oc-number"></th>
-                        <th><input type="number" @bind="@Sensors[dev.Key].NotReadyDelay" class="oc-number"></th>
+                        <th><input type="number" @bind="@Sensors[dev.Key].ValueCycleTime" min="0" max="3600" step="1" class="oc-number"></th>
+                        <th><input type="number" @bind="@Sensors[dev.Key].NotReadyDelay" min="0" max="120" step="1" class="oc-number"></th>
                     </tr>
 
                     i++;
