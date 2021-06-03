@@ -27,9 +27,9 @@
                         <th>@i</th>
                         <th><input type="text" @bind="@Switches[index].Name" style="max-width:10ch"></th>
                         <th><input type="text" @bind="@Switches[index].Description"></th>
-                        <th><input type="number" @bind="@Switches[index].Value" class="switch-number"></th>
-                        <th><input type="number" @bind="@Switches[index].Minimum" class="switch-number"></th>
-                        <th><input type="number" @bind="@Switches[index].Maximum" class="switch-number"></th>
+                        <th><input type="number" @bind="@Switches[index].Value" min="@Switches[index].Minimum" max="@Switches[index].Maximum" class="switch-number"></th>
+                        <th><input type="number" @bind="@Switches[index].Minimum" max="@Switches[index].Maximum" class="switch-number"></th>
+                        <th><input type="number" @bind="@Switches[index].Maximum" min="@Switches[index].Minimum" class="switch-number"></th>
                         <th><input type="number" @bind="@Switches[index].StepSize" class="switch-number"></th>
                         <th><input type="checkbox" @bind="@Switches[index].CanWrite" class="switch-number"></th>
                     </tr>
