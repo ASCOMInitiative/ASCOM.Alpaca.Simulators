@@ -189,6 +189,46 @@
     {
         try
         {
+
+            foreach (var sensor in Sensors)
+            {
+                if(sensor.Value.SimFromValue >= sensor.Value.SimToValue)
+                {
+                    toastService.ShowWarning($"Sensor {sensor.Key} must have the Max be greater than the Min.");
+                    return;
+                }
+
+                if(sensor.Value.NotReadyDelay < 0)
+                {
+                    toastService.ShowWarning($"Sensor {sensor.Key} must have the Delay be greater than 0.");
+                    return;
+                }
+
+                if (sensor.Value.ValueCycleTime < 0)
+                {
+                    toastService.ShowWarning($"Sensor {sensor.Key} must have the Delay be greater than 0.");
+                    return;
+                }
+            }
+
+            if (SensorQueryInterval < 0)
+            {
+                toastService.ShowWarning($"The Sensor Query Interval must be greater than 0.");
+                return;
+            }
+
+            if (AveragePeriod < 0)
+            {
+                toastService.ShowWarning($"The Average Period must be greater than 0.");
+                return;
+            }
+
+            if (NumberOfReadings < 0)
+            {
+                toastService.ShowWarning($"The Number Of Readings must be greater than 0.");
+                return;
+            }
+
             ASCOM.Simulators.OCSimulator.SensorQueryInterval = SensorQueryInterval;
 
             ASCOM.Simulators.OCSimulator.AveragePeriod = AveragePeriod;
