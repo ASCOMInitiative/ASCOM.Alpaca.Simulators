@@ -1,0 +1,130 @@
+﻿@page "/control/v1/dome/{InstanceID:int}/"
+
+@inject IToastService toastService
+@inject NavigationManager uriHelper;
+@using System.Timers;
+
+<body>
+    <fieldset>
+        <legend>Dome</legend>
+        <div class="grid-container-two">
+
+            <div class="grid-item-left">
+                <svg width="30" height="30">
+                    <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
+                </svg>
+                <button @onclick="Connect">@ConnectText</button>
+            </div>
+            <div class="grid-item-right">
+                <button @onclick="Setup">Setup</button>
+            </div>
+        </div>
+    </fieldset>
+</body>
+
+@code {
+        [Parameter]
+        public int InstanceID { get; set; }
+
+    /// <summary>
+    /// This access the device type not the interface to allow the device specific settings to be accessed.
+    /// </summary>
+    private ASCOM.Simulators.Dome Device
+    {
+        get
+        {
+            return DeviceManager.GetDome(InstanceID) as ASCOM.Simulators.Dome;
+        }
+    }
+
+    Timer timer = new Timer(100);
+
+    public void Dispose()
+    {
+        timer.Elapsed -= OnPageRefresh;
+        timer.Stop();
+    }
+
+    protected override void OnInitialized()
+    {
+        timer.Elapsed += OnPageRefresh;
+        timer.AutoReset = true;
+        timer.Enabled = true;
+        base.OnInitialized();
+    }
+
+    private void OnPageRefresh(Object source, ElapsedEventArgs e)
+    {
+        try
+        {
+            // Note that the following line is necessary because otherwise
+            // Blazor would not recognize the state change and not refresh the UI
+            InvokeAsync(() =>
+            {
+                try
+                {
+                    StateHasChanged();
+                }
+                catch
+                {
+
+                }
+            });
+        }
+        catch
+        {
+
+        }
+    }
+
+    #region Control
+
+    public bool Connected
+    {
+        get
+        {
+            return Device.Connected;
+        }
+    }
+
+    public string ConnectionColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                return "red";
+            }
+            return "gray";
+        }
+    }
+
+    public string ConnectText
+    {
+        get
+        {
+            if (Device.Connected)
+            {
+                return "Disconnect";
+            }
+            return "Connect";
+        }
+    }
+
+    public void Connect()
+    {
+        Device.Connected = !Device.Connected;
+    }
+
+    #endregion
+
+    public void Setup()
+    {
+        uriHelper.NavigateTo($"/setup/v1/dome/{InstanceID}/setup");
+    }
+
+    public void DisplayError(string error)
+    {
+        toastService.ShowError(error);
+    }
+}
