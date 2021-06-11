@@ -9,22 +9,58 @@
         <legend>Focuser</legend>
         <div class="grid-container-two">
 
-            <div class="grid-item-left">
+            <div class="grid-item-right">
                 <svg width="30" height="30">
                     <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
                 </svg>
                 <button @onclick="Connect">@ConnectText</button>
             </div>
-            <div class="grid-item-right">
+            <div class="grid-item-left">
                 <button @onclick="Setup">Setup</button>
             </div>
+
+            <div class="grid-item-right">
+                <p>Temperature (C):</p>
+            </div>
+            <div class="grid-item-left">
+                <p>@Temperature</p>
+            </div>
+
+
+            <div class="grid-item-right">
+                <p>Position (Steps):</p>
+            </div>
+            <div class="grid-item-left">
+                <p>@Position</p>
+            </div>
+
+            <div class="grid-item-right">
+                <input type="number" min="0" step="1" max="@Device.MaxStep" @bind="GoToPosition" />
+            </div>
+            <div class="grid-item-left">
+                <button @onclick="GoTo">GoTo</button>
+            </div>
+
+            <div class="grid-item-right">
+            </div>
+            <div class="grid-item-left">
+                <button @onclick="Halt">Halt</button>
+            </div>
+
+            <div class="grid-item-right">
+                <label>Temp Comp</label>
+                <input type="checkbox" @bind="TempComp" />
+            </div>
+            <div class="grid-item-left">
+            </div>
+
         </div>
     </fieldset>
 </body>
 
 @code {
-        [Parameter]
-        public int InstanceID { get; set; }
+    [Parameter]
+    public int InstanceID { get; set; }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -79,7 +115,7 @@
 
     #region Control
 
-    public bool Connected
+    bool Connected
     {
         get
         {
@@ -87,7 +123,7 @@
         }
     }
 
-    public string ConnectionColor
+    string ConnectionColor
     {
         get
         {
@@ -99,7 +135,7 @@
         }
     }
 
-    public string ConnectText
+    string ConnectText
     {
         get
         {
@@ -111,9 +147,109 @@
         }
     }
 
-    public void Connect()
+    void Connect()
     {
         Device.Connected = !Device.Connected;
+    }
+
+    double Temperature
+    {
+        get
+        {
+            if (Connected)
+            {
+                try
+                {
+                    return Device.Temperature;
+                }
+                catch
+                {
+
+                }
+            }
+            return 0;
+        }
+    }
+
+    int Position
+    {
+        get
+        {
+            if (Connected)
+            {
+                try
+                {
+                    return Device.Position;
+                }
+                catch
+                {
+
+                }
+            }
+            return 0;
+        }
+    }
+
+    int GoToPosition
+    {
+        get;
+        set;
+    } = 0;
+
+    void GoTo()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                Device.Move(GoToPosition);
+            }
+        }
+        catch(Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    bool TempComp
+    {
+        get
+        {
+            try
+            {
+                return Device.TempComp;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        set
+        {
+            try
+            {
+                if (Device.Connected)
+                {
+                    Device.TempComp = value;
+                }
+            }
+            catch (Exception ex)
+            {
+                DisplayError(ex.Message);
+            }
+        }
+    }
+
+    void Halt()
+    {
+        try
+        {
+            Device.Halt();
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
     }
 
     #endregion
