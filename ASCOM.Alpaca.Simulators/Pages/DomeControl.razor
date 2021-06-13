@@ -8,7 +8,6 @@
     <fieldset>
         <legend>Dome</legend>
         <div class="grid-container-two">
-
             <div class="grid-item-left">
                 <svg width="30" height="30">
                     <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
@@ -19,12 +18,59 @@
                 <button @onclick="Setup">Setup</button>
             </div>
         </div>
+        <div class="grid-container-two">
+
+            <div class="grid-item-right">
+                Shutter:
+            </div>
+            <div class="grid-item-left">
+                @Shutter
+            </div>
+
+            <div class="grid-item-right">
+                Dome AZ:
+            </div>
+            <div class="grid-item-left">
+                @DomeAz
+            </div>
+        </div>
+        <div class="centered">
+            <label style="color:@SlewColor">@SlewText</label>&nbsp;
+            <label style="color:@HomeColor">@HomeText</label>&nbsp;
+            <label style="color:@ParkColor">@ParkText</label>
+        </div>
+        <div class="centered">
+            <button @onclick="@GoToAz">GoTo</button>
+            <input type="number" min="0" max="360" step=".1" @bind="@NewAz" />
+            <button @onclick="@SyncAz">Sync</button>
+        </div>
+        <div class="centered">
+            <button @onclick="@Open">Open</button>
+            <button @onclick="@SlewAltUp" class="oi oi-arrow-top" aria-hidden="true"></button>
+            <button @onclick="@Close">Close</button>
+        </div>
+        <div class="centered">
+            <button @onclick="@Clockwise">&#8635;</button>
+            <button @onclick="@Halt" class="oi oi-media-stop" aria-hidden="true"></button>
+            <button @onclick="@CounterClockwise">&#8634;</button>
+        </div>
+
+        <div class="centered">
+            <button @onclick="@StepClockwise">Step</button>
+            <button @onclick="@SlewAltDown" class="oi oi-arrow-bottom" aria-hidden="true"></button>
+            <button @onclick="@StepCounterClockwise">Step</button>
+        </div>
+        <div class="centered">
+            <button @onclick="@Park">Park</button>
+            &nbsp;
+            <button @onclick="@Home">Home</button>
+        </div>
     </fieldset>
 </body>
 
 @code {
-        [Parameter]
-        public int InstanceID { get; set; }
+    [Parameter]
+    public int InstanceID { get; set; }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -114,6 +160,356 @@
     public void Connect()
     {
         Device.Connected = !Device.Connected;
+    }
+
+    string Shutter
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.CanSetShutter && Device.Altitude != -100000.0)
+                {
+                    switch (Device.ShutterStatus)
+                    {
+                        case Standard.Interfaces.ShutterState.Open:
+                            if (Device.CanSetAltitude)
+                            {
+                                return Device.Altitude.ToString("0.0");
+                            }
+                            else
+                            {
+                                return "Open";
+                            }
+                        case Standard.Interfaces.ShutterState.Closed:
+                            return "Closed";
+                        case Standard.Interfaces.ShutterState.Closing:
+                            return "Closing";
+                        case Standard.Interfaces.ShutterState.Error:
+                            return "Error";
+                        case Standard.Interfaces.ShutterState.Opening:
+                            return "Opening";
+
+                    }
+                }
+            }
+            return "----";
+        }
+    }
+
+    public string DomeAz
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.Azimuth != -100000.0)
+                {
+                    return Device.Azimuth.ToString("000.0");
+                }
+
+            }
+
+            return "---.-";
+        }
+    }
+
+    public string SlewText
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.Slewing)
+                {
+                    return "Slewing";
+                }
+            }
+            return "Not Slewing";
+        }
+    }
+
+    public string SlewColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.Slewing)
+                {
+                    return "Green";
+                }
+            }
+            return "Red";
+        }
+    }
+
+    public string HomeText
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.AtHome)
+                {
+                    return "At Home";
+                }
+            }
+            return "Not At Home";
+        }
+    }
+
+    public string HomeColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.AtHome)
+                {
+                    return "Green";
+                }
+            }
+            return "Red";
+        }
+    }
+
+    public string ParkText
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.AtPark)
+                {
+                    return "Parked";
+                }
+            }
+            return "Not Parked";
+        }
+    }
+
+    public string ParkColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.AtPark)
+                {
+                    return "Green";
+                }
+            }
+            return "Red";
+        }
+    }
+
+    double NewAz
+    {
+        get;
+        set;
+    } = 0;
+
+    void GoToAz()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                Device.SlewToAzimuth(NewAz);
+            }
+        }
+        catch(Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void SyncAz()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                Device.SyncToAzimuth(NewAz);
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void Open()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                Device.OpenShutter();
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void Close()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                Device.CloseShutter();
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void Halt()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                Device.AbortSlew();
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void SlewAltUp()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                if (Device.ShutterStatus == Standard.Interfaces.ShutterState.Open) {
+                    ASCOM.Simulators.Hardware.HW_MoveShutter(ASCOM.Simulators.Hardware.g_dMaxAlt);
+                }
+            }
+        }
+
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void SlewAltDown()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                if (Device.ShutterStatus == Standard.Interfaces.ShutterState.Open)
+                {
+                    ASCOM.Simulators.Hardware.HW_MoveShutter(ASCOM.Simulators.Hardware.g_dMinAlt);
+                }
+            }
+        }
+
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void Clockwise()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                ASCOM.Simulators.Hardware.HW_Run(true);
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void CounterClockwise()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                ASCOM.Simulators.Hardware.HW_Run(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void StepClockwise()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                Device.SlewToAzimuth(ASCOM.Simulators.Hardware.AzScale(Device.Azimuth + ASCOM.Simulators.Hardware.g_dStepSize));
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void StepCounterClockwise()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                Device.SlewToAzimuth(ASCOM.Simulators.Hardware.AzScale(Device.Azimuth - ASCOM.Simulators.Hardware.g_dStepSize));
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void Park()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                Device.Park();
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void Home()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                Device.FindHome();
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
     }
 
     #endregion

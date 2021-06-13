@@ -154,6 +154,10 @@ app {
     text-align: right;
 }
 
+.centered {
+    text-align: center;
+}
+
 fieldset {
     border: 3px solid #002157;
     background: #eee;
