@@ -19,12 +19,37 @@
                 <button @onclick="Setup">Setup</button>
             </div>
         </div>
+
+        <table style="width:100%">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Set</th>
+                <th>Value</th>
+            </tr>
+            @if (Connected)
+            {
+                @for (short i = 0; i < Device.MaxSwitch; i++)
+                {
+                    int index = i + 1;
+                    <tr>
+                        <th>@index</th>
+                        <th>@Device.GetSwitchName(i)</th>
+                        <th><input type="range" min="@Device.MinSwitchValue(i)" max="@Device.MaxSwitchValue(i)" step="@Device.SwitchStep(i)" value="@Device.GetSwitchValue(i)" @onchange="@((ChangeEventArgs __e) => SetValue(index, Convert.ToDouble(__e.Value)))" style="min-width:40ch"></th>
+                        <th>@Device.GetSwitchValue(i)</th>
+                    </tr>
+
+                    i++;
+                }
+            }
+        </table>
+
     </fieldset>
 </body>
 
 @code {
-        [Parameter]
-        public int InstanceID { get; set; }
+    [Parameter]
+    public int InstanceID { get; set; }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -114,6 +139,18 @@
     public void Connect()
     {
         Device.Connected = !Device.Connected;
+    }
+
+    void SetValue(int ID, double value)
+    {
+        try
+        {
+            Device.SetSwitchValue((short)(ID - 1), value);
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
     }
 
     #endregion
