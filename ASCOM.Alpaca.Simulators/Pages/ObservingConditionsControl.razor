@@ -19,6 +19,32 @@
                 <button @onclick="Setup">Setup</button>
             </div>
         </div>
+
+        <table style="width:100%">
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+                <th>Unit</th>
+            </tr>
+
+            @foreach (var dev in ASCOM.Simulators.OCSimulator.Sensors)
+            {
+                <tr>
+                    <th>@dev.Value.SensorName</th>
+                    @if (Connected)
+                    {
+                        <th>@dev.Value.SimCurrentValue.ToString("0.000")</th>
+                        <th>@dev.Value.Unit</th>
+                    }
+                    else
+                    {
+                        <th>-----</th>
+                        <th>@dev.Value.Unit</th>
+                    }
+                </tr>
+            }
+
+        </table>
     </fieldset>
 </body>
 
