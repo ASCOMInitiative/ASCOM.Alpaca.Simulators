@@ -9,22 +9,65 @@
         <legend>Rotator</legend>
         <div class="grid-container-two">
 
-            <div class="grid-item-left">
+            <div class="grid-item-right">
                 <svg width="30" height="30">
                     <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
                 </svg>
                 <button @onclick="Connect">@ConnectText</button>
             </div>
-            <div class="grid-item-right">
+            <div class="grid-item-left">
                 <button @onclick="Setup">Setup</button>
+            </div>
+
+            <div class="grid-item-right">
+                <p>Sky PA:</p>
+            </div>
+            <div class="grid-item-left">
+                <p>@SkyPA</p>
+            </div>
+
+            <div class="grid-item-right">
+                <p>Mechanical PA:</p>
+            </div>
+            <div class="grid-item-left">
+                <p>@MechanicalPA</p>
+            </div>
+
+            <div class="grid-item-right">
+                <p>Sync Offset:</p>
+            </div>
+            <div class="grid-item-left">
+                <p>@SyncOffset</p>
+            </div>
+
+            <div class="grid-item-right">
+                <label>Reverse</label>
+            </div>
+            <div class="grid-item-left">
+
+                <input type="checkbox" @bind="Reverse" />
+            </div>
+
+            <div class="grid-item-right">
+                <input type="number" min="0" step=".1" max="360" @bind="GoToPosition" />
+            </div>
+            <div class="grid-item-left">
+                <button @onclick="GoTo">Move To</button>
+            </div>
+
+            <div class="grid-item-right">
+                <p style="color:@MovingColor">@MovingText</p>
+            </div>
+            <div class="grid-item-left">
+                <button @onclick="Halt">Halt</button>
             </div>
         </div>
     </fieldset>
 </body>
 
 @code {
-        [Parameter]
-        public int InstanceID { get; set; }
+    [Parameter]
+    public int InstanceID { get; set; }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -114,6 +157,128 @@
     public void Connect()
     {
         Device.Connected = !Device.Connected;
+    }
+
+    string SkyPA
+    {
+        get
+        {
+            if (Device.Connected)
+            {
+                return Device.Position.ToString("000.0");
+            }
+            return "---.-";
+        }
+    }
+
+    string MechanicalPA
+    {
+        get
+        {
+            if (Device.Connected)
+            {
+                return Device.MechanicalPosition.ToString("000.0");
+            }
+            return "---.-";
+        }
+    }
+
+    string SyncOffset
+    {
+        get
+        {
+            if (Device.Connected)
+            {
+                return (Device.Position - Device.MechanicalPosition).ToString("+000.0;-000.0");
+            }
+            return " ---.-";
+        }
+    }
+
+    string MovingColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.IsMoving)
+                {
+                    return "Green";
+                }
+            }
+            return "Red";
+        }
+    }
+
+    string MovingText
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.IsMoving)
+                {
+                    return "Moving";
+                }
+            }
+            return "Not Moving";
+        }
+    }
+
+    bool Reverse
+    {
+        get
+        {
+            if (Connected)
+            {
+                return Device.Reverse;
+            }
+            return false;
+        }
+        set
+        {
+            try
+            {
+                Device.Reverse = value;
+            }
+            catch(Exception ex)
+            {
+                DisplayError(ex.Message);
+            }
+        }
+    }
+
+    float GoToPosition
+    {
+        get;
+        set;
+    } = 0;
+
+    void GoTo()
+    {
+        try
+        {
+            if (Device.Connected)
+            {
+                Device.MoveAbsolute(GoToPosition);
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void Halt()
+    {
+        try
+        {
+            Device.Halt();
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
     }
 
     #endregion
