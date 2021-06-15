@@ -18,13 +18,48 @@
             <div class="grid-item-right">
                 <button @onclick="Setup">Setup</button>
             </div>
+
+            <div class="grid-item-right">
+                <label>LST</label>
+            </div>
+            <div class="grid-item-left">
+                <p>@LSTText</p>
+            </div>
+
+            <div class="grid-item-right">
+                <label>RA</label>
+            </div>
+            <div class="grid-item-left">
+                <p>@RAText</p>
+            </div>
+
+            <div class="grid-item-right">
+                <label>Dec</label>
+            </div>
+            <div class="grid-item-left">
+                <p>@DecText</p>
+            </div>
+
+            <div class="grid-item-right">
+                <label>Az</label>
+            </div>
+            <div class="grid-item-left">
+                <p>@AzText</p>
+            </div>
+
+            <div class="grid-item-right">
+                <label>Alt</label>
+            </div>
+            <div class="grid-item-left">
+                <p>@AltText</p>
+            </div>
         </div>
     </fieldset>
 </body>
 
 @code {
-        [Parameter]
-        public int InstanceID { get; set; }
+    [Parameter]
+    public int InstanceID { get; set; }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -115,6 +150,68 @@
     {
         Device.Connected = !Device.Connected;
     }
+
+
+    string LSTText
+    {
+        get
+        {
+            if (Connected)
+            {
+                return new ASCOM.Standard.Utilities.Utilities().HoursToHMS(ASCOM.Simulators.TelescopeHardware.SiderealTime);
+            }
+            return "00:00:00.00";
+        }
+    }
+
+    string RAText
+    {
+        get
+        {
+            if (Connected)
+            {
+                return new ASCOM.Standard.Utilities.Utilities().HoursToHMS(ASCOM.Simulators.TelescopeHardware.RightAscension);
+            }
+            return "00:00:00.00";
+        }
+    }
+
+    string DecText
+    {
+        get
+        {
+            if (Connected)
+            {
+                return new ASCOM.Standard.Utilities.Utilities().DegreesToDMS(ASCOM.Simulators.TelescopeHardware.Declination);
+            }
+            return "+00:00:00.00";
+        }
+    }
+
+    string AltText
+    {
+        get
+        {
+            if (Connected)
+            {
+                return new ASCOM.Standard.Utilities.Utilities().DegreesToDMS(ASCOM.Simulators.TelescopeHardware.Altitude);
+            }
+            return "+00:00:00.00";
+        }
+    }
+
+    string AzText
+    {
+        get
+        {
+            if (Connected)
+            {
+                return new ASCOM.Standard.Utilities.Utilities().DegreesToDMS(ASCOM.Simulators.TelescopeHardware.Azimuth);
+            }
+            return "000:00:00.00";
+        }
+    }
+
 
     #endregion
 
