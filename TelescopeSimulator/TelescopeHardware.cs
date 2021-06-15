@@ -617,6 +617,12 @@ namespace ASCOM.Simulators
             s_Profile.WriteValue("StartAltitudeConfigured", TelescopeHardware.StartCoordinates.Y.ToString(CultureInfo.InvariantCulture));
         }
 
+        internal static void ShutdownTelescope()
+        {
+            try { s_Profile.WriteValue("ShutdownAzimuth", TelescopeHardware.Azimuth.ToString(CultureInfo.InvariantCulture)); } catch { }
+            try { s_Profile.WriteValue("ShutdownAltitude", TelescopeHardware.Altitude.ToString(CultureInfo.InvariantCulture)); } catch { }
+        }
+
         public static void Start()
         {
             //Connected = false;
@@ -1209,6 +1215,12 @@ namespace ASCOM.Simulators
             {
                 bool successfullyRemoved = connectStates.TryRemove(id, out value);
                 LogMessage("Hardware.Connected Set", "Set Connected to: False, Successfully removed: " + successfullyRemoved.ToString());
+
+                //Store out last location. Server shutdown should also store this
+                if (!Connected)
+                {
+                    ShutdownTelescope();
+                }
             }
         }
 

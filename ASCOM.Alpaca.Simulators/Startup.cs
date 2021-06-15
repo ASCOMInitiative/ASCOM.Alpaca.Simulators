@@ -182,8 +182,10 @@ namespace ASCOM.Alpaca.Simulators
                 }
             });
 
+            //Put code here that runs at shutdown
             lifetime.ApplicationStopping.Register(() =>
             {
+                ASCOM.Simulators.TelescopeHardware.ShutdownTelescope();
                 Logging.LogInformation($"{ServerSettings.ServerName} Stopping");
             });
 
