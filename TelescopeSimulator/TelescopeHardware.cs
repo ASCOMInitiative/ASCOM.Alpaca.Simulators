@@ -421,7 +421,7 @@ namespace ASCOM.Simulators
                     s_Profile.WriteValue("ShutdownAzimuth", HomePosition.X.ToString(CultureInfo.InvariantCulture)); // Set some default last shutdown values
                     s_Profile.WriteValue("ShutdownAltitude", HomePosition.Y.ToString(CultureInfo.InvariantCulture));
 
-                    s_Profile.WriteValue("StartupMode", STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION); // Set the original simulator behaviour as the default staretup mode
+                    s_Profile.WriteValue("StartUpMode", STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION); // Set the original simulator behaviour as the default staretup mode
 
                     //Capabilities Settings
                     s_Profile.WriteValue("V1", "false");
@@ -502,12 +502,12 @@ namespace ASCOM.Simulators
                 HomePosition.X = double.Parse(s_Profile.GetValue("HomeAzimuth", "0"), CultureInfo.InvariantCulture);
                 HomePosition.Y = double.Parse(s_Profile.GetValue("HomeAltitude", "0"), CultureInfo.InvariantCulture);
 
-                // Retrieve the previous shutdown position position
+                // Retrieve the previous shutdown position
                 shutdownPosition.X = double.Parse(s_Profile.GetValue("ShutdownAzimuth", "0"), CultureInfo.InvariantCulture);
                 shutdownPosition.Y = double.Parse(s_Profile.GetValue("ShutdownAltitude", "0"), CultureInfo.InvariantCulture);
 
                 // Retrieve the startup mode
-                startupMode = s_Profile.GetValue("StartupMode", STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION);
+                startupMode = s_Profile.GetValue("StartUpMode", STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION);
 
                 // Select the configured startup position
                 switch (startupMode)
@@ -602,6 +602,19 @@ namespace ASCOM.Simulators
             {
                 TL.LogError($"TelescopeHardware Initialiser Exception: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// This was stored by a Form in the old simulator. For now stored by this function.
+        /// </summary>
+        internal static void StoreHomeParkStart()
+        {
+            s_Profile.WriteValue("HomeAzimuth", TelescopeHardware.HomePosition.X.ToString(CultureInfo.InvariantCulture));
+            s_Profile.WriteValue("HomeAltitude", TelescopeHardware.HomePosition.Y.ToString(CultureInfo.InvariantCulture));
+            s_Profile.WriteValue("ParkAzimuth", TelescopeHardware.ParkAzimuth.ToString(CultureInfo.InvariantCulture));
+            s_Profile.WriteValue("ParkAltitude", TelescopeHardware.ParkAltitude.ToString(CultureInfo.InvariantCulture));
+            s_Profile.WriteValue("StartAzimuthConfigured", TelescopeHardware.StartCoordinates.X.ToString(CultureInfo.InvariantCulture));
+            s_Profile.WriteValue("StartAltitudeConfigured", TelescopeHardware.StartCoordinates.Y.ToString(CultureInfo.InvariantCulture));
         }
 
         public static void Start()
@@ -1590,7 +1603,7 @@ namespace ASCOM.Simulators
             set
             {
                 startupMode = value;
-                s_Profile.WriteValue("StartupMode", value.ToString());
+                s_Profile.WriteValue("StartUpMode", value.ToString());
             }
         }
 
