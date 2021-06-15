@@ -1590,6 +1590,7 @@ namespace ASCOM.Simulators
             set
             {
                 startupMode = value;
+                s_Profile.WriteValue("StartupMode", value.ToString());
             }
         }
 
