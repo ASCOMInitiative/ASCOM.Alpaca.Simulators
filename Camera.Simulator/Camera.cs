@@ -2490,7 +2490,7 @@ namespace ASCOM.Simulators
             canAsymmetricBin = Convert.ToBoolean(Profile.GetValue(STR_CanAsymmetricBin, "true"), CultureInfo.InvariantCulture);
             maxBinX = Convert.ToInt16(Profile.GetValue(STR_MaxBinX, "4"), CultureInfo.InvariantCulture);
             maxBinY = Convert.ToInt16(Profile.GetValue(STR_MaxBinY, "4"), CultureInfo.InvariantCulture);
-            hasShutter = Convert.ToBoolean(Profile.GetValue(STR_HasShutter, "false"), CultureInfo.InvariantCulture);
+            hasShutter = Convert.ToBoolean(Profile.GetValue(STR_HasShutter, "true"), CultureInfo.InvariantCulture);
             sensorName = Profile.GetValue(STR_SensorName, "");
             sensorType = (SensorType)Convert.ToInt32(Profile.GetValue(STR_SensorType, "0"), CultureInfo.InvariantCulture);
             omitOddBins = Convert.ToBoolean(Profile.GetValue(STR_OmitOddBins, "false"), CultureInfo.InvariantCulture);
