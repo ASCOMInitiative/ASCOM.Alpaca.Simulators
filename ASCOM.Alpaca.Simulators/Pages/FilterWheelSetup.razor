@@ -59,10 +59,11 @@
 
             @for (int i = 0; i < 8; i++)
             {
+                var local = i;
                 <tr>
-                    <td>Slot @i</td>
-                    <td><input type="text" @bind="FilterNames[i]" disabled="@SlotDisabled(i)"/></td>
-                    <td><input type="number" step="1" @bind="FilterOffsets[i]" disabled="@SlotDisabled(i)" /></td>
+                    <td>Slot @local</td>
+                    <td><input type="text" @bind="FilterNames[local]" disabled="@SlotDisabled(local)"/></td>
+                    <td><input type="number" step="1" @bind="FilterOffsets[local]" disabled="@SlotDisabled(local)" /></td>
                 </tr>
             }
         </table>
