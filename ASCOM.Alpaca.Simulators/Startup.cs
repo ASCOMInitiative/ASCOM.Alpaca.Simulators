@@ -68,6 +68,7 @@ namespace ASCOM.Alpaca.Simulators
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
+            //Use Development exceptions if in development mode. These are disabled in production for security.
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -77,6 +78,7 @@ namespace ASCOM.Alpaca.Simulators
                 app.UseExceptionHandler("/Error");
             }
 
+            //Start Swagger on the Swagger endpoints if enabled.
             if (ServerSettings.RunSwagger)
             {
                 app.UseSwagger();
@@ -86,6 +88,7 @@ namespace ASCOM.Alpaca.Simulators
 
             int port = ServerSettings.ServerPort;
 
+            //Parse out addresses for the server and start discovery on IPv4 / IPv6 based on which addresses are in use
             try
             {
                 var serverAddressesFeature = app.ServerFeatures.Get<IServerAddressesFeature>();
@@ -149,15 +152,18 @@ namespace ASCOM.Alpaca.Simulators
             {
                 Logging.LogError(ex.Message);
             }
-
+            
+            //Serve static files, mostly CSS
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            //Allow authentication, either Cookie or Basic HTTP Auth
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCookiePolicy();
 
+            //Map Endpoints, primarily Blazor UI and REST Controllers
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -165,6 +171,7 @@ namespace ASCOM.Alpaca.Simulators
                 endpoints.MapFallbackToPage("/_Host");
             });
 
+            //Put code here that needs to run on startup
             lifetime.ApplicationStarted.Register(() =>
             {
                 Logging.LogInformation($"{ServerSettings.ServerName} Starting");
@@ -189,6 +196,7 @@ namespace ASCOM.Alpaca.Simulators
                 Logging.LogInformation($"{ServerSettings.ServerName} Stopping");
             });
 
+            //Put code here that needs to run after shutdown of ASP.Net Core systems.
             lifetime.ApplicationStopped.Register(() =>
             {
                 Logging.LogInformation($"{ServerSettings.ServerName} Stopped");
