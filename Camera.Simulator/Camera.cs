@@ -46,6 +46,10 @@ using System.Collections.Generic;
 using ASCOM.Standard.Interfaces;
 using ASCOM.Alpaca.Responses;
 using System.Runtime.CompilerServices;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.ColorSpaces;
+using SixLabors.ImageSharp.ColorSpaces.Conversion;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 namespace ASCOM.Simulators
@@ -2875,7 +2879,7 @@ namespace ASCOM.Simulators
         }
 
         private delegate void GetData(int x, int y);
-        private Bitmap bmp;
+        private Image<Rgba32> bmp;
         // Bayer offsets
         private int x0;
         private int x1;
@@ -2910,7 +2914,7 @@ namespace ASCOM.Simulators
 
             try
             {
-                bmp = (Bitmap)Image.FromFile(imagePath);
+                bmp = Image.Load<Rgba32>(imagePath);
 
                 // x0 = bayerOffsetX;
                 // x1 = (bayerOffsetX + 1) & 1;
@@ -2976,19 +2980,24 @@ namespace ASCOM.Simulators
                 }
 
             }
-            catch
+            catch(Exception ex)
             {
+                Log.log.LogError(ex.Message);
             }
         }
 
         // get data using the sensor types
         private void MonochromeData(int x, int y)
         {
-            imageData[x, y, 0] = (bmp.GetPixel(x, y).GetBrightness() * 255);
+
+            ColorSpaceConverter converter = new ColorSpaceConverter();
+
+            
+            imageData[x, y, 0] = (converter.ToHsl(bmp[x, y]).L * 255);
         }
         private void RGGBData(int x, int y)
         {
-            Color px = bmp.GetPixel(x / 2, y / 2);
+            var px = bmp[x / 2, y / 2];
             imageData[x + x0, y + y0, 0] = px.R;      // red
             imageData[x + x1, y + y0, 0] = px.G;      // green
             imageData[x + x0, y + y1, 0] = px.G;      // green
@@ -2996,7 +3005,7 @@ namespace ASCOM.Simulators
         }
         private void CMYGData(int x, int y)
         {
-            Color px = bmp.GetPixel(x / 2, y / 2);
+            var px = bmp[x / 2, y / 2];
             imageData[x + x0, y + y0, 0] = (px.R + px.G) / 2;       // yellow
             imageData[x + x1, y + y0, 0] = (px.G + px.B) / 2;       // cyan
             imageData[x + x0, y + y1, 0] = px.G;                    // green
@@ -3004,12 +3013,12 @@ namespace ASCOM.Simulators
         }
         private void CMYG2Data(int x, int y)
         {
-            Color px = bmp.GetPixel(x / 2, y / 2);
+            var px = bmp[x / 2, y / 2];
             imageData[x + x0, y + y0, 0] = (px.G);
             imageData[x + x1, y + y0, 0] = (px.B + px.R) / 2;      // magenta
             imageData[x + x0, y + y1, 0] = (px.G + px.B) / 2;      // cyan
             imageData[x + x1, y + y1, 0] = (px.R + px.G) / 2;      // yellow
-            px = bmp.GetPixel(x / 2, (y / 2) + 1);
+            px = bmp[x / 2, (y / 2) + 1];
             imageData[x + x0, y + y2, 0] = (px.B + px.R) / 2;      // magenta
             imageData[x + x1, y + y2, 0] = (px.G);
             imageData[x + x0, y + y3, 0] = (px.G + px.B) / 2;      // cyan
@@ -3017,32 +3026,36 @@ namespace ASCOM.Simulators
         }
         private void LRGBData(int x, int y)
         {
-            Color px = bmp.GetPixel(x / 2, y / 2);
-            imageData[x + x0, y + y0, 0] = px.GetBrightness() * 255;
+            ColorSpaceConverter converter = new ColorSpaceConverter();
+
+
+
+            var px = bmp[x / 2, y / 2];
+            imageData[x + x0, y + y0, 0] = converter.ToHsl(px).L * 255;
             imageData[x + x1, y + y0, 0] = (px.R);
             imageData[x + x0, y + y1, 0] = (px.R);
-            imageData[x + x1, y + y1, 0] = px.GetBrightness() * 255;
-            px = bmp.GetPixel((x / 2) + 1, y / 2);
-            imageData[x + x2, y + y0, 0] = px.GetBrightness() * 255;
+            imageData[x + x1, y + y1, 0] = converter.ToHsl(px).L * 255;
+            px = bmp[(x / 2) + 1, y / 2];
+            imageData[x + x2, y + y0, 0] = converter.ToHsl(px).L * 255;
             imageData[x + x3, y + y0, 0] = (px.G);
             imageData[x + x2, y + y1, 0] = (px.G);
-            imageData[x + x3, y + y1, 0] = px.GetBrightness() * 255;
-            px = bmp.GetPixel(x / 2, (y / 2) + 1);
-            imageData[x + x0, y + y2, 0] = px.GetBrightness() * 255;
+            imageData[x + x3, y + y1, 0] = converter.ToHsl(px).L * 255;
+            px = bmp[x / 2, (y / 2) + 1];
+            imageData[x + x0, y + y2, 0] = converter.ToHsl(px).L * 255;
             imageData[x + x1, y + y2, 0] = (px.G);
             imageData[x + x0, y + y3, 0] = (px.G);
-            imageData[x + x1, y + y3, 0] = px.GetBrightness() * 255;
-            px = bmp.GetPixel((x / 2) + 1, (y / 2) + 1);
-            imageData[x + x2, y + y2, 0] = px.GetBrightness() * 255;
+            imageData[x + x1, y + y3, 0] = converter.ToHsl(px).L * 255;
+            px = bmp[(x / 2) + 1, (y / 2) + 1];
+            imageData[x + x2, y + y2, 0] = converter.ToHsl(px).L * 255;
             imageData[x + x3, y + y2, 0] = (px.B);
             imageData[x + x2, y + y3, 0] = (px.B);
-            imageData[x + x3, y + y3, 0] = px.GetBrightness() * 255;
+            imageData[x + x3, y + y3, 0] = converter.ToHsl(px).L * 255;
         }
         private void ColorData(int x, int y)
         {
-            imageData[x, y, 0] = (bmp.GetPixel(x, y).R);
-            imageData[x, y, 1] = (bmp.GetPixel(x, y).G);
-            imageData[x, y, 2] = (bmp.GetPixel(x, y).B);
+            imageData[x, y, 0] = (bmp[x, y].R);
+            imageData[x, y, 1] = (bmp[x, y].G);
+            imageData[x, y, 2] = (bmp[x, y].B);
         }
 
         /// <summary>
