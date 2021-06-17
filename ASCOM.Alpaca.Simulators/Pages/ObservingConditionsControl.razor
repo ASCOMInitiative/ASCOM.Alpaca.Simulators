@@ -25,6 +25,8 @@
                 <th>Name</th>
                 <th>Value</th>
                 <th>Unit</th>
+                <th></th>
+                <th>Override</th>
             </tr>
 
             @foreach (var dev in ASCOM.Simulators.OCSimulator.Sensors)
@@ -33,8 +35,10 @@
                     <th>@dev.Value.SensorName</th>
                     @if (Connected)
                     {
-                        <th>@dev.Value.SimCurrentValue.ToString("0.000")</th>
+                        <th>@ASCOM.Simulators.OCSimulator.GetSensorValue(@dev.Value.SensorName).ToString("0.000")</th>
                         <th>@dev.Value.Unit</th>
+                        <th><input type="checkbox" @bind="@dev.Value.Override"></th>
+                        <th><input type="range" min="@dev.Value.SimFromValue" max="@dev.Value.SimToValue" step=".1" @bind="@dev.Value.OverrideValue" style="min-width:30ch"></th>
                     }
                     else
                     {
@@ -45,6 +49,15 @@
             }
 
         </table>
+
+        <div class="grid-container-two">
+
+            <div class="grid-item-left">
+            </div>
+            <div class="grid-item-right">
+                <button @onclick="SaveOverride">Save Overrides</button>
+            </div>
+        </div>
     </fieldset>
 </body>
 
@@ -143,6 +156,20 @@
     }
 
     #endregion
+
+    public void SaveOverride()
+    {
+        try
+        {
+            ASCOM.Simulators.OCSimulator.WriteProfile();
+
+            toastService.ShowSuccess("Settings Saved");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message);
+        }
+    }
 
     public void Setup()
     {

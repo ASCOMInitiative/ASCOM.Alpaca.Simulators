@@ -789,7 +789,7 @@ namespace ASCOM.Simulators
         /// </summary>
         /// <param name="PropertyName">Name of the property to read</param>
         /// <returns>Double value read from device</returns>
-        private static double GetSensorValue(string PropertyName)
+        internal static double GetSensorValue(string PropertyName)
         {
             CheckConnected(PropertyName);
             if (Sensors[PropertyName].Override) // Override in effect so just return the specified value

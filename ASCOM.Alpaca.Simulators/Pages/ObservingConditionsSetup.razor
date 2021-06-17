@@ -34,11 +34,14 @@
                 <th>Delay</th>
             </tr>
             @{
-                int i = 0;
                 @foreach (var dev in Sensors)
                 {
-                    int index = i;
+                    if (dev.Key == "DewPoint")
+                    {
+                        continue;
+                    }
                     <tr>
+
                         <th>@dev.Value.SensorName</th>
                         <th><input type="checkbox" @bind="@Sensors[dev.Key].IsImplemented"></th>
                         <th><input type="number" @bind="@Sensors[dev.Key].SimFromValue" max="@Sensors[dev.Key].SimToValue" class="oc-number"></th>
@@ -47,8 +50,6 @@
                         <th><input type="number" @bind="@Sensors[dev.Key].ValueCycleTime" min="0" max="3600" step="1" class="oc-number"></th>
                         <th><input type="number" @bind="@Sensors[dev.Key].NotReadyDelay" min="0" max="120" step="1" class="oc-number"></th>
                     </tr>
-
-                    i++;
                 }
             }
         </table>
@@ -192,6 +193,10 @@
 
             foreach (var sensor in Sensors)
             {
+                if(sensor.Key == "DewPoint")
+                {
+                    continue;
+                }
                 if(sensor.Value.SimFromValue >= sensor.Value.SimToValue)
                 {
                     toastService.ShowWarning($"Sensor {sensor.Key} must have the Max be greater than the Min.");
