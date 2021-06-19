@@ -19,12 +19,57 @@
                 <button @onclick="Setup">Setup</button>
             </div>
         </div>
+
+        <div class="grid-container-two">
+
+            <div class="grid-item-right">
+                Camera State:
+            </div>
+            <div class="grid-item-left">
+                @CameraStateText
+            </div>
+
+            <div class="grid-item-right">
+                Cooler State:
+            </div>
+            <div class="grid-item-left">
+                @CoolerStateText
+            </div>
+
+            <div class="grid-item-right">
+                Cooler Power:
+            </div>
+            <div class="grid-item-left">
+                @CoolerPowerText
+            </div>
+
+            <div class="grid-item-right">
+                Heat Sync Temperature:
+            </div>
+            <div class="grid-item-left">
+                @HeatSyncTemperatureText
+            </div>
+
+            <div class="grid-item-right">
+                Image Ready:
+            </div>
+            <div class="grid-item-left">
+                @ImageReadyText
+            </div>
+
+            <div class="grid-item-right">
+                Percent Complete:
+            </div>
+            <div class="grid-item-left">
+                @PercentCompleteText
+            </div>
+        </div>
     </fieldset>
 </body>
 
 @code {
-        [Parameter]
-        public int InstanceID { get; set; }
+    [Parameter]
+    public int InstanceID { get; set; }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -37,7 +82,7 @@
         }
     }
 
-    Timer timer = new Timer(100);
+    Timer timer = new Timer(250);
 
     public void Dispose()
     {
@@ -115,6 +160,132 @@
     {
         Device.Connected = !Device.Connected;
     }
+
+    string CameraStateText
+    {
+        get
+        {
+            try
+            {
+                if (Connected)
+                {
+                    return Device.CameraState.ToString();
+                }
+                return "Not Availible";
+            }
+            catch
+            {
+
+            }
+            return "Not Availible";
+        }
+    }
+
+    string CoolerStateText
+    {
+        get
+        {
+            try
+            {
+                if (Connected)
+                {
+                    if (Device.CoolerOn)
+                    {
+                        return "On";
+                    }
+                    return "Off";
+                }
+                return "Not Availible";
+            }
+            catch
+            {
+
+            }
+            return "Not Availible";
+        }
+    }
+
+    string CoolerPowerText
+    {
+        get
+        {
+            try
+            {
+                if (Connected)
+                {
+                    return Device.CoolerPower.ToString();
+                }
+            }
+            catch
+            {
+
+            }
+            return "Not Availible";
+        }
+    }
+
+    string HeatSyncTemperatureText
+    {
+        get
+        {
+            try
+            {
+                if (Connected)
+                {
+                    return Device.HeatSinkTemperature.ToString();
+                }
+            }
+            catch
+            {
+
+            }
+            return "Not Availible";
+        }
+    }
+
+    string ImageReadyText
+    {
+        get
+        {
+            try
+            {
+                if (Connected)
+                {
+                    if (Device.ImageReady)
+                    {
+                        return "Image Ready";
+                    }
+                    return "No Image";
+                }
+            }
+            catch
+            {
+
+            }
+            return "Not Availible";
+        }
+    }
+
+    string PercentCompleteText
+    {
+        get
+        {
+            try
+            {
+                if (Connected)
+                {
+                    return Device.PercentCompleted.ToString();
+                }
+            }
+            catch
+            {
+
+            }
+            return "Not Availible";
+        }
+    }
+
+
 
     #endregion
 
