@@ -18,6 +18,8 @@
             <div class="grid-item-right">
                 <button @onclick="Setup">Setup</button>
             </div>
+        </div>
+        <div class="grid-container-two">
 
             <div class="grid-item-right">
                 <label>LST</label>
@@ -53,6 +55,11 @@
             <div class="grid-item-left">
                 <p>@AltText</p>
             </div>
+        </div>
+        <div class="centered">
+            <label style="color:@SlewColor">@SlewText</label>&nbsp;
+            <label style="color:@HomeColor">@HomeText</label>&nbsp;
+            <label style="color:@ParkColor">@ParkText</label>
         </div>
     </fieldset>
 </body>
@@ -212,6 +219,95 @@
         }
     }
 
+    public string SlewText
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.Slewing)
+                {
+                    return "Slewing";
+                }
+            }
+            return "Not Slewing";
+        }
+    }
+
+    public string SlewColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.Slewing)
+                {
+                    return "Green";
+                }
+            }
+            return "Red";
+        }
+    }
+
+    public string HomeText
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.AtHome)
+                {
+                    return "At Home";
+                }
+            }
+            return "Not At Home";
+        }
+    }
+
+    public string HomeColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.AtHome)
+                {
+                    return "Green";
+                }
+            }
+            return "Red";
+        }
+    }
+
+    public string ParkText
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.AtPark)
+                {
+                    return "Parked";
+                }
+            }
+            return "Not Parked";
+        }
+    }
+
+    public string ParkColor
+    {
+        get
+        {
+            if (Connected)
+            {
+                if (Device.AtPark)
+                {
+                    return "Green";
+                }
+            }
+            return "Red";
+        }
+    }
 
     #endregion
 
