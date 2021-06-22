@@ -225,12 +225,17 @@
         {
             if (Connected)
             {
-                if (Device.Slewing)
+                if (Device.Tracking)
+                {
+                    return "Tracking";
+                }
+                else if (Device.Slewing)
                 {
                     return "Slewing";
                 }
+                return "Stationary";
             }
-            return "Not Slewing";
+            return "--------";
         }
     }
 
@@ -240,7 +245,7 @@
         {
             if (Connected)
             {
-                if (Device.Slewing)
+                if (Device.Slewing || Device.Tracking)
                 {
                     return "Green";
                 }
@@ -259,8 +264,9 @@
                 {
                     return "At Home";
                 }
+                return "Away from Home";
             }
-            return "Not At Home";
+            return "--------";
         }
     }
 
@@ -272,8 +278,9 @@
             {
                 if (Device.AtHome)
                 {
-                    return "Green";
+                    return "Red";
                 }
+                return "Green";
             }
             return "Red";
         }
@@ -289,8 +296,9 @@
                 {
                     return "Parked";
                 }
+                return "Unparked";
             }
-            return "Not Parked";
+            return "--------";
         }
     }
 
@@ -302,8 +310,9 @@
             {
                 if (Device.AtPark)
                 {
-                    return "Green";
+                    return "Red";
                 }
+                return "Green";
             }
             return "Red";
         }
