@@ -224,8 +224,9 @@
                 {
                     return "Slewing";
                 }
+                return "Stationary";
             }
-            return "Not Slewing";
+            return "--------";
         }
     }
 
@@ -254,8 +255,9 @@
                 {
                     return "At Home";
                 }
+                return "Away from Home";
             }
-            return "Not At Home";
+            return "--------";
         }
     }
 
@@ -267,8 +269,9 @@
             {
                 if (Device.AtHome)
                 {
-                    return "Green";
+                    return "Red";
                 }
+                return "Green";
             }
             return "Red";
         }
@@ -284,8 +287,9 @@
                 {
                     return "Parked";
                 }
+                return "Unparked";
             }
-            return "Not Parked";
+            return "--------";
         }
     }
 
@@ -297,8 +301,9 @@
             {
                 if (Device.AtPark)
                 {
-                    return "Green";
+                    return "Red";
                 }
+                return "Green";
             }
             return "Red";
         }
