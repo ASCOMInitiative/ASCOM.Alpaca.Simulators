@@ -1,3 +1,4 @@
+using Alpaca;
 using ASCOM.Alpaca.Responses;
 using System;
 using System.Collections.Generic;
@@ -248,7 +249,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             else
             {
-                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+                throw new DeviceNotFoundException(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
         }
 
@@ -260,7 +261,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             else
             {
-                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+                throw new DeviceNotFoundException(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
         }
 
@@ -272,7 +273,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             else
             {
-                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+                throw new DeviceNotFoundException(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
         }
 
@@ -284,7 +285,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             else
             {
-                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+                throw new DeviceNotFoundException(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
         }
 
@@ -296,7 +297,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             else
             {
-                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+                throw new DeviceNotFoundException(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
         }
 
@@ -308,7 +309,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             else
             {
-                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+                throw new DeviceNotFoundException(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
         }
 
@@ -320,7 +321,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             else
             {
-                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+                throw new DeviceNotFoundException(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
         }
 
@@ -332,7 +333,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             else
             {
-                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+                throw new DeviceNotFoundException(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
         }
 
@@ -344,7 +345,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             else
             {
-                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+                throw new DeviceNotFoundException(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
         }
 
@@ -356,7 +357,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             else
             {
-                throw new Exception(string.Format("Instance {0} does not exist in this server.", DeviceID));
+                throw new DeviceNotFoundException(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
         }
     }
