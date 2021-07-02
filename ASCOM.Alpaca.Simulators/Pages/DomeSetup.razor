@@ -4,7 +4,14 @@
 @inject NavigationManager uriHelper;
 
 <body>
-    <fieldset>
+    @if (Device.Connected)
+    {
+        <fieldset>
+            <legend>Device is Connected</legend>
+            <p>The device must be disconnected to safely make changes.</p>
+        </fieldset>
+    }
+    <fieldset disabled="@Device.Connected">
         <legend>Shutter Control</legend>
 
         <label for="ShutterSlewRate">Slew Rate (deg/sec)</label>
@@ -24,8 +31,7 @@
         <br>
     </fieldset>
 
-
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Azimuth Control</legend>
 
         <label for="AzimuthSlewRate">Slew Rate (deg/sec)</label>
@@ -45,7 +51,7 @@
         <br>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Interface Capabilities</legend>
 
         <input type="checkbox" id="CanFindHome" @bind="CanFindHome">
@@ -70,7 +76,7 @@
         <label for="CanSyncAzimuth">Can Sync Azimuth</label><br>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Nonstandard Behavior</legend>
 
         <input type="checkbox" id="AtHomeWithoutFindHome" @bind="AtHomeWithoutFindHome">
@@ -86,7 +92,7 @@
         <label for="SlewingOnOpenClose">Slewing on Open/Close</label><br>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <div class="grid-container-two">
 
             <div class="grid-item-left">
