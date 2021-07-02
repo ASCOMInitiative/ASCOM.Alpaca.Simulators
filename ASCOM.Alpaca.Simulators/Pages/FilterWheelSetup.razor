@@ -4,7 +4,14 @@
 @inject NavigationManager uriHelper;
 
 <body>
-    <fieldset>
+    @if (Device.Connected)
+    {
+        <fieldset>
+            <legend>Device is Connected</legend>
+            <p>The device must be disconnected in order to safely make changes.</p>
+        </fieldset>
+    }
+    <fieldset disabled="@Device.Connected">
         <legend>Filter Wheel Settings</legend>
 
         <div>
@@ -48,7 +55,7 @@
         </div>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Filter Setup</legend>
         <table style="width:100%">
             <tr>
@@ -62,14 +69,14 @@
                 var local = i;
                 <tr>
                     <td>Slot @local</td>
-                    <td><input type="text" @bind="FilterNames[local]" disabled="@SlotDisabled(local)"/></td>
+                    <td><input type="text" @bind="FilterNames[local]" disabled="@SlotDisabled(local)" /></td>
                     <td><input type="number" step="1" @bind="FilterOffsets[local]" disabled="@SlotDisabled(local)" /></td>
                 </tr>
             }
         </table>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Save</legend>
         <div class="grid-container-two">
 
@@ -84,8 +91,8 @@
 </body>
 
 @code {
-        [Parameter]
-        public int InstanceID { get; set; }
+    [Parameter]
+    public int InstanceID { get; set; }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.

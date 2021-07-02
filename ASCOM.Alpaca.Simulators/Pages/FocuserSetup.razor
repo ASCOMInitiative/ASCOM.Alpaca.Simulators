@@ -4,7 +4,14 @@
 @inject NavigationManager uriHelper;
 
 <body>
-    <fieldset>
+    @if (Device.Connected)
+    {
+        <fieldset>
+            <legend>Device is Connected</legend>
+            <p>The device must be disconnected in order to safely make changes.</p>
+        </fieldset>
+    }
+    <fieldset disabled="@Device.Connected">
         <legend>Focuser Settings</legend>
 
         <label for="maxPosition"> Maximum Pos (steps):</label>
@@ -23,7 +30,7 @@
         <input type="number" id="settleTime" name="settleTime" min="0" @bind="settleTime">
         <br>
     </fieldset>
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Capabilities</legend>
 
         <input type="checkbox" id="tempProbe" name="tempProbe" @bind="tempProbe">
@@ -41,7 +48,7 @@
         <input type="checkbox" id="synchronous" name="synchronous" @bind="Synchronous">
         <label for="synchronous"> Synchronous</label><br>
     </fieldset>
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Temperature Simulator</legend>
 
         <label for="currentTemp"> Current Temperature (C):</label>
@@ -64,7 +71,7 @@
         <input type="number" id="steps" @bind="StepsPerC">
         <br>
     </fieldset>
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Type</legend>
 
         <input type="checkbox" id="absolute" @bind="Absolute">
@@ -73,7 +80,7 @@
         <label for="relative">Relative</label><br>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <div class="grid-container-two">
 
             <div class="grid-item-left">

@@ -4,7 +4,14 @@
 @inject NavigationManager uriHelper;
 
 <body>
-    <fieldset>
+    @if (Device.Connected)
+    {
+        <fieldset>
+            <legend>Device is Connected</legend>
+            <p>The device must be disconnected in order to safely make changes.</p>
+        </fieldset>
+    }
+    <fieldset disabled="@Device.Connected">
         <legend>General Settings</legend>
 
         <label for="SensorQueryInterval">Sensor Query Interval (seconds)</label>
@@ -20,7 +27,7 @@
         <br>
 
     </fieldset>
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Sensor Settings</legend>
 
         <table style="width:100%">
@@ -45,7 +52,7 @@
                         <th>@dev.Value.SensorName</th>
                         <th><input type="checkbox" @bind="@Sensors[dev.Key].IsImplemented"></th>
                         <th><input type="number" @bind="@Sensors[dev.Key].SimFromValue" max="@Sensors[dev.Key].SimToValue" class="oc-number"></th>
-                        <th><input type="number" @bind="@Sensors[dev.Key].SimToValue"  min="@Sensors[dev.Key].SimFromValue" class="oc-number"></th>
+                        <th><input type="number" @bind="@Sensors[dev.Key].SimToValue" min="@Sensors[dev.Key].SimFromValue" class="oc-number"></th>
                         <th>@Sensors[dev.Key].Unit</th>
                         <th><input type="number" @bind="@Sensors[dev.Key].ValueCycleTime" min="0" max="3600" step="1" class="oc-number"></th>
                         <th><input type="number" @bind="@Sensors[dev.Key].NotReadyDelay" min="0" max="120" step="1" class="oc-number"></th>
@@ -55,7 +62,7 @@
         </table>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <div class="grid-container-two">
 
             <div class="grid-item-left">
