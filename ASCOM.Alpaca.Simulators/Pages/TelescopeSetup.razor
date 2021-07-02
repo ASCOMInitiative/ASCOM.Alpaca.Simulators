@@ -5,7 +5,14 @@
 @using ASCOM.Simulators; 
 
 <body>
-    <fieldset>
+    @if (Device.Connected)
+    {
+        <fieldset>
+            <legend>Device is Connected</legend>
+            <p>The device must be disconnected in order to safely make changes.</p>
+        </fieldset>
+    }
+    <fieldset disabled="@Device.Connected">
         <legend>Telescope Settings</legend>
 
         <input type="checkbox" id="AutoUnpark" @bind="AutoUnpark">
@@ -29,7 +36,7 @@
         <br>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Site Information</legend>
 
         <label for="LatitudeSign">Latitude</label>
@@ -55,7 +62,7 @@
         <br>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Mount Type</legend>
         <select id="MountType" @bind="MountType">
             <option value="AltAz">Alt-Azimuth</option>
@@ -64,7 +71,7 @@
         </select>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Optics</legend>
 
         <label for="Aperture">Aperture (m)</label>
@@ -80,7 +87,7 @@
         <br>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Interface</legend>
 
         <input type="checkbox" id="AltAzCoordinates" @bind="AltAzCoordinates">
@@ -200,7 +207,7 @@
         <br>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Park, Home and Startup</legend>
 
         <label for="StartupMode">Startup Mode</label>
@@ -252,7 +259,7 @@
         <br>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <div class="grid-container-two">
 
             <div class="grid-item-left">

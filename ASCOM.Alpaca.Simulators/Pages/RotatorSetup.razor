@@ -4,7 +4,14 @@
 @inject NavigationManager uriHelper;
 
 <body>
-    <fieldset>
+    @if (Device.Connected)
+    {
+        <fieldset>
+            <legend>Device is Connected</legend>
+            <p>The device must be disconnected in order to safely make changes.</p>
+        </fieldset>
+    }
+    <fieldset disabled="@Device.Connected">
         <legend>Rotator Settings</legend>
 
         <div>
@@ -27,7 +34,7 @@
         <input name="reverse" id="reverse" type="checkbox" @bind="Reverse" />
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Save</legend>
         <div class="grid-container-two">
 

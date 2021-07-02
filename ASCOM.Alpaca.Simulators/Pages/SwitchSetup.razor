@@ -4,7 +4,14 @@
 @inject NavigationManager uriHelper;
 
 <body>
-    <fieldset>
+    @if (Device.Connected)
+    {
+        <fieldset>
+            <legend>Device is Connected</legend>
+            <p>The device must be disconnected in order to safely make changes.</p>
+        </fieldset>
+    }
+    <fieldset disabled="@Device.Connected">
         <legend>Switch Settings</legend>
 
         <table style="width:100%">
@@ -40,7 +47,7 @@
         </table>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <div class="grid-container-two">
 
             <div class="grid-item-left">
