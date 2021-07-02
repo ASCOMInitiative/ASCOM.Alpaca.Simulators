@@ -4,7 +4,14 @@
 @inject NavigationManager uriHelper;
 
 <body>
-    <fieldset>
+    @if (Device.Connected)
+    {
+        <fieldset>
+            <legend>Device is Connected</legend>
+            <p>The device must be disconnected in order to safely make changes.</p>
+        </fieldset>
+    }
+    <fieldset disabled="@Device.Connected">
         <legend>Calibrator Settings</legend>
         <div class="grid-container-two">
             <div class="grid-item-right">
@@ -37,7 +44,7 @@
         </div>
     </fieldset>
 
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Cover Settings</legend>
         <div class="grid-container-two">
 
@@ -62,7 +69,7 @@
             </div>
         </div>
     </fieldset>
-    <fieldset>
+    <fieldset disabled="@Device.Connected">
         <legend>Settings</legend>
         <div class="grid-container-two">
 
@@ -77,8 +84,8 @@
 </body>
 
 @code {
-        [Parameter]
-        public int InstanceID { get; set; }
+    [Parameter]
+    public int InstanceID { get; set; }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
