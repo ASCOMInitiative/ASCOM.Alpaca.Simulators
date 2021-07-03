@@ -110,11 +110,11 @@
         <br>
 
         <label for="GainMin">Gain Min</label>
-        <input type="number" id="GainMin" min="0" max="10" step="1" @bind="GainMin">
+        <input type="number" id="GainMin" min="0" max="32767" step="1" @bind="GainMin">
         <br>
 
         <label for="GainMax">Gain Max</label>
-        <input type="number" id="GainMax" min="0" max="10" step="1" @bind="GainMax">
+        <input type="number" id="GainMax" min="0" max="32767" step="1" @bind="GainMax">
         <br>
     </fieldset>
 
@@ -589,15 +589,15 @@
                 return;
             }
 
-            if (GainMin < 0 || GainMin > 10 || GainMin > GainMax)
+            if (GainMin < 0 || GainMin > 32767 || GainMin > GainMax)
             {
-                toastService.ShowWarning("The Gain Min must be between 0 and 10 and less then Gain Max.");
+                toastService.ShowWarning("The Gain Min must be between 0 and 32767 and less then Gain Max.");
                 return;
             }
 
-            if (GainMax < 0 || GainMax > 10 || GainMin > GainMax)
+            if (GainMax < 0 || GainMax > 32767 || GainMin > GainMax)
             {
-                toastService.ShowWarning("The Gain Max must be between 0 and 10 and more the Gain Min.");
+                toastService.ShowWarning("The Gain Max must be between 0 and 32767 and more the Gain Min.");
                 return;
             }
 
