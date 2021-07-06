@@ -204,9 +204,9 @@
                 {
                     continue;
                 }
-                if(sensor.Value.SimFromValue >= sensor.Value.SimToValue)
+                if(sensor.Value.SimFromValue > sensor.Value.SimToValue)
                 {
-                    toastService.ShowWarning($"Sensor {sensor.Key} must have the Max be greater than the Min.");
+                    toastService.ShowWarning($"Sensor {sensor.Key} must have the Max be greater than or equal to the Min.");
                     return;
                 }
 
