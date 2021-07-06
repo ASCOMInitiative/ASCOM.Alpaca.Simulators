@@ -28,7 +28,7 @@
         <br>
 
         <label for="SlewRate">Slew Rate (deg/sec)</label>
-        <input type="number" id="SlewRate" @bind="SlewRate">
+        <input type="number" id="SlewRate" min="0" max="360" step=".01" @bind="SlewRate">
         <br>
 
         <input type="checkbox" id="RefractionOn" @bind="RefractionOn">
@@ -44,8 +44,8 @@
             <option value="1">N</option>
             <option value="-1">S</option>
         </select>
-        <input type="number" @bind="LatitudeDegrees">
-        <input type="number" @bind="LatitudeMinutes">
+        <input type="number" min="0" max="90" @bind="LatitudeDegrees">
+        <input type="number" min="0" max="60" @bind="LatitudeMinutes">
         <br>
 
         <label for="LongitudeSign">Longitude</label>
@@ -53,12 +53,12 @@
             <option value="1">E</option>
             <option value="-1">W</option>
         </select>
-        <input type="number" @bind="LongitudeDegrees">
-        <input type="number" @bind="LongitudeMinutes">
+        <input type="number" min="0" max="180" @bind="LongitudeDegrees">
+        <input type="number" min="0" max="60" @bind="LongitudeMinutes">
         <br>
 
         <label for="Elevation">Elevation</label>
-        <input type="number" id="Elevation" @bind="Elevation">
+        <input type="number" min="-3000" max="30000" step="1" id="Elevation" @bind="Elevation">
         <br>
     </fieldset>
 
@@ -75,15 +75,15 @@
         <legend>Optics</legend>
 
         <label for="Aperture">Aperture (m)</label>
-        <input type="number" id="Aperture" @bind="Aperture">
+        <input type="number" id="Aperture" min="0" step=".01" @bind="Aperture">
         <br>
 
         <label for="ApertureArea">ApertureArea (m^2)</label>
-        <input type="number" id="ApertureArea" @bind="ApertureArea">
+        <input type="number" id="ApertureArea" min="0" step=".01" @bind="ApertureArea">
         <br>
 
         <label for="FocalLength">FocalLength (m)</label>
-        <input type="number" id="FocalLength" @bind="FocalLength">
+        <input type="number" id="FocalLength" min="0" step=".01" @bind="FocalLength">
         <br>
     </fieldset>
 
@@ -224,11 +224,11 @@
         <br>
 
         <input type="number" id="StartupAzimuth" @bind="StartupAzimuth">
-        <label for="StartupAzimuth">Azimuth (deg)</label>
+        <label for="StartupAzimuth" min="0" max="360" step=".1">Azimuth (deg)</label>
         <br>
 
         <input type="number" id="StartupAltitude" @bind="StartupAltitude">
-        <label for="StartupAltitude">Altitude  (deg)</label>
+        <label for="StartupAltitude" min="-90" max="90" step=".1">Altitude  (deg)</label>
 
         <br>
         <br>
@@ -237,11 +237,11 @@
         <br>
 
         <input type="number" id="ParkAzimuth" @bind="ParkAzimuth">
-        <label for="ParkAzimuth">Azimuth (deg)</label>
+        <label for="ParkAzimuth" min="0" max="360" step=".1">Azimuth (deg)</label>
         <br>
 
         <input type="number" id="ParkAltitude" @bind="ParkAltitude">
-        <label for="ParkAltitude">Altitude  (deg)</label>
+        <label for="ParkAltitude" min="-90" max="90" step=".1">Altitude  (deg)</label>
 
         <br>
         <br>
@@ -250,11 +250,11 @@
         <br>
 
         <input type="number" id="HomeAzimuth" @bind="HomeAzimuth">
-        <label for="HomeAzimuth">Azimuth (deg)</label>
+        <label for="HomeAzimuth" min="0" max="360" step=".1">Azimuth (deg)</label>
         <br>
 
         <input type="number" id="HomeAltitude" @bind="HomeAltitude">
-        <label for="HomeAltitude">Altitude  (deg)</label>
+        <label for="HomeAltitude" min="-90" max="90" step=".1">Altitude  (deg)</label>
 
         <br>
     </fieldset>
