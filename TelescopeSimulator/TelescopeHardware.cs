@@ -1564,8 +1564,8 @@ namespace ASCOM.Simulators
             else
             {
                 double ha = AstronomyFunctions.HourAngle(rightAscension, longitude);
-                if (ha < 0.0 && ha >= -12.0) sideOfPier = PointingState.Normal;
-                else if (ha >= 0.0 && ha <= 12.0) sideOfPier = PointingState.ThroughThePole;
+                if (ha < 0.0 && ha >= -12.0) sideOfPier = PointingState.ThroughThePole;
+                else if (ha >= 0.0 && ha <= 12.0) sideOfPier = PointingState.Normal;
                 else sideOfPier = PointingState.Unknown;
                 LogMessage("SideOfPierRaDec", "Ra {0}, Dec {1}, Ha {2}, sop {3}", rightAscension, declination, ha, sideOfPier);
 
