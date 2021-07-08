@@ -75,11 +75,11 @@ namespace ASCOM.Alpaca.Simulators
         {
             get
             {
-                if (ushort.TryParse(Profile.GetValue("ServerPort", 5000.ToString()), out ushort result))
+                if (ushort.TryParse(Profile.GetValue("ServerPort", 32323.ToString()), out ushort result))
                 {
                     return result;
                 }
-                return 5000;
+                return 32323;
             }
             set
             {
