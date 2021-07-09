@@ -26,27 +26,40 @@ namespace ASCOM.Alpaca.Simulators.Discovery
                 NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
                 foreach (NetworkInterface adapter in adapters)
                 {
-                    //Do not try and use non-operational adapters
-                    if (adapter.OperationalStatus != OperationalStatus.Up)
-                        continue;
-
-                    IPInterfaceProperties adapterProperties = adapter.GetIPProperties();
-                    if (adapterProperties == null)
-                        continue;
-
-                    UnicastIPAddressInformationCollection uniCast = adapterProperties.UnicastAddresses;
-                    if (uniCast.Count > 0)
+                    try
                     {
-                        foreach (UnicastIPAddressInformation uni in uniCast)
-                        {
-                            if (uni.Address.AddressFamily != AddressFamily.InterNetwork && uni.Address.AddressFamily != AddressFamily.InterNetworkV6)
-                                continue;
+                        //Do not try and use non-operational adapters
+                        if (adapter.OperationalStatus != OperationalStatus.Up)
+                            continue;
 
-                            Addresses.Add(uni.Address);
+                        IPInterfaceProperties adapterProperties = adapter.GetIPProperties();
+                        if (adapterProperties == null)
+                            continue;
+
+                        UnicastIPAddressInformationCollection uniCast = adapterProperties.UnicastAddresses;
+                        if (uniCast.Count > 0)
+                        {
+                            foreach (UnicastIPAddressInformation uni in uniCast)
+                            {
+                                try
+                                {
+                                    if (uni.Address.AddressFamily != AddressFamily.InterNetwork && uni.Address.AddressFamily != AddressFamily.InterNetworkV6)
+                                        continue;
+
+                                    Addresses.Add(uni.Address);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logging.Log.Log(Standard.Interfaces.LogLevel.Error, $"Failed to read adapter address with error {ex.Message}");
+                                }
+                            }
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        Logging.Log.Log(Standard.Interfaces.LogLevel.Error, $"Failed to read network adapter with error {ex.Message}");
+                    }
                 }
-
                 return Addresses;
             }
         }

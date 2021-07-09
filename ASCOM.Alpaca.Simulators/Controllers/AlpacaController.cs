@@ -14,6 +14,7 @@ namespace Alpaca
 {
     /// <summary>
     /// A Custom REST MVC controller with additions to help handle Alpaca responses and error responses.
+    /// This contains the Alpaca endpoints that are common to all devices.
     /// </summary>
     public abstract class AlpacaController : Controller
     {

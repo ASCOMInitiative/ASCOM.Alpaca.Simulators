@@ -13,6 +13,9 @@ namespace ASCOM.Alpaca.Simulators
             set;
         } = 0;
 
+        /// <summary>
+        /// A server wide Transaction ID Counter
+        /// </summary>
         internal static uint ServerTransactionID
         {
             get

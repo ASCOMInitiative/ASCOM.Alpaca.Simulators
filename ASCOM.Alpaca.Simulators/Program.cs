@@ -22,6 +22,7 @@ namespace ASCOM.Alpaca.Simulators
                 return;
             }
 
+            //Turn off Authentication. Once off the user can change the password and re-enable authentication
             if (args?.Any(str => str.Contains("--reset-auth")) ?? false)
             {
                 WriteAndLog("Turning off Authentication to allow password reset.");

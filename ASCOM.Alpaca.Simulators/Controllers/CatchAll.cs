@@ -5,7 +5,7 @@ namespace ASCOM.Alpaca.Simulators
 {
     /// <summary>
     /// This controller catches all requests on the /api that do not have a controller and return an HTTP 400.
-    /// To not have this catch something create the route.
+    /// To have this not catch something create the route.
     /// </summary>
     [ServiceFilter(typeof(AuthorizationFilter))]
     [ApiController]
