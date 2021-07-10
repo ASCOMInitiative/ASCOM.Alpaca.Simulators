@@ -60,6 +60,7 @@
         <table style="width:100%">
             <tr>
                 <th></th>
+                <th>Color</th>
                 <th>Filter Name</th>
                 <th>Focus Offset</th>
             </tr>
@@ -69,6 +70,11 @@
                 var local = i;
                 <tr>
                     <td>Slot @local</td>
+                    <td>
+                        <svg width="32" height="32">
+                            <rect width="32" height="32" style="fill:@FilterColor[i];stroke-width:3;stroke:rgb(0,0,0)" />
+                        </svg>
+                    </td>
                     <td><input type="text" @bind="FilterNames[local]" disabled="@SlotDisabled(local)" /></td>
                     <td><input type="number" step="1" @bind="FilterOffsets[local]" disabled="@SlotDisabled(local)" /></td>
                 </tr>
@@ -118,6 +124,8 @@
         {
             FilterNames[i] = ASCOM.Simulators.FilterWheelHardware.FullFilterNames[i];
             FilterOffsets[i] = ASCOM.Simulators.FilterWheelHardware.FullFocusOffsets[i];
+            FilterColor[i] = $"rgb({ASCOM.Simulators.FilterWheelHardware.FullFilterColours[i].R},{ASCOM.Simulators.FilterWheelHardware.FullFilterColours[i].G},{ASCOM.Simulators.FilterWheelHardware.FullFilterColours[i].B})";
+                
         }
 
         base.OnInitialized();
@@ -198,6 +206,12 @@
 
     #region Filter Setup
     string[] FilterNames
+    {
+        get;
+        set;
+    } = new string[8];
+
+    string[] FilterColor
     {
         get;
         set;
