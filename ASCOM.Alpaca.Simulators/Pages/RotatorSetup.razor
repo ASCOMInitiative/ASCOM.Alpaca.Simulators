@@ -16,7 +16,7 @@
 
         <div>
             <label for="rotationrate">Rotation Rate (deg/sec):</label>
-            <input name="rotationrate" id="rotationrate" type="number" min="0" max="360" step=".1" @bind="RotationRate" />
+            <input name="rotationrate" id="rotationrate" type="number" min="0" max="60" step=".1" @bind="RotationRate" />
         </div>
 
         <div>
@@ -164,9 +164,9 @@
     {
         try
         {
-            if (RotationRate <= 0)
+            if (RotationRate <= 0 || RotationRate > 60)
             {
-                toastService.ShowWarning("The Rotation Rate must be greater then 0.");
+                toastService.ShowWarning("The Rotation Rate must be between 0 and 60.");
                 return;
             }
 
