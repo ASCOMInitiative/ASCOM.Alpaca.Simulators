@@ -56,7 +56,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpPut]
-        [Route("{DeviceNumber}/BinY")]
+        [Route("{DeviceNumber}/biny")]
         public ActionResult<Response> BinY([DefaultValue(0)] int DeviceNumber, [FromForm] short biny, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).BinY = biny; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -460,7 +460,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
-        [Route("{DeviceNumber}/MaxBinY")]
+        [Route("{DeviceNumber}/maxbiny")]
         public ActionResult<IntResponse> MaxBinY([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).MaxBinY, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -558,7 +558,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpPut]
-        [Route("{DeviceNumber}/ReadoutMode")]
+        [Route("{DeviceNumber}/readoutmode")]
         public ActionResult<Response> ReadoutMode([DefaultValue(0)] int DeviceNumber, [FromForm] short readoutmode, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).ReadoutMode = readoutmode; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -628,7 +628,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
-        [Route("{DeviceNumber}/SubExposureDuration")]
+        [Route("{DeviceNumber}/subexposureduration")]
         public ActionResult<DoubleResponse> SubExposureDuration([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).SubExposureDuration, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
