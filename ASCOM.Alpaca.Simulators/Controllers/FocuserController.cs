@@ -33,20 +33,6 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
-        [Route("{DeviceNumber}/link")]
-        public ActionResult<BoolResponse> Link([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).Link, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-
-        [HttpPut]
-        [Route("{DeviceNumber}/link")]
-        public ActionResult<Response> Link([DefaultValue(0)] int DeviceNumber, [FromForm] bool Link, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { DeviceManager.GetFocuser(DeviceNumber).Link = Link; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-
-        [HttpGet]
         [Route("{DeviceNumber}/maxincrement")]
         public ActionResult<IntResponse> MaxIncrement([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
         {
