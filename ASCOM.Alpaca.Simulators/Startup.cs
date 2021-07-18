@@ -191,7 +191,7 @@ namespace ASCOM.Alpaca.Simulators
             //Put code here that needs to run on startup
             lifetime.ApplicationStarted.Register(() =>
             {
-                Logging.LogInformation($"{ServerSettings.ServerName} Starting");
+                Logging.LogInformation($"{ServerSettings.ServerName} Starting Services");
 
                 try
                 {

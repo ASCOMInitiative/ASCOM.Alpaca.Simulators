@@ -10,7 +10,7 @@
             <span>Server Version:</span>
         </div>
         <div class="grid-item-left">
-            <span>@ServerVersion</span>
+            <span>@ServerSettings.ServerVersion</span>
         </div>
         <div class="grid-item-right">
             <span>Server Location:</span>
@@ -498,20 +498,5 @@
     public void DisplaySuccess(string message)
     {
         toastService.ShowSuccess(message);
-    }
-
-    string ServerVersion
-    {
-        get
-        {
-            try
-            {
-                return System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
-            }
-            catch
-            {
-                return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
-            }
-        }
     }
 }

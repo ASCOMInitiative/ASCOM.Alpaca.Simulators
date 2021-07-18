@@ -10,6 +10,21 @@ namespace ASCOM.Alpaca.Simulators
         internal const string Manufacturer = "ASCOM Initiative";
         internal static readonly int[] APIVersions = { 1 };
 
+        internal static string ServerVersion
+        {
+            get
+            {
+                try
+                {
+                    return System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
+                }
+                catch
+                {
+                    return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+                }
+            }
+        }
+
         internal static string Version
         {
             get

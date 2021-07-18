@@ -10,6 +10,8 @@ namespace ASCOM.Alpaca.Simulators
     {
         public static void Main(string[] args)
         {
+            WriteAndLog($"{ServerSettings.ServerName} version {ServerSettings.ServerVersion}");
+
             //Reset all stored settings if requested
             if (args?.Any(str => str.Contains("--reset")) ?? false)
             {
