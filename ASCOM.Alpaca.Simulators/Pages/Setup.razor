@@ -1,12 +1,17 @@
-﻿@page "/setup"
+@page "/setup"
 
 @inject IToastService toastService
 @inject NavigationManager NavManager
 
 <fieldset>
     <legend>Server Settings</legend>
-    <p>Version @ServerVersion</p>
     <div class="grid-container-two">
+        <div class="grid-item-right">
+            <span>Server Version:</span>
+        </div>
+        <div class="grid-item-left">
+            <span>@ServerVersion</span>
+        </div>
         <div class="grid-item-right">
             <span>Server Location:</span>
         </div>
@@ -499,7 +504,14 @@
     {
         get
         {
-            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+            try
+            {
+                return System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
+            }
+            catch
+            {
+                return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+            }
         }
     }
 }
