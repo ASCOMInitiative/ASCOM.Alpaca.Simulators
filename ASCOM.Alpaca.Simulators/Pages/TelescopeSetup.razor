@@ -28,7 +28,7 @@
         <br>
 
         <label for="SlewRate">Slew Rate (deg/sec)</label>
-        <input type="number" id="SlewRate" min="0" max="360" step=".01" @bind="SlewRate">
+        <input type="number" id="SlewRate" min="0" max="360" step="1" @bind="SlewRate">
         <br>
 
         <input type="checkbox" id="RefractionOn" @bind="RefractionOn">
@@ -793,6 +793,107 @@
     {
         try
         {
+            if(SlewRate <= 0 || SlewRate > 360)
+            {
+                toastService.ShowWarning("Slew Rate must be between 0 and 360");
+                return;
+            }
+
+            if (LatitudeDegrees < 0 || LatitudeDegrees > 90)
+            {
+                toastService.ShowWarning("Latitude Degrees must be between 0 and 90");
+                return;
+            }
+
+            if (LatitudeMinutes < 0 || LatitudeMinutes > 60)
+            {
+                toastService.ShowWarning("Latitude Minutes must be between 0 and 60");
+                return;
+            }
+
+            if ((LatitudeDegrees + LatitudeMinutes / 60) > 90) {
+                toastService.ShowWarning("The total Latitude must not be greater than 90.");
+                return;
+            }
+
+            if (LongitudeDegrees < 0 || LongitudeDegrees > 180)
+            {
+                toastService.ShowWarning("Longitude Degrees must be between 0 and 180");
+                return;
+            }
+
+            if (LongitudeMinutes < 0 || LongitudeMinutes > 60)
+            {
+                toastService.ShowWarning("Latitude Minutes must be between 0 and 60");
+                return;
+            }
+
+            if ((LongitudeDegrees + LongitudeMinutes / 60) > 90)
+            {
+                toastService.ShowWarning("The total Longitude must not be greater than 180.");
+                return;
+            }
+
+            if (Elevation < -3000 || Elevation > 30000)
+            {
+                toastService.ShowWarning("Elevation must be between -3000 and 30000");
+                return;
+            }
+
+            if (Aperture <= 0)
+            {
+                toastService.ShowWarning("Aperture must be greater than 0");
+                return;
+            }
+
+            if (ApertureArea <= 0)
+            {
+                toastService.ShowWarning("Aperture Area must be greater than 0");
+                return;
+            }
+
+            if (FocalLength <= 0)
+            {
+                toastService.ShowWarning("Focal Length must be greater than 0");
+                return;
+            }
+
+            if (StartupAzimuth < 0 || StartupAzimuth > 360)
+            {
+                toastService.ShowWarning("Startup Azimuth must be between 0 and 360");
+                return;
+            }
+
+            if (StartupAltitude < -90 || StartupAltitude > 90)
+            {
+                toastService.ShowWarning("Startup Altitude must be between -90 and 90");
+                return;
+            }
+
+            if (ParkAzimuth < 0 || ParkAzimuth > 360)
+            {
+                toastService.ShowWarning("Park Azimuth must be between 0 and 360");
+                return;
+            }
+
+            if (ParkAltitude < -90 || ParkAltitude > 90)
+            {
+                toastService.ShowWarning("Park Altitude must be between -90 and 90");
+                return;
+            }
+
+            if (HomeAzimuth < 0 || HomeAzimuth > 360)
+            {
+                toastService.ShowWarning("Home Azimuth must be between 0 and 360");
+                return;
+            }
+
+            if (HomeAltitude < -90 || HomeAltitude > 90)
+            {
+                toastService.ShowWarning("Home Altitude must be between -90 and 90");
+                return;
+            }
+
             TelescopeHardware.AutoTrack = AutoUnpark;
 
             TelescopeHardware.NoCoordinatesAtPark = NoCoordinates;
