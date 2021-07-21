@@ -7,13 +7,14 @@
     <fieldset>
         <legend>SafetyMonitor Settings</legend>
         <div class="grid-container-two">
-            <div class="grid-item-right">
-                <button @onclick="Connect">@ConnectText</button>
-            </div>
             <div class="grid-item-left">
                 <svg width="30" height="30">
                     <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
                 </svg>
+                <button @onclick="Connect">@ConnectText</button>
+            </div>
+            <div class="grid-item-right">
+
             </div>
         </div>
 
