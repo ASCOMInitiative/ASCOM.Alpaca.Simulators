@@ -1,10 +1,10 @@
-ASCOM.Alpaca.Simulators
+# ASCOM.Alpaca.Simulators
 
-An Alpaca Device Server built using ASP.Net 5. This creates and manages the controllers for the Alpaca devices as well as UIs for configuration.
+An Alpaca Device Server built using ASP.Net 5, MVC and Blazor. The program creates and manages the controllers for the Alpaca devices as well as UIs for configuration.
 
-Currently the project exposes one of each ASCOM Device type. Device settings are provided by the Alpaca Settings endpoint for the device and are accessible from the menu. 
+Currently the project exposes one of each ASCOM Alpaca Device type. Device settings are provided by the Alpaca Settings endpoint for the device and are accessible from the menu. 
 
-The current beta uses the default development port of 32323. As development continues this may be changed.
+The current build uses the default development port of 32323. As development continues this may be changed.
 
 Discovery uses the ASCOM Standard library and the standard discovery port of 32227. By default discovery is turned on.
 
