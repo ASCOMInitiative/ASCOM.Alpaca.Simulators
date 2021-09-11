@@ -14,5 +14,14 @@ There are builds available in the releases section. While in Alpha and Beta majo
 ## Features
 ## Builds
 ## Roadmap
+Feature updates, not in order
+
+1. Improve swagger doc generation and match official specification
+2. Add UI function for Telescope and Camera
+3. Add a traffic monitor to the UI
+4. Add camera to use user supplied images
+5. Add temperature simulator to camera
+6. Improve synchronous method calls 
+7. Add TLS support 
 ## License
 ## Feedback
