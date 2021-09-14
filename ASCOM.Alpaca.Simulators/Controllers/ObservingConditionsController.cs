@@ -12,7 +12,7 @@ namespace ASCOM.Alpaca.Simulators
     [Route("api/v1/observingconditions/")]
     public class ObservingConditionsController : AlpacaController
     {
-        public new const string APIRoot = "api/v1/observingconditions/";
+        public const string APIRoot = "api/v1/observingconditions/";
 
         [NonAction]
         public override IAscomDevice GetDevice(int DeviceNumber)

@@ -12,7 +12,7 @@ namespace ASCOM.Alpaca.Simulators
     [Route("api/v1/safetymonitor/")]
     public class SafetyMonitorController : AlpacaController
     {
-        public new const string APIRoot = "api/v1/safetymonitor/";
+        public const string APIRoot = "api/v1/safetymonitor/";
 
         [NonAction]
         public override IAscomDevice GetDevice(int DeviceNumber)

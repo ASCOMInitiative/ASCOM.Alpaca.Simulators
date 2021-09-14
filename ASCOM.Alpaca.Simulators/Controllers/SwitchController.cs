@@ -12,7 +12,7 @@ namespace ASCOM.Alpaca.Simulators
     [Route("api/v1/switch/")]
     public class SwitchController : AlpacaController
     {
-        public new const string APIRoot = "api/v1/switch/";
+        public const string APIRoot = "api/v1/switch/";
 
         [NonAction]
         public override IAscomDevice GetDevice(int DeviceNumber)
