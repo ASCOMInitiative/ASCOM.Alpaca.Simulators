@@ -2,6 +2,7 @@ using Alpaca;
 using ASCOM.Alpaca.Responses;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -36,38 +37,53 @@ namespace ASCOM.Alpaca.Simulators
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ISwitchV2> switchV2s = new Dictionary<int, ASCOM.Standard.Interfaces.ISwitchV2>();
         private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ITelescopeV3> telescopeV3s = new Dictionary<int, ASCOM.Standard.Interfaces.ITelescopeV3>();
 
+        private static string ServerFolderName
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "Server";
+                }
+                else
+                {
+                    return "Server".ToLowerInvariant();
+                }
+            }
+        }
+
         static DeviceManager()
         {
             //Only one instance of each in this simulator
             coverCalibratorV1s.Add(0, new ASCOM.Simulators.CoverCalibratorSimulator(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "CoverCalibrator", 0)));
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, CoverCalibrator, 0)));
 
             domeV2s.Add(0, new ASCOM.Simulators.Dome(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Dome", 0)));
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, Dome, 0)));
 
             filterWheelV2s.Add(0, new ASCOM.Simulators.FilterWheel(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "FilterWheel", 0)));
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, FilterWheel, 0)));
 
             focuserV3s.Add(0, new ASCOM.Simulators.Focuser(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Focuser", 0)));
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, Focuser, 0)));
 
             observingConditions.Add(0, new ASCOM.Simulators.ObservingConditions(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "ObservingConditions", 0)));
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, ObservingConditions, 0)));
 
             rotatorV3s.Add(0, new ASCOM.Simulators.Rotator(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Rotator", 0)));
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, Rotator, 0)));
 
             safetyMonitors.Add(0, new ASCOM.Simulators.SafetyMonitor(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "SafetyMonitor", 0)));
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, SafetyMonitor, 0)));
 
             switchV2s.Add(0, new ASCOM.Simulators.Switch(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Switch", 0)));
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, Switch, 0)));
 
             telescopeV3s.Add(0, new ASCOM.Simulators.Telescope(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Telescope", 0)));
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, Telescope, 0)));
 
             cameraV3s.Add(0, new ASCOM.Simulators.Camera(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.ServerFileName, "Camera", 0)));
+                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, "Camera", 0)));
         }
 
         /// <summary>
@@ -363,5 +379,144 @@ namespace ASCOM.Alpaca.Simulators
                 throw new DeviceNotFoundException(string.Format("Instance {0} does not exist in this server.", DeviceID));
             }
         }
+
+        //Use only lowercase for case sensitive OSes
+        #region Settings Folder Names
+
+        private static string Telescope
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "Telescope";
+                }
+                else
+                {
+                    return "Telescope".ToLowerInvariant();
+                }
+            }
+        }
+
+        private static string Dome
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "Dome";
+                }
+                else
+                {
+                    return "Dome".ToLowerInvariant();
+                }
+            }
+        }
+
+        private static string FilterWheel
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "FilterWheel";
+                }
+                else
+                {
+                    return "FilterWheel".ToLowerInvariant();
+                }
+            }
+        }
+
+        private static string Focuser
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "Focuser";
+                }
+                else
+                {
+                    return "Focuser".ToLowerInvariant();
+                }
+            }
+        }
+
+        private static string ObservingConditions
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "ObservingConditions";
+                }
+                else
+                {
+                    return "ObservingConditions".ToLowerInvariant();
+                }
+            }
+        }
+
+        private static string Rotator
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "Rotator";
+                }
+                else
+                {
+                    return "Rotator".ToLowerInvariant();
+                }
+            }
+        }
+
+        private static string SafetyMonitor
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "SafetyMonitor";
+                }
+                else
+                {
+                    return "SafetyMonitor".ToLowerInvariant();
+                }
+            }
+        }
+
+        private static string Switch
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "Switch";
+                }
+                else
+                {
+                    return "Switch".ToLowerInvariant();
+                }
+            }
+        }
+
+        private static string CoverCalibrator
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "CoverCalibrator";
+                }
+                else
+                {
+                    return "CoverCalibrator".ToLowerInvariant();
+                }
+            }
+        }
+        #endregion
     }
 }

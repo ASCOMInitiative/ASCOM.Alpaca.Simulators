@@ -1,6 +1,7 @@
 using ASCOM.Standard.Interfaces;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -42,9 +43,40 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         //Change this to be unique for your server, it is the name of the settings folder
-        internal const string ServerFileName = "ASCOM-Alpaca-Simulator";
+        private const string _settingFolderName = "ASCOM-Alpaca-Simulator";
 
-        private readonly static ASCOM.Standard.Utilities.XMLProfile Profile = new ASCOM.Standard.Utilities.XMLProfile(ServerFileName, "Server");
+
+        internal static string SettingsFolderName
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return _settingFolderName;
+                }
+                else
+                {
+                    return _settingFolderName.ToLowerInvariant();
+                }
+            }
+        } 
+
+        private static string ServerFolderName
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "Server";
+                }
+                else
+                {
+                    return "Server".ToLowerInvariant();
+                }
+            }
+        }
+
+        private readonly static ASCOM.Standard.Utilities.XMLProfile Profile = new ASCOM.Standard.Utilities.XMLProfile(SettingsFolderName, ServerFolderName);
 
         internal static void Reset()
         {
