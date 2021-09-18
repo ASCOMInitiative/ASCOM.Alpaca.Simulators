@@ -1198,7 +1198,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                LogMessage("Hardware.Connected Get", "Number of connected devices: " + connectStates.Count + ", Returning: " + (connectStates.Count > 0).ToString());
+                TL.LogVerbose("Hardware.Connected Get - Number of connected devices: " + connectStates.Count + ", Returning: " + (connectStates.Count > 0).ToString());
                 return connectStates.Count > 0;
             }
         }

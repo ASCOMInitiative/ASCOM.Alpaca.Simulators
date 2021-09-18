@@ -486,7 +486,7 @@ namespace ASCOM.Simulators
             {
                 var connected = TelescopeHardware.Connected;
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "Connected = " + connected.ToString());
-                TelescopeHardware.LogMessage("Connected Get", connected.ToString());
+                TelescopeHardware.TL.LogVerbose($"Connected Get {connected.ToString()}");
                 return connected;
             }
             set
