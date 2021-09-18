@@ -645,6 +645,11 @@ namespace ASCOM.Simulators
 
             TelescopeHardware.FindHome();
 
+            while (TelescopeHardware.SlewState == SlewType.SlewHome || TelescopeHardware.SlewState == SlewType.SlewSettle)
+            {
+                System.Threading.Thread.Sleep(1);
+            }
+
             SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "(done)");
         }
 
@@ -1009,6 +1014,11 @@ namespace ASCOM.Simulators
 
             TelescopeHardware.StartSlewAltAz(Altitude, Azimuth);
 
+            while (TelescopeHardware.SlewState == SlewType.SlewAltAz || TelescopeHardware.SlewState == SlewType.SlewSettle)
+            {
+                System.Threading.Thread.Sleep(1);
+            }
+
             SharedResources.TrafficEnd(" done");
         }
 
@@ -1043,6 +1053,11 @@ namespace ASCOM.Simulators
 
             TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true);
 
+            while (TelescopeHardware.IsSlewing)
+            {
+                System.Threading.Thread.Sleep(1);
+            }
+
             SharedResources.TrafficEnd("done");
         }
 
@@ -1074,6 +1089,11 @@ namespace ASCOM.Simulators
             CheckTracking(true, "SlewToTarget");
 
             TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.TargetDeclination, true);
+
+            while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
+            {
+                System.Threading.Thread.Sleep(1);
+            }
 
             SharedResources.TrafficEnd("done");
         }
