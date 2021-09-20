@@ -10,8 +10,7 @@ Settings, discovery, and logging are provided by the ASCOM Standard libraries. T
 
 This supports Swagger / OpenAPI on the /swagger url. Please note that the documentation on the ASCOM website should be considered canonical, to better handle serialization of some endpoints (camera images) the automatic serializer is not used so the swagger doc here shows a string as the return. As development progresses it is expected that the auto-generated Swagger document will better match the Alpaca Specification.
 
-There are builds available in the releases section. While in Alpha and Beta major breaking changes may occur on any update. See the release notes for changes and the available platforms. Normally builds should be available for Windows, Linux (desktop and Raspberry Pi) and macOS. 
-## Features
+There are builds available in the releases section. While in Alpha and Beta major breaking changes may occur on any update. See the release notes for changes and the available platforms. Normally builds should be available for Windows, Linux (desktop and Raspberry Pi) and macOS.
 ## Builds
 
 Prebuilt versions are available from the Github releases page (https://github.com/DanielVanNoord/ASCOM.Alpaca.Simulators/releases). These include packages for Windows, Linux (x64, armhf and aarch64) and macOS (x64). Versions with preview in the name are test builds for future releases.
@@ -25,7 +24,9 @@ Feature updates, not in order
 5. Add temperature simulator to camera
 6. Improve synchronous method calls 
 7. Add TLS support 
-## License
 ## Feedback
 
 Feedback can be given to the ASCOM Developer forum or here on the Github page. For issues please include any relevant logs. Please note that this is not the appropriate place to request changes to the Alpaca protocols. This is an implementation of the protocols, not the protocols themselves.
+
+## License
+
