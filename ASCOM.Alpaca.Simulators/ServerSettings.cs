@@ -219,11 +219,11 @@ namespace ASCOM.Alpaca.Simulators
         {
             get
             {
-                if (bool.TryParse(Profile.GetValue("PreventRemoteDisconnects", true.ToString()), out bool result))
+                if (bool.TryParse(Profile.GetValue("PreventRemoteDisconnects", false.ToString()), out bool result))
                 {
                     return result;
                 }
-                return true;
+                return false;
             }
             set
             {
