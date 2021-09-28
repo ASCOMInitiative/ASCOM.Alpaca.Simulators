@@ -828,7 +828,7 @@
                 return;
             }
 
-            if ((LongitudeDegrees + LongitudeMinutes / 60) > 90)
+            if ((LongitudeDegrees + LongitudeMinutes / 60) > 180)
             {
                 toastService.ShowWarning("The total Longitude must not be greater than 180.");
                 return;
