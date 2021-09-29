@@ -7,6 +7,7 @@
     <Description>A full set of ASCOM Simulators exposing the Alpaca Controller Interfaces</Description>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
     <Copyright>2021 Daniel Van Noord</Copyright>
+    <AssemblyName>ascom.alpaca.simulators</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
