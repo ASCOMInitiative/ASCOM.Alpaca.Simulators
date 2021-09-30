@@ -35,7 +35,20 @@
                     <th>@dev.Value.SensorName</th>
                     @if (Connected)
                     {
-                        <th>@ASCOM.Simulators.OCSimulator.GetSensorValue(@dev.Value.SensorName).ToString("0.000")</th>
+
+                        @if (ASCOM.Simulators.OCSimulator.Sensors[@dev.Value.SensorName].IsImplemented)
+                        {
+                            <th>
+                                @ASCOM.Simulators.OCSimulator.GetSensorValue(@dev.Value.SensorName).ToString("0.000")
+                            </th>
+                        }
+                        else
+                        {
+                            <th>
+                                NA
+                            </th>
+                        }
+
                         <th>@dev.Value.Unit</th>
                         <th><input type="checkbox" @bind="@dev.Value.Override"></th>
                         <th><input type="range" min="@dev.Value.SimFromValue" max="@dev.Value.SimToValue" step=".1" @bind="@dev.Value.OverrideValue" style="min-width:30ch"></th>
