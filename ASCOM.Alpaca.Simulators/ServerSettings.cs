@@ -59,7 +59,25 @@ namespace ASCOM.Alpaca.Simulators
                     return _settingFolderName.ToLowerInvariant();
                 }
             }
-        } 
+        }
+
+        //Change this to be unique for your server, it is the name of the log file
+        private const string _logFileName = "Alpaca-Simulator";
+
+        internal static string LogFileName
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return _logFileName;
+                }
+                else
+                {
+                    return _logFileName.ToLowerInvariant();
+                }
+            }
+        }
 
         private static string ServerFolderName
         {

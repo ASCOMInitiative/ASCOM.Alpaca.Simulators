@@ -13,7 +13,7 @@ namespace ASCOM.Alpaca.Simulators
 
         static Logging()
         {
-            Log = new ASCOM.Standard.Utilities.TraceLogger(ServerSettings.SettingsFolderName, true);
+            Log = new ASCOM.Standard.Utilities.TraceLogger(ServerSettings.LogFileName, true);
 
             Log.SetMinimumLoggingLevel(ServerSettings.LoggingLevel);
 
