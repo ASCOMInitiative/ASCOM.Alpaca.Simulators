@@ -158,6 +158,10 @@ app {
     text-align: center;
 }
 
+.button-margin {
+    margin: 3px 3px 3px 3px;
+}
+
 fieldset {
     border: 3px solid #002157;
     background: #eee;
