@@ -26,6 +26,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\license.md" Link="license.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Camera.Simulator\CameraSimulator.csproj" />
     <ProjectReference Include="..\CoverCalibratorSimulator\CoverCalibratorSimulator.csproj" />
     <ProjectReference Include="..\DomeSimulator\DomeSimulator.csproj" />
