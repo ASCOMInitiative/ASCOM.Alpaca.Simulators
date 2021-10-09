@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace ASCOM.Alpaca.Simulators
@@ -109,7 +110,11 @@ namespace ASCOM.Alpaca.Simulators
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+#if BUNDLED
+                    .UseContentRoot(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location))
+#endif
+                    .UseKestrel();
                 });
 
         private static void WriteAndLog(string message)
