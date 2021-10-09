@@ -32,6 +32,11 @@ namespace ASCOM.Alpaca.Simulators
                 WriteAndLog("Authentication off, you can change the password and then re-enable Authentication.");
             }
 
+            if (args?.Any(str => str.Contains("--local-address")) ?? false)
+            {
+                Console.WriteLine($"http://localhost:{ServerSettings.ServerPort}");
+            }
+
             //Already running, start the browser
             //This was working fine for .Net Core 3.1. Initial tests for .Net 5 show a change in how single file deployments work on Linux
             //This should probably be changed to a Mutex or another similar lock
