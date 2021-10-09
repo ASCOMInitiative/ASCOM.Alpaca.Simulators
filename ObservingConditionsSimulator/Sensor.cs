@@ -1,4 +1,4 @@
-﻿using ASCOM.Standard.Interfaces;
+﻿using ASCOM.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,7 +10,6 @@ namespace ASCOM.Simulators
     /// </summary>
     public class Sensor
     {
-
         public Sensor()
         {
             Readings = new List<OCSimulator.TimeValue>();

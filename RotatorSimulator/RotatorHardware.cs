@@ -3,7 +3,8 @@
 //							Throw error if angles outside 0 <= angle < 360 
 //							(this is a reference implementation!)
 //
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
 using System;
 using System.Globalization;
 using System.Timers;

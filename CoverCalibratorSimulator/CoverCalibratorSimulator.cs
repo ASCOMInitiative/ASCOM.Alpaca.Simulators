@@ -1,5 +1,7 @@
-using ASCOM.Alpaca.Responses;
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common;
+using ASCOM.Common.Alpaca;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,8 +20,11 @@ namespace ASCOM.Simulators
 
         public const double SYNCHRONOUS_BEHAVIOUR_LIMIT = 0.5; // Threshold (seconds) above which state changes will be handled asynchronously
 
-        private readonly int DeviceNumber = 0;
-
+        public int DeviceNumber
+        {
+            get;
+            private set;
+        }
         /// <summary>
         /// Resets all stored device settings
         /// </summary>
@@ -83,7 +88,7 @@ namespace ASCOM.Simulators
                 TL.LogInformation($"CoverCalibrator {deviceNumber} - Starting initialisation");
 
                 //This should be replaced by the next bit of code but is semi-unique as a default.
-                string UniqueID = DRIVER_DESCRIPTION + deviceNumber.ToString();
+                UniqueID = DRIVER_DESCRIPTION + deviceNumber.ToString();
                 //Create a Unique ID if it does not exist
                 try
                 {
@@ -100,8 +105,6 @@ namespace ASCOM.Simulators
                 }
 
                 TL.LogInformation($"CoverCalibrator {deviceNumber} - UUID of {UniqueID}");
-
-                Configuration = new AlpacaConfiguredDevice(DRIVER_DESCRIPTION, "CoverCalibrator", deviceNumber, UniqueID);
 
                 // Initialise remaining components
                 calibratorTimer = new System.Timers.Timer();
@@ -477,11 +480,8 @@ namespace ASCOM.Simulators
         #endregion ICoverCalibrator Implementation
 
         #region Alpaca Information
-        public AlpacaConfiguredDevice Configuration
-        {
-            get;
-            private set;
-        }
+        public string DeviceName { get => DRIVER_DESCRIPTION; }
+        public string UniqueID { get; private set; }
         #endregion
 
         #region Private properties and methods

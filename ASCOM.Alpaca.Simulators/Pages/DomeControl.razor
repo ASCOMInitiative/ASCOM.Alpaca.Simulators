@@ -3,6 +3,7 @@
 @inject IToastService toastService
 @inject NavigationManager uriHelper;
 @using System.Timers;
+@using ASCOM.Common.DeviceInterfaces; 
 
 <body>
     <fieldset>
@@ -172,7 +173,7 @@
                 {
                     switch (Device.ShutterStatus)
                     {
-                        case Standard.Interfaces.ShutterState.Open:
+                        case ShutterState.Open:
                             if (Device.CanSetAltitude)
                             {
                                 return Device.Altitude.ToString("0.0");
@@ -181,13 +182,13 @@
                             {
                                 return "Open";
                             }
-                        case Standard.Interfaces.ShutterState.Closed:
+                        case ShutterState.Closed:
                             return "Closed";
-                        case Standard.Interfaces.ShutterState.Closing:
+                        case ShutterState.Closing:
                             return "Closing";
-                        case Standard.Interfaces.ShutterState.Error:
+                        case ShutterState.Error:
                             return "Error";
-                        case Standard.Interfaces.ShutterState.Opening:
+                        case ShutterState.Opening:
                             return "Opening";
 
                     }
@@ -396,7 +397,7 @@
         {
             if (Device.Connected)
             {
-                if (Device.ShutterStatus == Standard.Interfaces.ShutterState.Open) {
+                if (Device.ShutterStatus == ShutterState.Open) {
                     ASCOM.Simulators.Hardware.HW_MoveShutter(ASCOM.Simulators.Hardware.g_dMaxAlt);
                 }
             }
@@ -414,7 +415,7 @@
         {
             if (Device.Connected)
             {
-                if (Device.ShutterStatus == Standard.Interfaces.ShutterState.Open)
+                if (Device.ShutterStatus == ShutterState.Open)
                 {
                     ASCOM.Simulators.Hardware.HW_MoveShutter(ASCOM.Simulators.Hardware.g_dMinAlt);
                 }

@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelescopeSimulator", "Teles
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsBase.Vector", "WindowsBase.Vector\WindowsBase.Vector\WindowsBase.Vector.csproj", "{2535B18B-4C8F-4AD4-BF4A-15F379FC4B43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraSimulator", "Camera.Simulator\CameraSimulator.csproj", "{2DFE7546-629C-453E-8F56-4E624DFDE8F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CameraSimulator", "Camera.Simulator\CameraSimulator.csproj", "{2DFE7546-629C-453E-8F56-4E624DFDE8F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmniSim.Tools", "OmniSim.Tools\OmniSim.Tools.csproj", "{02ED9EB0-EF66-451B-9209-5D5FFC6B9DE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,10 @@ Global
 		{2DFE7546-629C-453E-8F56-4E624DFDE8F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DFE7546-629C-453E-8F56-4E624DFDE8F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DFE7546-629C-453E-8F56-4E624DFDE8F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02ED9EB0-EF66-451B-9209-5D5FFC6B9DE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02ED9EB0-EF66-451B-9209-5D5FFC6B9DE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02ED9EB0-EF66-451B-9209-5D5FFC6B9DE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02ED9EB0-EF66-451B-9209-5D5FFC6B9DE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -16,7 +16,7 @@
 // --------------------------------------------------------------------------------
 //
 
-using ASCOM.Standard.Utilities;
+using ASCOM.Tools;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,7 +26,6 @@ namespace ASCOM.Simulators
 {
     public static class AstronomyFunctions
     {
-        private static Utilities util = new Utilities();
 
         //----------------------------------------------------------------------------------------
         // Calculate Precession
@@ -64,7 +63,7 @@ namespace ASCOM.Simulators
         /// <returns></returns>
         public static double LocalSiderealTime(double longitude)
         {
-            double days_since_j_2000 = util.JulianDateUtc - 2451545.0;
+            double days_since_j_2000 = Utilities.JulianDateUtc - 2451545.0;
             double t = days_since_j_2000 / 36525;
             double l1mst = 280.46061837 + 360.98564736629 * days_since_j_2000 + longitude;
             if (l1mst < 0.0)

@@ -3,6 +3,7 @@
 @inject IToastService toastService
 @inject NavigationManager uriHelper;
 @using System.Timers;
+@using ASCOM.Common.DeviceInterfaces;
 
 <body>
     <fieldset>
@@ -55,8 +56,8 @@
 </body>
 
 @code {
-        [Parameter]
-        public int InstanceID { get; set; }
+    [Parameter]
+    public int InstanceID { get; set; }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -167,7 +168,7 @@
             {
                 return true;
             }
-            if (CalStatus == ASCOM.Standard.Interfaces.CalibratorStatus.NotPresent)
+            if (CalStatus == CalibratorStatus.NotPresent)
             {
                 return true;
             }
@@ -183,7 +184,7 @@
             {
                 return true;
             }
-            if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.NotPresent)
+            if (CoverStatus == CoverStatus.NotPresent)
             {
                 return true;
             }
@@ -244,19 +245,19 @@
     {
         try
         {
-            if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Open)
+            if (CoverStatus == CoverStatus.Open)
             {
                 Device.CloseCover();
             }
-            else if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Closed)
+            else if (CoverStatus == CoverStatus.Closed)
             {
                 Device.OpenCover();
             }
-            else if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Unknown)
+            else if (CoverStatus == CoverStatus.Unknown)
             {
                 Device.CloseCover();
             }
-            else if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Error)
+            else if (CoverStatus == CoverStatus.Error)
             {
                 Device.CloseCover();
             }
@@ -272,7 +273,7 @@
     {
         try
         {
-            if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Moving)
+            if (CoverStatus == CoverStatus.Moving)
             {
                 Device.HaltCover();
             }
@@ -291,15 +292,15 @@
             {
                 return "Open";
             }
-            if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Closed)
+            if (CoverStatus == CoverStatus.Closed)
             {
                 return "Open";
             }
-            if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Open)
+            if (CoverStatus == CoverStatus.Open)
             {
                 return "Close";
             }
-            if (CoverStatus == ASCOM.Standard.Interfaces.CoverStatus.Moving)
+            if (CoverStatus == CoverStatus.Moving)
             {
                 return "Moving";
             }
@@ -319,7 +320,7 @@
         }
     }
 
-    public ASCOM.Standard.Interfaces.CalibratorStatus CalStatus
+    public CalibratorStatus CalStatus
     {
         get
         {
@@ -327,7 +328,7 @@
         }
     }
 
-    public ASCOM.Standard.Interfaces.CoverStatus CoverStatus
+    public CoverStatus CoverStatus
     {
         get
         {

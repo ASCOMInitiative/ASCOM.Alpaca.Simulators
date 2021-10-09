@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ASCOM.Common.Components" Version="1.0.0-alpha23" />
     <PackageReference Include="ASCOM.Exceptions" Version="6.5.1" />
-    <PackageReference Include="ASCOM.Standard.Types" Version="1.0.0-alpha18" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OmniSim.Tools\OmniSim.Tools.csproj" />
   </ItemGroup>
 
 </Project>

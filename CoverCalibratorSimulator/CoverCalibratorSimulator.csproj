@@ -2,14 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>LocalServer.snk</AssemblyOriginatorKeyFile>
     <RootNamespace>ASCOMSimulators</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ASCOM.Common.Components" Version="1.0.0-alpha23" />
     <PackageReference Include="ASCOM.Exceptions" Version="6.5.1" />
-    <PackageReference Include="ASCOM.Standard.Types" Version="1.0.0-alpha18" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OmniSim.Tools\OmniSim.Tools.csproj" />
   </ItemGroup>
 
 </Project>

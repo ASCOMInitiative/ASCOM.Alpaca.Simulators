@@ -43,13 +43,15 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Timers;
 using System.Collections.Generic;
-using ASCOM.Standard.Interfaces;
-using ASCOM.Alpaca.Responses;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Alpaca;
 using System.Runtime.CompilerServices;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.ColorSpaces;
 using SixLabors.ImageSharp.ColorSpaces.Conversion;
+using ASCOM.Common.Interfaces;
+using ASCOM.Common;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 namespace ASCOM.Simulators
@@ -270,7 +272,7 @@ namespace ASCOM.Simulators
         internal bool omitOddBins; // True if bins of 3, 5, 7 etc. should throw NotImplementedExceptions
 
         internal bool connected = false;
-        internal ASCOM.Standard.Interfaces.CameraState cameraState = ASCOM.Standard.Interfaces.CameraState.Idle;
+        internal CameraState cameraState = CameraState.Idle;
 
         private int[,] imageArray;
         private object[,] imageArrayVariant;
@@ -323,8 +325,10 @@ namespace ASCOM.Simulators
 
             InitialiseSimulator();
 
+            DeviceNumber = deviceNumber;
+
             //This should be replaced by the next bit of code but is semi-unique as a default.
-            string UniqueID = "Alpaca Camera Sim" + deviceNumber.ToString();
+            UniqueID = "Alpaca Camera Sim" + deviceNumber.ToString();
             //Create a Unique ID if it does not exist
             try
             {
@@ -342,16 +346,12 @@ namespace ASCOM.Simulators
 
             logger.LogInformation($"Camera {deviceNumber} - UUID of {UniqueID}");
 
-            Configuration = new AlpacaConfiguredDevice("Alpaca Camera Sim", "Camera", deviceNumber, UniqueID);
-
             Log.LogMessage("Constructor", "Done");
         }
 
-        public AlpacaConfiguredDevice Configuration
-        {
-            get;
-            private set;
-        }
+        public string DeviceName { get => "Alpaca Camera Sim"; }
+        public int DeviceNumber { get; private set; }
+        public string UniqueID { get; private set; }
 
         public void Dispose()
         {
@@ -732,18 +732,18 @@ namespace ASCOM.Simulators
             Log.LogMessage("AbortExposure", "start");
             switch (cameraState)
             {
-                case ASCOM.Standard.Interfaces.CameraState.Waiting:
-                case ASCOM.Standard.Interfaces.CameraState.Exposing:
-                case ASCOM.Standard.Interfaces.CameraState.Reading:
-                case ASCOM.Standard.Interfaces.CameraState.Download:
+                case CameraState.Waiting:
+                case CameraState.Exposing:
+                case CameraState.Reading:
+                case CameraState.Download:
                     // these are all possible exposure states so we can abort the exposure
                     exposureTimer.Enabled = false;
-                    cameraState = ASCOM.Standard.Interfaces.CameraState.Idle;
+                    cameraState = CameraState.Idle;
                     imageReady = false;
                     break;
-                case ASCOM.Standard.Interfaces.CameraState.Idle:
+                case CameraState.Idle:
                     break;
-                case ASCOM.Standard.Interfaces.CameraState.Error:
+                case CameraState.Error:
                     Log.LogMessage("AbortExposure", "Camera Error");
                     throw new ASCOM.InvalidOperationException("AbortExposure not possible because of an error");
             }
@@ -1833,7 +1833,7 @@ namespace ASCOM.Simulators
             }
             // force the minimum exposure to be 1 millisecond to keep the exposureTimer happy
             exposureTimer.Interval = Math.Max((int)(Duration * 1000), 1);
-            cameraState = ASCOM.Standard.Interfaces.CameraState.Exposing;
+            cameraState = CameraState.Exposing;
             exposureStartTime = DateTime.Now;
             exposureDuration = Duration;
             exposureTimer.Enabled = true;
@@ -1844,10 +1844,10 @@ namespace ASCOM.Simulators
         {
             exposureTimer.Enabled = false;
             lastExposureDuration = (DateTime.Now - exposureStartTime).TotalSeconds;
-            cameraState = ASCOM.Standard.Interfaces.CameraState.Download;
+            cameraState = CameraState.Download;
             FillImageArray();
             imageReady = true;
-            cameraState = ASCOM.Standard.Interfaces.CameraState.Idle;
+            cameraState = CameraState.Idle;
             Log.LogMessage("ExposureTimer_Elapsed", "done");
         }
 
@@ -1910,20 +1910,20 @@ namespace ASCOM.Simulators
             Log.LogMessage("StopExposure", "state {0}", cameraState);
             switch (cameraState)
             {
-                case ASCOM.Standard.Interfaces.CameraState.Waiting:
-                case ASCOM.Standard.Interfaces.CameraState.Exposing:
-                case ASCOM.Standard.Interfaces.CameraState.Reading:
-                case ASCOM.Standard.Interfaces.CameraState.Download:
+                case CameraState.Waiting:
+                case CameraState.Exposing:
+                case CameraState.Reading:
+                case CameraState.Download:
                     // these are all possible exposure states so we can stop the exposure
                     exposureTimer.Enabled = false;
                     lastExposureDuration = (DateTime.Now - exposureStartTime).TotalSeconds;
                     FillImageArray();
-                    cameraState = ASCOM.Standard.Interfaces.CameraState.Idle;
+                    cameraState = CameraState.Idle;
                     imageReady = true;
                     break;
-                case ASCOM.Standard.Interfaces.CameraState.Idle:
+                case CameraState.Idle:
                     break;
-                case ASCOM.Standard.Interfaces.CameraState.Error:
+                case CameraState.Error:
                 default:
                     Log.LogMessage("StopExposure", "Not exposing");
                     // these states are this where it isn't possible to stop an exposure
@@ -2224,14 +2224,14 @@ namespace ASCOM.Simulators
                 CheckConnected("PercentCompleted");
                 switch (cameraState)
                 {
-                    case ASCOM.Standard.Interfaces.CameraState.Waiting:
-                    case ASCOM.Standard.Interfaces.CameraState.Exposing:
-                    case ASCOM.Standard.Interfaces.CameraState.Reading:
-                    case ASCOM.Standard.Interfaces.CameraState.Download:
+                    case CameraState.Waiting:
+                    case CameraState.Exposing:
+                    case CameraState.Reading:
+                    case CameraState.Download:
                         var pc = (short)(((DateTime.Now - exposureStartTime).TotalSeconds / exposureDuration) * 100);
                         Log.LogMessage("PercentCompleted", "state {0}, get {1}", cameraState, pc);
                         return pc;
-                    case ASCOM.Standard.Interfaces.CameraState.Idle:
+                    case CameraState.Idle:
                         Log.LogMessage("PercentCompleted", "imageready {0}", (short)(imageReady ? 100 : 0));
                         return (short)(imageReady ? 100 : 0);
                     default:
@@ -2729,7 +2729,7 @@ namespace ASCOM.Simulators
             readoutMode = 0;
             fastReadout = false;
 
-            cameraState = ASCOM.Standard.Interfaces.CameraState.Idle;
+            cameraState = CameraState.Idle;
 
             // Set initial cooler control variables
             targetCcdTemperature = setCcdTemperature; // Set the default value

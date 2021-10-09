@@ -23,7 +23,7 @@
 // instead of requiring position to be exactly the set pos.
 // 23-Jun-09 rbt     Port to Visual Basic .NET
 // -----------------------------------------------------------------------------
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common.DeviceInterfaces;
 using System;
 using System.Timers;
 using System.Runtime.CompilerServices;

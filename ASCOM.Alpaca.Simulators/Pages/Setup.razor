@@ -3,6 +3,8 @@
 @inject IToastService toastService
 @inject NavigationManager NavManager
 
+@using ASCOM.Common.Interfaces 
+
 <fieldset>
     <legend>Server Settings</legend>
     <div class="grid-container-two">
@@ -186,12 +188,12 @@
         </div>
         <div class="grid-item-left">
             <select @bind="LoggingLevel">
-                <option value="@ASCOM.Standard.Interfaces.LogLevel.Verbose">Verbose</option>
-                <option value="@ASCOM.Standard.Interfaces.LogLevel.Debug">Debug</option>
-                <option value="@ASCOM.Standard.Interfaces.LogLevel.Information">Information</option>
-                <option value="@ASCOM.Standard.Interfaces.LogLevel.Warning">Warning</option>
-                <option value="@ASCOM.Standard.Interfaces.LogLevel.Error">Error</option>
-                <option value="@ASCOM.Standard.Interfaces.LogLevel.Fatal">Fatal</option>
+                <option value="@LogLevel.Verbose">Verbose</option>
+                <option value="@LogLevel.Debug">Debug</option>
+                <option value="@LogLevel.Information">Information</option>
+                <option value="@LogLevel.Warning">Warning</option>
+                <option value="@LogLevel.Error">Error</option>
+                <option value="@LogLevel.Fatal">Fatal</option>
             </select>
             <button @onclick="LoggingLevelChanged" style="min-width:12ch; vertical-align:middle;">Save</button>
         </div>
@@ -310,7 +312,7 @@
         set;
     } = ServerSettings.UserName;
 
-    ASCOM.Standard.Interfaces.LogLevel LoggingLevel
+    LogLevel LoggingLevel
     {
         get;
         set;

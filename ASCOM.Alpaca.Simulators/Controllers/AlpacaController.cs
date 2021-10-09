@@ -1,7 +1,6 @@
-﻿using ASCOM.Alpaca.Responses;
+﻿using ASCOM.Common.Alpaca;
 using ASCOM.Alpaca.Simulators;
-using ASCOM.Standard.Helpers;
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common.DeviceInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +8,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using ASCOM.Common.Helpers;
+using ASCOM.Tools;
 
 namespace Alpaca
 {
@@ -18,7 +19,7 @@ namespace Alpaca
     /// </summary>
     public abstract class AlpacaController : Controller
     {
-        public abstract ASCOM.Standard.Interfaces.IAscomDevice GetDevice(int DeviceNumber);
+        public abstract IAscomDevice GetDevice(int DeviceNumber);
         #region Common Methods
 
         [HttpPut]
@@ -395,11 +396,11 @@ namespace Alpaca
         {
             if (payload == null || payload == string.Empty)
             {
-                ASCOM.Standard.Utilities.Logger.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request}");
+                Logger.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request}");
             }
             else
             {
-                ASCOM.Standard.Utilities.Logger.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request} with payload {payload}");
+                Logger.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request} with payload {payload}");
             }
         }
     }

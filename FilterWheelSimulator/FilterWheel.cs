@@ -36,8 +36,10 @@ using System.Runtime.CompilerServices;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
-using ASCOM.Alpaca.Responses;
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common;
+using ASCOM.Common.Alpaca;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
 using Microsoft.VisualBasic;
 
 namespace ASCOM.Simulators
@@ -51,25 +53,20 @@ namespace ASCOM.Simulators
 
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
-        public AlpacaConfiguredDevice Configuration
-        {
-            get;
-            private set;
-        }
-
         // 
         // Constructor - Must be public for COM registration!
         // 
         public FilterWheel(int deviceNumber, ILogger logger, IProfile profile)
         {
             logger.LogInformation($"FilterWheel {deviceNumber} - Starting initialization");
+            DeviceNumber = deviceNumber;
 
             FilterWheelHardware.g_Profile = profile;
 
             FilterWheelHardware.Initialize();
 
             //This should be replaced by the next bit of code but is semi-unique as a default.
-            string UniqueID = Name + deviceNumber.ToString();
+            UniqueID = Name + deviceNumber.ToString();
             //Create a Unique ID if it does not exist
             try
             {
@@ -86,9 +83,11 @@ namespace ASCOM.Simulators
             }
 
             logger.LogInformation($"FilterWheel {deviceNumber} - UUID of {UniqueID}");
-
-            Configuration = new AlpacaConfiguredDevice(Name, "FilterWheel", deviceNumber, UniqueID);
         }
+
+        public string DeviceName { get => Name; }
+        public int DeviceNumber { get; private set; }
+        public string UniqueID { get; private set; }
 
         public void Dispose()
         {

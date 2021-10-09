@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ASCOM.Common.Components" Version="1.0.0-alpha23" />
     <PackageReference Include="ASCOM.Exceptions" Version="6.5.1" />
-    <PackageReference Include="ASCOM.Standard.Types" Version="1.0.0-alpha18" />
-    <PackageReference Include="ASCOM.Standard.Utilities" Version="1.0.0-alpha20" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OmniSim.Tools\OmniSim.Tools.csproj" />
     <ProjectReference Include="..\WindowsBase.Vector\WindowsBase.Vector\WindowsBase.Vector.csproj" />
   </ItemGroup>
 

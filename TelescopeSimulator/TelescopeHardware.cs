@@ -18,7 +18,9 @@
 // --------------------------------------------------------------------------------
 //
 
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

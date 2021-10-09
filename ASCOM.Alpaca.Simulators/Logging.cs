@@ -1,4 +1,6 @@
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
+using ASCOM.Tools;
 using System.Net;
 
 namespace ASCOM.Alpaca.Simulators
@@ -13,33 +15,33 @@ namespace ASCOM.Alpaca.Simulators
 
         static Logging()
         {
-            Log = new ASCOM.Standard.Utilities.TraceLogger(ServerSettings.LogFileName, true);
+            Log = new TraceLogger(ServerSettings.LogFileName, true);
 
             Log.SetMinimumLoggingLevel(ServerSettings.LoggingLevel);
 
             //Set platform logging
             //In this case the platform uses the same logger as the driver.
-            ASCOM.Standard.Utilities.Logger.SetLogProvider(Log);
+            Logger.SetLogProvider(Log);
         }
 
         internal static void LogInformation(string message)
         {
-            ASCOM.Standard.Utilities.Logger.LogInformation(message);
+            Logger.LogInformation(message);
         }
 
         internal static void LogAPICall(IPAddress remoteIpAddress, string request, uint clientID, uint clientTransactionID, uint transactionID)
         {
-            Log.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request}");
+            Logger.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request}");
         }
 
         internal static void LogAPICall(IPAddress remoteIpAddress, string request, uint clientID, uint clientTransactionID, uint transactionID, string payload)
         {
-            Log.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request} with payload {payload}");
+            Logger.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request} with payload {payload}");
         }
 
         internal static void LogError(string message)
         {
-            ASCOM.Standard.Utilities.Logger.LogError(message);
+            Logger.LogError(message);
         }
     }
 }

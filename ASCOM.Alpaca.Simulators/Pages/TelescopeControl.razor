@@ -3,6 +3,7 @@
 @inject IToastService toastService
 @inject NavigationManager uriHelper;
 @using System.Timers;
+@using ASCOM.Tools;
 
 <body>
     <fieldset>
@@ -165,7 +166,7 @@
         {
             if (Connected)
             {
-                return new ASCOM.Standard.Utilities.Utilities().HoursToHMS(ASCOM.Simulators.TelescopeHardware.SiderealTime);
+                return Utilities.HoursToHMS(ASCOM.Simulators.TelescopeHardware.SiderealTime);
             }
             return "00:00:00";
         }
@@ -177,7 +178,7 @@
         {
             if (Connected)
             {
-                return new ASCOM.Standard.Utilities.Utilities().HoursToHMS(ASCOM.Simulators.TelescopeHardware.RightAscension);
+                return Utilities.HoursToHMS(ASCOM.Simulators.TelescopeHardware.RightAscension);
             }
             return "00:00:00";
         }
@@ -189,7 +190,7 @@
         {
             if (Connected)
             {
-                return new ASCOM.Standard.Utilities.Utilities().DegreesToDMS(ASCOM.Simulators.TelescopeHardware.Declination);
+                return Utilities.DegreesToDMS(ASCOM.Simulators.TelescopeHardware.Declination);
             }
             return "+00:00:00";
         }
@@ -201,7 +202,7 @@
         {
             if (Connected)
             {
-                return new ASCOM.Standard.Utilities.Utilities().DegreesToDMS(ASCOM.Simulators.TelescopeHardware.Altitude);
+                return Utilities.DegreesToDMS(ASCOM.Simulators.TelescopeHardware.Altitude);
             }
             return "+00:00:00";
         }
@@ -213,7 +214,7 @@
         {
             if (Connected)
             {
-                return new ASCOM.Standard.Utilities.Utilities().DegreesToDMS(ASCOM.Simulators.TelescopeHardware.Azimuth);
+                return Utilities.DegreesToDMS(ASCOM.Simulators.TelescopeHardware.Azimuth);
             }
             return "000:00:00";
         }

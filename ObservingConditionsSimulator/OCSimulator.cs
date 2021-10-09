@@ -13,7 +13,9 @@
 // Written by:	Bob Denny	29-May-2007
 // Modified by Chris Rowland and Peter Simpson to handle multiple hardware devices March 2011
 //
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

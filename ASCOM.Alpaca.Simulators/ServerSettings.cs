@@ -1,4 +1,6 @@
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
+using ASCOM.Tools;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -94,7 +96,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        private readonly static ASCOM.Standard.Utilities.XMLProfile Profile = new ASCOM.Standard.Utilities.XMLProfile(SettingsFolderName, ServerFolderName);
+        private readonly static XMLProfile Profile = new XMLProfile(SettingsFolderName, ServerFolderName);
 
         internal static void Reset()
         {

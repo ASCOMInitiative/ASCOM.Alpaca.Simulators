@@ -1,5 +1,7 @@
-﻿using ASCOM.Alpaca.Responses;
-using ASCOM.Standard.Interfaces;
+﻿using ASCOM.Common;
+using ASCOM.Common.Alpaca;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,11 +40,12 @@ namespace ASCOM.Simulators
                 OCSimulator.Init();
                 TL = logger;
 
+                DeviceNumber = deviceNumber;
 
-                OCSimulator.LogMessage("ObservingConditions", "Starting initialisation");
+                OCSimulator.LogMessage($"New ObservingConditions {deviceNumber}", "Starting initialisation");
 
                 // This should be replaced by the next bit of code but is semi - unique as a default.
-                string UniqueID = Name + deviceNumber.ToString();
+                UniqueID = Name + deviceNumber.ToString();
                 //Create a Unique ID if it does not exist
                 try
                 {
@@ -60,8 +63,6 @@ namespace ASCOM.Simulators
 
                 logger.LogInformation($"ObservingConditions {deviceNumber} - UUID of {UniqueID}");
 
-                Configuration = new AlpacaConfiguredDevice(Name, "ObservingConditions", deviceNumber, UniqueID);
-
                 OCSimulator.LogMessage("ObservingConditions", "Completed initialisation");
             }
             catch (Exception ex)
@@ -69,6 +70,10 @@ namespace ASCOM.Simulators
                 OCSimulator.LogMessage("ObservingConditions", ex.ToString());
             }
         }
+
+        public string DeviceName { get => Name; }
+        public int DeviceNumber { get; private set; }
+        public string UniqueID { get; private set; }
 
         #endregion
 
@@ -240,8 +245,6 @@ namespace ASCOM.Simulators
         {
             get { return OCSimulator.WindSpeed(); }
         }
-
-        public AlpacaConfiguredDevice Configuration { get; private set; }
         #endregion
     }
 }

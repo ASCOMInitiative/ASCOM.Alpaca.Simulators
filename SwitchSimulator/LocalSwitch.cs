@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
 
 namespace ASCOM.Simulators
 {

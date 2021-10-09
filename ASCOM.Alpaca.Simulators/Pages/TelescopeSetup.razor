@@ -2,8 +2,8 @@
 
 @inject IToastService toastService
 @inject NavigationManager uriHelper;
-@using ASCOM.Simulators; 
-
+@using ASCOM.Simulators;
+@using ASCOM.Common.DeviceInterfaces;
 <body>
     @if (Device.Connected)
     {
@@ -517,7 +517,7 @@
         set;
     }
 
-    ASCOM.Standard.Interfaces.AlignmentMode MountType
+    AlignmentMode MountType
     {
         get;
         set;
@@ -793,7 +793,7 @@
     {
         try
         {
-            if(SlewRate <= 0 || SlewRate > 360)
+            if (SlewRate <= 0 || SlewRate > 360)
             {
                 toastService.ShowWarning("Slew Rate must be between 0 and 360");
                 return;
@@ -811,7 +811,8 @@
                 return;
             }
 
-            if ((LatitudeDegrees + LatitudeMinutes / 60) > 90) {
+            if ((LatitudeDegrees + LatitudeMinutes / 60) > 90)
+            {
                 toastService.ShowWarning("The total Latitude must not be greater than 90.");
                 return;
             }

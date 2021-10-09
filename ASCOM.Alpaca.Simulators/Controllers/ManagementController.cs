@@ -1,4 +1,5 @@
-﻿using ASCOM.Alpaca.Responses;
+﻿using ASCOM.Alpaca.Discovery;
+using ASCOM.Common.Alpaca;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

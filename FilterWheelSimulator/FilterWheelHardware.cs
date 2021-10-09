@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.Drawing;
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common.DeviceInterfaces;
 using System.Timers;
+using ASCOM.Common.Interfaces;
 
 namespace ASCOM.Simulators
 {

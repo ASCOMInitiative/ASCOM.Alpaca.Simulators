@@ -24,8 +24,10 @@
 // The ClassInterface/None attribute prevents an empty interface called
 // _Dome from being created and used as the [default] interface
 //
-using ASCOM.Alpaca.Responses;
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common;
+using ASCOM.Common.Alpaca;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -46,10 +48,12 @@ namespace ASCOM.Simulators
             Logger = logger;
             Profile = profile;
 
-            LogMessage("New", "Log started");
+            LogMessage($"New dome {deviceNumber}", "Log started");
+
+            DeviceNumber = deviceNumber;
 
             //This should be replaced by the next bit of code but is semi-unique as a default.
-            string UniqueID = Name + deviceNumber.ToString();
+            UniqueID = Name + deviceNumber.ToString();
             //Create a Unique ID if it does not exist
             try
             {
@@ -67,14 +71,16 @@ namespace ASCOM.Simulators
 
             logger.LogInformation($"Dome {deviceNumber} - UUID of {UniqueID}");
 
-            Configuration = new AlpacaConfiguredDevice(Name, "Dome", deviceNumber, UniqueID);
-
             LoadConfig();
 
             LogMessage("New", "Starting thread");
 
             LogMessage("New", "New completed OK");
         }
+
+        public string DeviceName { get => Name; }
+        public int DeviceNumber { get; private set; }
+        public string UniqueID { get; private set; }
 
         internal void LoadConfig()
         {
@@ -167,12 +173,6 @@ namespace ASCOM.Simulators
             Profile.WriteValue("CanSetPark", System.Convert.ToString(Hardware.g_bCanSetPark));
             Profile.WriteValue("CanSetShutter", System.Convert.ToString(Hardware.g_bCanSetShutter));
             Profile.WriteValue("CanSyncAzimuth", System.Convert.ToString(Hardware.g_bCanSyncAzimuth));
-        }
-
-        public AlpacaConfiguredDevice Configuration
-        {
-            get;
-            private set;
         }
 
         private bool disposedValue; // To detect redundant calls

@@ -1,6 +1,6 @@
 ﻿using Alpaca;
-using ASCOM.Alpaca.Responses;
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common.Alpaca;
+using ASCOM.Common.DeviceInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel;

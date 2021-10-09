@@ -4,10 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Globalization;
-using ASCOM.Standard.Interfaces;
+using ASCOM.Common.DeviceInterfaces;
 using System.Collections.Generic;
-using ASCOM.Alpaca.Responses;
+using ASCOM.Common.Alpaca;
 using System.Runtime.CompilerServices;
+using ASCOM.Common.Interfaces;
+using ASCOM.Common;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 namespace ASCOM.Simulators
@@ -100,12 +102,6 @@ namespace ASCOM.Simulators
 
         #endregion
 
-        public AlpacaConfiguredDevice Configuration
-        {
-            get;
-            private set;
-        }
-
         #region Constructor and dispose
 
         /// <summary>
@@ -118,7 +114,9 @@ namespace ASCOM.Simulators
             {
                 TL = logger;
                 Profile = profile;
-                LogMessage("New", "Started");
+                LogMessage($"New Focuser {deviceNumber}", "Started");
+
+                DeviceNumber = deviceNumber;
 
                 //check to see if the profile is ok
 
@@ -143,7 +141,7 @@ namespace ASCOM.Simulators
                 LogMessage("New", "Started Simulation");
 
                 //This should be replaced by the next bit of code but is semi-unique as a default.
-                string UniqueID = Name + deviceNumber.ToString();
+                UniqueID = Name + deviceNumber.ToString();
                 //Create a Unique ID if it does not exist
                 try
                 {
@@ -161,8 +159,6 @@ namespace ASCOM.Simulators
 
                 logger.LogInformation($"Focuser {deviceNumber} - UUID of {UniqueID}");
 
-                Configuration = new AlpacaConfiguredDevice(Name, "Focuser", deviceNumber, UniqueID);
-
                 LogMessage("New", "Completed");
             }
             catch (Exception ex)
@@ -171,6 +167,10 @@ namespace ASCOM.Simulators
                 throw ex;
             }
         }
+
+        public string DeviceName { get => Name; }
+        public int DeviceNumber { get; private set; }
+        public string UniqueID { get; private set; }
 
         protected virtual void Dispose(bool disposing)
         {

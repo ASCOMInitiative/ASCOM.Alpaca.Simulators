@@ -1,4 +1,5 @@
-using ASCOM.Standard.Discovery;
+using ASCOM.Alpaca.Discovery;
+using ASCOM.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,14 +51,14 @@ namespace ASCOM.Alpaca.Simulators.Discovery
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logging.Log.Log(Standard.Interfaces.LogLevel.Error, $"Failed to read adapter address with error {ex.Message}");
+                                    Logging.Log.Log(LogLevel.Error, $"Failed to read adapter address with error {ex.Message}");
                                 }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Logging.Log.Log(Standard.Interfaces.LogLevel.Error, $"Failed to read network adapter with error {ex.Message}");
+                        Logging.Log.Log(LogLevel.Error, $"Failed to read network adapter with error {ex.Message}");
                     }
                 }
                 return Addresses;

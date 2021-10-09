@@ -21,9 +21,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using ASCOM.Standard.Interfaces;
-using ASCOM.Alpaca.Responses;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Alpaca;
 using System.Runtime.CompilerServices;
+using ASCOM.Common.Interfaces;
+using ASCOM.Common;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 namespace ASCOM.Simulators
@@ -91,14 +93,15 @@ namespace ASCOM.Simulators
 
             ReadProfile(); // Read device configuration from the ASCOM Profile store
 
-            LogMessage("Switch", "Starting initialisation");
+            LogMessage($"New Switch {deviceNumber}", "Starting initialisation");
 
+            DeviceNumber = deviceNumber;
 
             connectedState = false; // Initialise connected to false
                                     //TODO: Implement your additional construction here
 
             //This should be replaced by the next bit of code but is semi-unique as a default.
-            string UniqueID = Name + deviceNumber.ToString();
+            UniqueID = Name + deviceNumber.ToString();
             //Create a Unique ID if it does not exist
             try
             {
@@ -116,16 +119,12 @@ namespace ASCOM.Simulators
 
             logger.LogInformation($"Switch {deviceNumber} - UUID of {UniqueID}");
 
-            Configuration = new AlpacaConfiguredDevice(Name, "Switch", deviceNumber, UniqueID);
-
             LogMessage("Switch", "Completed initialisation");
         }
 
-        public AlpacaConfiguredDevice Configuration
-        {
-            get;
-            private set;
-        }
+        public string DeviceName { get => Name; }
+        public int DeviceNumber { get; private set; }
+        public string UniqueID { get; private set; }
 
         //
         // PUBLIC COM INTERFACE ISwitchV2 IMPLEMENTATION

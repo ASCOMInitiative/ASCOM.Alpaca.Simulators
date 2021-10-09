@@ -3,13 +3,15 @@
 @inject IToastService toastService
 @inject NavigationManager uriHelper;
 
+@using ASCOM.Common.DeviceInterfaces;
+
 <body>
     @if (Device.Connected)
     {
-    <fieldset>
-        <legend>Device is Connected</legend>
-        <p>The device must be disconnected to safely make changes.</p>
-    </fieldset>
+        <fieldset>
+            <legend>Device is Connected</legend>
+            <p>The device must be disconnected to safely make changes.</p>
+        </fieldset>
     }
     <fieldset disabled="@Device.Connected">
         <legend>Pixel Settings</legend>
@@ -377,7 +379,7 @@
         set;
     }
 
-    ASCOM.Standard.Interfaces.SensorType SensorType
+    SensorType SensorType
     {
         get;
         set;

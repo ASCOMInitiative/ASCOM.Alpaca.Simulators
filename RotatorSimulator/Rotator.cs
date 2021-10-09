@@ -23,10 +23,12 @@
 using System.Runtime.InteropServices;
 using System.Collections;
 using ASCOM;
-using ASCOM.Standard.Interfaces;
-using ASCOM.Alpaca.Responses;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Alpaca;
 using System;
 using System.Collections.Generic;
+using ASCOM.Common.Interfaces;
+using ASCOM.Common;
 
 namespace ASCOM.Simulators
 {
@@ -53,8 +55,10 @@ namespace ASCOM.Simulators
 			{
 				RotatorHardware.Initialize(profile);
 
+				DeviceNumber = deviceNumber;
+
 				//This should be replaced by the next bit of code but is semi-unique as a default.
-				string UniqueID = Name + deviceNumber.ToString();
+				UniqueID = Name + deviceNumber.ToString();
 				//Create a Unique ID if it does not exist
 				try
 				{
@@ -73,8 +77,6 @@ namespace ASCOM.Simulators
 
 				logger.LogInformation($"Rotator {deviceNumber} - UUID of {UniqueID}");
 
-				Configuration = new AlpacaConfiguredDevice(Name, "Rotator", deviceNumber, UniqueID);
-
 			}
 
 			catch (Exception ex)
@@ -85,12 +87,9 @@ namespace ASCOM.Simulators
 
 		}
 
-
-		public AlpacaConfiguredDevice Configuration
-		{
-			get;
-			private set;
-		}
+		public string DeviceName { get => Name; }
+		public int DeviceNumber { get; private set; }
+		public string UniqueID { get; private set; }
 
 		//
 		// PUBLIC COM INTERFACE IRotator IMPLEMENTATION

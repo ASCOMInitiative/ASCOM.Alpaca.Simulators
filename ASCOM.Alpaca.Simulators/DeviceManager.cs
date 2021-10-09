@@ -1,5 +1,9 @@
 using Alpaca;
-using ASCOM.Alpaca.Responses;
+using ASCOM.Alpaca.Discovery;
+using ASCOM.Common.Alpaca;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Simulators;
+using ASCOM.Tools;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -26,16 +30,16 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         // These store the actual instance of the device drivers. They are keyed to the Device Number
-        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ICameraV3> cameraV3s = new Dictionary<int, ASCOM.Standard.Interfaces.ICameraV3>();
-        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int, ASCOM.Standard.Interfaces.ICoverCalibratorV1>();
-        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IDomeV2> domeV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IDomeV2>();
-        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2> filterWheelV2s = new Dictionary<int, ASCOM.Standard.Interfaces.IFilterWheelV2>();
-        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IFocuserV3> focuserV3s = new Dictionary<int, ASCOM.Standard.Interfaces.IFocuserV3>();
-        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IObservingConditions> observingConditions = new Dictionary<int, ASCOM.Standard.Interfaces.IObservingConditions>();
-        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.IRotatorV3> rotatorV3s = new Dictionary<int, ASCOM.Standard.Interfaces.IRotatorV3>();
-        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ISafetyMonitor> safetyMonitors = new Dictionary<int, ASCOM.Standard.Interfaces.ISafetyMonitor>();
-        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ISwitchV2> switchV2s = new Dictionary<int, ASCOM.Standard.Interfaces.ISwitchV2>();
-        private readonly static Dictionary<int, ASCOM.Standard.Interfaces.ITelescopeV3> telescopeV3s = new Dictionary<int, ASCOM.Standard.Interfaces.ITelescopeV3>();
+        private readonly static Dictionary<int, ICameraV3> cameraV3s = new Dictionary<int, ICameraV3>();
+        private readonly static Dictionary<int, ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int, ICoverCalibratorV1>();
+        private readonly static Dictionary<int, IDomeV2> domeV2s = new Dictionary<int, IDomeV2>();
+        private readonly static Dictionary<int, IFilterWheelV2> filterWheelV2s = new Dictionary<int, IFilterWheelV2>();
+        private readonly static Dictionary<int, IFocuserV3> focuserV3s = new Dictionary<int, IFocuserV3>();
+        private readonly static Dictionary<int, IObservingConditions> observingConditions = new Dictionary<int, IObservingConditions>();
+        private readonly static Dictionary<int, IRotatorV3> rotatorV3s = new Dictionary<int, IRotatorV3>();
+        private readonly static Dictionary<int, ISafetyMonitor> safetyMonitors = new Dictionary<int, ISafetyMonitor>();
+        private readonly static Dictionary<int, ISwitchV2> switchV2s = new Dictionary<int, ISwitchV2>();
+        private readonly static Dictionary<int, ITelescopeV3> telescopeV3s = new Dictionary<int, ITelescopeV3>();
 
         private static string ServerFolderName
         {
@@ -56,34 +60,34 @@ namespace ASCOM.Alpaca.Simulators
         {
             //Only one instance of each in this simulator
             coverCalibratorV1s.Add(0, new ASCOM.Simulators.CoverCalibratorSimulator(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, CoverCalibrator, 0)));
+                new XMLProfile(ServerSettings.SettingsFolderName, CoverCalibrator, 0)));
 
             domeV2s.Add(0, new ASCOM.Simulators.Dome(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, Dome, 0)));
+                new XMLProfile(ServerSettings.SettingsFolderName, Dome, 0)));
 
             filterWheelV2s.Add(0, new ASCOM.Simulators.FilterWheel(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, FilterWheel, 0)));
+                new XMLProfile(ServerSettings.SettingsFolderName, FilterWheel, 0)));
 
             focuserV3s.Add(0, new ASCOM.Simulators.Focuser(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, Focuser, 0)));
+                new XMLProfile(ServerSettings.SettingsFolderName, Focuser, 0)));
 
             observingConditions.Add(0, new ASCOM.Simulators.ObservingConditions(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, ObservingConditions, 0)));
+                new XMLProfile(ServerSettings.SettingsFolderName, ObservingConditions, 0)));
 
             rotatorV3s.Add(0, new ASCOM.Simulators.Rotator(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, Rotator, 0)));
+                new XMLProfile(ServerSettings.SettingsFolderName, Rotator, 0)));
 
             safetyMonitors.Add(0, new ASCOM.Simulators.SafetyMonitor(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, SafetyMonitor, 0)));
+                new XMLProfile(ServerSettings.SettingsFolderName, SafetyMonitor, 0)));
 
             switchV2s.Add(0, new ASCOM.Simulators.Switch(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, Switch, 0)));
+                new XMLProfile(ServerSettings.SettingsFolderName, Switch, 0)));
 
             telescopeV3s.Add(0, new ASCOM.Simulators.Telescope(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, Telescope, 0)));
+                new XMLProfile(ServerSettings.SettingsFolderName, Telescope, 0)));
 
             cameraV3s.Add(0, new ASCOM.Simulators.Camera(0, Logging.Log,
-                new ASCOM.Standard.Utilities.XMLProfile(ServerSettings.SettingsFolderName, "Camera", 0)));
+                new XMLProfile(ServerSettings.SettingsFolderName, "Camera", 0)));
         }
 
         /// <summary>
@@ -207,52 +211,52 @@ namespace ASCOM.Alpaca.Simulators
 
             foreach (var dev in cameraV3s)
             {
-                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "Camera", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
             }
 
             foreach (var dev in coverCalibratorV1s)
             {
-                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "CoverCalibrator", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
             }
 
             foreach (var dev in domeV2s)
             {
-                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "Dome", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
             }
 
             foreach (var dev in filterWheelV2s)
             {
-                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "FilterWheel", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
             }
 
             foreach (var dev in focuserV3s)
             {
-                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "Focuser", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
             }
 
             foreach (var dev in observingConditions)
             {
-                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "ObservingCondition", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
             }
 
             foreach (var dev in rotatorV3s)
             {
-                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "Rotator", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
             }
 
             foreach (var dev in safetyMonitors)
             {
-                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "SafetyMonitro", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
             }
 
             foreach (var dev in switchV2s)
             {
-                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "Switch", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
             }
 
             foreach (var dev in telescopeV3s)
             {
-                devices.Add((dev.Value as Standard.Interfaces.IAlpacaDevice).Configuration);
+                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "Telescope", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
             }
 
             return devices;
@@ -260,7 +264,7 @@ namespace ASCOM.Alpaca.Simulators
 
         //These methods allow access to specific devices for the API controllers and the device Blazor UI Pages
 
-        internal static ASCOM.Standard.Interfaces.ICameraV3 GetCamera(int DeviceID)
+        internal static ICameraV3 GetCamera(int DeviceID)
         {
             if (cameraV3s.ContainsKey(DeviceID))
             {
@@ -272,7 +276,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ASCOM.Standard.Interfaces.ICoverCalibratorV1 GetCoverCalibrator(int DeviceID)
+        internal static ICoverCalibratorV1 GetCoverCalibrator(int DeviceID)
         {
             if (coverCalibratorV1s.ContainsKey(DeviceID))
             {
@@ -284,7 +288,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ASCOM.Standard.Interfaces.IDomeV2 GetDome(int DeviceID)
+        internal static IDomeV2 GetDome(int DeviceID)
         {
             if (domeV2s.ContainsKey(DeviceID))
             {
@@ -296,7 +300,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ASCOM.Standard.Interfaces.IFilterWheelV2 GetFilterWheel(int DeviceID)
+        internal static IFilterWheelV2 GetFilterWheel(int DeviceID)
         {
             if (filterWheelV2s.ContainsKey(DeviceID))
             {
@@ -308,7 +312,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ASCOM.Standard.Interfaces.IFocuserV3 GetFocuser(int DeviceID)
+        internal static IFocuserV3 GetFocuser(int DeviceID)
         {
             if (focuserV3s.ContainsKey(DeviceID))
             {
@@ -320,7 +324,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ASCOM.Standard.Interfaces.IObservingConditions GetObservingConditions(int DeviceID)
+        internal static IObservingConditions GetObservingConditions(int DeviceID)
         {
             if (observingConditions.ContainsKey(DeviceID))
             {
@@ -332,7 +336,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ASCOM.Standard.Interfaces.IRotatorV3 GetRotator(int DeviceID)
+        internal static IRotatorV3 GetRotator(int DeviceID)
         {
             if (rotatorV3s.ContainsKey(DeviceID))
             {
@@ -344,7 +348,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ASCOM.Standard.Interfaces.ISafetyMonitor GetSafetyMonitor(int DeviceID)
+        internal static ISafetyMonitor GetSafetyMonitor(int DeviceID)
         {
             if (safetyMonitors.ContainsKey(DeviceID))
             {
@@ -356,7 +360,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ASCOM.Standard.Interfaces.ISwitchV2 GetSwitch(int DeviceID)
+        internal static ISwitchV2 GetSwitch(int DeviceID)
         {
             if (switchV2s.ContainsKey(DeviceID))
             {
@@ -368,7 +372,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ASCOM.Standard.Interfaces.ITelescopeV3 GetTelescope(int DeviceID)
+        internal static ITelescopeV3 GetTelescope(int DeviceID)
         {
             if (telescopeV3s.ContainsKey(DeviceID))
             {

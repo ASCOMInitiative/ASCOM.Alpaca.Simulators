@@ -11,9 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ASCOM.Alpaca.Components" Version="1.0.0-alpha23" />
+    <PackageReference Include="ASCOM.Common.Components" Version="1.0.0-alpha23" />
     <PackageReference Include="ASCOM.Exceptions" Version="6.5.1" />
-    <PackageReference Include="ASCOM.Standard.Types" Version="1.0.0-alpha18" />
-    <PackageReference Include="ASCOM.Standard.Utilities" Version="1.0.0-alpha20" />
+    <PackageReference Include="ASCOM.Tools" Version="1.0.0-alpha23" />
     <PackageReference Include="Blazored.Toast" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
@@ -38,6 +39,7 @@
     <ProjectReference Include="..\FilterWheelSimulator\FilterWheelSimulator.csproj" />
     <ProjectReference Include="..\FocuserSimulator\FocuserSimulator.csproj" />
     <ProjectReference Include="..\ObservingConditionsSimulator\ObservingConditionsSimulator.csproj" />
+    <ProjectReference Include="..\OmniSim.Tools\OmniSim.Tools.csproj" />
     <ProjectReference Include="..\RotatorSimulator\RotatorSimulator.csproj" />
     <ProjectReference Include="..\SafetyMonitorSimulator\SafetyMonitorSimulator.csproj" />
     <ProjectReference Include="..\SwitchSimulator\SwitchSimulator.csproj" />
