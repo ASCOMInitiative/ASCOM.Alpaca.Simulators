@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=ascom.alpaca.simulators
+Exec=ascom.alpaca.simulators
+Icon=ascom.alpaca.simulators
+Type=Application
+Categories=Science;
+Terminal=true
