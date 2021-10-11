@@ -1,4 +1,4 @@
-﻿using Alpaca;
+using Alpaca;
 using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -70,7 +70,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route("{DeviceNumber}/axisrates")]
-        public ActionResult<AxisRatesResponse> AxisRates([DefaultValue(0)] int DeviceNumber, TelescopeAxis Axis, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<AxisRatesResponse> AxisRates([DefaultValue(0)] int DeviceNumber, [Required] TelescopeAxis Axis, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).AxisRates(Axis), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -91,7 +91,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route("{DeviceNumber}/canmoveaxis")]
-        public ActionResult<BoolResponse> CanMoveAxis([DefaultValue(0)] int DeviceNumber, TelescopeAxis Axis, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> CanMoveAxis([DefaultValue(0)] int DeviceNumber, [Required] TelescopeAxis Axis, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanMoveAxis(Axis), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
