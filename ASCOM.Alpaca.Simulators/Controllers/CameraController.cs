@@ -43,9 +43,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/binx")]
-        public ActionResult<Response> BinX([DefaultValue(0)] int DeviceNumber, [FromForm] short binx, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> BinX([DefaultValue(0)] int DeviceNumber, [Required][FromForm] short BinX, [Required][FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).BinX = binx; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).BinX = BinX; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
@@ -57,9 +57,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/biny")]
-        public ActionResult<Response> BinY([DefaultValue(0)] int DeviceNumber, [FromForm] short biny, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> BinY([DefaultValue(0)] int DeviceNumber, [Required][FromForm] short BinY, [Required][FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).BinY = biny; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).BinY = BinY; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
@@ -148,9 +148,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/cooleron")]
-        public ActionResult<Response> CoolerOn([DefaultValue(0)] int DeviceNumber, [FromForm] bool cooleron, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> CoolerOn([DefaultValue(0)] int DeviceNumber, [Required][FromForm] bool CoolerOn, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).CoolerOn = cooleron; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).CoolerOn = CoolerOn; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
@@ -197,9 +197,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/fastreadout")]
-        public ActionResult<Response> FastReadout([DefaultValue(0)] int DeviceNumber, [FromForm] bool fastreadout, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> FastReadout([DefaultValue(0)] int DeviceNumber, [Required][FromForm] bool FastReadout, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).FastReadout = fastreadout; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).FastReadout = FastReadout; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
@@ -218,9 +218,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/gain")]
-        public ActionResult<Response> Gain([DefaultValue(0)] int DeviceNumber, [FromForm] short gain, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Gain([DefaultValue(0)] int DeviceNumber, [Required][FromForm] short Gain, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).Gain = gain; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).Gain = Gain; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
@@ -475,9 +475,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/numx")]
-        public ActionResult<Response> NumX([DefaultValue(0)] int DeviceNumber, [FromForm] int numx, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> NumX([DefaultValue(0)] int DeviceNumber, [Required][FromForm] int NumX, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).NumX = numx; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).NumX = NumX; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
@@ -489,9 +489,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/numy")]
-        public ActionResult<Response> NumY([DefaultValue(0)] int DeviceNumber, [FromForm] int numy, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> NumY([DefaultValue(0)] int DeviceNumber, [Required][FromForm] int NumY, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).NumY = numy; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).NumY = NumY; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
@@ -503,9 +503,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/offset")]
-        public ActionResult<Response> Offset([DefaultValue(0)] int DeviceNumber, [FromForm] int offset, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Offset([DefaultValue(0)] int DeviceNumber, [Required][FromForm] int Offset, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).Offset = offset; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).Offset = Offset; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
@@ -559,9 +559,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/readoutmode")]
-        public ActionResult<Response> ReadoutMode([DefaultValue(0)] int DeviceNumber, [FromForm] short readoutmode, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> ReadoutMode([DefaultValue(0)] int DeviceNumber, [Required][FromForm] short ReadoutMode, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).ReadoutMode = readoutmode; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).ReadoutMode = ReadoutMode; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
@@ -594,9 +594,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/setccdtemperature")]
-        public ActionResult<Response> SetCCDTemperature([DefaultValue(0)] int DeviceNumber, [FromForm] double setccdtemperature, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SetCCDTemperature([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double SetCCDTemperature, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).SetCCDTemperature = setccdtemperature; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).SetCCDTemperature = SetCCDTemperature; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
@@ -608,9 +608,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/startx")]
-        public ActionResult<Response> StartX([DefaultValue(0)] int DeviceNumber, [FromForm] int startx, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> StartX([DefaultValue(0)] int DeviceNumber, [Required][FromForm] int StartX, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).StartX = startx; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).StartX = StartX; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
@@ -622,9 +622,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/starty")]
-        public ActionResult<Response> StartY([DefaultValue(0)] int DeviceNumber, [FromForm] int starty, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> StartY([DefaultValue(0)] int DeviceNumber, [Required][FromForm] int StartY, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).StartY = starty; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).StartY = StartY; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
@@ -636,7 +636,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/subexposureduration")]
-        public ActionResult<Response> SubExposureDuration([DefaultValue(0)] int DeviceNumber, [FromForm] double SubExposureDuration, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SubExposureDuration([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double SubExposureDuration, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).SubExposureDuration = SubExposureDuration; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -650,16 +650,16 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/pulseguide")]
-        public ActionResult<Response> PulseGuide([DefaultValue(0)] int DeviceNumber, [FromForm] GuideDirection Direction, [FromForm] int Duration, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> PulseGuide([DefaultValue(0)] int DeviceNumber, [Required][FromForm] GuideDirection Direction, [Required][FromForm] int Duration, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).PulseGuide(Direction, Duration), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route("{DeviceNumber}/startexposure")]
-        public ActionResult<Response> StartExposure([DefaultValue(0)] int DeviceNumber, [FromForm] double duration, [FromForm] bool light, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> StartExposure([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double Duration, [Required][FromForm] bool Light, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).StartExposure(duration, light), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).StartExposure(Duration, Light), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]

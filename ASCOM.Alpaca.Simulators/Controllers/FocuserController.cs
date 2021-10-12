@@ -69,7 +69,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/tempcomp")]
-        public ActionResult<Response> TempComp([DefaultValue(0)] int DeviceNumber, [FromForm] bool TempComp, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> TempComp([DefaultValue(0)] int DeviceNumber, [Required][FromForm] bool TempComp, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetFocuser(DeviceNumber).TempComp = TempComp; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -97,7 +97,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/move")]
-        public ActionResult<Response> Move([DefaultValue(0)] int DeviceNumber, [FromForm] int Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Move([DefaultValue(0)] int DeviceNumber, [Required][FromForm] int Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetFocuser(DeviceNumber).Move(Position), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }

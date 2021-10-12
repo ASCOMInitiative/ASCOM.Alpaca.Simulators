@@ -217,14 +217,14 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/declinationrate")]
-        public ActionResult<Response> DeclinationRate([DefaultValue(0)] int DeviceNumber, [FromForm] double DeclinationRate, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> DeclinationRate([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double DeclinationRate, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).DeclinationRate = DeclinationRate; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route("{DeviceNumber}/destinationsideofpier")]
-        public ActionResult<IntResponse> DestinationSideOfPier([DefaultValue(0)] int DeviceNumber, double RightAscension, double Declination, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<IntResponse> DestinationSideOfPier([DefaultValue(0)] int DeviceNumber, [Required] double RightAscension, [Required] double Declination, uint ClientID = 0, uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => (int)DeviceManager.GetTelescope(DeviceNumber).DestinationSideOfPier(RightAscension, Declination), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -238,7 +238,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/doesrefraction")]
-        public ActionResult<Response> DoesRefraction([DefaultValue(0)] int DeviceNumber, [FromForm] bool DoesRefraction, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> DoesRefraction([DefaultValue(0)] int DeviceNumber, [Required][FromForm] bool DoesRefraction, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).DoesRefraction = DoesRefraction; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -273,7 +273,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/guideratedeclination")]
-        public ActionResult<Response> GuideRateDeclination([DefaultValue(0)] int DeviceNumber, [FromForm] double GuideRateDeclination, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> GuideRateDeclination([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double GuideRateDeclination, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).GuideRateDeclination = GuideRateDeclination; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -287,7 +287,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/guideraterightascension")]
-        public ActionResult<Response> GuideRateRightAscension([DefaultValue(0)] int DeviceNumber, [FromForm] double GuideRateRightAscension, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> GuideRateRightAscension([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double GuideRateRightAscension, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).GuideRateRightAscension = GuideRateRightAscension; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -301,7 +301,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/moveaxis")]
-        public ActionResult<Response> MoveAxis([DefaultValue(0)] int DeviceNumber, [FromForm] TelescopeAxis Axis, [FromForm] double Rate, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> MoveAxis([DefaultValue(0)] int DeviceNumber, [Required][FromForm] TelescopeAxis Axis, [Required][FromForm] double Rate, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).MoveAxis(Axis, Rate), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -315,7 +315,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/pulseguide")]
-        public ActionResult<Response> PulseGuide([DefaultValue(0)] int DeviceNumber, [FromForm] GuideDirection Direction, [FromForm] int Duration, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> PulseGuide([DefaultValue(0)] int DeviceNumber, [Required][FromForm] GuideDirection Direction, [Required][FromForm] int Duration, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).PulseGuide(Direction, Duration), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -336,7 +336,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/rightascensionrate")]
-        public ActionResult<Response> RightAscensionRate([DefaultValue(0)] int DeviceNumber, [FromForm] double RightAscensionRate, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> RightAscensionRate([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double RightAscensionRate, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).RightAscensionRate = RightAscensionRate; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -357,7 +357,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/sideofpier")]
-        public ActionResult<Response> SideOfPier([DefaultValue(0)] int DeviceNumber, [FromForm] PointingState SideOfPier, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SideOfPier([DefaultValue(0)] int DeviceNumber, [Required][FromForm] PointingState SideOfPier, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).SideOfPier = SideOfPier; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -378,7 +378,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/siteelevation")]
-        public ActionResult<Response> SiteElevation([DefaultValue(0)] int DeviceNumber, [FromForm] double SiteElevation, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SiteElevation([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double SiteElevation, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).SiteElevation = SiteElevation; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -392,7 +392,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/sitelatitude")]
-        public ActionResult<Response> SiteLatitude([DefaultValue(0)] int DeviceNumber, [FromForm] double SiteLatitude, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SiteLatitude([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double SiteLatitude, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).SiteLatitude = SiteLatitude; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -406,7 +406,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/sitelongitude")]
-        public ActionResult<Response> SiteLongitude([DefaultValue(0)] int DeviceNumber, [FromForm] double SiteLongitude, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SiteLongitude([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double SiteLongitude, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).SiteLongitude = SiteLongitude; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -420,35 +420,35 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/slewsettletime")]
-        public ActionResult<Response> SlewSettleTime([DefaultValue(0)] int DeviceNumber, [FromForm] short SlewSettleTime, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SlewSettleTime([DefaultValue(0)] int DeviceNumber, [Required][FromForm] short SlewSettleTime, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).SlewSettleTime = SlewSettleTime; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route("{DeviceNumber}/slewtoaltaz")]
-        public ActionResult<Response> SlewToAltAz([DefaultValue(0)] int DeviceNumber, [FromForm] double Azimuth, [FromForm] double Altitude, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SlewToAltAz([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double Azimuth, [Required][FromForm] double Altitude, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SlewToAltAz(Azimuth, Altitude), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route("{DeviceNumber}/slewtoaltazasync")]
-        public ActionResult<Response> SlewToAltAzAsync([DefaultValue(0)] int DeviceNumber, [FromForm] double Azimuth, [FromForm] double Altitude, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SlewToAltAzAsync([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double Azimuth, [Required][FromForm] double Altitude, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SlewToAltAzAsync(Azimuth, Altitude), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route("{DeviceNumber}/slewtocoordinates")]
-        public ActionResult<Response> SlewToCoordinates([DefaultValue(0)] int DeviceNumber, [FromForm] double RightAscension, [FromForm] double Declination, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SlewToCoordinates([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double RightAscension, [Required][FromForm] double Declination, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SlewToCoordinates(RightAscension, Declination), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route("{DeviceNumber}/slewtocoordinatesasync")]
-        public ActionResult<Response> SlewToCoordinatesAsync([DefaultValue(0)] int DeviceNumber, [FromForm] double RightAscension, [FromForm] double Declination, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SlewToCoordinatesAsync([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double RightAscension, [Required][FromForm] double Declination, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SlewToCoordinatesAsync(RightAscension, Declination), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -476,14 +476,14 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/synctoaltaz")]
-        public ActionResult<Response> SyncToAltAz([DefaultValue(0)] int DeviceNumber, [FromForm] double Azimuth, [FromForm] double Altitude, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SyncToAltAz([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double Azimuth, [Required][FromForm] double Altitude, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SyncToAltAz(Azimuth, Altitude), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route("{DeviceNumber}/synctocoordinates")]
-        public ActionResult<Response> SyncToCoordinates([DefaultValue(0)] int DeviceNumber, [FromForm] double RightAscension, [FromForm] double Declination, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SyncToCoordinates([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double RightAscension, [Required][FromForm] double Declination, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SyncToCoordinates(RightAscension, Declination), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -504,7 +504,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/targetdeclination")]
-        public ActionResult<Response> TargetDeclination([DefaultValue(0)] int DeviceNumber, [FromForm] double TargetDeclination, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> TargetDeclination([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double TargetDeclination, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).TargetDeclination = TargetDeclination; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -518,7 +518,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/targetrightascension")]
-        public ActionResult<Response> TargetRightAscension([DefaultValue(0)] int DeviceNumber, [FromForm] double TargetRightAscension, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> TargetRightAscension([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double TargetRightAscension, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).TargetRightAscension = TargetRightAscension; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -532,7 +532,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/tracking")]
-        public ActionResult<Response> Tracking([DefaultValue(0)] int DeviceNumber, [FromForm] bool Tracking, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Tracking([DefaultValue(0)] int DeviceNumber, [Required][FromForm] bool Tracking, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).Tracking = Tracking; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -546,7 +546,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/trackingrate")]
-        public ActionResult<Response> TrackingRate([DefaultValue(0)] int DeviceNumber, [FromForm] int TrackingRate, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> TrackingRate([DefaultValue(0)] int DeviceNumber, [Required][FromForm] int TrackingRate, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).TrackingRate = (DriveRate)TrackingRate; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -567,7 +567,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/utcdate")]
-        public ActionResult<Response> UTCDate([DefaultValue(0)] int DeviceNumber, [FromForm] DateTime UTCDate, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> UTCDate([DefaultValue(0)] int DeviceNumber, [Required][FromForm] DateTime UTCDate, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).UTCDate = UTCDate; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }

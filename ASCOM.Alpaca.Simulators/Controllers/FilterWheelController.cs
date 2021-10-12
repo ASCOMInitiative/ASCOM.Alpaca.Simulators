@@ -41,9 +41,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/position")]
-        public ActionResult<Response> Position([DefaultValue(0)] int DeviceNumber, [FromForm] short position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Position([DefaultValue(0)] int DeviceNumber, [Required][FromForm] short Position, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetFilterWheel(DeviceNumber).Position = position; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetFilterWheel(DeviceNumber).Position = Position; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
     }
 }

@@ -118,7 +118,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/slaved")]
-        public ActionResult<Response> Slaved([DefaultValue(0)] int DeviceNumber, [FromForm] bool Slaved, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Slaved([DefaultValue(0)] int DeviceNumber, [Required][FromForm] bool Slaved, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetDome(DeviceNumber).Slaved = Slaved; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -174,21 +174,21 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/slewtoaltitude")]
-        public ActionResult<Response> SlewToAltitude([DefaultValue(0)] int DeviceNumber, [FromForm] double Altitude, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SlewToAltitude([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double Altitude, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetDome(DeviceNumber).SlewToAltitude(Altitude), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route("{DeviceNumber}/slewtoazimuth")]
-        public ActionResult<Response> SlewToAzimuth([DefaultValue(0)] int DeviceNumber, [FromForm] double Azimuth, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SlewToAzimuth([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double Azimuth, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetDome(DeviceNumber).SlewToAzimuth(Azimuth), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route("{DeviceNumber}/synctoazimuth")]
-        public ActionResult<Response> SyncToAzimuth([DefaultValue(0)] int DeviceNumber, [FromForm] double Azimuth, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> SyncToAzimuth([DefaultValue(0)] int DeviceNumber, [Required][FromForm] double Azimuth, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetDome(DeviceNumber).SyncToAzimuth(Azimuth), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }

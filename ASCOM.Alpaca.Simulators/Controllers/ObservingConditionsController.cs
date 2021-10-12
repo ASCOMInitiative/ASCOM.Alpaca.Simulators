@@ -29,9 +29,9 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpPut]
         [Route("{DeviceNumber}/averageperiod")]
-        public ActionResult<Response> AveragePeriod([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(1)][FromForm] double averageperiod, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> AveragePeriod([DefaultValue(0)] int DeviceNumber, [Required][DefaultValue(1)][FromForm] double AveragePeriod, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { DeviceManager.GetObservingConditions(DeviceNumber).AveragePeriod = averageperiod; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => { DeviceManager.GetObservingConditions(DeviceNumber).AveragePeriod = AveragePeriod; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
@@ -134,16 +134,16 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route("{DeviceNumber}/sensordescription")]
-        public ActionResult<StringResponse> SensorDescription([DefaultValue(0)] int DeviceNumber, string sensorname, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> SensorDescription([DefaultValue(0)] int DeviceNumber, [Required] string SensorName, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).SensorDescription(sensorname), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).SensorDescription(SensorName), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route("{DeviceNumber}/timesincelastupdate")]
-        public ActionResult<DoubleResponse> TimeSinceLastUpdate([DefaultValue(0)] int DeviceNumber, string sensorname, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<DoubleResponse> TimeSinceLastUpdate([DefaultValue(0)] int DeviceNumber, [Required] string SensorName, uint ClientID = 0, uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).TimeSinceLastUpdate(sensorname), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).TimeSinceLastUpdate(SensorName), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
     }
 }
