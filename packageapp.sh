@@ -22,7 +22,7 @@ dotnet publish -c Release -r linux-arm64 --self-contained true /p:PublishTrimmed
 
 cd ..
 
-chmod 755 AppRun
+chmod 755 AppImage/AppRun
 
 cp AppImage/AppRun AppImage/amd64/ascom.alpaca.simulators.AppDir/
 cp AppImage/ascom.alpaca.simulators.desktop AppImage/amd64/ascom.alpaca.simulators.AppDir/
@@ -44,6 +44,6 @@ ARCH=x86_64 ./appimagetool-x86_64.AppImage AppImage/amd64/ascom.alpaca.simulator
 ARCH=arm ./appimagetool-x86_64.AppImage --runtime-file AppImage/runtime-armhf AppImage/arm/ascom.alpaca.simulators.AppDir/
 ARCH=arm_aarch64 ./appimagetool-x86_64.AppImage --runtime-file AppImage/runtime-aarch64 AppImage/arm64/ascom.alpaca.simulators.AppDir/
 
-tar cfJ ascom.alpaca.simulators-x86_64.tar.xz AppImage/ascom.alpaca.simulators-x86_64.AppImage
-tar cfJ ascom.alpaca.simulators-aarch64.tar.xz AppImage/ascom.alpaca.simulators-aarch64.AppImage
-tar cfJ ascom.alpaca.simulators-armhf.tar.xz AppImage/ascom.alpaca.simulators-armhf.AppImage
+tar cfJ ascom.alpaca.simulators-x86_64.tar.xz ascom.alpaca.simulators-x86_64.AppImage
+tar cfJ ascom.alpaca.simulators-aarch64.tar.xz ascom.alpaca.simulators-aarch64.AppImage
+tar cfJ ascom.alpaca.simulators-armhf.tar.xz ascom.alpaca.simulators-armhf.AppImage
