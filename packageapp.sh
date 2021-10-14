@@ -40,6 +40,10 @@ cp -r ASCOM.Alpaca.Simulators/bin/ascom.alpaca.simulators.linux-x64.image/* AppI
 cp -r ASCOM.Alpaca.Simulators/bin/ascom.alpaca.simulators.linux-arm.image/* AppImage/arm/ascom.alpaca.simulators.AppDir/usr/bin/
 cp -r ASCOM.Alpaca.Simulators/bin/ascom.alpaca.simulators.linux-arm64.image/* AppImage/arm64/ascom.alpaca.simulators.AppDir/usr/bin/
 
-./appimagetool-x86_64.AppImage AppImage/amd64/ascom.alpaca.simulators.AppDir/
-./appimagetool-x86_64.AppImage --runtime-file AppImage/runtime-armhf AppImage/arm/ascom.alpaca.simulators.AppDir/
-./appimagetool-x86_64.AppImage --runtime-file AppImage/runtime-aarch64 AppImage/arm64/ascom.alpaca.simulators.AppDir/
+ARCH=x86_64 ./appimagetool-x86_64.AppImage AppImage/amd64/ascom.alpaca.simulators.AppDir/
+ARCH=arm ./appimagetool-x86_64.AppImage --runtime-file AppImage/runtime-armhf AppImage/arm/ascom.alpaca.simulators.AppDir/
+ARCH=arm_aarch64 ./appimagetool-x86_64.AppImage --runtime-file AppImage/runtime-aarch64 AppImage/arm64/ascom.alpaca.simulators.AppDir/
+
+tar cfJ ascom.alpaca.simulators-x86_64.tar.xz AppImage/ascom.alpaca.simulators-x86_64.AppImage
+tar cfJ ascom.alpaca.simulators-aarch64.tar.xz AppImage/ascom.alpaca.simulators-aarch64.AppImage
+tar cfJ ascom.alpaca.simulators-armhf.tar.xz AppImage/ascom.alpaca.simulators-armhf.AppImage
