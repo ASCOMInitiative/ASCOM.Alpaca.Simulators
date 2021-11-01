@@ -10,8 +10,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -49,6 +51,23 @@ namespace ASCOM.Alpaca.Simulators
                 services.AddSwaggerGen(c =>
                 {
                     c.SwaggerDoc("v1", new OpenApiInfo { Title = $"{ServerSettings.ServerName}", Description = "Please note that the Alpaca API documentation on the ASCOM website is the canonical version. There are several issues with this auto generated version that will be resolved in future versions. This is currently provided only for testing the simulators.", Version = "v0" });
+
+                    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                    c.IncludeXmlComments(xmlPath);
+
+                    if (File.Exists(Path.Combine(AppContext.BaseDirectory, "ASCOM.Common.xml")))
+                    {
+                        xmlPath = Path.Combine(AppContext.BaseDirectory, "ASCOM.Common.xml");
+
+                        c.IncludeXmlComments(xmlPath);
+                    }
+                    else
+                    {
+                        Logging.LogInformation("Failed to find ASCOM.Common xml documentation.");
+                    }
+
+                    c.EnableAnnotations();
                 });
             }
 

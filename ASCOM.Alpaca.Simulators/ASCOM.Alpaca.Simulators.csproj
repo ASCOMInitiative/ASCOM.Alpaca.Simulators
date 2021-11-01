@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="ASCOM.Alpaca.Device" Version="1.0.0-alpha24" />
-    <PackageReference Include="ASCOM.Common.Components" Version="1.0.0-alpha24" />
+    <PackageReference Include="ASCOM.Common.Components" Version="1.0.0-alpha24.swashbuckle" />
     <PackageReference Include="ASCOM.Exceptions" Version="6.5.1" />
     <PackageReference Include="ASCOM.Tools" Version="1.0.0-alpha24" />
     <PackageReference Include="Blazored.Toast" Version="3.2.2" />
@@ -49,5 +49,17 @@
   <PropertyGroup>
     <DefineConstants Condition=" '$(AppImage)' == 'true' ">$(DefineConstants);BUNDLED</DefineConstants>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Projects\Repos\ASCOM.Alpaca.Simulators\ASCOM.Alpaca.Simulators\ascom.alpaca.simulators.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <Target Name="_ResolveCopyLocalNuGetPkgXmls" AfterTargets="ResolveReferences">
+    <ItemGroup>
+      <!-- Copy XML files from all PackageReferences to output dir -->
+      <ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).xml')" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)'!='' and Exists('%(RootDir)%(Directory)%(Filename).xml')" />
+    </ItemGroup>
+  </Target>
   
 </Project>
