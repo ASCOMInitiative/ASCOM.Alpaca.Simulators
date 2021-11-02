@@ -2,6 +2,8 @@
 using ASCOM.Common.Alpaca;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -12,7 +14,9 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [AllowAnonymous]
         [Route("management/apiversions")]
-        public IntListResponse ApiVersions(uint ClientID = 0, uint ClientTransactionID = 0)
+        public IntListResponse ApiVersions([SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             var TransactionID = DeviceManager.ServerTransactionID;
             Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -22,7 +26,9 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [AllowAnonymous]
         [Route("management/v1/description")]
-        public AlpacaDescriptionResponse Description(uint ClientID = 0, uint ClientTransactionID = 0)
+        public AlpacaDescriptionResponse Description([SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             var TransactionID = DeviceManager.ServerTransactionID;
             Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
@@ -33,7 +39,9 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [AllowAnonymous]
         [Route("management/v1/configureddevices")]
-        public AlpacaConfiguredDevicesResponse ConfiguredDevices(uint ClientID = 0, uint ClientTransactionID = 0)
+        public AlpacaConfiguredDevicesResponse ConfiguredDevices([SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             var TransactionID = DeviceManager.ServerTransactionID;
             Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);

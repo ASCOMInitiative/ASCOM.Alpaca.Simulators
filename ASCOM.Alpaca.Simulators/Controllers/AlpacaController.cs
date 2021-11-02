@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using ASCOM.Common.Helpers;
 using ASCOM.Tools;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Alpaca
 {
@@ -22,44 +23,89 @@ namespace Alpaca
         public abstract IAscomDevice GetDevice(int DeviceNumber);
         #region Common Methods
 
+        /// <summary>
+        /// Invokes the specified device-specific action.
+        /// </summary>
+        /// <remarks>
+        /// <para>Actions and SupportedActions are a standardised means for drivers to extend functionality beyond the built-in capabilities of the ASCOM device interfaces.</para>
+        /// <br/>
+        /// <para>The key advantage of using Actions is that drivers can expose any device specific functionality required. The downside is that, in order to use these unique features, every application author would need to create bespoke code to present or exploit them.</para>
+        /// <br/>
+        /// <para>The Action parameter and return strings are deceptively simple, but can support transmission of arbitrarily complex data structures, for example through JSON encoding.</para>
+        /// <br/>
+        /// <para>This capability will be of primary value to</para>
+        /// <br/>
+        /// <para>  * bespoke software and hardware configurations where a single entity controls both the consuming application software and the hardware / driver environment</para>
+        /// <para>  * a group of application and device authors to quickly formulate and try out new interface capabilities without requiring an immediate change to the ASCOM device interface, which will take a lot longer than just agreeing a name, input parameters and a standard response for an Action command.</para>
+        /// <br/>
+        /// <para>The list of Action commands supported by a driver can be discovered through the SupportedActions property.</para>
+        /// <br/>
+        /// <para>This method should return an error message and NotImplementedException error number (0x400) if the driver just implements the standard ASCOM device methods and has no bespoke, unique, functionality.</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="Action">A well known name that represents the action to be carried out.</param>
+        /// <param name="Parameters">List of required parameters or an Empty String if none are required</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Route("{DeviceNumber}/action")]
-        public ActionResult<StringResponse> Action([Required][DefaultValue(0)] int DeviceNumber, [Required][FromForm] string Action, [FromForm] string Parameters = "", [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> Action([Required][DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+ [Required][FromForm] string Action, [FromForm] string Parameters = "", [FromForm] [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [FromForm] [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).Action(Action, Parameters), DeviceManager.ServerTransactionID, (uint)ClientID, (uint)ClientTransactionID, $"Action: {Action}, Parameters {Parameters}");
         }
 
         [HttpPut]
         [Route("{DeviceNumber}/commandblind")]
-        public ActionResult<Response> CommandBlind([DefaultValue(0)] int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> CommandBlind([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+ [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [FromForm] [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).CommandBlind(Command, Raw), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Command {Command}, Raw {Raw}");
         }
 
         [HttpPut]
         [Route("{DeviceNumber}/commandbool")]
-        public ActionResult<BoolResponse> CommandBool([DefaultValue(0)] int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> CommandBool([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+ [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [FromForm] [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).CommandBool(Command, Raw), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Command={Command}, Raw={Raw}");
         }
 
         [HttpPut]
         [Route("{DeviceNumber}/commandstring")]
-        public ActionResult<StringResponse> CommandString([DefaultValue(0)] int DeviceNumber, [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> CommandString([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+ [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [FromForm] [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).CommandString(Command, Raw), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Command={Command}, Raw={Raw}");
         }
 
         [HttpGet]
         [Route("{DeviceNumber}/connected")]
-        public ActionResult<BoolResponse> Connected([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<BoolResponse> Connected([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+ [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).Connected, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpPut]
         [Route("{DeviceNumber}/connected")]
-        public ActionResult<Response> Connected([DefaultValue(0)] int DeviceNumber, [Required][FromForm] bool Connected, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Connected([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+ [Required][FromForm] bool Connected, [FromForm] [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [FromForm] [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             if (Connected || !ServerSettings.PreventRemoteDisconnects)
             {
@@ -70,42 +116,60 @@ namespace Alpaca
 
         [HttpGet]
         [Route("{DeviceNumber}/description")]
-        public ActionResult<StringResponse> Description([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> Description([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+ [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).Description, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route("{DeviceNumber}/driverinfo")]
-        public ActionResult<StringResponse> DriverInfo([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> DriverInfo([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+ [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).DriverInfo, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route("{DeviceNumber}/driverversion")]
-        public ActionResult<StringResponse> DriverVersion([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> DriverVersion([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+ [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).DriverVersion, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route("{DeviceNumber}/interfaceversion")]
-        public ActionResult<IntResponse> InterfaceVersion([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<IntResponse> InterfaceVersion([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+ [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).InterfaceVersion, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route("{DeviceNumber}/name")]
-        public ActionResult<StringResponse> Name([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringResponse> Name([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+ [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).Name, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         [HttpGet]
         [Route("{DeviceNumber}/supportedactions")]
-        public ActionResult<StringListResponse> SupportedActions([DefaultValue(0)] int DeviceNumber, uint ClientID = 0, uint ClientTransactionID = 0)
+        public ActionResult<StringListResponse> SupportedActions([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+ [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).SupportedActions, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -114,7 +178,10 @@ namespace Alpaca
 
         [HttpPut]
         [Route("{DeviceNumber}/dispose")]
-        public ActionResult<Response> Dispose([DefaultValue(0)] int DeviceNumber, [FromForm] uint ClientID = 0, [FromForm] uint ClientTransactionID = 0)
+        public ActionResult<Response> Dispose([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+ [FromForm] [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [FromForm] [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+)
         {
             if (!ServerSettings.PreventRemoteDisposes)
             {
@@ -163,7 +230,9 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<DriveRatesResponse> ProcessRequest(Func<ITrackingRates> p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
+        internal ActionResult<DriveRatesResponse> ProcessRequest(Func<ITrackingRates> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+, string payload = "")
         {
             try
             {
@@ -195,7 +264,9 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<DoubleResponse> ProcessRequest(Func<double> p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
+        internal ActionResult<DoubleResponse> ProcessRequest(Func<double> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+, string payload = "")
         {
             try
             {
@@ -218,7 +289,9 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<AxisRatesResponse> ProcessRequest(Func<IAxisRates> p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
+        internal ActionResult<AxisRatesResponse> ProcessRequest(Func<IAxisRates> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+, string payload = "")
         {
             try
             {
@@ -250,7 +323,9 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<IntArray2DResponse> ProcessRequest(Func<int[,]> p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
+        internal ActionResult<IntArray2DResponse> ProcessRequest(Func<int[,]> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+, string payload = "")
         {
             try
             {
@@ -273,7 +348,9 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<StringListResponse> ProcessRequest(Func<IList<string>> p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
+        internal ActionResult<StringListResponse> ProcessRequest(Func<IList<string>> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+, string payload = "")
         {
             try
             {
@@ -296,7 +373,9 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<IntListResponse> ProcessRequest(Func<IList<int>> p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
+        internal ActionResult<IntListResponse> ProcessRequest(Func<IList<int>> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+, string payload = "")
         {
             try
             {
@@ -319,7 +398,9 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<IntResponse> ProcessRequest(Func<int> p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
+        internal ActionResult<IntResponse> ProcessRequest(Func<int> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+, string payload = "")
         {
             try
             {
@@ -342,7 +423,9 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<StringResponse> ProcessRequest(Func<string> p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
+        internal ActionResult<StringResponse> ProcessRequest(Func<string> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+, string payload = "")
         {
             try
             {
@@ -365,7 +448,9 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<Response> ProcessRequest(Action p, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string payload = "")
+        internal ActionResult<Response> ProcessRequest(Action p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
+, string payload = "")
         {
             try
             {
