@@ -52,60 +52,136 @@ namespace Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Route("{DeviceNumber}/action")]
-        public ActionResult<StringResponse> Action([Required][DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [Required][FromForm] string Action, [FromForm] string Parameters = "", [FromForm] [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
- [FromForm] [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-)
+        public ActionResult<StringResponse> Action(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [Required][FromForm][SwaggerSchema("A well known name that represents the action to be carried out.")] string Action, 
+            [FromForm][SwaggerSchema("List of required parameters or an Empty String if none are required.")] string Parameters = "",
+            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).Action(Action, Parameters), DeviceManager.ServerTransactionID, (uint)ClientID, (uint)ClientTransactionID, $"Action: {Action}, Parameters {Parameters}");
         }
 
+        /// <summary>
+        /// Transmits an arbitrary string to the device
+        /// </summary>
+        /// <remarks>
+        /// <para>Transmits an arbitrary string to the device and does not wait for a response. Optionally, protocol framing characters may be added to the string before transmission.</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="Command">A well known name that represents the action to be carried out.</param>
+        /// <param name="Raw">If set to true the string is transmitted 'as-is', if set to false then protocol framing characters may be added prior to transmission.</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Route("{DeviceNumber}/commandblind")]
-        public ActionResult<Response> CommandBlind([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
- [FromForm] [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-)
+        public ActionResult<Response> CommandBlind(
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [Required][FromForm][SwaggerSchema("The literal command string to be transmitted.")] string Command, 
+            [FromForm][SwaggerSchema("If set to true the string is transmitted 'as-is', if set to false then protocol framing characters may be added prior to transmission.")] bool Raw = false, 
+            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).CommandBlind(Command, Raw), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Command {Command}, Raw {Raw}");
         }
 
+        /// <summary>
+        /// Transmits an arbitrary string to the device and returns a boolean value from the device.
+        /// </summary>
+        /// <remarks>
+        /// <para>Transmits an arbitrary string to the device and waits for a boolean response. Optionally, protocol framing characters may be added to the string before transmission.</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="Command">A well known name that represents the action to be carried out.</param>
+        /// <param name="Raw">If set to true the string is transmitted 'as-is', if set to false then protocol framing characters may be added prior to transmission.</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Route("{DeviceNumber}/commandbool")]
-        public ActionResult<BoolResponse> CommandBool([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
- [FromForm] [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-)
+        public ActionResult<BoolResponse> CommandBool(
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [Required][FromForm][SwaggerSchema("The literal command string to be transmitted.")] string Command, 
+            [FromForm][SwaggerSchema("If set to true the string is transmitted 'as-is', if set to false then protocol framing characters may be added prior to transmission.")] bool Raw = false, 
+            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).CommandBool(Command, Raw), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Command={Command}, Raw={Raw}");
         }
 
+        /// <summary>
+        /// Transmits an arbitrary string to the device and returns a string value from the device.
+        /// </summary>
+        /// <remarks>
+        /// <para>Transmits an arbitrary string to the device and waits for a string response. Optionally, protocol framing characters may be added to the string before transmission.</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="Command">A well known name that represents the action to be carried out.</param>
+        /// <param name="Raw">If set to true the string is transmitted 'as-is', if set to false then protocol framing characters may be added prior to transmission.</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Route("{DeviceNumber}/commandstring")]
-        public ActionResult<StringResponse> CommandString([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [Required][FromForm] string Command, [FromForm] bool Raw = false, [FromForm] [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
- [FromForm] [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-)
+        public ActionResult<StringResponse> CommandString(
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [Required][FromForm] string Command,
+            [FromForm] bool Raw = false, 
+            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).CommandString(Command, Raw), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Command={Command}, Raw={Raw}");
         }
 
+        /// <summary>
+        /// Retrieves the connected state of the device
+        /// </summary>
+        /// <remarks>
+        /// <para>Retrieves the connected state of the device</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Route("{DeviceNumber}/connected")]
-        public ActionResult<BoolResponse> Connected([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-)
+        public ActionResult<BoolResponse> Connected(
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).Connected, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
+        /// <summary>
+        /// Sets the connected state of the device
+        /// </summary>
+        /// <remarks>
+        /// <para>Sets the connected state of the device</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="Connected">Set True to connect to the device hardware, set False to disconnect from the device hardware.</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Route("{DeviceNumber}/connected")]
-        public ActionResult<Response> Connected([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [Required][FromForm] bool Connected, [FromForm] [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
- [FromForm] [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-)
+        public ActionResult<Response> Connected(
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [Required][FromForm][SwaggerSchema("Set True to connect to the device hardware, set False to disconnect from the device hardware.")] bool Connected, 
+            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             if (Connected || !ServerSettings.PreventRemoteDisconnects)
             {
@@ -114,62 +190,134 @@ namespace Alpaca
             return ProcessRequest(() => { }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
+        /// <summary>
+        /// Device description
+        /// </summary>
+        /// <remarks>
+        /// <para>The description of the device</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Route("{DeviceNumber}/description")]
-        public ActionResult<StringResponse> Description([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-)
+        public ActionResult<StringResponse> Description(
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).Description, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
+        /// <summary>
+        /// Device driver description
+        /// </summary>
+        /// <remarks>
+        /// <para>The description of the driver</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Route("{DeviceNumber}/driverinfo")]
-        public ActionResult<StringResponse> DriverInfo([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-)
+        public ActionResult<StringResponse> DriverInfo(
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).DriverInfo, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
+        /// <summary>
+        /// Driver Version
+        /// </summary>
+        /// <remarks>
+        /// <para>A string containing only the major and minor version of the driver.</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Route("{DeviceNumber}/driverversion")]
-        public ActionResult<StringResponse> DriverVersion([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-)
+        public ActionResult<StringResponse> DriverVersion(
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).DriverVersion, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
+        /// <summary>
+        /// The ASCOM Device interface version number that this device supports.
+        /// </summary>
+        /// <remarks>
+        /// <para>This method returns the version of the ASCOM device interface contract to which this device complies. Only one interface version is current at a moment in time and all new devices should be built to the latest interface version. Applications can choose which device interface versions they support and it is in their interest to support previous versions as well as the current version to ensure they can use the largest number of devices.</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Route("{DeviceNumber}/interfaceversion")]
-        public ActionResult<IntResponse> InterfaceVersion([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-)
+        public ActionResult<IntResponse> InterfaceVersion(
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).InterfaceVersion, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
+        /// <summary>
+        /// Device name
+        /// </summary>
+        /// <remarks>
+        /// <para>The name of the device</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Route("{DeviceNumber}/name")]
-        public ActionResult<StringResponse> Name([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-)
+        public ActionResult<StringResponse> Name(
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).Name, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
+        /// <summary>
+        /// Returns the list of action names supported by this driver.
+        /// </summary>
+        /// <remarks>
+        /// <para>Returns the list of action names supported by this driver.</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Route("{DeviceNumber}/supportedactions")]
-        public ActionResult<StringListResponse> SupportedActions([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-)
+        public ActionResult<StringListResponse> SupportedActions(
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => GetDevice(DeviceNumber).SupportedActions, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
@@ -178,10 +326,10 @@ namespace Alpaca
 
         [HttpPut]
         [Route("{DeviceNumber}/dispose")]
-        public ActionResult<Response> Dispose([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [FromForm] [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
- [FromForm] [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-)
+        public ActionResult<Response> Dispose(
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             if (!ServerSettings.PreventRemoteDisposes)
             {
