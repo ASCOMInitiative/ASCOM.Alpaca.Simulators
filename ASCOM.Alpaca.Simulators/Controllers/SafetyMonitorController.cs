@@ -23,7 +23,7 @@ namespace ASCOM.Alpaca.Simulators
 
         [HttpGet]
         [Route("{DeviceNumber}/issafe")]
-        public ActionResult<BoolResponse> IsSafe([DefaultValue(0)] [SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+        public ActionResult<BoolResponse> IsSafe([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
  [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
