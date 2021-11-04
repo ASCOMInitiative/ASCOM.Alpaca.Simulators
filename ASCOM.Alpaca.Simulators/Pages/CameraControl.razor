@@ -78,7 +78,7 @@
     {
         get
         {
-            return DeviceManager.GetCamera(InstanceID) as ASCOM.Simulators.Camera;
+            return DeviceManager.GetCamera((uint)InstanceID) as ASCOM.Simulators.Camera;
         }
     }
 

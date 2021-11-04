@@ -264,11 +264,11 @@ namespace ASCOM.Alpaca.Simulators
 
         //These methods allow access to specific devices for the API controllers and the device Blazor UI Pages
 
-        internal static ICameraV3 GetCamera(int DeviceID)
+        internal static ICameraV3 GetCamera(uint DeviceID)
         {
-            if (cameraV3s.ContainsKey(DeviceID))
+            if (cameraV3s.ContainsKey((int)DeviceID))
             {
-                return cameraV3s[DeviceID];
+                return cameraV3s[(int)DeviceID];
             }
             else
             {
@@ -276,11 +276,11 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ICoverCalibratorV1 GetCoverCalibrator(int DeviceID)
+        internal static ICoverCalibratorV1 GetCoverCalibrator(uint DeviceID)
         {
-            if (coverCalibratorV1s.ContainsKey(DeviceID))
+            if (coverCalibratorV1s.ContainsKey((int)DeviceID))
             {
-                return coverCalibratorV1s[DeviceID];
+                return coverCalibratorV1s[(int)DeviceID];
             }
             else
             {
@@ -288,11 +288,11 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static IDomeV2 GetDome(int DeviceID)
+        internal static IDomeV2 GetDome(uint DeviceID)
         {
-            if (domeV2s.ContainsKey(DeviceID))
+            if (domeV2s.ContainsKey((int)DeviceID))
             {
-                return domeV2s[DeviceID];
+                return domeV2s[(int)DeviceID];
             }
             else
             {
@@ -300,11 +300,11 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static IFilterWheelV2 GetFilterWheel(int DeviceID)
+        internal static IFilterWheelV2 GetFilterWheel(uint DeviceID)
         {
-            if (filterWheelV2s.ContainsKey(DeviceID))
+            if (filterWheelV2s.ContainsKey((int)DeviceID))
             {
-                return filterWheelV2s[DeviceID];
+                return filterWheelV2s[(int)DeviceID];
             }
             else
             {
@@ -312,11 +312,11 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static IFocuserV3 GetFocuser(int DeviceID)
+        internal static IFocuserV3 GetFocuser(uint DeviceID)
         {
-            if (focuserV3s.ContainsKey(DeviceID))
+            if (focuserV3s.ContainsKey((int)DeviceID))
             {
-                return focuserV3s[DeviceID];
+                return focuserV3s[(int)DeviceID];
             }
             else
             {
@@ -324,11 +324,11 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static IObservingConditions GetObservingConditions(int DeviceID)
+        internal static IObservingConditions GetObservingConditions(uint DeviceID)
         {
-            if (observingConditions.ContainsKey(DeviceID))
+            if (observingConditions.ContainsKey((int)DeviceID))
             {
-                return observingConditions[DeviceID];
+                return observingConditions[(int)DeviceID];
             }
             else
             {
@@ -336,11 +336,11 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static IRotatorV3 GetRotator(int DeviceID)
+        internal static IRotatorV3 GetRotator(uint DeviceID)
         {
-            if (rotatorV3s.ContainsKey(DeviceID))
+            if (rotatorV3s.ContainsKey((int)DeviceID))
             {
-                return rotatorV3s[DeviceID];
+                return rotatorV3s[(int)DeviceID];
             }
             else
             {
@@ -348,11 +348,11 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ISafetyMonitor GetSafetyMonitor(int DeviceID)
+        internal static ISafetyMonitor GetSafetyMonitor(uint DeviceID)
         {
-            if (safetyMonitors.ContainsKey(DeviceID))
+            if (safetyMonitors.ContainsKey((int)DeviceID))
             {
-                return safetyMonitors[DeviceID];
+                return safetyMonitors[(int)DeviceID];
             }
             else
             {
@@ -360,11 +360,11 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ISwitchV2 GetSwitch(int DeviceID)
+        internal static ISwitchV2 GetSwitch(uint DeviceID)
         {
-            if (switchV2s.ContainsKey(DeviceID))
+            if (switchV2s.ContainsKey((int)DeviceID))
             {
-                return switchV2s[DeviceID];
+                return switchV2s[(int)DeviceID];
             }
             else
             {
@@ -372,11 +372,11 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ITelescopeV3 GetTelescope(int DeviceID)
+        internal static ITelescopeV3 GetTelescope(uint DeviceID)
         {
-            if (telescopeV3s.ContainsKey(DeviceID))
+            if (telescopeV3s.ContainsKey((int)DeviceID))
             {
-                return telescopeV3s[DeviceID];
+                return telescopeV3s[(int)DeviceID];
             }
             else
             {

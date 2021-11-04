@@ -85,7 +85,7 @@
     {
         get
         {
-            return DeviceManager.GetObservingConditions(InstanceID) as ASCOM.Simulators.ObservingConditions;
+            return DeviceManager.GetObservingConditions((uint)InstanceID) as ASCOM.Simulators.ObservingConditions;
         }
     }
 

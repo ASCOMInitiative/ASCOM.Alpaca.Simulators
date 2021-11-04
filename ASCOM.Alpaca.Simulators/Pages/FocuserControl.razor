@@ -69,7 +69,7 @@
     {
         get
         {
-            return DeviceManager.GetFocuser(InstanceID) as ASCOM.Simulators.Focuser;
+            return DeviceManager.GetFocuser((uint)InstanceID) as ASCOM.Simulators.Focuser;
         }
     }
 

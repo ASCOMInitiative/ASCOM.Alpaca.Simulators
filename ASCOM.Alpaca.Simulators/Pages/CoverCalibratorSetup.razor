@@ -96,7 +96,7 @@
     {
         get
         {
-            return DeviceManager.GetCoverCalibrator(InstanceID) as ASCOM.Simulators.CoverCalibratorSimulator;
+            return DeviceManager.GetCoverCalibrator((uint)InstanceID) as ASCOM.Simulators.CoverCalibratorSimulator;
         }
     }
 

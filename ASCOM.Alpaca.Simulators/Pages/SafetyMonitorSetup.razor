@@ -46,7 +46,7 @@
     {
         get
         {
-            return DeviceManager.GetSafetyMonitor(InstanceID) as ASCOM.Simulators.SafetyMonitor;
+            return DeviceManager.GetSafetyMonitor((uint)InstanceID) as ASCOM.Simulators.SafetyMonitor;
         }
     }
 

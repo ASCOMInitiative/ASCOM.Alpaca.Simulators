@@ -76,7 +76,7 @@
     {
         get
         {
-            return DeviceManager.GetTelescope(InstanceID) as ASCOM.Simulators.Telescope;
+            return DeviceManager.GetTelescope((uint)InstanceID) as ASCOM.Simulators.Telescope;
         }
     }
 

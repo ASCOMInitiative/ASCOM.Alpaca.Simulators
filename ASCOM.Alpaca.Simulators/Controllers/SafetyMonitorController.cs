@@ -17,7 +17,7 @@ namespace ASCOM.Alpaca.Simulators
         public const string APIRoot = "api/v1/safetymonitor/";
 
         [NonAction]
-        public override IAscomDevice GetDevice(int DeviceNumber)
+        public override IAscomDevice GetDevice(uint DeviceNumber)
         {
             return DeviceManager.GetSafetyMonitor(DeviceNumber);
         }
@@ -38,7 +38,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/issafe")]
         public ActionResult<BoolResponse> IsSafe(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
