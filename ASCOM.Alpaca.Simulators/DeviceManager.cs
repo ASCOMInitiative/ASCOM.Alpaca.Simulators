@@ -246,7 +246,7 @@ namespace ASCOM.Alpaca.Simulators
 
             foreach (var dev in safetyMonitors)
             {
-                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "SafetyMonitro", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
+                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "SafetyMonitor", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
             }
 
             foreach (var dev in switchV2s)
