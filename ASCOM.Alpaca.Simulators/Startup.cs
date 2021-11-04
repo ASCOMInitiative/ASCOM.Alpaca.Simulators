@@ -1,3 +1,4 @@
+using ASCOM.Common.Alpaca;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -50,6 +51,8 @@ namespace ASCOM.Alpaca.Simulators
             {
                 services.AddSwaggerGen(c =>
                 {
+                    c.UseOneOfForPolymorphism();
+
                     c.SwaggerDoc("v1", new OpenApiInfo { Title = $"{ServerSettings.ServerName}", Description = "Please note that the Alpaca API documentation on the ASCOM website is the canonical version. There are several issues with this auto generated version that will be resolved in future versions. This is currently provided only for testing the simulators.", Version = "v0" });
 
                     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
