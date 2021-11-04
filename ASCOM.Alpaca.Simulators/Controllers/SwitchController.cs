@@ -2,9 +2,10 @@
 using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
 using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Mime;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -22,9 +23,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/maxswitch")]
         public ActionResult<IntResponse> MaxSwitch([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -32,9 +34,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/canwrite")]
         public ActionResult<BoolResponse> CanWrite([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -42,9 +45,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/getswitch")]
         public ActionResult<BoolResponse> GetSwitch([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -52,9 +56,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/getswitchdescription")]
         public ActionResult<StringResponse> GetSwitchDescription([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -62,9 +67,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/getswitchname")]
         public ActionResult<StringResponse> GetSwitchName([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -72,9 +78,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/getswitchvalue")]
         public ActionResult<DoubleResponse> GetSwitchValue([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -82,9 +89,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/minswitchvalue")]
         public ActionResult<DoubleResponse> MinSwitchValue([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -92,9 +100,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/maxswitchvalue")]
         public ActionResult<DoubleResponse> MaxSwitchValue([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -102,9 +111,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/switchstep")]
         public ActionResult<DoubleResponse> SwitchStep([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [Required][DefaultValue(0)] short ID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -112,9 +122,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/setswitch")]
         public ActionResult<Response> SetSwitch([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [FromForm][Required][DefaultValue(0)] short ID, [FromForm][Required] bool State, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [FromForm][Required][DefaultValue(0)] short ID, [FromForm][Required] bool State, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -122,9 +133,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/setswitchname")]
         public ActionResult<Response> SetSwitchName([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [FromForm][Required][DefaultValue(0)] short ID, [Required][FromForm] string Name, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [FromForm][Required][DefaultValue(0)] short ID, [Required][FromForm] string Name, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -132,9 +144,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/setswitchvalue")]
         public ActionResult<Response> SetSwitchValue([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [FromForm][Required][DefaultValue(0)] short ID, [Required][FromForm] double Value, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [FromForm][Required][DefaultValue(0)] short ID, [Required][FromForm] double Value, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {

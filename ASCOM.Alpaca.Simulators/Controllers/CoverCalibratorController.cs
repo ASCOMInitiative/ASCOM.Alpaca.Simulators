@@ -2,9 +2,10 @@
 using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
 using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Mime;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -20,9 +21,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/coverstate")]
         public ActionResult<IntResponse> CoverState([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -30,9 +32,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/calibratorstate")]
         public ActionResult<IntResponse> CalibratorState([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -40,9 +43,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/brightness")]
         public ActionResult<IntResponse> Brightness([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -50,9 +54,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/maxbrightness")]
         public ActionResult<IntResponse> MaxBrightness([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -60,9 +65,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/opencover")]
         public ActionResult<Response> OpenCover([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -70,9 +76,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/closecover")]
         public ActionResult<Response> CloseCover([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -80,9 +87,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/haltcover")]
         public ActionResult<Response> HaltCover([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -90,9 +98,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/calibratoron")]
         public ActionResult<Response> CalibratorOn([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [DefaultValue(0)][Required][FromForm] int Brightness, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [DefaultValue(0)][Required][FromForm] int Brightness, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -100,9 +109,10 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/calibratoroff")]
         public ActionResult<Response> CalibratorOff([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
- [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+ [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {

@@ -2,9 +2,10 @@
 using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
 using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Mime;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -34,10 +35,11 @@ namespace ASCOM.Alpaca.Simulators
         /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/issafe")]
         public ActionResult<BoolResponse> IsSafe(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription)] int DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetSafetyMonitor(DeviceNumber).IsSafe, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
