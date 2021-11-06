@@ -82,7 +82,7 @@ namespace Alpaca
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/commandblind")]
-        public ActionResult<Response> CommandBlind(
+        public ActionResult<VoidResponse> CommandBlind(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The literal command string to be transmitted.")] string Command,
             [FromForm][SwaggerSchema("If set to true the string is transmitted 'as-is', if set to false then protocol framing characters may be added prior to transmission.")] bool Raw = false,
@@ -185,7 +185,7 @@ namespace Alpaca
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/connected")]
-        public ActionResult<Response> Connected(
+        public ActionResult<VoidResponse> Connected(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Set True to connect to the device hardware, set False to disconnect from the device hardware.")] bool Connected,
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -341,7 +341,7 @@ namespace Alpaca
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/dispose")]
-        public ActionResult<Response> Dispose(
+        public ActionResult<VoidResponse> Dispose(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -611,7 +611,7 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<Response> ProcessRequest(Action p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+        internal ActionResult<VoidResponse> ProcessRequest(Action p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 , string payload = "")
         {
