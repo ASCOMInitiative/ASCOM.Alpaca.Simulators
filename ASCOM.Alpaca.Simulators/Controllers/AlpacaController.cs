@@ -345,23 +345,23 @@ namespace Alpaca
         /// If no device is available an HTTP 400 is returned
         /// If the device call fails an Alpaca JSON error is returned
         /// </summary>
-        /// <param name="operation">The operation to preform on the device. Often this is just a lambda that returns a property. By passing it in as a function it can be executed inside a try catch and handle the exception.</param>
+        /// <param name="Operation">The operation to preform on the device. Often this is just a lambda that returns a property. By passing it in as a function it can be executed inside a try catch and handle the exception.</param>
         /// <param name="TransactionID">The current server transaction id</param>
         /// <param name="ClientID">The client id</param>
         /// <param name="ClientTransactionID">The client transaction id</param>
-        /// <param name="payload">Any payload values, optional, only used for logging</param>
+        /// <param name="Payload">Any payload values, optional, only used for logging</param>
         /// <returns></returns>
-        internal ActionResult<BoolResponse> ProcessRequest(Func<bool> operation, uint TransactionID, uint ClientID, uint ClientTransactionID, string payload = "")
+        internal ActionResult<BoolResponse> ProcessRequest(Func<bool> Operation, uint TransactionID, uint ClientID, uint ClientTransactionID, string Payload = "")
         {
             try
             {
-                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, payload);
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
                 return Ok(new BoolResponse()
                 {
                     ClientTransactionID = ClientTransactionID,
                     ServerTransactionID = TransactionID,
-                    Value = operation.Invoke()
+                    Value = Operation.Invoke()
                 });
             }
             catch (DeviceNotFoundException ex)
@@ -374,15 +374,13 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<DriveRatesResponse> ProcessRequest(Func<ITrackingRates> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-, string payload = "")
+        internal ActionResult<DriveRatesResponse> ProcessRequest(Func<ITrackingRates> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
-                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, payload);
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                var rates = p.Invoke();
+                var rates = Request.Invoke();
 
                 IList<DriveRate> res = new List<DriveRate>();
 
@@ -408,19 +406,17 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<DoubleResponse> ProcessRequest(Func<double> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-, string payload = "")
+        internal ActionResult<DoubleResponse> ProcessRequest(Func<double> Request, uint TransactionID, uint ClientID = 0,uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
-                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, payload);
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
                 return Ok(new DoubleResponse()
                 {
                     ClientTransactionID = ClientTransactionID,
                     ServerTransactionID = TransactionID,
-                    Value = p.Invoke()
+                    Value = Request.Invoke()
                 });
             }
             catch (DeviceNotFoundException ex)
@@ -433,15 +429,13 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<AxisRatesResponse> ProcessRequest(Func<IAxisRates> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-, string payload = "")
+        internal ActionResult<AxisRatesResponse> ProcessRequest(Func<IAxisRates> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
-                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, payload);
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                var rates = p.Invoke();
+                var rates = Request.Invoke();
 
                 IList<AxisRate> res = new List<AxisRate>();
 
@@ -467,19 +461,17 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<IntArray2DResponse> ProcessRequest(Func<int[,]> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-, string payload = "")
+        internal ActionResult<IntArray2DResponse> ProcessRequest(Func<int[,]> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
-                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, payload);
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
                 return Ok(new IntArray2DResponse()
                 {
                     ClientTransactionID = ClientTransactionID,
                     ServerTransactionID = TransactionID,
-                    Value = p.Invoke()
+                    Value = Request.Invoke()
                 });
             }
             catch (DeviceNotFoundException ex)
@@ -492,19 +484,17 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<StringListResponse> ProcessRequest(Func<IList<string>> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-, string payload = "")
+        internal ActionResult<StringListResponse> ProcessRequest(Func<IList<string>> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
-                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, payload);
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
                 return Ok(new StringListResponse()
                 {
                     ClientTransactionID = ClientTransactionID,
                     ServerTransactionID = TransactionID,
-                    Value = p.Invoke()
+                    Value = Request.Invoke()
                 });
             }
             catch (DeviceNotFoundException ex)
@@ -517,19 +507,17 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<IntListResponse> ProcessRequest(Func<IList<int>> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-, string payload = "")
+        internal ActionResult<IntListResponse> ProcessRequest(Func<IList<int>> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
-                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, payload);
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
                 return Ok(new IntListResponse()
                 {
                     ClientTransactionID = ClientTransactionID,
                     ServerTransactionID = TransactionID,
-                    Value = p.Invoke()
+                    Value = Request.Invoke()
                 });
             }
             catch (DeviceNotFoundException ex)
@@ -542,19 +530,17 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<IntResponse> ProcessRequest(Func<int> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-, string payload = "")
+        internal ActionResult<IntResponse> ProcessRequest(Func<int> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
-                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, payload);
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
                 return Ok(new IntResponse()
                 {
                     ClientTransactionID = ClientTransactionID,
                     ServerTransactionID = TransactionID,
-                    Value = p.Invoke()
+                    Value = Request.Invoke()
                 });
             }
             catch (DeviceNotFoundException ex)
@@ -567,19 +553,17 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<StringResponse> ProcessRequest(Func<string> p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-, string payload = "")
+        internal ActionResult<StringResponse> ProcessRequest(Func<string> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
-                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, payload);
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
                 return Ok(new StringResponse()
                 {
                     ClientTransactionID = ClientTransactionID,
                     ServerTransactionID = TransactionID,
-                    Value = p.Invoke()
+                    Value = Request.Invoke()
                 });
             }
             catch (DeviceNotFoundException ex)
@@ -592,14 +576,12 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<VoidResponse> ProcessRequest(Action p, uint TransactionID, [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
- [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
-, string payload = "")
+        internal ActionResult<VoidResponse> ProcessRequest(Action Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
-                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, payload);
-                p.Invoke();
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
+                Request.Invoke();
                 return Ok(new Response() { ClientTransactionID = ClientTransactionID, ServerTransactionID = TransactionID });
             }
             catch (DeviceNotFoundException ex)
