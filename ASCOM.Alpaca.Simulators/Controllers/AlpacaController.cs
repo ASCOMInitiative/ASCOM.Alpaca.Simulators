@@ -336,25 +336,6 @@ namespace Alpaca
             return ProcessRequest(() => GetDevice(DeviceNumber).SupportedActions, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
-        #region IDisposable Members
-
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [Route("{DeviceNumber}/dispose")]
-        public ActionResult<VoidResponse> Dispose(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            if (!ServerSettings.PreventRemoteDisposes)
-            {
-                return ProcessRequest(() => { GetDevice(DeviceNumber).Dispose(); }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-            }
-            return ProcessRequest(() => { }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-
-        #endregion IDisposable Members
-
         #endregion Common Methods
 
         /// <summary>
