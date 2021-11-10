@@ -236,7 +236,7 @@ namespace ASCOM.Alpaca.Simulators
 
             foreach (var dev in observingConditions)
             {
-                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "ObservingCondition", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
+                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "ObservingConditions", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
             }
 
             foreach (var dev in rotatorV3s)
