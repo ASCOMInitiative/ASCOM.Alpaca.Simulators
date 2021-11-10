@@ -56,8 +56,8 @@
     <DefineConstants Condition=" '$(AppImage)' == 'true' ">$(DefineConstants);BUNDLED</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\Projects\Repos\ASCOM.Alpaca.Simulators\ASCOM.Alpaca.Simulators\ascom.alpaca.simulators.xml</DocumentationFile>
+  <PropertyGroup>
+    <DocumentationFile>.\ascom.alpaca.simulators.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
