@@ -46,6 +46,12 @@
     <ProjectReference Include="..\TelescopeSimulator\TelescopeSimulator.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ascom.alpaca.simulators.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
   <PropertyGroup>
     <DefineConstants Condition=" '$(AppImage)' == 'true' ">$(DefineConstants);BUNDLED</DefineConstants>
   </PropertyGroup>

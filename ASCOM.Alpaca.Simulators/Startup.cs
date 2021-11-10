@@ -58,7 +58,16 @@ namespace ASCOM.Alpaca.Simulators
 
                     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                    c.IncludeXmlComments(xmlPath);
+
+                    if (File.Exists(xmlPath))
+                    {
+                        c.IncludeXmlComments(xmlPath);
+                    }
+                    else
+                    {
+                        Logging.LogInformation("Failed to find simulator xml documentation.");
+                    }
+
 
                     if (File.Exists(Path.Combine(AppContext.BaseDirectory, "ASCOM.Common.xml")))
                     {
