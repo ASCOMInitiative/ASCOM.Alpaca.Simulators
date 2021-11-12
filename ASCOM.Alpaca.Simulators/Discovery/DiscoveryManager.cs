@@ -83,7 +83,7 @@ namespace ASCOM.Alpaca.Simulators.Discovery
         {
             if (ServerSettings.AllowDiscovery)
             {
-                Console.WriteLine($"Starting Discovery on port: {port}");
+                Console.WriteLine($"Starting Discovery on port: 32227");
 
                 if (!Dns.GetHostAddresses(Dns.GetHostName()).Any(o => o.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6))
                 {
