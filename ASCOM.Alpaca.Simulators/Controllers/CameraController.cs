@@ -1001,7 +1001,16 @@ namespace ASCOM.Alpaca.Simulators
 
                 Array raw_data = (Array)DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant;
 
-                var type = raw_data.GetValue(0, 0).GetType();
+                Type type = null;
+
+                if(raw_data.Rank == 2)
+                {
+                    type = raw_data.GetValue(0,0).GetType();
+                }
+                else if (raw_data.Rank == 3)
+                {
+                    type = raw_data.GetValue(0, 0, 0).GetType();
+                }
 
                 if (type == typeof(int))
                 {
@@ -1083,9 +1092,9 @@ namespace ASCOM.Alpaca.Simulators
 
             for (int i = 0; i < raw.GetLength(0); ++i)
             {
-                for (int j = 0; j < raw.GetLength(0); ++j)
+                for (int j = 0; j < raw.GetLength(1); ++j)
                 {
-                    for (int k = 0; k < raw.GetLength(0); ++k)
+                    for (int k = 0; k < raw.GetLength(2); ++k)
                     {
                         result[i, j, k] = (T)raw.GetValue(i, j, k);
                     }
