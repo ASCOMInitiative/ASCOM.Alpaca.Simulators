@@ -252,23 +252,6 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static bool PreventRemoteDisposes
-        {
-            get
-            {
-                if (bool.TryParse(Profile.GetValue("PreventRemoteDisposes", true.ToString()), out bool result))
-                {
-                    return result;
-                }
-                return true;
-            }
-            set
-            {
-                Discovery.DiscoveryManager.DiscoveryResponder.LocalRespondOnlyToLocalHost = value;
-                Profile.WriteValue("PreventRemoteDisposes", value.ToString());
-            }
-        }
-
         internal static bool UseAuth
         {
             get

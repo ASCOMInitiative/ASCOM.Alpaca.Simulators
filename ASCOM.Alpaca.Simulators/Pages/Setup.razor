@@ -95,12 +95,6 @@
             <input type="checkbox" @bind="PreventRemoteDisconnects">
         </div>
         <div class="grid-item-right">
-            <span>Prevent Disposes:</span>
-        </div>
-        <div class="grid-item-left">
-            <input type="checkbox" @bind="PreventRemoteDisposes">
-        </div>
-        <div class="grid-item-right">
         </div>
         <div class="grid-item-right">
             <button @onclick="SaveDriverSettings" style="min-width:12ch; vertical-align:middle;">Save</button>
@@ -292,12 +286,6 @@
         set;
     } = ServerSettings.PreventRemoteDisconnects;
 
-    bool PreventRemoteDisposes
-    {
-        get;
-        set;
-    } = ServerSettings.PreventRemoteDisposes;
-
     bool RequireAuthorization
     {
         get;
@@ -395,7 +383,6 @@
         try
         {
             ServerSettings.PreventRemoteDisconnects = PreventRemoteDisconnects;
-            ServerSettings.PreventRemoteDisposes = PreventRemoteDisposes;
 
             DisplaySuccess("Driver Settings Saved");
         }
