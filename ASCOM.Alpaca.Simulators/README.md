@@ -6,8 +6,8 @@ Currently the project exposes one of each ASCOM Alpaca Device type. Device setti
 
 The current build uses the default development port of 32323. As development continues this may be changed.
 
-Discovery uses the ASCOM Standard library and the standard discovery port of 32227. By default discovery is turned on.
+Discovery uses the ASCOM Standard library and the standard discovery port of 32227. By default discovery is turned on, it can be turned off from the driver settings page.
 
 The project auto-generates Swagger pages while running. The Swagger pages shows all active controllers in the project by default. Because this exposes all controller types the Swagger page has all Alpaca Endpoints.
 
-Authentication is optional and can be turned on from the setup page. This currently supports HTTP basic authentication and token based authentication.
+Authentication is optional and can be turned on from the setup page. This currently supports HTTP basic authentication and token based authentication. Authentication can be configured and turned on / off from the driver settings page.
