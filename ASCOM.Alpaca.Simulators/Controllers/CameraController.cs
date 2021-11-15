@@ -815,7 +815,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         /// <summary>
-        /// Returns an array containing the exposure pixel values
+        /// Returns an array (2d or 3d of integers) containing the exposure pixel values
         /// </summary>
         /// <remarks>
         /// <para>
@@ -894,25 +894,9 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new IntArray3DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as int[,,]));
                 }
-                else if (DeviceManager.GetCamera(DeviceNumber).ImageArray is double[,])
-                {
-                    rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new DoubleArray2DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as double[,]));
-                }
-                else if (DeviceManager.GetCamera(DeviceNumber).ImageArray is double[,,])
-                {
-                    rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new DoubleArray3DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as double[,,]));
-                }
-                else if (DeviceManager.GetCamera(DeviceNumber).ImageArray is short[,])
-                {
-                    rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new ShortArray2DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as short[,]));
-                }
-                else if (DeviceManager.GetCamera(DeviceNumber).ImageArray is short[,,])
-                {
-                    rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new ShortArray3DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as short[,,]));
-                }
                 else
                 {
-                    throw new Exception("Failed to read ImageArray type from camera");
+                    throw new Exception("Failed to read correct ImageArray type from camera");
                 }
 
                 return Content(rawresponse, "application/json; charset=utf-8");
