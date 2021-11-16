@@ -151,7 +151,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/reverse")]
-        public ActionResult<VoidResponse> Reverse(
+        public ActionResult<Response> Reverse(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True if the rotation and angular direction must be reversed to match the optical characteristcs")] bool Reverse, 
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -221,7 +221,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/halt")]
-        public ActionResult<VoidResponse> Halt(
+        public ActionResult<Response> Halt(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -245,7 +245,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/move")]
-        public ActionResult<VoidResponse> Move(
+        public ActionResult<Response> Move(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][DefaultValue(0)][FromForm][SwaggerSchema("Relative position to move in degrees from current Position.")] double Position, 
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -270,7 +270,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/moveabsolute")]
-        public ActionResult<VoidResponse> MoveAbsolute(
+        public ActionResult<Response> MoveAbsolute(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][DefaultValue(0)][FromForm][SwaggerSchema("Absolute position in degrees.")] double Position, 
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -295,7 +295,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/movemechanical")]
-        public ActionResult<VoidResponse> MoveMechanical(
+        public ActionResult<Response> MoveMechanical(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][DefaultValue(0)][FromForm][SwaggerSchema("Absolute position in degrees.")] double Position, 
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -320,7 +320,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/sync")]
-        public ActionResult<VoidResponse> Sync(
+        public ActionResult<Response> Sync(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][DefaultValue(0)][FromForm][SwaggerSchema("Absolute position in degrees.")] double Position, 
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,

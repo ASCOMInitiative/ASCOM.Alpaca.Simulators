@@ -260,7 +260,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/setswitch")]
-        public ActionResult<VoidResponse> SetSwitch(
+        public ActionResult<Response> SetSwitch(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short ID, 
             [FromForm][Required][SwaggerSchema("The required control state(True or False)")] bool State, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -286,7 +286,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/setswitchname")]
-        public ActionResult<VoidResponse> SetSwitchName(
+        public ActionResult<Response> SetSwitchName(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short ID, 
             [Required][FromForm][SwaggerSchema("The name of the device")] string Name, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -312,7 +312,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/setswitchvalue")]
-        public ActionResult<VoidResponse> SetSwitchValue(
+        public ActionResult<Response> SetSwitchValue(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short ID, 
             [Required][FromForm][SwaggerSchema("The value to be set, between MinSwitchValue and MaxSwitchValue")] double Value, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,

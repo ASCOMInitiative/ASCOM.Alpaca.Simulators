@@ -82,7 +82,7 @@ namespace Alpaca
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/commandblind")]
-        public ActionResult<VoidResponse> CommandBlind(
+        public ActionResult<Response> CommandBlind(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The literal command string to be transmitted.")] string Command,
             [FromForm][SwaggerSchema("If set to true the string is transmitted 'as-is', if set to false then protocol framing characters may be added prior to transmission.")] bool Raw = false,
@@ -185,7 +185,7 @@ namespace Alpaca
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/connected")]
-        public ActionResult<VoidResponse> Connected(
+        public ActionResult<Response> Connected(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Set True to connect to the device hardware, set False to disconnect from the device hardware.")] bool Connected,
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -576,7 +576,7 @@ namespace Alpaca
             }
         }
 
-        internal ActionResult<VoidResponse> ProcessRequest(Action Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
+        internal ActionResult<Response> ProcessRequest(Action Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {

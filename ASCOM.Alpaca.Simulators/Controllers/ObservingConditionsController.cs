@@ -61,7 +61,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/averageperiod")]
-        public ActionResult<VoidResponse> AveragePeriod(
+        public ActionResult<Response> AveragePeriod(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][DefaultValue(1)][FromForm][SwaggerSchema("Time period(hours) over which to average sensor readings")] double AveragePeriod, 
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -384,7 +384,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/refresh")]
-        public ActionResult<VoidResponse> Refresh(
+        public ActionResult<Response> Refresh(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)

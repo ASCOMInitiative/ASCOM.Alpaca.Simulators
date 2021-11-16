@@ -107,7 +107,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/binx")]
-        public ActionResult<VoidResponse> BinX(
+        public ActionResult<Response> BinX(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The X binning value")] short BinX,
             [Required][FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -155,7 +155,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/biny")]
-        public ActionResult<VoidResponse> BinY(
+        public ActionResult<Response> BinY(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The Y binning value")] short BinY,
             [Required][FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -456,7 +456,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/cooleron")]
-        public ActionResult<VoidResponse> CoolerOn(
+        public ActionResult<Response> CoolerOn(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Cooler state")] bool CoolerOn,
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -619,7 +619,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/fastreadout")]
-        public ActionResult<VoidResponse> FastReadout(
+        public ActionResult<Response> FastReadout(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True to enable fast readout mode")] bool FastReadout,
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -690,7 +690,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/gain")]
-        public ActionResult<VoidResponse> Gain(
+        public ActionResult<Response> Gain(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Index of the current camera gain in the Gains string array.")] short Gain,
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -873,7 +873,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/imagearray")]
-        [ProducesResponseType(typeof(ImageArrayResponse), 200)]
+        [ProducesResponseType(typeof(ImageArrayResponseBase), 200)]
         public ActionResult ImageArray(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -970,7 +970,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/imagearrayvariant")]
-        [ProducesResponseType(typeof(ImageArrayResponse), 200)]
+        [ProducesResponseType(typeof(ImageArrayVariantResponseBase), 200)]
         public ActionResult ImageArrayVariant(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1288,7 +1288,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/numx")]
-        public ActionResult<VoidResponse> NumX(
+        public ActionResult<Response> NumX(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Sets the subframe width, if binning is active, value is in binned pixels.")] int NumX, 
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1336,7 +1336,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/numy")]
-        public ActionResult<VoidResponse> NumY(
+        public ActionResult<Response> NumY(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Sets the subframe height, if binning is active, value is in binned pixels.")] int NumY, 
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1384,7 +1384,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/offset")]
-        public ActionResult<VoidResponse> Offset(
+        public ActionResult<Response> Offset(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Index of the current camera offset in the offsets string array.")] int Offset, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1569,7 +1569,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/readoutmode")]
-        public ActionResult<VoidResponse> ReadoutMode(
+        public ActionResult<Response> ReadoutMode(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Index into the ReadoutModes array of string readout mode names indicating the camera's current readout mode.")] short ReadoutMode, 
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1693,7 +1693,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/setccdtemperature")]
-        public ActionResult<VoidResponse> SetCCDTemperature(
+        public ActionResult<Response> SetCCDTemperature(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Temperature set point(degrees Celsius).")] double SetCCDTemperature, 
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1741,7 +1741,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/startx")]
-        public ActionResult<VoidResponse> StartX(
+        public ActionResult<Response> StartX(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The subframe X axis start position in binned pixels.")] int StartX, 
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1789,7 +1789,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/starty")]
-        public ActionResult<VoidResponse> StartY(
+        public ActionResult<Response> StartY(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The subframe Y axis start position in binned pixels.")] int StartY, 
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1837,7 +1837,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/subexposureduration")]
-        public ActionResult<VoidResponse> SubExposureDuration(
+        public ActionResult<Response> SubExposureDuration(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The request sub exposure duration in seconds")] double SubExposureDuration, 
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1861,7 +1861,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/abortexposure")]
-        public ActionResult<VoidResponse> AbortExposure(
+        public ActionResult<Response> AbortExposure(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1886,7 +1886,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/pulseguide")]
-        public ActionResult<VoidResponse> PulseGuide(
+        public ActionResult<Response> PulseGuide(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Direction of movement(0 = North, 1 = South, 2 = East, 3 = West)")] GuideDirection Direction, 
             [Required][FromForm][SwaggerSchema("Duration of movement in milli-seconds")] int Duration, 
@@ -1913,7 +1913,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/startexposure")]
-        public ActionResult<VoidResponse> StartExposure(
+        public ActionResult<Response> StartExposure(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Duration of exposure in seconds")] double Duration, 
             [Required][FromForm][SwaggerSchema("True if light frame, false if dark frame.")] bool Light, 
@@ -1938,7 +1938,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/stopexposure")]
-        public ActionResult<VoidResponse> StopExposure(
+        public ActionResult<Response> StopExposure(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
