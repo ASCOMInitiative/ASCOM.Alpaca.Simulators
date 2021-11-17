@@ -921,7 +921,7 @@ namespace ASCOM.Alpaca.Simulators
         /// Where applicable, the size of NumPlanes has to be determined by inspection of the returned Array.
         /// </para>
         /// <para>
-        /// Since 32bit integers are always returned by this call, the returned JSON Type value (0 = Unknown, 1 = short(16bit), 2 = int(32bit), 3 = Double) is always 2. The number of planes is given in the returned Rank value.
+        /// This call can return values as short(16bit) integers, int(32bit) integers or double floating point values. The nature of the returned values is given in the Type parameter: 0 = Unknown, 1 = short(16bit), 2 = int(32bit), 3 = Double. The number of planes is given in the returned Rank value.
         /// </para>
         /// <para>
         /// When de-serialising to an object it helps enormously to know the array Rank beforehand so that the correct data class can be used. This can be achieved through a regular expression or by direct parsing of the returned JSON string to extract the Type and Rank values before de-serialising.
@@ -970,7 +970,9 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/imagearrayvariant")]
+        [ProducesResponseType(typeof(IntArray2DResponse), 200)]
         [ProducesResponseType(typeof(ImageArrayVariantResponseBase), 200)]
+
         public ActionResult ImageArrayVariant(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
