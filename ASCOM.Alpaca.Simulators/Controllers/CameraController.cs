@@ -873,7 +873,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/imagearray")]
-        [ProducesResponseType(typeof(ImageArrayResponseBase), 200)]
+        [ProducesResponseType(typeof(ImageResponseBase), 200)]
         public ActionResult ImageArray(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -970,9 +970,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/imagearrayvariant")]
-        [ProducesResponseType(typeof(IntArray2DResponse), 200)]
-        [ProducesResponseType(typeof(ImageArrayVariantResponseBase), 200)]
-
+        [ProducesResponseType(typeof(ImageResponseBase), 200)]
         public ActionResult ImageArrayVariant(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,

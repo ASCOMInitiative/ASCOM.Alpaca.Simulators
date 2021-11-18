@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="ASCOM.Alpaca.Device" Version="1.0.0-alpha24" />
-    <PackageReference Include="ASCOM.Common.Components" Version="1.0.0-alpha25.swashbuckle2" />
+    <PackageReference Include="ASCOM.Common.Components" Version="1.0.0-alpha25.swashbuckle" />
     <PackageReference Include="ASCOM.Exceptions" Version="6.5.1" />
     <PackageReference Include="ASCOM.Tools" Version="1.0.0-alpha25" />
     <PackageReference Include="Blazored.Toast" Version="3.2.2" />

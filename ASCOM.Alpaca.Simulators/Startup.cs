@@ -51,8 +51,9 @@ namespace ASCOM.Alpaca.Simulators
             {
                 services.AddSwaggerGen(c =>
                 {
-                    //This allows for an interesting camera image function but currently breaks plain responses.
-                    c.UseOneOfForPolymorphism();
+                    //This allows for an interesting camera image function but has some issues
+                    //This is off for now
+                    //c.UseOneOfForPolymorphism();
 
                     c.SwaggerDoc("v1", new OpenApiInfo { Title = $"{ServerSettings.ServerName}", Description = "Please note that the Alpaca API documentation on the ASCOM website is the canonical version. There are several issues with this auto generated version that will be resolved in future versions. This is currently provided only for testing the simulators.", Version = "v0" });
 
