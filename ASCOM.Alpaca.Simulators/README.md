@@ -1,6 +1,6 @@
 # ASCOM.Alpaca.Simulators
 
-An Alpaca Device Server built using ASP.Net 5, MVC and Blazor. The program creates and manages the controllers for the Alpaca devices as well as UIs for configuration.
+An Alpaca Device Server built using ASP.Net 6, MVC and Blazor. The program creates and manages the controllers for the Alpaca devices as well as UIs for configuration.
 
 Currently the project exposes one of each ASCOM Alpaca Device type. Device settings are provided by the Alpaca Settings endpoint for the device and are accessible from the menu. 
 
