@@ -12,8 +12,7 @@ namespace ASCOM.Alpaca
 
         internal static string GetStoragePassword(string password)
         {
-            byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[salt_length]);
+            byte[] salt = RandomNumberGenerator.GetBytes(salt_length);
 
             byte[] hash = new Rfc2898DeriveBytes(password, salt, iters).GetBytes(key_length);
 
