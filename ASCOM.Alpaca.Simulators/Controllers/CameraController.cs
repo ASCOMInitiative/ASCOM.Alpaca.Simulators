@@ -1,4 +1,4 @@
-﻿using Alpaca;
+using Alpaca;
 using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Helpers;
@@ -7,6 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net.Mime;
 
 namespace ASCOM.Alpaca.Simulators
@@ -883,6 +884,22 @@ namespace ASCOM.Alpaca.Simulators
             try
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
+
+
+                if (HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
+                {
+                    var bytes = (Array)DeviceManager.GetCamera(DeviceNumber).ImageArray;
+
+                    var response = bytes.ToByteArray(1, ClientTransactionID, TransactionID, AlpacaErrors.AlpacaNoError, string.Empty);
+
+                    Response.ContentType = AlpacaConstants.IMAGE_BYTES_MIME_TYPE;
+                    Response.StatusCode = (int)HttpStatusCode.OK; // Set the response status and status code
+
+                    Response.ContentLength = imageArrayBytes.Length;
+
+                    Response.Body.Write(response, 0, response.Length);
+                    return Response;
+                }
 
                 var rawresponse = string.Empty;
 
