@@ -12,14 +12,15 @@
 
   <ItemGroup>
     <PackageReference Include="ASCOM.Alpaca.Device" Version="1.0.0-alpha24" />
-    <PackageReference Include="ASCOM.Common.Components" Version="1.0.0-alpha25.swashbuckle" />
+    <PackageReference Include="ASCOM.Common.Components" Version="1.0.0-alpha26" />
     <PackageReference Include="ASCOM.Exceptions" Version="6.5.1" />
-    <PackageReference Include="ASCOM.Tools" Version="1.0.0-alpha25" />
+    <PackageReference Include="ASCOM.Tools" Version="1.0.0-alpha26" />
     <PackageReference Include="Blazored.Toast" Version="3.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>

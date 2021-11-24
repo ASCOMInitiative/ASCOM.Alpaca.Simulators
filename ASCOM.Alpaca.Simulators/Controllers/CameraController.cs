@@ -1,4 +1,4 @@
-using Alpaca;
+﻿using Alpaca;
 using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Helpers;
@@ -874,7 +874,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/imagearray")]
-        [ProducesResponseType(typeof(ImageResponseBase), 200)]
+        [ProducesResponseType(typeof(IntArray2DResponse), 200)]
         public ActionResult ImageArray(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -888,17 +888,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
                 {
-                    var bytes = (Array)DeviceManager.GetCamera(DeviceNumber).ImageArray;
 
-                    var response = bytes.ToByteArray(1, ClientTransactionID, TransactionID, AlpacaErrors.AlpacaNoError, string.Empty);
-
-                    Response.ContentType = AlpacaConstants.IMAGE_BYTES_MIME_TYPE;
-                    Response.StatusCode = (int)HttpStatusCode.OK; // Set the response status and status code
-
-                    Response.ContentLength = imageArrayBytes.Length;
-
-                    Response.Body.Write(response, 0, response.Length);
-                    return Response;
                 }
 
                 var rawresponse = string.Empty;
@@ -917,6 +907,7 @@ namespace ASCOM.Alpaca.Simulators
                 }
 
                 return Content(rawresponse, "application/json; charset=utf-8");
+
             }
             catch (DeviceNotFoundException ex)
             {
@@ -987,7 +978,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/imagearrayvariant")]
-        [ProducesResponseType(typeof(ImageResponseBase), 200)]
+        [ProducesResponseType(typeof(IntArray2DResponse), 200)]
         public ActionResult ImageArrayVariant(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
