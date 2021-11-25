@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Mime;
+using System.Threading.Tasks;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -875,7 +876,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/imagearray")]
         [ProducesResponseType(typeof(IntArray2DResponse), 200)]
-        public ActionResult ImageArray(
+        public async Task<ActionResult> ImageArray(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -888,7 +889,16 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
                 {
+                    var bytes = (Array)DeviceManager.GetCamera(DeviceNumber).ImageArray;
 
+                    var response = bytes.ToByteArray(1, ClientTransactionID, TransactionID, AlpacaErrors.AlpacaNoError, string.Empty);
+
+                    Response.ContentType = AlpacaConstants.IMAGE_BYTES_MIME_TYPE;
+
+                    Response.ContentLength = response.Length;
+
+                    await Response.Body.WriteAsync(response);
+                    return Ok();
                 }
 
                 var rawresponse = string.Empty;
@@ -979,7 +989,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/imagearrayvariant")]
         [ProducesResponseType(typeof(IntArray2DResponse), 200)]
-        public ActionResult ImageArrayVariant(
+        public async Task<ActionResult> ImageArrayVariant(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -989,20 +999,86 @@ namespace ASCOM.Alpaca.Simulators
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
 
-                var rawresponse = string.Empty;
-
                 Array raw_data = (Array)DeviceManager.GetCamera(DeviceNumber).ImageArrayVariant;
 
                 Type type = null;
 
-                if(raw_data.Rank == 2)
+                if (raw_data.Rank == 2)
                 {
-                    type = raw_data.GetValue(0,0).GetType();
+                    type = raw_data.GetValue(0, 0).GetType();
                 }
                 else if (raw_data.Rank == 3)
                 {
                     type = raw_data.GetValue(0, 0, 0).GetType();
                 }
+
+                Array bytes = null;
+
+
+                if (HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
+                {
+                    if (type == typeof(int))
+                    {
+                        if (raw_data.Rank == 2)
+                        {
+                            bytes = To2DArray<int>(raw_data);
+                        }
+                        else if (raw_data.Rank == 3)
+                        {
+                            bytes = To3DArray<int>(raw_data);
+                        }
+                        else
+                        {
+                            throw new Exception("Failed to read valid Rank from camera");
+                        }
+                    }
+                    else if (type == typeof(short))
+                    {
+                        if (raw_data.Rank == 2)
+                        {
+                            bytes = To2DArray<short>(raw_data);
+                        }
+                        else if (raw_data.Rank == 3)
+                        {
+                            bytes = To3DArray<short>(raw_data);
+                        }
+                        else
+                        {
+                            throw new Exception("Failed to read valid Rank from camera");
+                        }
+                    }
+                    else if (type == typeof(double))
+                    {
+                        if (raw_data.Rank == 2)
+                        {
+                            bytes = To2DArray<double>(raw_data);
+                        }
+                        else if (raw_data.Rank == 3)
+                        {
+                            bytes = To3DArray<double>(raw_data);
+                        }
+                        else
+                        {
+                            throw new Exception("Failed to read valid Rank from camera");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Failed to read ImageArrayVariant type from camera");
+                    }
+
+                    var response = bytes.ToByteArray(1, ClientTransactionID, TransactionID, AlpacaErrors.AlpacaNoError, string.Empty);
+
+                    Response.ContentType = AlpacaConstants.IMAGE_BYTES_MIME_TYPE;
+
+                    Response.ContentLength = response.Length;
+
+                    await Response.Body.WriteAsync(response);
+                    return Ok();
+                }
+
+                var rawresponse = string.Empty;
+
 
                 if (type == typeof(int))
                 {
