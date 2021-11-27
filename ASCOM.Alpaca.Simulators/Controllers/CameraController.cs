@@ -887,7 +887,7 @@ namespace ASCOM.Alpaca.Simulators
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
 
 
-                if (HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
+                if (ServerSettings.AllowImageBytesDownload && HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
                 {
                     var bytes = (Array)DeviceManager.GetCamera(DeviceNumber).ImageArray;
 
@@ -925,7 +925,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             catch (Exception ex)
             {
-                return Ok(ResponseHelpers.ExceptionResponseBuilder<AxisRatesResponse>(ex, ClientTransactionID, TransactionID));
+                return Ok(ResponseHelpers.ExceptionResponseBuilder<Response>(ex, ClientTransactionID, TransactionID));
             }
         }
 
@@ -1015,7 +1015,7 @@ namespace ASCOM.Alpaca.Simulators
                 Array bytes = null;
 
 
-                if (HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
+                if (ServerSettings.AllowImageBytesDownload && HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
                 {
                     if (type == typeof(int))
                     {
@@ -1138,7 +1138,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             catch (Exception ex)
             {
-                return Ok(ResponseHelpers.ExceptionResponseBuilder<AxisRatesResponse>(ex, ClientTransactionID, TransactionID));
+                return Ok(ResponseHelpers.ExceptionResponseBuilder<Response>(ex, ClientTransactionID, TransactionID));
             }
         }
 

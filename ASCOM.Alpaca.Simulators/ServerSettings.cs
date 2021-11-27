@@ -324,5 +324,21 @@ namespace ASCOM.Alpaca.Simulators
                 Profile.WriteValue("RunSwagger", value.ToString());
             }
         }
+
+        internal static bool AllowImageBytesDownload
+        {
+            get
+            {
+                if (bool.TryParse(Profile.GetValue("CanImageBytesDownload", true.ToString()), out bool result))
+                {
+                    return result;
+                }
+                return true;
+            }
+            set
+            {
+                Profile.WriteValue("CanImageBytesDownload", value.ToString());
+            }
+        }
     }
 }

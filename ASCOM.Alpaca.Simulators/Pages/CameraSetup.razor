@@ -199,6 +199,13 @@
     </fieldset>
 
     <fieldset disabled="@Device.Connected">
+        <legend>Image Download Settings</legend>
+
+        <input type="checkbox" id="CanImageBytes" @bind="CanImageBytes">
+        <label for="CanImageBytes">Allow Image Bytes Download</label><br>
+    </fieldset>
+
+    <fieldset disabled="@Device.Connected">
         <div class="grid-container-two">
 
             <div class="grid-item-left">
@@ -295,6 +302,8 @@
         OffsetMax = Device.offsetMax;
 
         CanPulseGuide = Device.canPulseGuide;
+
+        CanImageBytes = ServerSettings.AllowImageBytesDownload;
 
         base.OnInitialized();
     }
@@ -505,6 +514,12 @@
         set;
     }
 
+    bool CanImageBytes
+    {
+        get;
+        set;
+    }
+
     #endregion
 
     public void Reset()
@@ -703,6 +718,8 @@
             Device.canPulseGuide = CanPulseGuide;
 
             Device.SaveToProfile();
+
+            ServerSettings.AllowImageBytesDownload = CanImageBytes;
 
             toastService.ShowSuccess("Settings Saved");
         }
