@@ -898,7 +898,7 @@ namespace ASCOM.Alpaca.Simulators
                     Response.ContentLength = response.Length;
 
                     await Response.Body.WriteAsync(response);
-                    return Ok();
+                    return new EmptyResult();
                 }
 
                 var rawresponse = string.Empty;
@@ -1074,7 +1074,7 @@ namespace ASCOM.Alpaca.Simulators
                     Response.ContentLength = response.Length;
 
                     await Response.Body.WriteAsync(response);
-                    return Ok();
+                    return new EmptyResult();
                 }
 
                 var rawresponse = string.Empty;
