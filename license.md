@@ -11,8 +11,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ## 3rd Party packages
 This project uses awesome open source projects. You can find a list here in alphabetical order:
 
-* .Net 5.0 and Asp.Net Core - .NET Foundation and Contributors - MIT License
-* ASCOM Standard - ASCOM Initiative - MIT License
+* .Net 6.0 and Asp.Net Core - .NET Foundation and Contributors - MIT License
+* ASCOM Cross Platform Libraries - ASCOM Initiative - MIT License
 * Blazored.Toast - Chris Sainty - MIT License
 * Microsoft.AspNetCore.Authorization - Microsoft - Apache 2.0
 * Microsoft.AspNetCore.Identity - Microsoft - Apache 2.0
