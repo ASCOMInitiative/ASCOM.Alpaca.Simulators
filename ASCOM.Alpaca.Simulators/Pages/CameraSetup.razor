@@ -37,11 +37,11 @@
         <legend>CCD Settings</legend>
 
         <label for="CCDWidth">Width (Pixels)</label>
-        <input type="number" id="CCDWidth" min="0" max="4000" step="1" @bind="CCDWidth">
+        <input type="number" id="CCDWidth" min="0" max="100000" step="1" @bind="CCDWidth">
         <br>
 
         <label for="CCDHeight">Height (Pixels)</label>
-        <input type="number" id="CCDHeight" min="0" max="4000" step="1" @bind="CCDHeight">
+        <input type="number" id="CCDHeight" min="0" max="100000" step="1" @bind="CCDHeight">
         <br>
 
         <label for="MaxBinX">Max Bin X</label>
@@ -570,15 +570,15 @@
                 return;
             }
 
-            if (CCDWidth < 1 || CCDWidth > 4000)
+            if (CCDWidth < 1 || CCDWidth > 100000)
             {
-                toastService.ShowWarning("The CCD Width must be between 1 and 4000.");
+                toastService.ShowWarning("The CCD Width must be between 1 and 100000.");
                 return;
             }
 
-            if (CCDHeight < 1 || CCDHeight > 4000)
+            if (CCDHeight < 1 || CCDHeight > 100000)
             {
-                toastService.ShowWarning("The CCD Height must be between 1 and 4000.");
+                toastService.ShowWarning("The CCD Height must be between 1 and 100000.");
                 return;
             }
 
