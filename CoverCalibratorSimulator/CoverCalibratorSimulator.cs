@@ -31,6 +31,7 @@ namespace ASCOM.Simulators
         public void ResetSettings()
         {
             Profile?.Clear();
+            ReadProfile();
         }
 
         // Persistence constants
