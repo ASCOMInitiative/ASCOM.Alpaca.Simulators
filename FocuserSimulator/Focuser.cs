@@ -87,7 +87,7 @@ namespace ASCOM.Simulators
         private double _lastTemp;
         private DateTime lastTempUpdate;
         private Random RandomGenerator;
-        internal double stepSize;
+        internal double InternalStepSize;
         internal bool tempComp;
 
         private enum MotorState
@@ -477,13 +477,13 @@ namespace ASCOM.Simulators
             {
                 if (CanStepSize)
                 {
-                    return stepSize;
+                    return InternalStepSize;
                 }
                 throw new PropertyNotImplementedException("Property StepSize is not implemented");
             }
             internal set
             {
-                stepSize = value;
+                InternalStepSize = value;
             }
         }
 
@@ -649,7 +649,7 @@ namespace ASCOM.Simulators
             MaxIncrement = Convert.ToInt32(Profile.GetValue("MaxIncrement", "50000"), CultureInfo.InvariantCulture);
             MaxStep = Convert.ToInt32(Profile.GetValue("MaxStep", "50000"), CultureInfo.InvariantCulture);
             _position = Convert.ToInt32(Profile.GetValue("Position", "25000"), CultureInfo.InvariantCulture);
-            stepSize = Convert.ToDouble(Profile.GetValue("StepSize", "20"), CultureInfo.InvariantCulture);
+            InternalStepSize = Convert.ToDouble(Profile.GetValue("StepSize", "20"), CultureInfo.InvariantCulture);
             tempComp = Convert.ToBoolean(Profile.GetValue("TempComp", "false"), CultureInfo.InvariantCulture);
             TempCompAvailable = Convert.ToBoolean(Profile.GetValue("TempCompAvailable", "true"), CultureInfo.InvariantCulture);
             Temperature = Convert.ToDouble(Profile.GetValue("Temperature", "5"), CultureInfo.InvariantCulture);
@@ -679,7 +679,7 @@ namespace ASCOM.Simulators
             Profile.WriteValue("MaxIncrement", MaxIncrement.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue("MaxStep", MaxStep.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue("Position", _position.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("StepSize", stepSize.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue("StepSize", InternalStepSize.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue("TempComp", tempComp.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue("TempCompAvailable", TempCompAvailable.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue("Temperature", Temperature.ToString(CultureInfo.InvariantCulture));
