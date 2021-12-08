@@ -412,9 +412,9 @@
 
             ASCOM.Simulators.Hardware.g_bCanSyncAzimuth = CanSyncAzimuth;
 
-            ASCOM.Simulators.Hardware.g_bStandardAtHome = AtHomeWithoutFindHome;
+            ASCOM.Simulators.Hardware.g_bStandardAtHome = !AtHomeWithoutFindHome;
 
-            ASCOM.Simulators.Hardware.g_bStandardAtPark = AtParkWithoutPark;
+            ASCOM.Simulators.Hardware.g_bStandardAtPark = !AtParkWithoutPark;
 
             ASCOM.Simulators.Hardware.g_bStartShutterError = StartUpWithShutterError;
 
