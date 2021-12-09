@@ -199,8 +199,20 @@ namespace ASCOM.Simulators
 
 		public bool Reverse
 		{
-			get { return RotatorHardware.Reverse; }
-			set { RotatorHardware.Reverse = value; }
+			get { 
+				if(InterfaceVersion < 3 && !CanReverse)
+                {
+					throw new PropertyNotImplementedException();
+                }
+				return RotatorHardware.Reverse; 
+			}
+			set {
+				if (InterfaceVersion < 3 && !CanReverse)
+				{
+					throw new PropertyNotImplementedException();
+				}
+				RotatorHardware.Reverse = value; 
+			}
 		}
 
 		public float StepSize
