@@ -269,9 +269,11 @@ namespace ASCOM.Simulators
             {
                 _isSafe = res;
             }
-
-            // A bad value is not very safe now is it?
-            _isSafe = false;
+            else
+            {
+                // A bad value is not very safe now is it?
+                _isSafe = false;
+            }
         }
 
         /// <summary>
