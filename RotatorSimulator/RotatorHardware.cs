@@ -104,6 +104,10 @@ namespace ASCOM.Simulators
 			Profile.WriteValue("RotationRate", rate.ToString(CultureInfo.InvariantCulture));
 			Profile.WriteValue("CanReverse", canreverse.ToString());
 			Profile.WriteValue( "Reverse", reverse.ToString());
+
+			RotationRate = (float)rate;
+			s_bCanReverse = canreverse;
+			s_bReverse = reverse;
 		}
 
 		//
