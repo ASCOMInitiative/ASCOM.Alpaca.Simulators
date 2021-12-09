@@ -176,7 +176,7 @@
                 return;
             }
 
-            ASCOM.Simulators.RotatorHardware.SaveProfile(RotationRate, CanReverse, Reverse);
+            ASCOM.Simulators.RotatorHardware.SaveProfile(RotationRate, CanReverse, Reverse, (float)SyncOffset);
 
             toastService.ShowSuccess("Settings Saved");
         }

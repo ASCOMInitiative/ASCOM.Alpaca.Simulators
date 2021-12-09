@@ -215,9 +215,8 @@ namespace ASCOM.Simulators
 
 		public float Offset
 		{
-			get;
-			set;
-		} = 0;
+			get => RotatorHardware.SyncOffset;
+		}
 
 		public float Position
 		{
@@ -234,7 +233,7 @@ namespace ASCOM.Simulators
 
 		public void Sync(float position)
 		{
-			Offset = position - MechanicalPosition;
+			RotatorHardware.SyncOffset = position - MechanicalPosition;
 		}
 
 

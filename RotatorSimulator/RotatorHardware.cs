@@ -27,6 +27,7 @@ namespace ASCOM.Simulators
 		private static float s_fSpeed;
 		private static bool s_bCanReverse;
 		private static bool s_bReverse;
+		private static float s_fsyncOffset;
 
 		//
 		// State variables
@@ -91,7 +92,7 @@ namespace ASCOM.Simulators
 			RotationRate = Convert.ToSingle(profile.GetValue("RotationRate", "3.0"), CultureInfo.InvariantCulture);
 			s_bCanReverse = Convert.ToBoolean(profile.GetValue("CanReverse", bool.TrueString));
 			s_bReverse = Convert.ToBoolean(profile.GetValue("Reverse", bool.FalseString));
-
+			s_fsyncOffset = Convert.ToSingle(profile.GetValue("SyncOffset", "0.0"), CultureInfo.InvariantCulture);
 		}
 
 		public static void ResetProfile()
@@ -99,15 +100,17 @@ namespace ASCOM.Simulators
 			Profile.Clear();
 		}
 
-		public static void SaveProfile(double rate, bool canreverse, bool reverse)  // "Finalize" exists in parent
+		public static void SaveProfile(double rate, bool canreverse, bool reverse, float offset)  // "Finalize" exists in parent
 		{
 			Profile.WriteValue("RotationRate", rate.ToString(CultureInfo.InvariantCulture));
 			Profile.WriteValue("CanReverse", canreverse.ToString());
-			Profile.WriteValue( "Reverse", reverse.ToString());
+			Profile.WriteValue("Reverse", reverse.ToString());
+			Profile.WriteValue("SyncOffset", offset.ToString());
 
 			RotationRate = (float)rate;
 			s_bCanReverse = canreverse;
 			s_bReverse = reverse;
+			s_fsyncOffset = offset;
 		}
 
 		//
@@ -117,6 +120,16 @@ namespace ASCOM.Simulators
 		{
 			get { return s_fSpeed * 1000; }				// Internally deg/millisecond
 			set { s_fSpeed = value / 1000; }
+        }
+
+		public static float SyncOffset
+        {
+			get => s_fsyncOffset;
+			set
+			{
+				s_fsyncOffset = value;
+				Profile.WriteValue("SyncOffset", value.ToString());
+			}
         }
 
         public static bool CanReverse
