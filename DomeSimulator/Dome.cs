@@ -237,10 +237,8 @@ namespace ASCOM.Simulators
         {
             get
             {
-                System.Reflection.Assembly Ass;
-
-                Ass = System.Reflection.Assembly.GetExecutingAssembly(); // Get our own assembly and report its version number
-                return Ass.GetName().Version.Major.ToString() + "." + Ass.GetName().Version.Minor.ToString();
+                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                return $"{version.Major}.{version.Minor}";
             }
         }
 

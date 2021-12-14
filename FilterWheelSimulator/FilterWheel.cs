@@ -127,7 +127,8 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return "6.0";
+                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                return $"{version.Major}.{version.Minor}";
             }
         }
 

@@ -40,7 +40,6 @@ namespace ASCOM.Simulators
         private static string _rotatorName = "Alpaca Rotator Sim";
         private static string _description = "ASCOM Rotator Driver for RotatorSimulator";
         private static string _driverInfo = "ASCOM.Simulator.Rotator";
-        private static string _driverVersion = "6.4";
         private static short _interfaceVersion = 3;
 
 		//
@@ -161,12 +160,6 @@ namespace ASCOM.Simulators
         {
             get { return _driverInfo; }
             set { _driverInfo = value; }
-        }
-
-        public static string DriverVersion
-        {
-            get { return _driverVersion; }
-            set { _driverVersion = value; }
         }
 
         public static short InterfaceVersion

@@ -54,11 +54,6 @@ namespace ASCOM.Simulators
         private const short interfaceVersion = 3;
 
         /// <summary>
-        /// Driver version number
-        /// </summary>
-        private const string driverVersion = "6.4";
-
-        /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
         /// The DeviceID is used by ASCOM applications to load the driver at runtime.
         /// </summary>
@@ -331,7 +326,11 @@ namespace ASCOM.Simulators
         /// <value>The driver version.</value>
         public string DriverVersion
         {
-            get { return driverVersion; }
+            get
+            {
+                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                return $"{version.Major}.{version.Minor}";
+            }
         }
 
         /// <summary>

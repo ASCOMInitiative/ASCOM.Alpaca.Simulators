@@ -232,10 +232,8 @@ namespace ASCOM.Simulators
         {
             get
             {
-                FileVersionInfo FV = Process.GetCurrentProcess().MainModule.FileVersionInfo; //Get the name of the executable without path or file extension
-                string driverVersion = FV.FileMajorPart.ToString() + "." + FV.FileMinorPart.ToString();
-                LogMessage("DriverVersion Get", driverVersion);
-                return driverVersion;
+                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                return $"{version.Major}.{version.Minor}";
             }
         }
 

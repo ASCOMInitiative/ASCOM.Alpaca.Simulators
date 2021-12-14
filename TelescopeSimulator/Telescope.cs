@@ -586,12 +586,10 @@ namespace ASCOM.Simulators
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "DriverVersion: ");
                 CheckVersionOne("DriverVersion", false);
-                Assembly asm = Assembly.GetExecutingAssembly();
-
-                string driverinfo = asm.GetName().Version.ToString();
-
-                SharedResources.TrafficEnd(driverinfo);
-                return driverinfo;
+                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                var driverversion = $"{version.Major}.{version.Minor}";
+                SharedResources.TrafficEnd(driverversion);
+                return driverversion;
             }
         }
 

@@ -154,7 +154,11 @@ namespace ASCOM.Simulators
 
 		public string DriverVersion
 		{
-			get { return RotatorHardware.DriverVersion; }
+			get
+			{
+				Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+				return $"{version.Major}.{version.Minor}";
+			}
 		}
 
 		public short InterfaceVersion
