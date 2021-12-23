@@ -29,10 +29,9 @@ Some future updates, not in order
 3. Add a traffic monitor to the UI
 4. Add camera support for user supplied images
 5. Add temperature simulator to camera
-6. Improve synchronous method calls 
-7. Add TLS support 
-8. General UI Improvements
-9. Cleanup and modernization of simulator ports
+6. Add TLS support 
+7. General UI Improvements
+8. Cleanup and modernization of simulator ports
 ## Feedback
 
 Feedback can be given to the ASCOM Developer forum or here on the Github page. For issues please include any relevant logs. Please note that this is not the appropriate place to request changes to the Alpaca protocols. This is an implementation of the protocols, not the protocols themselves.
