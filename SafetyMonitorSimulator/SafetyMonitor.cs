@@ -186,7 +186,12 @@ namespace ASCOM.Simulators
         /// <value>State of the Monitor</value>
         public bool IsSafe
         {
-            get { return _isSafe; }
+            get {
+                if (!Connected)
+                {
+                    return false;
+                }
+                return _isSafe; }
         }
 
         /// <summary>
