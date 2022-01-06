@@ -304,7 +304,7 @@ namespace ASCOM.Simulators
                 // Non-standard, Slewing true if shutter is opening/closing
                 if (g_bSlewingOpenClose)
                 {
-                    return HW_Slewing | (g_eShutterState == ShutterState.Closing) | (g_eShutterState == ShutterState.Opening);
+                    return (g_eSlewing != Going.slewNowhere) | (g_dDomeAlt != g_dTargetAlt) | (g_eShutterState == ShutterState.Closing) | (g_eShutterState == ShutterState.Opening);
                 }
                 else
                 {
