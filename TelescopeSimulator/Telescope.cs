@@ -242,7 +242,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                CheckVersionOne("AtHome", false);
+                CheckVersionOne("AtHome");
                 SharedResources.TrafficLine(SharedResources.MessageType.Polls, "AtHome: " + TelescopeHardware.AtHome);
                 return TelescopeHardware.AtHome;
             }
@@ -252,7 +252,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                CheckVersionOne("AtPark", false);
+                CheckVersionOne("AtPark");
                 SharedResources.TrafficLine(SharedResources.MessageType.Polls, "AtPark: " + TelescopeHardware.AtPark);
                 return TelescopeHardware.AtPark;
             }
@@ -335,7 +335,7 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "CanSetDeclinationRate: ");
-                CheckVersionOne("CanSetDeclinationRate", false);
+                CheckVersionOne("CanSetDeclinationRate");
                 SharedResources.TrafficEnd(TelescopeHardware.CanSetDeclinationRate.ToString());
                 return TelescopeHardware.CanSetDeclinationRate;
             }
@@ -364,7 +364,7 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "CanSetPointingState: ");
-                CheckVersionOne("CanSetPointingState", false);
+                CheckVersionOne("CanSetPointingState");
                 SharedResources.TrafficEnd(TelescopeHardware.CanSetPointingState.ToString());
                 return TelescopeHardware.CanSetPointingState;
             }
@@ -375,7 +375,7 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "CanSetRightAscensionRate: ");
-                CheckVersionOne("CanSetRightAscensionRate", false);
+                CheckVersionOne("CanSetRightAscensionRate");
                 SharedResources.TrafficEnd(TelescopeHardware.CanSetRightAscensionRate.ToString());
                 return TelescopeHardware.CanSetRightAscensionRate;
             }
@@ -404,7 +404,7 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "CanSlewAltAz: ");
-                CheckVersionOne("CanSlewAltAz", false);
+                CheckVersionOne("CanSlewAltAz");
                 SharedResources.TrafficEnd(TelescopeHardware.CanSlewAltAz.ToString());
                 return TelescopeHardware.CanSlewAltAz;
             }
@@ -415,7 +415,7 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "CanSlewAltAzAsync: ");
-                CheckVersionOne("CanSlewAltAzAsync", false);
+                CheckVersionOne("CanSlewAltAzAsync");
                 SharedResources.TrafficEnd(TelescopeHardware.CanSlewAltAzAsync.ToString());
                 return TelescopeHardware.CanSlewAltAzAsync;
             }
@@ -444,7 +444,7 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "CanSyncAltAz: ");
-                CheckVersionOne("CanSyncAltAz", false);
+                CheckVersionOne("CanSyncAltAz");
                 SharedResources.TrafficEnd(TelescopeHardware.CanSyncAltAz.ToString());
                 return TelescopeHardware.CanSyncAltAz;
             }
@@ -483,7 +483,7 @@ namespace ASCOM.Simulators
             {
                 var connected = TelescopeHardware.Connected;
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "Connected = " + connected.ToString());
-                TelescopeHardware.TL.LogVerbose($"Connected Get {connected.ToString()}");
+                TelescopeHardware.TL.LogVerbose($"Connected Get {connected}");
                 return connected;
             }
             set
@@ -554,14 +554,14 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "DoesRefraction: ");
-                CheckVersionOne("DoesRefraction", false);
+                CheckVersionOne("DoesRefraction");
                 SharedResources.TrafficEnd(TelescopeHardware.Refraction.ToString());
                 return TelescopeHardware.Refraction;
             }
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "DoesRefraction: ->");
-                CheckVersionOne("DoesRefraction", true);
+                CheckVersionOne("DoesRefraction");
                 SharedResources.TrafficEnd(value.ToString());
                 TelescopeHardware.Refraction = value;
             }
@@ -585,7 +585,7 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "DriverVersion: ");
-                CheckVersionOne("DriverVersion", false);
+                CheckVersionOne("DriverVersion");
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 var driverversion = $"{version.Major}.{version.Minor}";
                 SharedResources.TrafficEnd(driverversion);
@@ -598,7 +598,7 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "EquatorialSystem: ");
-                CheckVersionOne("EquatorialSystem", false);
+                CheckVersionOne("EquatorialSystem");
                 string output = "";
                 EquatorialCoordinateType eq = EquatorialCoordinateType.Other;
 
@@ -653,7 +653,7 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "FocalLength: ");
-                CheckVersionOne("FocalLength", false);
+                CheckVersionOne("FocalLength");
                 CheckCapability(TelescopeHardware.CanOptics, "FocalLength", false);
                 SharedResources.TrafficEnd(TelescopeHardware.FocalLength.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.FocalLength;
@@ -665,14 +665,14 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateDeclination: ");
-                CheckVersionOne("GuideRateDeclination", false);
+                CheckVersionOne("GuideRateDeclination");
                 SharedResources.TrafficEnd(TelescopeHardware.GuideRateDeclination.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.GuideRateDeclination;
             }
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateDeclination->: ");
-                CheckVersionOne("GuideRateDeclination", true);
+                CheckVersionOne("GuideRateDeclination");
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
                 TelescopeHardware.GuideRateDeclination = value;
             }
@@ -683,14 +683,14 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateRightAscension: ");
-                CheckVersionOne("GuideRateRightAscension", false);
+                CheckVersionOne("GuideRateRightAscension");
                 SharedResources.TrafficEnd(TelescopeHardware.GuideRateRightAscension.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.GuideRateRightAscension;
             }
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateRightAscension->: ");
-                CheckVersionOne("GuideRateRightAscension", true);
+                CheckVersionOne("GuideRateRightAscension");
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
                 TelescopeHardware.GuideRateRightAscension = value;
             }
@@ -700,7 +700,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                CheckVersionOne("InterfaceVersion", false);
+                CheckVersionOne("InterfaceVersion");
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: 3");
                 return 3;
             }
@@ -1244,14 +1244,14 @@ namespace ASCOM.Simulators
             {
                 DriveRate rate = TelescopeHardware.TrackingRate;
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "TrackingRate: ");
-                CheckVersionOne("TrackingRate", false);
+                CheckVersionOne("TrackingRate");
                 SharedResources.TrafficEnd(rate.ToString());
                 return rate;
             }
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "TrackingRate: -> ");
-                CheckVersionOne("TrackingRate", true);
+                CheckVersionOne("TrackingRate");
                 if ((value < DriveRate.DriveSidereal) || (value > DriveRate.DriveKing)) throw new InvalidValueException("TrackingRate", value.ToString(), "0 (DriveSidereal) to 3 (DriveKing)");
                 TelescopeHardware.TrackingRate = value;
                 SharedResources.TrafficEnd(value.ToString() + "(done)");
@@ -1371,16 +1371,6 @@ namespace ASCOM.Simulators
                 SharedResources.TrafficEnd(string.Format(CultureInfo.CurrentCulture, "{0} {1} out of range {2} to {3}", propertyOrMethod, value, min, max));
                 throw new InvalidValueException(propertyOrMethod, value.ToString(CultureInfo.CurrentCulture), string.Format(CultureInfo.CurrentCulture, "{0} to {1}", min, max));
             }
-        }
-
-        private static void CheckVersionOne(string property, bool accessorSet)
-        {
-            CheckVersionOne(property);
-            //if (TelescopeHardware.VersionOneOnly)
-            //{
-            //    SharedResources.TrafficEnd( property + " invalid in version 1");
-            //    throw new PropertyNotImplementedException(property, accessorSet);
-            //}
         }
 
         private static void CheckVersionOne(string property)
