@@ -261,11 +261,18 @@
         {
             if (Connected)
             {
-                if (Device.AtHome)
+                try
                 {
-                    return "At Home";
+                    if (Device.AtHome)
+                    {
+                        return "At Home";
+                    }
+                    return "Away from Home";
                 }
-                return "Away from Home";
+                catch
+                {
+                    //V1 drivers can not return this
+                }
             }
             return "--------";
         }
@@ -277,11 +284,18 @@
         {
             if (Connected)
             {
-                if (Device.AtHome)
+                try
                 {
-                    return "Red";
+                    if (Device.AtHome)
+                    {
+                        return "Red";
+                    }
+                    return "Green";
                 }
-                return "Green";
+                catch
+                {
+                    //V1 drivers can not return this
+                }
             }
             return "Red";
         }
@@ -293,11 +307,18 @@
         {
             if (Connected)
             {
-                if (Device.AtPark)
+                try
                 {
-                    return "Parked";
+                    if (Device.AtPark)
+                    {
+                        return "Parked";
+                    }
+                    return "Unparked";
                 }
-                return "Unparked";
+                catch
+                {
+                    //V1 drivers can not return this
+                }
             }
             return "--------";
         }
@@ -309,11 +330,18 @@
         {
             if (Connected)
             {
-                if (Device.AtPark)
+                try
                 {
-                    return "Red";
+                    if (Device.AtPark)
+                    {
+                        return "Red";
+                    }
+                    return "Green";
                 }
-                return "Green";
+                catch
+                {
+                    //V1 drivers can not return this
+                }
             }
             return "Red";
         }

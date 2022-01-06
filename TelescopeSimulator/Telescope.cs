@@ -700,9 +700,16 @@ namespace ASCOM.Simulators
         {
             get
             {
-                CheckVersionOne("InterfaceVersion");
-                SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: 3");
-                return 3;
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: 1");
+                    return 1;
+                }
+                else
+                {
+                    SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: 3");
+                    return 3;
+                }
             }
         }
 
