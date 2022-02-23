@@ -21,6 +21,17 @@ Prebuilt versions are available from the Github releases page (https://github.co
 2. --reset-auth -> Resets authentication allowing access without password
 3. --local-address -> Prints the localhost and port IE http://localhost:32323
 4. --urls=http://*:p -> Starts the server listening on * IP and port p. Use * as a wildcard for any available IP Address
+
+## Potability With Docker 🐋
+
+This project can also be run using docker via docker-compose:
+
+```sh
+docker compose -f docker-compose.yml up --build
+```
+
+This will expose the ASCOM Alpaca Simulation API and Blazer web UI on http://localhost:80, or even simpler, localhost on any browser of your choice.
+
 ## Roadmap
 Some future updates, not in order
 
