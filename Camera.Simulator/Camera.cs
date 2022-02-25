@@ -2714,7 +2714,7 @@ namespace ASCOM.Simulators
             return returnValue;
         }
 
-        private void InitialiseSimulator()
+        internal void InitialiseSimulator()
         {
             ReadFromProfile();
 

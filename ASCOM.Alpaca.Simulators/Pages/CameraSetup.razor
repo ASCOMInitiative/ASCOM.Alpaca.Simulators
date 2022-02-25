@@ -527,7 +527,7 @@
         try
         {
             Device.ClearProfile();
-            Device.ReadFromProfile();
+            Device.InitialiseSimulator();
 
             toastService.ShowSuccess("Settings Reset");
 
@@ -697,7 +697,7 @@
                 Device.readoutModes = new System.Collections.Generic.List<string>() { "Default" };
             }
 
-            Device.canAbortExposure = CanAbortExposure; ;
+            Device.canAbortExposure = CanAbortExposure;
 
             Device.canStopExposure = CanStopExposure;
 
@@ -720,6 +720,8 @@
             Device.SaveToProfile();
 
             ServerSettings.AllowImageBytesDownload = CanImageBytes;
+
+            Device.InitialiseSimulator();
 
             toastService.ShowSuccess("Settings Saved");
         }
