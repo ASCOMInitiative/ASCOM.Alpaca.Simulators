@@ -2228,7 +2228,13 @@ namespace ASCOM.Simulators
                     case CameraState.Exposing:
                     case CameraState.Reading:
                     case CameraState.Download:
-                        var pc = (short)(((DateTime.Now - exposureStartTime).TotalSeconds / exposureDuration) * 100);
+                        var ellapsed = (DateTime.Now - exposureStartTime).TotalSeconds;
+                        short pc = 100;
+                        if (ellapsed < exposureDuration)
+                        {
+                            pc = (short)((ellapsed / exposureDuration) * 100);
+                        }
+
                         Log.LogMessage("PercentCompleted", "state {0}, get {1}", cameraState, pc);
                         return pc;
                     case CameraState.Idle:
