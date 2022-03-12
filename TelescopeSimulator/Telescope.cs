@@ -1259,7 +1259,7 @@ namespace ASCOM.Simulators
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "TrackingRate: -> ");
                 CheckVersionOne("TrackingRate");
-                if ((value < DriveRate.DriveSidereal) || (value > DriveRate.DriveKing)) throw new InvalidValueException("TrackingRate", value.ToString(), "0 (DriveSidereal) to 3 (DriveKing)");
+                if ((value < DriveRate.Sidereal) || (value > DriveRate.King)) throw new InvalidValueException("TrackingRate", value.ToString(), "0 (DriveSidereal) to 3 (DriveKing)");
                 TelescopeHardware.TrackingRate = value;
                 SharedResources.TrafficEnd(value.ToString() + "(done)");
             }
@@ -1295,7 +1295,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        public void UnPark()
+        public void Unpark()
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "UnPark: ");
             CheckCapability(TelescopeHardware.CanUnpark, "UnPark");
@@ -1662,7 +1662,7 @@ namespace ASCOM.Simulators
             // the tracking rates supported by your telescope. The one value
             // (tracking rate) that MUST be supported is DriveSidereal!
             //
-            m_TrackingRates = new DriveRate[] { DriveRate.DriveSidereal, DriveRate.DriveKing, DriveRate.DriveLunar, DriveRate.DriveSolar };
+            m_TrackingRates = new DriveRate[] { DriveRate.Sidereal, DriveRate.King, DriveRate.Lunar, DriveRate.Solar };
         }
 
         #region ITrackingRates Members
@@ -1758,7 +1758,7 @@ namespace ASCOM.Simulators
             // the tracking rates supported by your telescope. The one value
             // (tracking rate) that MUST be supported is DriveSidereal!
             //
-            m_TrackingRates = new DriveRate[] { DriveRate.DriveSidereal };
+            m_TrackingRates = new DriveRate[] { DriveRate.Sidereal };
         }
 
         #region ITrackingRates Members

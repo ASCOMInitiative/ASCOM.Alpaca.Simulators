@@ -1925,7 +1925,7 @@ namespace ASCOM.Alpaca.Simulators
             [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).UnPark(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).Unpark(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
     }
 }

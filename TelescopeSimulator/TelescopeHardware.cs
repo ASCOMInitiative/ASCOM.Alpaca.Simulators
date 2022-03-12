@@ -587,7 +587,7 @@ namespace ASCOM.Simulators
                 rateRaDecOffsetInternal.Y = 0;
                 rateRaDecOffsetInternal.X = 0;
 
-                TrackingRate = DriveRate.DriveSidereal;
+                TrackingRate = DriveRate.Sidereal;
                 SlewSettleTime = 0;
                 ChangePark(AtPark);
 
@@ -1643,19 +1643,19 @@ namespace ASCOM.Simulators
             // generate the change in hour angle as a result of tracking
             switch (TrackingRate)
             {
-                case DriveRate.DriveSidereal:
+                case DriveRate.Sidereal:
                     haChange = SIDEREAL_RATE_DEG_SEC * updateInterval;     // change in degrees
                     break;
 
-                case DriveRate.DriveSolar:
+                case DriveRate.Solar:
                     haChange = SOLAR_RATE_DEG_SEC * updateInterval;     // change in degrees
                     break;
 
-                case DriveRate.DriveLunar:
+                case DriveRate.Lunar:
                     haChange = LUNAR_RATE_DEG_SEC * updateInterval;     // change in degrees
                     break;
 
-                case DriveRate.DriveKing:
+                case DriveRate.King:
                     haChange = KING_RATE_DEG_SEC * updateInterval;     // change in degrees
                     break;
             }
