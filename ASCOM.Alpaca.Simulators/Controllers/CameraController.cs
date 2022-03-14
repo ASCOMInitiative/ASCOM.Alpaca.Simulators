@@ -889,9 +889,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.AllowImageBytesDownload && HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
                 {
-                    var bytes = (Array)DeviceManager.GetCamera(DeviceNumber).ImageArray;
-
-                    var response = bytes.ToByteArray(1, ClientTransactionID, TransactionID, AlpacaErrors.AlpacaNoError, string.Empty);
+                    var response = ((Array)DeviceManager.GetCamera(DeviceNumber).ImageArray).ToByteArray(1, ClientTransactionID, TransactionID, AlpacaErrors.AlpacaNoError, string.Empty);
 
                     Response.ContentType = AlpacaConstants.IMAGE_BYTES_MIME_TYPE;
 
