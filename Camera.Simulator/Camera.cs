@@ -112,6 +112,7 @@ namespace ASCOM.Simulators
         private const string STR_Offset = "Offset";
         private const string STR_HasSubExposure = "HasSubExposure";
         private const string STR_SubExposureInterval = "SubExposureInterval";
+        private const string STR_UseCustomImage = "UseCustomImage";
 
         // Cooler configuration strings
         private const string STR_CoolerAmbientTemperature = "CoolerAmbientTemperature";
@@ -2519,8 +2520,16 @@ namespace ASCOM.Simulators
             exposureMin = Convert.ToDouble(Profile.GetValue(STR_MinExposure, "0.001"), CultureInfo.InvariantCulture);
             exposureResolution = Convert.ToDouble(Profile.GetValue(STR_ExposureResolution, "0.001"), CultureInfo.InvariantCulture);
 
-            string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly((GetType())).Location);
-            imagePath = Profile.GetValue(STR_ImagePath, Path.Combine(fullPath, @"m42-800x600.jpg"));
+            string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(GetType()).Location);
+            if (Convert.ToBoolean(Profile.GetValue(STR_UseCustomImage, false.ToString())))
+            {
+                imagePath = Profile.GetValue(STR_ImagePath, Path.Combine(fullPath, @"m42-800x600.jpg"));
+            }
+            else
+            {
+                imagePath = Path.Combine(fullPath, @"m42-800x600.jpg");
+            }
+
             applyNoise = Convert.ToBoolean(Profile.GetValue(STR_ApplyNoise, "false"), CultureInfo.InvariantCulture);
 
             canPulseGuide = Convert.ToBoolean(Profile.GetValue(STR_CanPulseGuide, "false"), CultureInfo.InvariantCulture);
