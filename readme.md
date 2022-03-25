@@ -15,7 +15,7 @@ There are builds available in the releases section. While in Beta breaking chang
 Currently development is focused on reaching a 1.0 stable release. However, even in beta form the simulators are quite functional and are routinely tested to ensure that they are conformant with both the ASCOM Conformance checker and the Alpaca specification.
 ## Builds
 
-Prebuilt versions are available from the Github releases page (https://github.com/DanielVanNoord/ASCOM.Alpaca.Simulators/releases). These include packages for Windows, Linux (x64, armhf and aarch64) and macOS (x64). Versions with preview in the name are test builds for future releases. Each build contains a platform specific binary called ascom.alpaca.simulators.
+Prebuilt versions are available from the Github releases page (https://github.com/DanielVanNoord/ASCOM.Alpaca.Simulators/releases). These include packages for Windows, Linux (x64, armhf and aarch64) and macOS (x64). Versions with preview in the name are test builds for future releases. Each build contains a platform specific binary called ascom.alpaca.simulators. Note that the AppImage builds require libfuse2.
 ## Command Line Arguments
 1. --reset -> Resets all settings for the drivers and server
 2. --reset-auth -> Resets authentication allowing access without password
