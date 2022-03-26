@@ -11,3 +11,5 @@ Discovery uses the ASCOM Standard library and the standard discovery port of 322
 The project auto-generates Swagger pages while running. The Swagger pages shows all active controllers in the project by default. Because this exposes all controller types the Swagger page has all Alpaca Endpoints.
 
 Authentication is optional and can be turned on from the setup page. This currently supports HTTP basic authentication and token based authentication. Authentication can be configured and turned on / off from the driver settings page.
+
+All devices offer configuration via Blazor pages. The configuration is persistent. Logging is accomplished via the ASCOM Cross Platform Libraries in the for of text files.
