@@ -87,7 +87,7 @@ namespace ASCOM.Alpaca.Simulators
                 new XMLProfile(ServerSettings.SettingsFolderName, Telescope, 0)));
 
             cameraV3s.Add(0, new ASCOM.Simulators.Camera(0, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, "Camera", 0)));
+                new XMLProfile(ServerSettings.SettingsFolderName, Camera, 0)));
         }
 
         /// <summary>
@@ -398,6 +398,21 @@ namespace ASCOM.Alpaca.Simulators
                 else
                 {
                     return "Telescope".ToLowerInvariant();
+                }
+            }
+        }
+
+        private static string Camera
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "Camera";
+                }
+                else
+                {
+                    return "Camera".ToLowerInvariant();
                 }
             }
         }
