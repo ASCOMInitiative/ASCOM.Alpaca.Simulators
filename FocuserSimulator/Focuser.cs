@@ -644,22 +644,22 @@ namespace ASCOM.Simulators
         /// </summary>
         private void LoadFocuserKeyValues()
         {
-            Absolute = Convert.ToBoolean(Profile.GetValue("Absolute", "true"), CultureInfo.InvariantCulture);
+            Absolute = Convert.ToBoolean(Profile.GetValue("Absolute", true.ToString()), CultureInfo.InvariantCulture);
             MaxIncrement = Convert.ToInt32(Profile.GetValue("MaxIncrement", "50000"), CultureInfo.InvariantCulture);
             MaxStep = Convert.ToInt32(Profile.GetValue("MaxStep", "50000"), CultureInfo.InvariantCulture);
             _position = Convert.ToInt32(Profile.GetValue("Position", "25000"), CultureInfo.InvariantCulture);
             InternalStepSize = Convert.ToDouble(Profile.GetValue("StepSize", "20"), CultureInfo.InvariantCulture);
-            tempComp = Convert.ToBoolean(Profile.GetValue("TempComp", "false"), CultureInfo.InvariantCulture);
-            TempCompAvailable = Convert.ToBoolean(Profile.GetValue("TempCompAvailable", "true"), CultureInfo.InvariantCulture);
+            tempComp = Convert.ToBoolean(Profile.GetValue("TempComp", false.ToString()), CultureInfo.InvariantCulture);
+            TempCompAvailable = Convert.ToBoolean(Profile.GetValue("TempCompAvailable", true.ToString()), CultureInfo.InvariantCulture);
             Temperature = Convert.ToDouble(Profile.GetValue("Temperature", "5"), CultureInfo.InvariantCulture);
             //extended focuser items
-            CanHalt = Convert.ToBoolean(Profile.GetValue("CanHalt", "true"), CultureInfo.InvariantCulture);
-            CanStepSize = Convert.ToBoolean(Profile.GetValue("CanStepSize", "true"), CultureInfo.InvariantCulture);
-            Synchronous = Convert.ToBoolean(Profile.GetValue("Synchronous", "true"), CultureInfo.InvariantCulture);
+            CanHalt = Convert.ToBoolean(Profile.GetValue("CanHalt", true.ToString()), CultureInfo.InvariantCulture);
+            CanStepSize = Convert.ToBoolean(Profile.GetValue("CanStepSize", true.ToString()), CultureInfo.InvariantCulture);
+            Synchronous = Convert.ToBoolean(Profile.GetValue("Synchronous", false.ToString()), CultureInfo.InvariantCulture);
             TempMax = Convert.ToDouble(Profile.GetValue("TempMax", "50"), CultureInfo.InvariantCulture);
             TempMin = Convert.ToDouble(Profile.GetValue("TempMin", "-50"), CultureInfo.InvariantCulture);
             TempPeriod = Convert.ToDouble(Profile.GetValue("TempPeriod", "3"), CultureInfo.InvariantCulture);
-            TempProbe = Convert.ToBoolean(Profile.GetValue("TempProbe", "true"), CultureInfo.InvariantCulture);
+            TempProbe = Convert.ToBoolean(Profile.GetValue("TempProbe", true.ToString()), CultureInfo.InvariantCulture);
             TempSteps = Convert.ToInt32(Profile.GetValue("TempSteps", "10"), CultureInfo.InvariantCulture);
             SettleTime = Convert.ToInt32(Profile.GetValue("SettleTime", "500"), CultureInfo.InvariantCulture);
         }
