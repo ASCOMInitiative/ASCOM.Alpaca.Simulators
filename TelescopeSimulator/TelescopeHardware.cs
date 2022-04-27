@@ -340,7 +340,7 @@ namespace ASCOM.Simulators
 
                     // Telescope Implemention
                     // Initialise mount type to German Polar
-                    s_Profile.WriteValue("AlignMode", "1"); // 1 = Start as German Polar m9ount type
+                    s_Profile.WriteValue("AlignMode", ((int)AlignmentMode.GermanPolar).ToString()); // 1 = Start as German Polar m9ount type
                     alignmentMode = AlignmentMode.GermanPolar; // Added by Peter because the Profile setting was set to German Polar but the alignment mode value at this point was still zer0 = Alt/Az!
 
                     s_Profile.WriteValue("ApertureArea", SharedResources.INSTRUMENT_APERTURE_AREA.ToString(CultureInfo.InvariantCulture));
@@ -462,16 +462,16 @@ namespace ASCOM.Simulators
 
                 switch (int.Parse(s_Profile.GetValue("AlignMode"), CultureInfo.InvariantCulture))
                 {
-                    case 0:
+                    case (int)AlignmentMode.AltAz:
                         alignmentMode = AlignmentMode.AltAz;
                         break;
 
-                    case 1:
-                        alignmentMode = AlignmentMode.GermanPolar;
+                    case (int)AlignmentMode.Polar:
+                        alignmentMode = AlignmentMode.Polar;
                         break;
 
-                    case 2:
-                        alignmentMode = AlignmentMode.Polar;
+                    case (int)AlignmentMode.GermanPolar:
+                        alignmentMode = AlignmentMode.GermanPolar;
                         break;
 
                     default:
@@ -730,20 +730,7 @@ namespace ASCOM.Simulators
             set
             {
                 alignmentMode = value;
-                switch (value)
-                {
-                    case AlignmentMode.AltAz:
-                        s_Profile.WriteValue("AlignMode", "0");
-                        break;
-
-                    case AlignmentMode.GermanPolar:
-                        s_Profile.WriteValue("AlignMode", "1");
-                        break;
-
-                    case AlignmentMode.Polar:
-                        s_Profile.WriteValue("AlignMode", "2");
-                        break;
-                }
+                s_Profile.WriteValue("AlignMode", ((int)value).ToString());
             }
         }
 
