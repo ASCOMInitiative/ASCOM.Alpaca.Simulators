@@ -739,6 +739,7 @@ namespace ASCOM.Simulators
                 case CameraState.Download:
                     // these are all possible exposure states so we can abort the exposure
                     exposureTimer.Enabled = false;
+                    exposureTimer.Stop();
                     cameraState = CameraState.Idle;
                     imageReady = false;
                     break;
