@@ -1135,10 +1135,6 @@ namespace ASCOM.Simulators
 
             TelescopeHardware.SyncToAltAzm(Azimuth, Altitude);
 
-            //TelescopeHardware.Altitude = Altitude;
-            //TelescopeHardware.Azimuth = Azimuth;
-
-            //TelescopeHardware.CalculateRaDec();
             SharedResources.TrafficEnd("done");
         }
 
@@ -1160,10 +1156,6 @@ namespace ASCOM.Simulators
 
             TelescopeHardware.SyncToTarget();
 
-            //TelescopeHardware.RightAscension = RightAscension;
-            //TelescopeHardware.Declination = Declination;
-
-            //TelescopeHardware.CalculateAltAz();
             SharedResources.TrafficEnd("done");
         }
 
@@ -1183,10 +1175,6 @@ namespace ASCOM.Simulators
 
             TelescopeHardware.SyncToTarget();
 
-            //TelescopeHardware.RightAscension = TelescopeHardware.TargetRightAscension;
-            //TelescopeHardware.Declination = TelescopeHardware.TargetDeclination;
-
-            //TelescopeHardware.CalculateAltAz();
             SharedResources.TrafficEnd("done");
         }
 
