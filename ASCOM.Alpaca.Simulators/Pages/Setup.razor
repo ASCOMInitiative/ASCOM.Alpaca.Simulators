@@ -397,6 +397,7 @@
         try
         {
             ServerSettings.LoggingLevel = LoggingLevel;
+            Logging.Log.SetMinimumLoggingLevel(LoggingLevel);
             DisplaySuccess("Logging Settings Saved");
         }
         catch(Exception ex)
