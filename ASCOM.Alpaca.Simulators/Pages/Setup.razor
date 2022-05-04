@@ -189,8 +189,22 @@
                 <option value="@LogLevel.Error">Error</option>
                 <option value="@LogLevel.Fatal">Fatal</option>
             </select>
-            <button @onclick="LoggingLevelChanged" style="min-width:12ch; vertical-align:middle;">Save</button>
+
         </div>
+
+        <div class="grid-item-right">
+            <span>Also write log to console:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox" @bind="LogToConsole">
+        </div>
+
+                <div class="grid-item-right">
+        </div>
+        <div class="grid-item-right">
+                    <button @onclick="SaveLogSettings" style="min-width:12ch; vertical-align:middle;">Save</button>
+        </div>
+
     </div>
 </fieldset>
 
@@ -306,6 +320,12 @@
         set;
     } = ServerSettings.LoggingLevel;
 
+    bool LogToConsole
+    {
+        get;
+        set;
+    } = ServerSettings.LogToConsole;
+
     string Password
     {
         get;
@@ -392,12 +412,13 @@
         }
     }
 
-    void LoggingLevelChanged()
+    void SaveLogSettings()
     {
         try
         {
             ServerSettings.LoggingLevel = LoggingLevel;
             Logging.Log.SetMinimumLoggingLevel(LoggingLevel);
+            ServerSettings.LogToConsole = LogToConsole;
             DisplaySuccess("Logging Settings Saved");
         }
         catch(Exception ex)
