@@ -3,13 +3,13 @@ using ASCOM.Tools;
 
 namespace ASCOM.Alpaca.Simulators
 {
-    public class MultiLogger : ASCOM.Common.Interfaces.ILogger
+    internal class MultiLogger : ASCOM.Common.Interfaces.ILogger
     {
-        public static bool LogToConsole
+        internal static bool LogToConsole
         {
-            get;
-            set;
-        } = true;
+            get => ServerSettings.LogToConsole;
+            set => ServerSettings.LogToConsole = value;
+        }
 
         private ConsoleLogger consoleLogger = new ConsoleLogger();
         private TraceLogger traceLogger;

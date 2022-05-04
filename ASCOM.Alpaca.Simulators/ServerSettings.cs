@@ -309,6 +309,22 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        internal static bool LogToConsole
+        {
+            get
+            {
+                if (bool.TryParse(Profile.GetValue("LogToConsole", false.ToString()), out bool result))
+                {
+                    return result;
+                }
+                return true;
+            }
+            set
+            {
+                Profile.WriteValue("LogToConsole", value.ToString());
+            }
+        }
+
         internal static bool RunSwagger
         {
             get
