@@ -6,7 +6,7 @@ The simulators are direct ports from the ASCOM Platform simulators over to .Net 
 
 Most devices will have a Setup page for device settings and a Control page. The control page allows the device to run without a client, similar to the ASCOM Simulator handboxes.
 
-Settings, discovery, and logging are provided by the ASCOM Cross Platform libraries. The log and settings files can be found in the standard folders for the ASCOM Cross Platform project.
+Settings, discovery, and logging are provided by the ASCOM Cross Platform libraries. The log and settings files can be found in the standard folders for the ASCOM Cross Platform project. From Driver Setup you can also set the logs to write to the console.
 
 This supports Swagger / OpenAPI on the /swagger url. Please note that the documentation on the ASCOM website should be considered canonical, to better handle serialization of some endpoints (camera images) the automatic serializer is not used so the swagger doc may not be correct. As development progresses it is expected that the auto-generated Swagger document will better match the Alpaca Specification.
 
