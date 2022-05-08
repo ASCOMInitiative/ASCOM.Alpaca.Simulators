@@ -96,6 +96,10 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        /// <summary>
+        /// Starts the system default handler (normally a browser) for local host and the current port.
+        /// </summary>
+        /// <param name="port"></param>
         internal static void StartBrowser(int port)
         {
             ProcessStartInfo psi = new ProcessStartInfo
@@ -106,7 +110,12 @@ namespace ASCOM.Alpaca.Simulators
             Process.Start(psi);
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        /// <summary>
+        /// Creates a asp.net host builder. Sets the content root if a bundled application.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
@@ -117,6 +126,10 @@ namespace ASCOM.Alpaca.Simulators
                     .UseKestrel();
                 });
 
+        /// <summary>
+        /// Writes to the console and logs to the primary log provider at the informational level.
+        /// </summary>
+        /// <param name="message">The message to write out</param>
         private static void WriteAndLog(string message)
         {
             Console.WriteLine(message);
