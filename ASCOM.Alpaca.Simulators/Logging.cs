@@ -37,11 +37,6 @@ namespace ASCOM.Alpaca.Simulators
             Logger.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request}");
         }
 
-        internal static void LogAPICall(IPAddress remoteIpAddress, string request, uint clientID, uint clientTransactionID, uint transactionID, string payload)
-        {
-            Logger.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request} with payload {payload}");
-        }
-
         internal static void LogError(string message)
         {
             Logger.LogError(message);
