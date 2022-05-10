@@ -5,6 +5,9 @@ using System.Net;
 
 namespace ASCOM.Alpaca.Simulators
 {
+    /// <summary>
+    /// Support code and storage for an ASCOM logger.
+    /// </summary>
     internal static class Logging
     {
         internal static ILogger Log

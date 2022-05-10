@@ -64,6 +64,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 string startupURLArg = "--urls=http://";
 
+                //If set to allow remote access bind to all local ips, otherwise bind only to localhost
                 if (ServerSettings.AllowRemoteAccess)
                 {
                     startupURLArg += "*";
