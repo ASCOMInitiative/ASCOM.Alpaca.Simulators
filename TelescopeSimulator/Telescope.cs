@@ -823,13 +823,13 @@ namespace ASCOM.Simulators
                         break;
 
                     case GuideDirection.East:
-                        TelescopeHardware.guideRate.X = Math.Abs(TelescopeHardware.guideRate.X);
+                        TelescopeHardware.guideRate.X = -Math.Abs(TelescopeHardware.guideRate.X);
                         //TelescopeHardware.pulseGuideRaEndTime = endTime;
                         TelescopeHardware.isPulseGuidingRa = true;
                         TelescopeHardware.guideDuration.X = Duration / 1000.0;
                         break;
                     case GuideDirection.West:
-                        TelescopeHardware.guideRate.X = -Math.Abs(TelescopeHardware.guideRate.X);
+                        TelescopeHardware.guideRate.X = Math.Abs(TelescopeHardware.guideRate.X);
                         //TelescopeHardware.pulseGuideRaEndTime = endTime;
                         TelescopeHardware.isPulseGuidingRa = true;
                         TelescopeHardware.guideDuration.X = Duration / 1000.0;
