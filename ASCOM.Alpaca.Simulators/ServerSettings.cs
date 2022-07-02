@@ -356,5 +356,21 @@ namespace ASCOM.Alpaca.Simulators
                 Profile.WriteValue("CanImageBytesDownload", value.ToString());
             }
         }
+
+        internal static bool RequireStrictURLCase
+        {
+            get
+            {
+                if (bool.TryParse(Profile.GetValue("RequireStrictURLCase", true.ToString()), out bool result))
+                {
+                    return result;
+                }
+                return true;
+            }
+            set
+            {
+                Profile.WriteValue("RequireStrictURLCase", value.ToString());
+            }
+        }
     }
 }

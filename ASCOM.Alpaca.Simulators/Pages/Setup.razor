@@ -42,6 +42,13 @@
         </div>
 
         <div class="grid-item-right">
+            <span>Require Strict API URL cases:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox" @bind="StrictAPIMode">
+        </div>
+
+        <div class="grid-item-right">
         </div>
         <div class="grid-item-right">
             <button @onclick="SaveServerSettings" style="min-width:12ch; vertical-align:middle;">Save</button>
@@ -250,6 +257,12 @@
         set;
     } = ServerSettings.DiscoveryPort;
 
+    bool StrictAPIMode
+    {
+        get;
+        set;
+    } = ServerSettings.RequireStrictURLCase;
+
     bool LocalHostOnlyOnHost
     {
         get;
@@ -383,6 +396,8 @@
             ServerSettings.Location = Location;
 
             ServerSettings.AutoStartBrowser = StartBrowser;
+
+            ServerSettings.RequireStrictURLCase = StrictAPIMode;
 
             DisplaySuccess("Server Settings Saved");
 
