@@ -85,6 +85,15 @@ namespace ASCOM.Alpaca.Simulators
 
             try
             {
+                Update.CheckForUpdates();
+            }
+            catch
+            {
+
+            }
+
+            try
+            {
                 CreateHostBuilder(args).Build().Run();
             }
             catch (OperationCanceledException)

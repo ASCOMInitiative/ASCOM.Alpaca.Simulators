@@ -1,0 +1,138 @@
+﻿@page "/update"
+
+@using Semver;
+@using Octokit;
+@using LetsMake;
+
+<fieldset>
+    <legend>ASCOM Alpaca Simulators</legend>
+    <p>Version - @ServerSettings.ServerVersion</p>
+    <p>Copyright 2021-22 Daniel Van Noord</p>
+
+</fieldset>
+
+<fieldset>
+    <legend>Updates</legend>
+    @if (ASCOM.Alpaca.Simulators.Update.UpdateAvailable)
+    {
+        @if (HasNewerRelease)
+        {
+            <p>New release available, Version - @LatestVersion</p>   
+            <a href="@URL" target="_blank">@URL</a>
+
+        }
+
+        @if (HasNewerPreview)
+        {
+            <p>New pre-release available, Version - @LatestPreviewVersion</p>          
+            <a href="@PreviewURL" target="_blank">@PreviewURL</a>
+        }
+    }
+    else
+    {
+        @if (UpToDate)
+        {
+            <p>Up to date</p>
+        }
+        else
+        {
+            <p>Found no updates or failed to read from the server. You should check manually for new releases.</p>
+        }
+    }
+
+</fieldset>
+
+@code {
+    protected override void OnInitialized()
+    {
+        try
+        {
+            if (SemVersion.TryParse(ServerSettings.ServerVersion, SemVersionStyles.AllowV, out SemVersion currentversion))
+            {
+                var LatestRelease = ASCOM.Alpaca.Simulators.Update.Releases?.LatestRelease();
+                var LatestPrerelease = ASCOM.Alpaca.Simulators.Update.Releases?.LatestPrerelease();
+
+                SemVersion.TryParse(LatestRelease.TagName, SemVersionStyles.AllowV, out SemVersion latestrelease);
+
+                SemVersion.TryParse(LatestPrerelease.TagName, SemVersionStyles.AllowV, out SemVersion latestprerelease);
+
+                if(currentversion == latestrelease || currentversion == latestprerelease)
+                {
+                    UpToDate = true;
+                }
+
+                if (latestrelease != null)
+                {
+                    if(currentversion < latestrelease)
+                    {
+                        HasNewerRelease = true;
+                        LatestVersion = LatestRelease.TagName;
+                        URL = LatestRelease.HtmlUrl;
+                    }
+                }
+                if(latestrelease == null)
+                {
+                    latestrelease = new SemVersion(0);
+                }
+                if (latestprerelease != null)
+                {
+                    if(currentversion < latestprerelease && latestrelease < latestprerelease)
+                    {
+                        HasNewerPreview = true;
+                        LatestPreviewVersion = LatestPrerelease.TagName;
+                        URL = LatestPrerelease.HtmlUrl;
+                    }
+                }
+            }
+        }
+        catch
+        {
+
+        }
+
+        base.OnInitialized();
+    }
+
+
+    string LatestVersion
+    {
+        get;
+        set;
+    }
+
+    string URL
+    {
+        get;
+        set;
+    }
+
+    string LatestPreviewVersion
+    {
+        get;
+        set;
+    }
+
+    string PreviewURL
+    {
+        get;
+        set;
+    }
+
+    bool UpToDate
+    {
+        get;
+        set;
+    } = false;
+
+    bool HasNewerPreview
+    {
+        get;
+        set;
+    } = false;
+
+    bool HasNewerRelease
+    {
+        get;
+        set;
+    } = false;
+}

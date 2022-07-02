@@ -19,6 +19,8 @@ This project uses awesome open source projects. You can find a list here in alph
 * Microsoft.VisualBasic - Microsoft - MIT License
 * NETStandard.Library - .NET Foundation and Contributors - MIT License
 * Newtonsoft.Json - James Newton-King - MIT License
+* OctoKit - GitHub - MIT License
+* Semver - Max Hauser, Jeff Walker - MIT License
 * SixLabors.ImageSharp - Six Labors and contributors - Apache 2.0
 * Swashbuckle.AspNetCore - Richard Morris - MIT License
 * Windows.Vector - Mono - MIT 
