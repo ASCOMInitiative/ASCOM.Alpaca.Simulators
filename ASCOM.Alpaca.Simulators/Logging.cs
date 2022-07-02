@@ -1,3 +1,4 @@
+using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
 using ASCOM.Tools;
@@ -21,25 +22,21 @@ namespace ASCOM.Alpaca.Simulators
             Log = new MultiLogger(ServerSettings.LogFileName);
 
             Log.SetMinimumLoggingLevel(ServerSettings.LoggingLevel);
-
-            //Set platform logging
-            //In this case the platform uses the same logger as the driver.
-            Logger.SetLogProvider(Log);
         }
 
         internal static void LogInformation(string message)
         {
-            Logger.LogInformation(message);
+            Logging.Log.LogInformation(message);
         }
 
         internal static void LogAPICall(IPAddress remoteIpAddress, string request, uint clientID, uint clientTransactionID, uint transactionID)
         {
-            Logger.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request}");
+            Logging.Log.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request}");
         }
 
         internal static void LogError(string message)
         {
-            Logger.LogError(message);
+            Logging.Log.LogError(message);
         }
     }
 }

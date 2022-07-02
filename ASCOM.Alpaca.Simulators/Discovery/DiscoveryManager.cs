@@ -71,7 +71,7 @@ namespace ASCOM.Alpaca.Simulators.Discovery
             {
                 Console.WriteLine("Starting discovery responder from defaults");
 
-                DiscoveryResponder = new Responder(ServerSettings.ServerPort, true, false)
+                DiscoveryResponder = new Responder(ServerSettings.ServerPort, true, false, Logging.Log)
                 {
                     AllowRemoteAccess = ServerSettings.AllowRemoteAccess,
                     LocalRespondOnlyToLocalHost = ServerSettings.LocalRespondOnlyToLocalHost
@@ -90,7 +90,7 @@ namespace ASCOM.Alpaca.Simulators.Discovery
                     ipv6 = false;
                 }
 
-                DiscoveryResponder = new Responder(port, true, ipv6)
+                DiscoveryResponder = new Responder(port, true, ipv6, Logging.Log)
                 {
                     AllowRemoteAccess = !localHostOnly,
                     LocalRespondOnlyToLocalHost = ServerSettings.LocalRespondOnlyToLocalHost
