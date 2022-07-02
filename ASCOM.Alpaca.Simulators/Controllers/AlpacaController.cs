@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net;
 using System.Net.Mime;
 
@@ -357,6 +358,14 @@ namespace Alpaca
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
+                if (ServerSettings.RequireStrictURLCase)
+                {
+                    if(HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    {
+                        return BadRequest(Strings.URLCapitalizationDescription);
+                    }
+                }
+
                 return Ok(new BoolResponse()
                 {
                     ClientTransactionID = ClientTransactionID,
@@ -379,6 +388,14 @@ namespace Alpaca
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
+
+                if (ServerSettings.RequireStrictURLCase)
+                {
+                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    {
+                        return BadRequest(Strings.URLCapitalizationDescription);
+                    }
+                }
 
                 var rates = Request.Invoke();
 
@@ -412,6 +429,14 @@ namespace Alpaca
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
+                if (ServerSettings.RequireStrictURLCase)
+                {
+                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    {
+                        return BadRequest(Strings.URLCapitalizationDescription);
+                    }
+                }
+
                 return Ok(new DoubleResponse()
                 {
                     ClientTransactionID = ClientTransactionID,
@@ -434,6 +459,14 @@ namespace Alpaca
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
+
+                if (ServerSettings.RequireStrictURLCase)
+                {
+                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    {
+                        return BadRequest(Strings.URLCapitalizationDescription);
+                    }
+                }
 
                 var rates = Request.Invoke();
 
@@ -467,6 +500,14 @@ namespace Alpaca
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
+                if (ServerSettings.RequireStrictURLCase)
+                {
+                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    {
+                        return BadRequest(Strings.URLCapitalizationDescription);
+                    }
+                }
+
                 return Ok(new IntArray2DResponse()
                 {
                     ClientTransactionID = ClientTransactionID,
@@ -489,6 +530,14 @@ namespace Alpaca
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
+
+                if (ServerSettings.RequireStrictURLCase)
+                {
+                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    {
+                        return BadRequest(Strings.URLCapitalizationDescription);
+                    }
+                }
 
                 return Ok(new StringListResponse()
                 {
@@ -513,6 +562,14 @@ namespace Alpaca
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
+                if (ServerSettings.RequireStrictURLCase)
+                {
+                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    {
+                        return BadRequest(Strings.URLCapitalizationDescription);
+                    }
+                }
+
                 return Ok(new IntListResponse()
                 {
                     ClientTransactionID = ClientTransactionID,
@@ -535,6 +592,14 @@ namespace Alpaca
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
+
+                if (ServerSettings.RequireStrictURLCase)
+                {
+                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    {
+                        return BadRequest(Strings.URLCapitalizationDescription);
+                    }
+                }
 
                 return Ok(new IntResponse()
                 {
@@ -559,6 +624,14 @@ namespace Alpaca
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
+                if (ServerSettings.RequireStrictURLCase)
+                {
+                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    {
+                        return BadRequest(Strings.URLCapitalizationDescription);
+                    }
+                }
+
                 return Ok(new StringResponse()
                 {
                     ClientTransactionID = ClientTransactionID,
@@ -581,6 +654,15 @@ namespace Alpaca
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
+
+                if (ServerSettings.RequireStrictURLCase)
+                {
+                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    {
+                        return BadRequest(Strings.URLCapitalizationDescription);
+                    }
+                }
+
                 Request.Invoke();
                 return Ok(new Response() { ClientTransactionID = ClientTransactionID, ServerTransactionID = TransactionID });
             }
