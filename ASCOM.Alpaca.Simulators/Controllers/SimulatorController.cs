@@ -31,7 +31,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         /// <summary>
-        /// Resets a device settings to the simulator default
+        /// OmniSim only API - Resets a device settings to the simulator default
         /// </summary>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
         /// <param name="ClientID">Client's unique ID.</param>
@@ -57,7 +57,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         /// <summary>
-        /// Resets a device settings to the simulator default
+        /// OmniSim only API - Resets a device settings to the simulator default
         /// </summary>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
         /// <param name="ClientID">Client's unique ID.</param>
@@ -82,7 +82,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         /// <summary>
-        /// Resets a device settings to the simulator default
+        /// OmniSim only API - Resets a device settings to the simulator default
         /// </summary>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
         /// <param name="ClientID">Client's unique ID.</param>
