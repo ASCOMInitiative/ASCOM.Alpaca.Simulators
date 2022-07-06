@@ -12,6 +12,6 @@ namespace ASCOM.Alpaca.Simulators
         public const string DeviceIDDescription = @"Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)";
         public const string ClientIDDescription = @"Client's unique ID. (A uint32 with a range of 0 to 4294967295). The client should choose a value at start-up, e.g. a random value between 0 and 65535, and send this value on every transaction to help associate entries in device logs with this particular client.";
 
-        public const string URLCapitalizationDescription = @"The API URL is required to be lowercase";
+        public const string URLCapitalizationDescription = @"The API URL is required to be lowercase. Supplied URL: ";
     }
 }

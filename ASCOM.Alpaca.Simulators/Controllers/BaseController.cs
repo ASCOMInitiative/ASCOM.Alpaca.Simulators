@@ -36,7 +36,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription);
+                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
                     }
                 }
 
@@ -67,7 +67,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription);
+                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
                     }
                 }
 
@@ -107,7 +107,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription);
+                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
                     }
                 }
 
@@ -138,7 +138,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription);
+                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
                     }
                 }
 
@@ -178,7 +178,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription);
+                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
                     }
                 }
 
@@ -209,7 +209,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription);
+                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
                     }
                 }
 
@@ -240,7 +240,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription);
+                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
                     }
                 }
 
@@ -271,7 +271,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription);
+                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
                     }
                 }
 
@@ -302,7 +302,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription);
+                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
                     }
                 }
 
@@ -333,7 +333,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription);
+                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
                     }
                 }
 
