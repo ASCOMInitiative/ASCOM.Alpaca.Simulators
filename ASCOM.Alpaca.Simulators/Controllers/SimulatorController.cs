@@ -8,6 +8,9 @@ using System.Net.Mime;
 
 namespace ASCOM.Alpaca.Simulators
 {
+    /// <summary>
+    /// OmniSim only, not part of Alpaca
+    /// </summary>
     [ServiceFilter(typeof(AuthorizationFilter))]
     [ApiController]
     [Route("simulator/v1/")]
@@ -33,6 +36,11 @@ namespace ASCOM.Alpaca.Simulators
         private ASCOM.Simulators.FilterWheel FilterWheelAccess(uint InstanceID)
         {
             return DeviceManager.GetFilterWheel((uint)InstanceID) as ASCOM.Simulators.FilterWheel;
+        }
+
+        private ASCOM.Simulators.Focuser FocuserAccess(uint InstanceID)
+        {
+            return DeviceManager.GetFocuser((uint)InstanceID) as ASCOM.Simulators.Focuser;
         }
 
 
@@ -137,6 +145,32 @@ namespace ASCOM.Alpaca.Simulators
                 ASCOM.Simulators.FilterWheelHardware.Initialize();
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting FilterWheel to default settings.");
+        }
+
+        /// <summary>
+        /// OmniSim only API - Resets a device settings to the simulator default
+        /// </summary>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Route("focuser/{DeviceNumber}/reset")]
+        public ActionResult<Response> ResetFocuser(
+            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+
+
+            return ProcessRequest(() =>
+            {
+                FocuserAccess(DeviceNumber).Reset();
+            },
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Focuser to default settings.");
         }
     }
 }
