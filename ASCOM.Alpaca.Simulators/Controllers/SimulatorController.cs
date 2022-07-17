@@ -1,4 +1,4 @@
-using ASCOM.Common.Alpaca;
+﻿using ASCOM.Common.Alpaca;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
@@ -20,7 +20,7 @@ namespace ASCOM.Alpaca.Simulators
 
         private ASCOM.Simulators.Camera CameraAccess(uint InstanceID)
         {
-                return DeviceManager.GetCamera((uint)InstanceID) as ASCOM.Simulators.Camera;
+            return DeviceManager.GetCamera((uint)InstanceID) as ASCOM.Simulators.Camera;
         }
 
         private ASCOM.Simulators.CoverCalibratorSimulator CoverCalibratorAccess(uint InstanceID)
@@ -37,7 +37,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return DeviceManager.GetFilterWheel((uint)InstanceID) as ASCOM.Simulators.FilterWheel;
         }
-        
+
         private ASCOM.Simulators.Focuser FocuserAccess(uint InstanceID)
         {
             return DeviceManager.GetFocuser((uint)InstanceID) as ASCOM.Simulators.Focuser;
@@ -75,7 +75,6 @@ namespace ASCOM.Alpaca.Simulators
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-
             return ProcessRequest(() =>
             {
                 CameraAccess(DeviceNumber).ClearProfile();
@@ -101,7 +100,6 @@ namespace ASCOM.Alpaca.Simulators
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-
             return ProcessRequest(() =>
             {
                 CoverCalibratorAccess(DeviceNumber).ResetSettings();
@@ -126,7 +124,6 @@ namespace ASCOM.Alpaca.Simulators
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-
             return ProcessRequest(() =>
             {
                 DomeAccess(DeviceNumber).ResetConfig();
@@ -152,7 +149,6 @@ namespace ASCOM.Alpaca.Simulators
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-
             return ProcessRequest(() =>
             {
                 ASCOM.Simulators.FilterWheelHardware.ResetProfile();
@@ -178,8 +174,6 @@ namespace ASCOM.Alpaca.Simulators
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-
-
             return ProcessRequest(() =>
             {
                 FocuserAccess(DeviceNumber).Reset();
@@ -188,7 +182,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         /// <summary>
-        /// OmniSim only API - Resets a device settings to the simulator default ObservingConditions 
+        /// OmniSim only API - Resets a device settings to the simulator default ObservingConditions
         /// </summary>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
         /// <param name="ClientID">Client's unique ID.</param>
@@ -204,18 +198,16 @@ namespace ASCOM.Alpaca.Simulators
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-
-
             return ProcessRequest(() =>
             {
                 ASCOM.Simulators.OCSimulator.ClearProfile();
                 ASCOM.Simulators.OCSimulator.Init();
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Focuser to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting ObservingConditions to default settings.");
         }
 
         /// <summary>
-        /// OmniSim only API - Resets a device settings to the simulator default ObservingConditions 
+        /// OmniSim only API - Resets a device settings to the simulator default ObservingConditions
         /// </summary>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
         /// <param name="ClientID">Client's unique ID.</param>
@@ -231,17 +223,15 @@ namespace ASCOM.Alpaca.Simulators
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-
-
             return ProcessRequest(() =>
             {
                 ASCOM.Simulators.RotatorHardware.ResetProfile();
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Focuser to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Rotator to default settings.");
         }
 
         /// <summary>
-        /// OmniSim only API - Resets a device settings to the simulator default ObservingConditions 
+        /// OmniSim only API - Resets a device settings to the simulator default ObservingConditions
         /// </summary>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
         /// <param name="ClientID">Client's unique ID.</param>
@@ -257,17 +247,15 @@ namespace ASCOM.Alpaca.Simulators
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-
-
             return ProcessRequest(() =>
             {
                 SafetyMonitorAccess(DeviceNumber).ResetProfile();
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Focuser to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting SafetyMonitor to default settings.");
         }
 
         /// <summary>
-        /// OmniSim only API - Resets a device settings to the simulator default ObservingConditions 
+        /// OmniSim only API - Resets a device settings to the simulator default ObservingConditions
         /// </summary>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
         /// <param name="ClientID">Client's unique ID.</param>
@@ -283,8 +271,6 @@ namespace ASCOM.Alpaca.Simulators
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-
-
             return ProcessRequest(() =>
             {
                 SwitchAccess(DeviceNumber).ResetProfile();
@@ -294,7 +280,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         /// <summary>
-        /// OmniSim only API - Resets a device settings to the simulator default ObservingConditions 
+        /// OmniSim only API - Resets a device settings to the simulator default ObservingConditions
         /// </summary>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
         /// <param name="ClientID">Client's unique ID.</param>
