@@ -15,3 +15,5 @@ The Swagger pages also include several OmniSim only APIs. These are only used to
 Authentication is optional and can be turned on from the setup page. This currently supports HTTP basic authentication and token based authentication. Authentication can be configured and turned on / off from the driver settings page.
 
 All devices offer configuration via Blazor pages. The configuration is persistent. Logging is accomplished via the ASCOM Cross Platform Libraries in the for of text files.
+
+As of the 0.2.0 preview strict URL casing is enforced by default. This can be turned off from the OmniSim settings page.
