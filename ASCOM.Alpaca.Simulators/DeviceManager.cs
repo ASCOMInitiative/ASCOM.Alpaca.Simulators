@@ -86,8 +86,15 @@ namespace ASCOM.Alpaca.Simulators
             telescopeV3s.Add(0, new ASCOM.Simulators.Telescope(0, Logging.Log,
                 new XMLProfile(ServerSettings.SettingsFolderName, Telescope, 0)));
 
-            cameraV3s.Add(0, new ASCOM.Simulators.Camera(0, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, Camera, 0)));
+            LoadCamera(0);
+        }
+
+        internal static void LoadCamera(int DeviceID)
+        {
+            //Remove if the simulated instance already exists
+            cameraV3s.Remove(DeviceID);
+            //Add the new instance
+            cameraV3s.Add(DeviceID, new ASCOM.Simulators.Camera(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, Camera, (uint)DeviceID)));
         }
 
         /// <summary>
