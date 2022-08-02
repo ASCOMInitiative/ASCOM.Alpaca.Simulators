@@ -59,10 +59,9 @@ namespace ASCOM.Alpaca.Simulators
         static DeviceManager()
         {
             //Only one instance of each in this simulator
-            LoadCoverCalibrator(0);
 
-            domeV2s.Add(0, new ASCOM.Simulators.Dome(0, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, Dome, 0)));
+
+
 
             filterWheelV2s.Add(0, new ASCOM.Simulators.FilterWheel(0, Logging.Log,
                 new XMLProfile(ServerSettings.SettingsFolderName, FilterWheel, 0)));
@@ -86,6 +85,10 @@ namespace ASCOM.Alpaca.Simulators
                 new XMLProfile(ServerSettings.SettingsFolderName, Telescope, 0)));
 
             LoadCamera(0);
+
+            LoadCoverCalibrator(0);
+
+            LoadDome(0);
         }
 
         internal static void LoadCamera(int DeviceID)
@@ -102,6 +105,15 @@ namespace ASCOM.Alpaca.Simulators
             coverCalibratorV1s.Remove(DeviceID);
             //Add the new instance
             coverCalibratorV1s.Add(0, new ASCOM.Simulators.CoverCalibratorSimulator(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, CoverCalibrator, (uint)DeviceID)));
+        }
+
+        internal static void LoadDome(int DeviceID)
+        {
+            //Remove if the simulated instance already exists
+            domeV2s.Remove(DeviceID);
+            //Add the new instance
+            domeV2s.Add(DeviceID, new ASCOM.Simulators.Dome(DeviceID, Logging.Log,
+                new XMLProfile(ServerSettings.SettingsFolderName, Dome, (uint)DeviceID)));
         }
 
         /// <summary>
