@@ -63,8 +63,7 @@ namespace ASCOM.Alpaca.Simulators
 
 
 
-            filterWheelV2s.Add(0, new ASCOM.Simulators.FilterWheel(0, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, FilterWheel, 0)));
+
 
             focuserV3s.Add(0, new ASCOM.Simulators.Focuser(0, Logging.Log,
                 new XMLProfile(ServerSettings.SettingsFolderName, Focuser, 0)));
@@ -89,6 +88,8 @@ namespace ASCOM.Alpaca.Simulators
             LoadCoverCalibrator(0);
 
             LoadDome(0);
+
+            LoadFilterWheel(0);
         }
 
         internal static void LoadCamera(int DeviceID)
@@ -114,6 +115,15 @@ namespace ASCOM.Alpaca.Simulators
             //Add the new instance
             domeV2s.Add(DeviceID, new ASCOM.Simulators.Dome(DeviceID, Logging.Log,
                 new XMLProfile(ServerSettings.SettingsFolderName, Dome, (uint)DeviceID)));
+        }
+
+        internal static void LoadFilterWheel(int DeviceID)
+        {
+            //Remove if the simulated instance already exists
+            filterWheelV2s.Remove(DeviceID);
+            //Add the new instance
+            filterWheelV2s.Add(DeviceID, new ASCOM.Simulators.FilterWheel(DeviceID, Logging.Log,
+                new XMLProfile(ServerSettings.SettingsFolderName, FilterWheel, (uint)DeviceID)));
         }
 
         /// <summary>
