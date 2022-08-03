@@ -80,7 +80,7 @@ namespace ASCOM.Alpaca.Simulators
                 CameraAccess(DeviceNumber).ClearProfile();
                 CameraAccess(DeviceNumber).InitialiseSimulator();
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Camera to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Camera {DeviceNumber} to default settings.");
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 CoverCalibratorAccess(DeviceNumber).ResetSettings();
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting CoverCalibrator to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting CoverCalibrator {DeviceNumber} to default settings.");
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace ASCOM.Alpaca.Simulators
                 DomeAccess(DeviceNumber).ResetConfig();
                 DomeAccess(DeviceNumber).LoadConfig();
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Dome to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Dome {DeviceNumber} to default settings.");
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace ASCOM.Alpaca.Simulators
                 ASCOM.Simulators.FilterWheelHardware.ResetProfile();
                 ASCOM.Simulators.FilterWheelHardware.Initialize();
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting FilterWheel to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting FilterWheel {DeviceNumber} to default settings.");
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 FocuserAccess(DeviceNumber).Reset();
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Focuser to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Focuser {DeviceNumber} to default settings.");
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace ASCOM.Alpaca.Simulators
                 ASCOM.Simulators.OCSimulator.ClearProfile();
                 ASCOM.Simulators.OCSimulator.Init();
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting ObservingConditions to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting ObservingConditions {DeviceNumber} to default settings.");
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 ASCOM.Simulators.RotatorHardware.ResetProfile();
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Rotator to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Rotator {DeviceNumber} to default settings.");
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 SafetyMonitorAccess(DeviceNumber).ResetProfile();
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting SafetyMonitor to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting SafetyMonitor {DeviceNumber} to default settings.");
         }
 
         /// <summary>
@@ -276,7 +276,7 @@ namespace ASCOM.Alpaca.Simulators
                 SwitchAccess(DeviceNumber).ResetProfile();
                 SwitchAccess(DeviceNumber).ReadProfile();
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Switch to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Switch {DeviceNumber} to default settings.");
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace ASCOM.Alpaca.Simulators
                 ASCOM.Simulators.TelescopeHardware.ClearProfile();
                 ASCOM.Simulators.TelescopeHardware.Init();
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Telescope to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Telescope {DeviceNumber} to default settings.");
         }
 
         #region Restart devices
@@ -327,7 +327,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 camera right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadCamera(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Camera {DeviceNumber} to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Camera {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -352,7 +352,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadCoverCalibrator(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading CoverCalibrator {DeviceNumber} to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading CoverCalibrator {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -377,7 +377,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadDome(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Dome {DeviceNumber} to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Dome {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -402,7 +402,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadFilterWheel(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading FilterWheel {DeviceNumber} to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading FilterWheel {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -427,7 +427,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadFocuser(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Focuser {DeviceNumber} to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Focuser {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -452,7 +452,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadObservingConditions(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading ObservingConditions {DeviceNumber} to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading ObservingConditions {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -477,7 +477,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadRotator(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Rotator {DeviceNumber} to default settings.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Rotator {DeviceNumber} to a clean state.");
         }
         #endregion
     }
