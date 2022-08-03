@@ -60,10 +60,6 @@ namespace ASCOM.Alpaca.Simulators
         {
             //Only one instance of each in this simulator
 
-
-            observingConditions.Add(0, new ASCOM.Simulators.ObservingConditions(0, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, ObservingConditions, 0)));
-
             rotatorV3s.Add(0, new ASCOM.Simulators.Rotator(0, Logging.Log,
                 new XMLProfile(ServerSettings.SettingsFolderName, Rotator, 0)));
 
@@ -85,6 +81,8 @@ namespace ASCOM.Alpaca.Simulators
             LoadFilterWheel(0);
 
             LoadFocuser(0);
+
+            LoadObservingConditions(0);
         }
 
         internal static void LoadCamera(int DeviceID)
@@ -128,6 +126,15 @@ namespace ASCOM.Alpaca.Simulators
             //Add the new instance
             focuserV3s.Add(DeviceID, new ASCOM.Simulators.Focuser(DeviceID, Logging.Log,
                 new XMLProfile(ServerSettings.SettingsFolderName, Focuser, (uint)DeviceID)));
+        }
+
+        internal static void LoadObservingConditions(int DeviceID)
+        {
+            //Remove if the simulated instance already exists
+            observingConditions.Remove(DeviceID);
+            //Add the new instance
+            observingConditions.Add(DeviceID, new ASCOM.Simulators.ObservingConditions(DeviceID, Logging.Log,
+                new XMLProfile(ServerSettings.SettingsFolderName, ObservingConditions, (uint)DeviceID)));
         }
 
         /// <summary>
