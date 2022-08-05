@@ -60,9 +60,6 @@ namespace ASCOM.Alpaca.Simulators
         {
             //Only one instance of each in this simulator
 
-            safetyMonitors.Add(0, new ASCOM.Simulators.SafetyMonitor(0, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, SafetyMonitor, 0)));
-
             switchV2s.Add(0, new ASCOM.Simulators.Switch(0, Logging.Log,
                 new XMLProfile(ServerSettings.SettingsFolderName, Switch, 0)));
 
@@ -82,6 +79,8 @@ namespace ASCOM.Alpaca.Simulators
             LoadObservingConditions(0);
 
             LoadRotator(0);
+
+            LoadSafetyMonitor(0);
         }
 
         internal static void LoadCamera(int DeviceID)
@@ -143,6 +142,15 @@ namespace ASCOM.Alpaca.Simulators
             //Add the new instance
             rotatorV3s.Add(DeviceID, new ASCOM.Simulators.Rotator(DeviceID, Logging.Log,
                 new XMLProfile(ServerSettings.SettingsFolderName, Rotator, (uint)DeviceID)));
+        }
+
+        internal static void LoadSafetyMonitor(int DeviceID)
+        {
+            //Remove if the simulated instance already exists
+            safetyMonitors.Remove(DeviceID);
+            //Add the new instance
+            safetyMonitors.Add(DeviceID, new ASCOM.Simulators.SafetyMonitor(DeviceID, Logging.Log,
+                new XMLProfile(ServerSettings.SettingsFolderName, SafetyMonitor, (uint)DeviceID)));
         }
 
         /// <summary>
