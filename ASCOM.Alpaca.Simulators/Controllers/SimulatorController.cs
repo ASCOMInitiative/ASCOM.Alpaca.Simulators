@@ -327,7 +327,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 camera right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadCamera(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Camera {DeviceNumber} to a clean state.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting Camera {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -352,7 +352,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadCoverCalibrator(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading CoverCalibrator {DeviceNumber} to a clean state.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting CoverCalibrator {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -377,7 +377,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadDome(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Dome {DeviceNumber} to a clean state.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting Dome {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -402,7 +402,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadFilterWheel(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading FilterWheel {DeviceNumber} to a clean state.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting FilterWheel {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -427,7 +427,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadFocuser(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Focuser {DeviceNumber} to a clean state.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting Focuser {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -452,7 +452,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadObservingConditions(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading ObservingConditions {DeviceNumber} to a clean state.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting ObservingConditions {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -477,7 +477,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadRotator(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Rotator {DeviceNumber} to a clean state.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting Rotator {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -502,7 +502,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadSafetyMonitor(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading SafetyMonitor {DeviceNumber} to a clean state.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting SafetyMonitor {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -527,7 +527,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadSwitch(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Switch {DeviceNumber} to a clean state.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting Switch {DeviceNumber} to a clean state.");
         }
 
         /// <summary>
@@ -552,7 +552,7 @@ namespace ASCOM.Alpaca.Simulators
                 //Only supports 1 right now, in the future use DeviceNumber instead.
                 DeviceManager.LoadTelescope(0);
             },
-            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reloading Switch {DeviceNumber} to a clean state.");
+            DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting Telescope {DeviceNumber} to a clean state.");
         }
         #endregion
     }
