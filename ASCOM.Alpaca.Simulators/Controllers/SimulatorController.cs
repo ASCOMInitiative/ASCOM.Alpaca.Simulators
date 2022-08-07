@@ -77,7 +77,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                CameraAccess(DeviceNumber).ClearProfile();
+                CameraAccess(DeviceNumber).ResetSettings();
                 CameraAccess(DeviceNumber).InitialiseSimulator();
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Camera {DeviceNumber} to default settings.");

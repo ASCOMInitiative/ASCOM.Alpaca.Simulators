@@ -177,7 +177,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 try
                 {
-                    (dev as ASCOM.Simulators.Camera)?.ClearProfile();
+                    (dev as ASCOM.Simulators.Camera)?.ResetSettings();
                 }
                 catch (Exception ex)
                 {

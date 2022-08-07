@@ -62,7 +62,7 @@ namespace ASCOM.Simulators
     /// The ClassInterface/None attribute prevents an empty interface called
     /// _Camera from being created and used as the [default] interface
     /// </summary>
-    public class Camera : ICameraV3, IAlpacaDevice
+    public class Camera : ICameraV3, IAlpacaDevice, ISimulation
     {
         // Driver ID and descriptive string that shows in the Chooser
         private static string s_csDriverDescription = "Camera V3 simulator";
@@ -2707,7 +2707,7 @@ namespace ASCOM.Simulators
             SaveCoolerToProfile(); // Save the cooler profile as well
         }
 
-        internal void ClearProfile()
+        public void ResetSettings()
         {
             Profile.Clear();
         }
