@@ -2712,6 +2712,11 @@ namespace ASCOM.Simulators
             Profile.Clear();
         }
 
+        public string GetXMLProfile()
+        {
+            return Profile.GetProfile();
+        }
+
         /// <summary>
         /// Add a random fluctuation of ±coolerFluctuation to the supplied temperature and return the revised value
         /// </summary>
