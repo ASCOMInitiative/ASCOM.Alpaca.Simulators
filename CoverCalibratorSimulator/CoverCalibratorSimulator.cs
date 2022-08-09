@@ -13,7 +13,7 @@ namespace ASCOM.Simulators
     /// ASCOM CoverCalibrator Driver for Simulator.
     /// </summary>
 
-    public class CoverCalibratorSimulator : ICoverCalibratorV1, IAlpacaDevice
+    public class CoverCalibratorSimulator : ICoverCalibratorV1, IAlpacaDevice, ISimulation
     {
         // Private simulator constants
         private const string DRIVER_DESCRIPTION = "Alpaca CoverCalibrator Simulator"; // Driver description that displays in the ASCOM Chooser.
@@ -32,6 +32,11 @@ namespace ASCOM.Simulators
         {
             Profile?.Clear();
             ReadProfile();
+        }
+
+        public string GetXMLProfile()
+        {
+            return Profile.GetProfile();
         }
 
         // Persistence constants
