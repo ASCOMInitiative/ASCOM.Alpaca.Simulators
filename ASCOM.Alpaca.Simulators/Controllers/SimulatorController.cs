@@ -1,4 +1,4 @@
-﻿using ASCOM.Common.Alpaca;
+using ASCOM.Common.Alpaca;
 using ASCOM.Simulators;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -573,7 +573,7 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("camera/{DeviceNumber}/xmlprofile")]
-        public ActionResult<StringResponse> InterfaceVersion(
+        public ActionResult<StringResponse> GetXMLProfileCamera(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
