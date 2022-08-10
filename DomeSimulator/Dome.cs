@@ -36,7 +36,7 @@ using System.Runtime.CompilerServices;
 
 namespace ASCOM.Simulators
 {
-    public class Dome : IDomeV2, IDisposable, IAlpacaDevice
+    public class Dome : IDomeV2, IDisposable, IAlpacaDevice, ISimulation
     {
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
@@ -141,9 +141,14 @@ namespace ASCOM.Simulators
                 Hardware.g_bAtHome = Hardware.HW_AtHome;// Non standard, position, OK to wake up homed
         }
 
-        internal void ResetConfig()
+        public void ResetSettings()
         {
             Profile.Clear();
+        }
+
+        public string GetXMLProfile()
+        {
+            return Profile.GetProfile();
         }
 
         internal void SaveConfig()

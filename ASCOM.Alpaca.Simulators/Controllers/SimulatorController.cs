@@ -127,7 +127,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                DomeAccess(DeviceNumber).ResetConfig();
+                DomeAccess(DeviceNumber).ResetSettings();
                 DomeAccess(DeviceNumber).LoadConfig();
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Dome {DeviceNumber} to default settings.");

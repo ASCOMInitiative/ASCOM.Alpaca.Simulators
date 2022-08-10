@@ -201,7 +201,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 try
                 {
-                    (dev as ASCOM.Simulators.Dome)?.ResetConfig();
+                    (dev as ASCOM.Simulators.Dome)?.ResetSettings();
                 }
                 catch (Exception ex)
                 {
