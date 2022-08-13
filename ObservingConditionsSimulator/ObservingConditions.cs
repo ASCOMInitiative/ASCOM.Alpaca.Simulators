@@ -15,7 +15,7 @@ namespace ASCOM.Simulators
     /// <summary>
     /// ASCOM ObservingConditions Driver for Observing Conditions OCSimulator.
     /// </summary>
-    public class ObservingConditions :  IObservingConditions, IAlpacaDevice
+    public class ObservingConditions :  IObservingConditions, IAlpacaDevice, ISimulation
     {
         #region Variables and Constants
 
@@ -244,6 +244,18 @@ namespace ASCOM.Simulators
         public double WindSpeed
         {
             get { return OCSimulator.WindSpeed(); }
+        }
+        #endregion
+
+        #region ISimulation
+        public void ResetSettings()
+        {
+            OCSimulator.ClearProfile();
+        }
+
+        public string GetXMLProfile()
+        {
+            return OCSimulator.driverProfile.GetProfile();
         }
         #endregion
     }

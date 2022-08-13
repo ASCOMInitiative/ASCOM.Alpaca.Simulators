@@ -983,12 +983,14 @@ namespace ASCOM.Simulators
             }
         }
 
-        public static void ClearProfile()
+        internal static void ClearProfile()
         {
             driverProfile.Clear();
         }
 
         #endregion Profile management
+
+
 
         public static void LogMessage(string message)
         {

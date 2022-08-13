@@ -233,13 +233,16 @@ namespace ASCOM.Alpaca.Simulators
                 }
             }
 
-            try
+            foreach (var dev in observingConditions.Values)
             {
-                ASCOM.Simulators.OCSimulator.ClearProfile();
-            }
-            catch (Exception ex)
-            {
-                Logging.LogError($"Failed to reset Observing Conditions settings with error: {ex.Message}");
+                try
+                {
+                    (dev as ASCOM.Simulators.ObservingConditions)?.ResetSettings();
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogError($"Failed to reset Observing Conditions settings with error: {ex.Message}");
+                }
             }
 
             try

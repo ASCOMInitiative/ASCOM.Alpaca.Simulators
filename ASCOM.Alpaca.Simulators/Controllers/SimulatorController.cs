@@ -152,7 +152,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                FilterWheelAccess(ClientID).ResetSettings();
+                FilterWheelAccess(DeviceNumber).ResetSettings();
                 ASCOM.Simulators.FilterWheelHardware.Initialize();
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting FilterWheel {DeviceNumber} to default settings.");
@@ -201,7 +201,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                ASCOM.Simulators.OCSimulator.ClearProfile();
+                ObservingConditionsAccess(DeviceNumber).ResetSettings();
                 ASCOM.Simulators.OCSimulator.Init();
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting ObservingConditions {DeviceNumber} to default settings.");

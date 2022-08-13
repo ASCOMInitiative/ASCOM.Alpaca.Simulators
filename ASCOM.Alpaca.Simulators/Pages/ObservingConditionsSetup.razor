@@ -178,7 +178,7 @@
     {
         try
         {
-            ASCOM.Simulators.OCSimulator.ClearProfile();
+            Device.ResetSettings();
             ASCOM.Simulators.OCSimulator.Init();
             toastService.ShowSuccess("Settings Reset");
 
