@@ -177,7 +177,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                FocuserAccess(DeviceNumber).Reset();
+                FocuserAccess(DeviceNumber).ResetSettings();
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Focuser {DeviceNumber} to default settings.");
         }

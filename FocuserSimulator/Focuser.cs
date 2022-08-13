@@ -27,7 +27,7 @@ namespace ASCOM.Simulators
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
     /// 
-    public class Focuser : IFocuserV3, IDisposable, IAlpacaDevice
+    public class Focuser : IFocuserV3, IDisposable, IAlpacaDevice, ISimulation
     {
         #region Constants
 
@@ -694,11 +694,18 @@ namespace ASCOM.Simulators
             Profile.WriteValue("SettleTime", SettleTime.ToString(CultureInfo.InvariantCulture));
         }
 
-        internal void Reset()
+        #region ISimulator
+        public void ResetSettings()
         {
             Profile.Clear();
             LoadFocuserKeyValues();
         }
+
+        public string GetXMLProfile() 
+        {
+            return Profile.GetProfile();
+        }
+        #endregion
 
         /// <summary>
         /// Log a message making sure that the TraceLogger exists.

@@ -225,7 +225,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 try
                 {
-                    (dev as ASCOM.Simulators.Focuser)?.Reset();
+                    (dev as ASCOM.Simulators.Focuser)?.ResetSettings();
                 }
                 catch (Exception ex)
                 {
