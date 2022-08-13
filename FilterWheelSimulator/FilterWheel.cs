@@ -45,7 +45,7 @@ using Microsoft.VisualBasic;
 namespace ASCOM.Simulators
 {
 
-    public class FilterWheel : IFilterWheelV2, IAlpacaDevice // Early-bind interface implemented by this driver
+    public class FilterWheel : IFilterWheelV2, IAlpacaDevice, ISimulation // Early-bind interface implemented by this driver
     {
         // ==========
 
@@ -84,6 +84,18 @@ namespace ASCOM.Simulators
 
             logger.LogInformation($"FilterWheel {deviceNumber} - UUID of {UniqueID}");
         }
+
+        #region ISimulation
+        public void ResetSettings()
+        {
+            FilterWheelHardware.g_Profile.Clear();
+        }
+
+        public string GetXMLProfile()
+        {
+            return FilterWheelHardware.g_Profile.GetProfile();
+        }
+        #endregion
 
         public string DeviceName { get => Name; }
         public int DeviceNumber { get; private set; }

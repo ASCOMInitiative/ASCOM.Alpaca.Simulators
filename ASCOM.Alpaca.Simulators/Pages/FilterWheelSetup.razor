@@ -125,7 +125,7 @@
             FilterNames[i] = ASCOM.Simulators.FilterWheelHardware.FullFilterNames[i];
             FilterOffsets[i] = ASCOM.Simulators.FilterWheelHardware.FullFocusOffsets[i];
             FilterColor[i] = $"rgb({ASCOM.Simulators.FilterWheelHardware.FullFilterColours[i].R},{ASCOM.Simulators.FilterWheelHardware.FullFilterColours[i].G},{ASCOM.Simulators.FilterWheelHardware.FullFilterColours[i].B})";
-                
+
         }
 
         base.OnInitialized();
@@ -234,7 +234,7 @@
     {
         try
         {
-            ASCOM.Simulators.FilterWheelHardware.ResetProfile();
+            Device.ResetSettings();
             ASCOM.Simulators.FilterWheelHardware.Initialize();
 
             toastService.ShowSuccess("Settings Reset");

@@ -152,7 +152,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                ASCOM.Simulators.FilterWheelHardware.ResetProfile();
+                FilterWheelAccess(ClientID).ResetSettings();
                 ASCOM.Simulators.FilterWheelHardware.Initialize();
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting FilterWheel {DeviceNumber} to default settings.");

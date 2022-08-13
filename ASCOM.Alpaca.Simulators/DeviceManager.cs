@@ -209,13 +209,16 @@ namespace ASCOM.Alpaca.Simulators
                 }
             }
 
-            try
+            foreach (var dev in filterWheelV2s.Values)
             {
-                ASCOM.Simulators.FilterWheelHardware.ResetProfile();
-            }
-            catch (Exception ex)
-            {
-                Logging.LogError($"Failed to reset Filter Wheel settings with error: {ex.Message}");
+                try
+                {
+                    (dev as ASCOM.Simulators.FilterWheel)?.ResetSettings();
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogError($"Failed to reset Filter Wheel settings with error: {ex.Message}");
+                }
             }
 
             foreach (var dev in focuserV3s.Values)

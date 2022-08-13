@@ -408,11 +408,6 @@ namespace ASCOM.Simulators
             LoadSettings();
         }
 
-        public static void ResetProfile()
-        {
-            g_Profile.Clear();
-        }
-
         //
         // Settings support
         //
