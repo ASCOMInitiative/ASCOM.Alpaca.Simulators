@@ -39,7 +39,7 @@ namespace ASCOM.Simulators
 	// The ClassInterface/None addribute prevents an empty interface called
 	// _Rotator from being created and used as the [default] interface
 	//
-	public class Rotator : IRotatorV3, IAlpacaDevice
+	public class Rotator : IRotatorV3, IAlpacaDevice, ISimulation
 	{
 		/// <summary>
 		/// Driver ID - ClassID and used in the profile
@@ -253,6 +253,18 @@ namespace ASCOM.Simulators
 		}
 
 
-		#endregion
-	}
+        #endregion
+
+        #region ISimulation
+		public void ResetSettings()
+		{
+            RotatorHardware.ResetProfile();
+        }
+
+		public string GetXMLProfile()
+		{
+			return RotatorHardware.Profile.GetProfile();
+        }
+        #endregion
+    }
 }

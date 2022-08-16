@@ -47,7 +47,7 @@ namespace ASCOM.Simulators
 		//
 		private static object s_objSync = new object(); // Better than lock(this) - Jeffrey Richter, MSDN Jan 2003
 
-		private static IProfile Profile {
+		internal static IProfile Profile {
 			get;
 			set;
 		}
