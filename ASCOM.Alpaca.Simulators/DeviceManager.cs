@@ -258,7 +258,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 try
                 {
-                    (dev as ASCOM.Simulators.SafetyMonitor)?.ResetProfile();
+                    (dev as ASCOM.Simulators.SafetyMonitor)?.ResetSettings();
                 }
                 catch (Exception ex)
                 {

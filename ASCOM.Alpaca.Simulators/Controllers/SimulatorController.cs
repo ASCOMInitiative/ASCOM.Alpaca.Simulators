@@ -255,7 +255,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                SafetyMonitorAccess(DeviceNumber).ResetProfile();
+                SafetyMonitorAccess(DeviceNumber).ResetSettings();
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting SafetyMonitor {DeviceNumber} to default settings.");
         }

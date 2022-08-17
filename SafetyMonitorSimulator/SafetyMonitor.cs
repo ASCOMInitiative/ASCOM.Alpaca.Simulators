@@ -22,7 +22,7 @@ namespace ASCOM.Simulators
     /// ASCOM SafetyMonitor Driver for a SafetyMonitor.
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
-    public class SafetyMonitor : ISafetyMonitor, IDisposable, IAlpacaDevice
+    public class SafetyMonitor : ISafetyMonitor, IDisposable, IAlpacaDevice, ISimulation
     {
         #region Constants
 
@@ -291,9 +291,14 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Reset settings to default.
         /// </summary>
-        public void ResetProfile()
+        public void ResetSettings()
         {
             Profile.Clear();
+        }
+
+        public string GetXMLProfile()
+        {
+            return Profile.GetProfile();
         }
 
         /// <summary>
