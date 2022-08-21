@@ -41,7 +41,7 @@ namespace ASCOM.Simulators
     /// <summary>
     /// ASCOM Switch Driver for Simulator.
     /// </summary>
-    public class Switch : ISwitchV2, IDisposable, IAlpacaDevice
+    public class Switch : ISwitchV2, IDisposable, IAlpacaDevice, ISimulation
     {
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
@@ -534,9 +534,14 @@ namespace ASCOM.Simulators
             }
         }
 
-        internal void ResetProfile()
+        public void ResetSettings()
         {
             Profile.Clear();
+        }
+
+        public string GetXMLProfile()
+        {
+            return Profile.GetProfile();
         }
 
         /// <summary>

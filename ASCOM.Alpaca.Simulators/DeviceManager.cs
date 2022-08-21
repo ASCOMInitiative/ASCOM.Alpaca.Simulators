@@ -270,7 +270,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 try
                 {
-                    (dev as ASCOM.Simulators.Switch)?.ResetProfile();
+                    (dev as ASCOM.Simulators.Switch)?.ResetSettings();
                 }
                 catch (Exception ex)
                 {

@@ -279,7 +279,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                SwitchAccess(DeviceNumber).ResetProfile();
+                SwitchAccess(DeviceNumber).ResetSettings();
                 SwitchAccess(DeviceNumber).ReadProfile();
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Switch {DeviceNumber} to default settings.");
