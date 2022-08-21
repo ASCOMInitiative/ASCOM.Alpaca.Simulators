@@ -40,7 +40,7 @@ namespace ASCOM.Simulators
     // _Telescope from being created and used as the [default] interface
     //
 
-    public class Telescope : ITelescopeV3, IDisposable, IAlpacaDevice
+    public class Telescope : ITelescopeV3, IDisposable, IAlpacaDevice, ISimulation
     {
         //
         // Driver private data (rate collections)
@@ -1434,7 +1434,19 @@ namespace ASCOM.Simulators
             m_TrackingRatesSimple.Dispose();
             m_TrackingRatesSimple = null;
         }
+        #endregion
 
+        #region Simulation Members
+
+        public void ResetSettings()
+        {
+            TelescopeHardware.ClearProfile();
+        }
+
+        public string GetXMLProfile()
+        {
+            return TelescopeHardware.s_Profile.GetProfile();
+        }
         #endregion
     }
 
