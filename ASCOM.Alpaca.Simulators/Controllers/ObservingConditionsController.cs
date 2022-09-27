@@ -39,7 +39,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/averageperiod")]
         public ActionResult<DoubleResponse> AveragePeriod(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).AveragePeriod, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -64,7 +64,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> AveragePeriod(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][DefaultValue(1)][FromForm][SwaggerSchema("Time period(hours) over which to average sensor readings")] double AveragePeriod, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetObservingConditions(DeviceNumber).AveragePeriod = AveragePeriod; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -87,7 +87,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cloudcover")]
         public ActionResult<DoubleResponse> CloudCover(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).CloudCover, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -110,7 +110,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/dewpoint")]
         public ActionResult<DoubleResponse> DewPoint(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).DewPoint, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -133,7 +133,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/humidity")]
         public ActionResult<DoubleResponse> Humidity(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).Humidity, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -156,7 +156,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/pressure")]
         public ActionResult<DoubleResponse> Pressure(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).Pressure, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -179,7 +179,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/rainrate")]
         public ActionResult<DoubleResponse> RainRate(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).RainRate, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -202,7 +202,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/skybrightness")]
         public ActionResult<DoubleResponse> SkyBrightness(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).SkyBrightness, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -225,7 +225,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/skyquality")]
         public ActionResult<DoubleResponse> SkyQuality(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).SkyQuality, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -248,7 +248,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/skytemperature")]
         public ActionResult<DoubleResponse> SkyTemperature(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).SkyTemperature, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -271,7 +271,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/starfwhm")]
         public ActionResult<DoubleResponse> StarFWHM(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).StarFWHM, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -294,7 +294,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/temperature")]
         public ActionResult<DoubleResponse> Temperature(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).Temperature, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -317,7 +317,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/winddirection")]
         public ActionResult<DoubleResponse> WindDirection(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).WindDirection, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -340,7 +340,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/windgust")]
         public ActionResult<DoubleResponse> WindGust(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).WindGust, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -363,7 +363,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/windspeed")]
         public ActionResult<DoubleResponse> WindSpeed(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).WindSpeed, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -386,7 +386,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/refresh")]
         public ActionResult<Response> Refresh(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).Refresh(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -411,7 +411,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<StringResponse> SensorDescription(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][SwaggerSchema("Name of the sensor whose description is required")] string SensorName, 
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).SensorDescription(SensorName), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -436,7 +436,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<DoubleResponse> TimeSinceLastUpdate(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             string SensorName, 
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetObservingConditions(DeviceNumber).TimeSinceLastUpdate(SensorName), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);

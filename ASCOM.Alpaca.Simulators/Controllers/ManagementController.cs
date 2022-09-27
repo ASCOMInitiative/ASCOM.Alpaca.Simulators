@@ -28,7 +28,7 @@ namespace ASCOM.Alpaca.Simulators
         [AllowAnonymous]
         [Route("management/apiversions")]
         public IntListResponse ApiVersions(
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             var TransactionID = DeviceManager.ServerTransactionID;
@@ -52,7 +52,7 @@ namespace ASCOM.Alpaca.Simulators
         [AllowAnonymous]
         [Route("management/v1/description")]
         public AlpacaDescriptionResponse Description(
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             var TransactionID = DeviceManager.ServerTransactionID;
@@ -77,7 +77,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("management/v1/configureddevices")]
         public AlpacaConfiguredDevicesResponse ConfiguredDevices(
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)]uint ClientID = 0, 
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             var TransactionID = DeviceManager.ServerTransactionID;

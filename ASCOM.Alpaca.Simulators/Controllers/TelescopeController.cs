@@ -38,7 +38,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/abortslew")]
         public ActionResult<Response> AbortSlew(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).AbortSlew(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -61,7 +61,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/alignmentmode")]
         public ActionResult<IntResponse> AlignmentMode(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => (int)DeviceManager.GetTelescope(DeviceNumber).AlignmentMode, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -84,7 +84,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/altitude")]
         public ActionResult<DoubleResponse> Altitude(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).Altitude, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -107,7 +107,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/aperturearea")]
         public ActionResult<DoubleResponse> ApertureArea(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).ApertureArea, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -130,7 +130,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/aperturediameter")]
         public ActionResult<DoubleResponse> ApertureDiameter(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).ApertureDiameter, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -153,7 +153,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/athome")]
         public ActionResult<BoolResponse> AtHome(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).AtHome, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -176,7 +176,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/atpark")]
         public ActionResult<BoolResponse> AtPark(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).AtPark, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -201,7 +201,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<AxisRatesResponse> AxisRates(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][SwaggerSchema("The axis about which rate information is desired. 0 = axisPrimary, 1 = axisSecondary, 2 = axisTertiary.")] TelescopeAxis Axis, 
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).AxisRates(Axis), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -224,7 +224,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/azimuth")]
         public ActionResult<DoubleResponse> Azimuth(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).Azimuth, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -247,7 +247,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/canfindhome")]
         public ActionResult<BoolResponse> CanFindHome(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanFindHome, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -272,7 +272,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<BoolResponse> CanMoveAxis(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][SwaggerSchema("The axis about which rate information is desired. 0 = axisPrimary, 1 = axisSecondary, 2 = axisTertiary.")] TelescopeAxis Axis, 
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanMoveAxis(Axis), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -295,7 +295,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/canpark")]
         public ActionResult<BoolResponse> CanPark(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanPark, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -318,7 +318,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/canpulseguide")]
         public ActionResult<BoolResponse> CanPulseGuide(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanPulseGuide, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -341,7 +341,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cansetdeclinationrate")]
         public ActionResult<BoolResponse> CanSetDeclinationRate(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanSetDeclinationRate, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -364,7 +364,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cansetguiderates")]
         public ActionResult<BoolResponse> CanSetGuideRates(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanSetGuideRates, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -387,7 +387,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cansetpark")]
         public ActionResult<BoolResponse> CanSetPark(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanSetPark, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -410,7 +410,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cansetpierside")]
         public ActionResult<BoolResponse> CanSetPierSide(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanSetPierSide, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -433,7 +433,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cansetrightascensionrate")]
         public ActionResult<BoolResponse> CanSetRightAscensionRate(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanSetRightAscensionRate, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -456,7 +456,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cansettracking")]
         public ActionResult<BoolResponse> CanSetTracking(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanSetTracking, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -479,7 +479,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/canslew")]
         public ActionResult<BoolResponse> CanSlew(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanSlew, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -502,7 +502,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/canslewaltaz")]
         public ActionResult<BoolResponse> CanSlewAltAz(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanSlewAltAz, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -525,7 +525,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/canslewaltazasync")]
         public ActionResult<BoolResponse> CanSlewAltAzAsync(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanSlewAltAzAsync, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -548,7 +548,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/canslewasync")]
         public ActionResult<BoolResponse> CanSlewAsync(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanSlewAsync, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -571,7 +571,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cansync")]
         public ActionResult<BoolResponse> CanSync(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanSync, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -594,7 +594,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cansyncaltaz")]
         public ActionResult<BoolResponse> CanSyncAltAz(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanSyncAltAz, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -617,7 +617,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/canunpark")]
         public ActionResult<BoolResponse> CanUnpark(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).CanUnpark, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -640,7 +640,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/declination")]
         public ActionResult<DoubleResponse> Declination(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).Declination, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -663,7 +663,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/declinationrate")]
         public ActionResult<DoubleResponse> DeclinationRate(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).DeclinationRate, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -688,7 +688,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> DeclinationRate(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Declination tracking rate (arcseconds per SI second). Please note that rightascensionrate units are arcseconds per sidereal second.")] double DeclinationRate, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).DeclinationRate = DeclinationRate; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -715,7 +715,7 @@ namespace ASCOM.Alpaca.Simulators
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][SwaggerSchema("Right Ascension coordinate (0.0 to 23.99999999 hours)")] double RightAscension, 
             [Required][SwaggerSchema("Declination coordinate (-90.0 to +90.0 degrees)")] double Declination, 
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => (int)DeviceManager.GetTelescope(DeviceNumber).DestinationSideOfPier(RightAscension, Declination), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -738,7 +738,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/doesrefraction")]
         public ActionResult<BoolResponse> DoesRefraction(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).DoesRefraction, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -762,7 +762,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/doesrefraction")]
         public ActionResult<Response> DoesRefraction(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Determines whether atmospheric refraction is applied to coordinates.")] bool DoesRefraction, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [Required][FromForm][SwaggerSchema("Determines whether atmospheric refraction is applied to coordinates.")] bool DoesRefraction, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).DoesRefraction = DoesRefraction; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -785,7 +785,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/equatorialsystem")]
         public ActionResult<IntResponse> EquatorialSystem(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => (int)DeviceManager.GetTelescope(DeviceNumber).EquatorialSystem, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -808,7 +808,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/findhome")]
         public ActionResult<Response> FindHome(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).FindHome(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -831,7 +831,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/focallength")]
         public ActionResult<DoubleResponse> FocalLength(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).FocalLength, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -854,7 +854,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/guideratedeclination")]
         public ActionResult<DoubleResponse> GuideRateDeclination(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).GuideRateDeclination, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -878,7 +878,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/guideratedeclination")]
         public ActionResult<Response> GuideRateDeclination(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Declination movement rate offset degrees/sec).")] double GuideRateDeclination, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [Required][FromForm][SwaggerSchema("Declination movement rate offset degrees/sec).")] double GuideRateDeclination, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).GuideRateDeclination = GuideRateDeclination; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -901,7 +901,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/guideraterightascension")]
         public ActionResult<DoubleResponse> GuideRateRightAscension(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).GuideRateRightAscension, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -926,7 +926,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> GuideRateRightAscension(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("RightAscension movement rate offset (degrees/sec).")] double GuideRateRightAscension, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).GuideRateRightAscension = GuideRateRightAscension; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -949,7 +949,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/ispulseguiding")]
         public ActionResult<BoolResponse> IsPulseGuiding(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).IsPulseGuiding, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -976,7 +976,7 @@ namespace ASCOM.Alpaca.Simulators
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][Range(0,2)][SwaggerSchema("The axis about which rate information is desired. 0 = axisPrimary, 1 = axisSecondary, 2 = axisTertiary.")] TelescopeAxis Axis,
             [Required][FromForm][SwaggerSchema("The rate of motion (deg/sec) about the specified axis")] double Rate, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).MoveAxis(Axis, Rate), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -999,7 +999,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/park")]
         public ActionResult<Response> Park(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).Park(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1025,7 +1025,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> PulseGuide(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The direction in which the guide-rate motion is to be made. 0 = guideNorth, 1 = guideSouth, 2 = guideEast, 3 = guideWest")] GuideDirection Direction, 
-            [Required][FromForm][SwaggerSchema("The duration of the guide-rate motion (milliseconds)")] int Duration, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [Required][FromForm][SwaggerSchema("The duration of the guide-rate motion (milliseconds)")] int Duration, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).PulseGuide(Direction, Duration), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1048,7 +1048,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/rightascension")]
         public ActionResult<DoubleResponse> RightAscension(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).RightAscension, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1071,7 +1071,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/rightascensionrate")]
         public ActionResult<DoubleResponse> RightAscensionRate(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).RightAscensionRate, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1096,7 +1096,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> RightAscensionRate(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Right ascension tracking rate (arcseconds per sideral second). Please note that the declinationrate units are arcseconds per SI second.")] double RightAscensionRate, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).RightAscensionRate = RightAscensionRate; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1119,7 +1119,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/setpark")]
         public ActionResult<Response> SetPark(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SetPark(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1142,7 +1142,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/sideofpier")]
         public ActionResult<IntResponse> SideOfPier(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => (int)DeviceManager.GetTelescope(DeviceNumber).SideOfPier, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1167,7 +1167,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> SideOfPier(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema(">New pointing state.")] PointingState SideOfPier, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).SideOfPier = SideOfPier; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1190,7 +1190,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/siderealtime")]
         public ActionResult<DoubleResponse> SiderealTime(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SiderealTime, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1213,7 +1213,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/siteelevation")]
         public ActionResult<DoubleResponse> SiteElevation(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SiteElevation, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1238,7 +1238,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> SiteElevation(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Elevation above mean sea level (metres).")] double SiteElevation, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).SiteElevation = SiteElevation; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1261,7 +1261,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/sitelatitude")]
         public ActionResult<DoubleResponse> SiteLatitude(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SiteLatitude, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1286,7 +1286,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> SiteLatitude(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Site latitude (degrees)")] double SiteLatitude, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).SiteLatitude = SiteLatitude; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1309,7 +1309,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/sitelongitude")]
         public ActionResult<DoubleResponse> SiteLongitude(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SiteLongitude, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1334,7 +1334,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> SiteLongitude(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Site longitude (degrees, positive East, WGS84)")] double SiteLongitude, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).SiteLongitude = SiteLongitude; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1357,7 +1357,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/slewing")]
         public ActionResult<BoolResponse> Slewing(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).Slewing, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1380,7 +1380,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/slewsettletime")]
         public ActionResult<IntResponse> SlewSettleTime(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SlewSettleTime, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1405,7 +1405,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> SlewSettleTime(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Settling time (integer sec.).")] short SlewSettleTime, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).SlewSettleTime = SlewSettleTime; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1432,7 +1432,7 @@ namespace ASCOM.Alpaca.Simulators
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Azimuth coordinate (degrees, North-referenced, positive East/clockwise)")] double Azimuth, 
             [Required][FromForm][SwaggerSchema("Altitude coordinate (degrees, positive up)")] double Altitude, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SlewToAltAz(Azimuth, Altitude), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1459,7 +1459,7 @@ namespace ASCOM.Alpaca.Simulators
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Azimuth coordinate (degrees, North-referenced, positive East/clockwise)")] double Azimuth, 
             [Required][FromForm][SwaggerSchema("Altitude coordinate (degrees, positive up)")] double Altitude, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SlewToAltAzAsync(Azimuth, Altitude), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1486,7 +1486,7 @@ namespace ASCOM.Alpaca.Simulators
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Right Ascension coordinate (hours)")] double RightAscension, 
             [Required][FromForm][SwaggerSchema("Declination coordinate (degrees)")] double Declination, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SlewToCoordinates(RightAscension, Declination), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1513,7 +1513,7 @@ namespace ASCOM.Alpaca.Simulators
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Right Ascension coordinate (hours)")] double RightAscension, 
             [Required][FromForm][SwaggerSchema("Declination coordinate (degrees)")] double Declination, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SlewToCoordinatesAsync(RightAscension, Declination), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1536,7 +1536,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/slewtotarget")]
         public ActionResult<Response> SlewToTarget(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SlewToTarget(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1559,7 +1559,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/slewtotargetasync")]
         public ActionResult<Response> SlewToTargetAsync(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SlewToTargetAsync(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1586,7 +1586,7 @@ namespace ASCOM.Alpaca.Simulators
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Azimuth coordinate (degrees, North-referenced, positive East/clockwise)")] double Azimuth, 
             [Required][FromForm][SwaggerSchema("Altitude coordinate (degrees, positive up)")] double Altitude, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SyncToAltAz(Azimuth, Altitude), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1613,7 +1613,7 @@ namespace ASCOM.Alpaca.Simulators
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Right Ascension coordinate (hours)")] double RightAscension, 
             [Required][FromForm][SwaggerSchema("Declination coordinate (degrees)")] double Declination, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SyncToCoordinates(RightAscension, Declination), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1636,7 +1636,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/synctotarget")]
         public ActionResult<Response> SyncToTarget(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).SyncToTarget(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1659,7 +1659,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/targetdeclination")]
         public ActionResult<DoubleResponse> TargetDeclination(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).TargetDeclination, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1684,7 +1684,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> TargetDeclination(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Target declination(degrees)")] double TargetDeclination, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).TargetDeclination = TargetDeclination; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1707,7 +1707,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/targetrightascension")]
         public ActionResult<DoubleResponse> TargetRightAscension(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).TargetRightAscension, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1732,7 +1732,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> TargetRightAscension(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Target right ascension(hours)")] double TargetRightAscension, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).TargetRightAscension = TargetRightAscension; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1755,7 +1755,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/tracking")]
         public ActionResult<BoolResponse> Tracking(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).Tracking, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1780,7 +1780,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> Tracking(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Tracking enabled / disabled")] bool Tracking, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).Tracking = Tracking; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1803,7 +1803,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/trackingrate")]
         public ActionResult<IntResponse> TrackingRate(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => (int)DeviceManager.GetTelescope(DeviceNumber).TrackingRate, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1828,7 +1828,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> TrackingRate(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("New tracking rate")] int TrackingRate, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).TrackingRate = (DriveRate)TrackingRate; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1851,7 +1851,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/trackingrates")]
         public ActionResult<DriveRatesResponse> TrackingRates(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).TrackingRates, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1874,7 +1874,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/utcdate")]
         public ActionResult<StringResponse> UTCDate(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).UTCDate.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1899,7 +1899,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> UTCDate(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("UTC date/time in ISO 8601 format.")] DateTime UTCDate, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetTelescope(DeviceNumber).UTCDate = UTCDate; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1922,7 +1922,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/unpark")]
         public ActionResult<Response> UnPark(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetTelescope(DeviceNumber).Unpark(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);

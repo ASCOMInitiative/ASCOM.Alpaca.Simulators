@@ -41,7 +41,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/bayeroffsetx")]
         public ActionResult<IntResponse> BayerOffsetX(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).BayerOffsetX, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -64,7 +64,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/bayeroffsety")]
         public ActionResult<IntResponse> BayerOffsetY(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).BayerOffsetY, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -87,7 +87,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/binx")]
         public ActionResult<IntResponse> BinX(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).BinX, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -112,7 +112,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> BinX(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The X binning value")] short BinX,
-            [Required][FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [Required][FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).BinX = BinX; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -135,7 +135,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/biny")]
         public ActionResult<IntResponse> BinY(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).BinY, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -160,7 +160,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> BinY(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The Y binning value")] short BinY,
-            [Required][FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [Required][FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).BinY = BinY; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -183,7 +183,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/camerastate")]
         public ActionResult<IntResponse> CameraState(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => (int)DeviceManager.GetCamera(DeviceNumber).CameraState, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -206,7 +206,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cameraxsize")]
         public ActionResult<IntResponse> CameraXSize(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).CameraXSize, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -229,7 +229,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cameraysize")]
         public ActionResult<IntResponse> CameraYSize(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).CameraYSize, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -252,7 +252,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/canabortexposure")]
         public ActionResult<BoolResponse> CanAbortExposure(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).CanAbortExposure, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -275,7 +275,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/canasymmetricbin")]
         public ActionResult<BoolResponse> CanAsymmetricBin(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).CanAsymmetricBin, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -298,7 +298,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/canfastreadout")]
         public ActionResult<BoolResponse> CanFastReadout(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).CanFastReadout, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -321,7 +321,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cangetcoolerpower")]
         public ActionResult<BoolResponse> CanGetCoolerPower(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).CanGetCoolerPower, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -344,7 +344,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/canpulseguide")]
         public ActionResult<BoolResponse> CanPulseGuide(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).CanPulseGuide, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -367,7 +367,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cansetccdtemperature")]
         public ActionResult<BoolResponse> CanSetCCDTemperature(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).CanSetCCDTemperature, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -390,7 +390,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/canstopexposure")]
         public ActionResult<BoolResponse> CanStopExposure(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).CanStopExposure, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -413,7 +413,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/ccdtemperature")]
         public ActionResult<DoubleResponse> CCDTemperature(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).CCDTemperature, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -436,7 +436,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/cooleron")]
         public ActionResult<BoolResponse> CoolerOn(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).CoolerOn, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -461,7 +461,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> CoolerOn(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Cooler state")] bool CoolerOn,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).CoolerOn = CoolerOn; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -484,7 +484,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/coolerpower")]
         public ActionResult<DoubleResponse> CoolerPower(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).CoolerPower, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -507,7 +507,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/electronsperadu")]
         public ActionResult<DoubleResponse> ElectronsPerADU(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).ElectronsPerADU, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -530,7 +530,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/exposuremax")]
         public ActionResult<DoubleResponse> ExposureMax(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).ExposureMax, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -553,7 +553,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/exposuremin")]
         public ActionResult<DoubleResponse> ExposureMin(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).ExposureMin, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -576,7 +576,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/exposureresolution")]
         public ActionResult<DoubleResponse> ExposureResolution(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).ExposureResolution, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -599,7 +599,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/fastreadout")]
         public ActionResult<BoolResponse> FastReadout(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).FastReadout, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -624,7 +624,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> FastReadout(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True to enable fast readout mode")] bool FastReadout,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).FastReadout = FastReadout; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -647,7 +647,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/fullwellcapacity")]
         public ActionResult<DoubleResponse> FullWellCapacity(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).FullWellCapacity, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -670,7 +670,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/gain")]
         public ActionResult<IntResponse> Gain(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).Gain, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -695,7 +695,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> Gain(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Index of the current camera gain in the Gains string array.")] short Gain,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).Gain = Gain; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -718,7 +718,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/gainmax")]
         public ActionResult<IntResponse> GainMax(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).GainMax, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -741,7 +741,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/gainmin")]
         public ActionResult<IntResponse> GainMin(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).GainMin, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -764,7 +764,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/gains")]
         public ActionResult<StringListResponse> Gains(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).Gains, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -787,7 +787,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/hasshutter")]
         public ActionResult<BoolResponse> HasShutter(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).HasShutter, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -810,7 +810,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/heatsinktemperature")]
         public ActionResult<DoubleResponse> HeatSinkTemperature(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).HeatSinkTemperature, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -878,7 +878,7 @@ namespace ASCOM.Alpaca.Simulators
         [ProducesResponseType(typeof(IntArray2DResponse), 200)]
         public async Task<ActionResult> ImageArray(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             var TransactionID = DeviceManager.ServerTransactionID;
@@ -989,7 +989,7 @@ namespace ASCOM.Alpaca.Simulators
         [ProducesResponseType(typeof(IntArray2DResponse), 200)]
         public async Task<ActionResult> ImageArrayVariant(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             var TransactionID = DeviceManager.ServerTransactionID;
@@ -1187,7 +1187,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/imageready")]
         public ActionResult<BoolResponse> ImageReady(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).ImageReady, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1210,7 +1210,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/ispulseguiding")]
         public ActionResult<BoolResponse> IsPulseGuiding(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).IsPulseGuiding, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1233,7 +1233,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/lastexposureduration")]
         public ActionResult<DoubleResponse> LastExposureDuration(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).LastExposureDuration, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1256,7 +1256,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/lastexposurestarttime")]
         public ActionResult<StringResponse> LastExposureStartTime(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).LastExposureStartTime, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1279,7 +1279,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/maxadu")]
         public ActionResult<IntResponse> MaxADU(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).MaxADU, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1302,7 +1302,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/maxbinx")]
         public ActionResult<IntResponse> MaxBinX(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).MaxBinX, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1325,7 +1325,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/maxbiny")]
         public ActionResult<IntResponse> MaxBinY(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).MaxBinY, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1348,7 +1348,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/numx")]
         public ActionResult<IntResponse> NumX(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).NumX, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1373,7 +1373,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> NumX(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Sets the subframe width, if binning is active, value is in binned pixels.")] int NumX, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).NumX = NumX; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1396,7 +1396,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/numy")]
         public ActionResult<IntResponse> NumY(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).NumY, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1421,7 +1421,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> NumY(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Sets the subframe height, if binning is active, value is in binned pixels.")] int NumY, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).NumY = NumY; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1444,7 +1444,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/offset")]
         public ActionResult<IntResponse> Offset(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).Offset, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1468,7 +1468,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/offset")]
         public ActionResult<Response> Offset(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Index of the current camera offset in the offsets string array.")] int Offset, [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [Required][FromForm][SwaggerSchema("Index of the current camera offset in the offsets string array.")] int Offset, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).Offset = Offset; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1491,7 +1491,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/offsetmax")]
         public ActionResult<IntResponse> OffsetMax(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).OffsetMax, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1514,7 +1514,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/offsetmin")]
         public ActionResult<IntResponse> OffsetMin(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).OffsetMin, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1537,7 +1537,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/offsets")]
         public ActionResult<StringListResponse> Offsets(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)   
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).Offsets, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1560,7 +1560,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/percentcompleted")]
         public ActionResult<IntResponse> PercentCompleted(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).PercentCompleted, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1583,7 +1583,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/pixelsizex")]
         public ActionResult<DoubleResponse> PixelSizeX(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).PixelSizeX, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1606,7 +1606,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/pixelsizey")]
         public ActionResult<DoubleResponse> PixelSizeY(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).PixelSizeY, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1629,7 +1629,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/readoutmode")]
         public ActionResult<IntResponse> ReadoutMode(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).ReadoutMode, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1654,7 +1654,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> ReadoutMode(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Index into the ReadoutModes array of string readout mode names indicating the camera's current readout mode.")] short ReadoutMode, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).ReadoutMode = ReadoutMode; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1677,7 +1677,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/readoutmodes")]
         public ActionResult<StringListResponse> ReadoutModes(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).ReadoutModes, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1700,7 +1700,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/sensorname")]
         public ActionResult<StringResponse> SensorName(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).SensorName, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1730,7 +1730,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/sensortype")]
         public ActionResult<IntResponse> SensorType(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => (int)DeviceManager.GetCamera(DeviceNumber).SensorType, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1753,7 +1753,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/setccdtemperature")]
         public ActionResult<DoubleResponse> SetCCDTemperature(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).SetCCDTemperature, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1778,7 +1778,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> SetCCDTemperature(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Temperature set point(degrees Celsius).")] double SetCCDTemperature, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).SetCCDTemperature = SetCCDTemperature; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1801,7 +1801,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/startx")]
         public ActionResult<IntResponse> StartX(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).StartX, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1826,7 +1826,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> StartX(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The subframe X axis start position in binned pixels.")] int StartX, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).StartX = StartX; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1848,7 +1848,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/starty")]
         public ActionResult<IntResponse> StartY([DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
- [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+ [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
  [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
         {
@@ -1874,7 +1874,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> StartY(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The subframe Y axis start position in binned pixels.")] int StartY, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).StartY = StartY; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1897,7 +1897,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/subexposureduration")]
         public ActionResult<DoubleResponse> SubExposureDuration(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).SubExposureDuration, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1922,7 +1922,7 @@ namespace ASCOM.Alpaca.Simulators
         public ActionResult<Response> SubExposureDuration(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The request sub exposure duration in seconds")] double SubExposureDuration, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetCamera(DeviceNumber).SubExposureDuration = SubExposureDuration; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1945,7 +1945,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/abortexposure")]
         public ActionResult<Response> AbortExposure(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).AbortExposure(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1972,7 +1972,7 @@ namespace ASCOM.Alpaca.Simulators
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Direction of movement(0 = North, 1 = South, 2 = East, 3 = West)")] GuideDirection Direction, 
             [Required][FromForm][SwaggerSchema("Duration of movement in milli-seconds")] int Duration, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).PulseGuide(Direction, Duration), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -1999,7 +1999,7 @@ namespace ASCOM.Alpaca.Simulators
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Duration of exposure in seconds")] double Duration, 
             [Required][FromForm][SwaggerSchema("True if light frame, false if dark frame.")] bool Light, 
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
          [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).StartExposure(Duration, Light), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
@@ -2022,7 +2022,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/stopexposure")]
         public ActionResult<Response> StopExposure(
             [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][SwaggerSchema(Description = Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => DeviceManager.GetCamera(DeviceNumber).StopExposure(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
