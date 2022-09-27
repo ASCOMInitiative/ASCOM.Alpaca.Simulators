@@ -107,7 +107,32 @@ namespace ASCOM.Alpaca.Simulators
             {
                 options.InvalidModelStateResponseFactory = context =>
                 {
-                    return new BadRequestObjectResult("A data validation error occurred. See https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1.");
+                    string ErrorMessage = "Unknown Error";
+                    string ResourceMessage = "Unknown Resource";
+
+                    try
+                    {
+                        ErrorMessage = context.ModelState.Values.First(m => m.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid).Errors.First().ErrorMessage;
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.LogError(ex.Message);
+                    }
+
+                    try
+                    {
+                        ResourceMessage = context.HttpContext.Request.Path;
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.LogError(ex.Message);
+                    }
+
+                    var message = $"A data validation error occurred for request {ResourceMessage} with error message <{ErrorMessage}>. See https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1.";
+
+                    Logging.LogError(message);
+
+                    return new BadRequestObjectResult(message);
                 };
             });
         }
