@@ -16,14 +16,18 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{**catchAll}")]
         public IActionResult CatchAllApiGets()
         {
-            return BadRequest("Alpaca API route was not found on this driver");
+            string error = $"Alpaca API route {HttpContext.Request.Path} was not found on this driver";
+            Logging.LogError(error);
+            return BadRequest(error);
         }
 
         [HttpPut]
         [Route("{**catchAll}")]
         public IActionResult CatchAllApiPuts()
         {
-            return BadRequest("Alpaca API route was not found on this driver");
+            string error = $"Alpaca API route {HttpContext.Request.Path} was not found on this driver";
+            Logging.LogError(error);
+            return BadRequest(error);
         }
     }
 }
