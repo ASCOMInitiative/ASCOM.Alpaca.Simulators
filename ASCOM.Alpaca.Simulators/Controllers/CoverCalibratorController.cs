@@ -153,7 +153,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/calibratoron")]
         public ActionResult<Response> CalibratorOn(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [DefaultValue(0)][Required][FromForm][SwaggerSchema("The required brightness in the range 0 to MaxBrightness")] int Brightness, 
+            [Required][DefaultValue(0)][FromForm][SwaggerSchema("The required brightness in the range 0 to MaxBrightness")] int Brightness, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0
 )
