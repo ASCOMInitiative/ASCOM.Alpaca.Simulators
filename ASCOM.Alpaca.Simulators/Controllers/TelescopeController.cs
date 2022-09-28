@@ -37,7 +37,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/abortslew")]
         public ActionResult<Response> AbortSlew(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -60,7 +60,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/alignmentmode")]
         public ActionResult<IntResponse> AlignmentMode(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -83,7 +83,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/altitude")]
         public ActionResult<DoubleResponse> Altitude(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -106,7 +106,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/aperturearea")]
         public ActionResult<DoubleResponse> ApertureArea(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -129,7 +129,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/aperturediameter")]
         public ActionResult<DoubleResponse> ApertureDiameter(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -152,7 +152,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/athome")]
         public ActionResult<BoolResponse> AtHome(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -175,7 +175,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/atpark")]
         public ActionResult<BoolResponse> AtPark(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -199,7 +199,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/axisrates")]
         public ActionResult<AxisRatesResponse> AxisRates(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][SwaggerSchema("The axis about which rate information is desired. 0 = axisPrimary, 1 = axisSecondary, 2 = axisTertiary.")] TelescopeAxis Axis, 
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -223,7 +223,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/azimuth")]
         public ActionResult<DoubleResponse> Azimuth(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -246,7 +246,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/canfindhome")]
         public ActionResult<BoolResponse> CanFindHome(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -270,7 +270,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/canmoveaxis")]
         public ActionResult<BoolResponse> CanMoveAxis(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][SwaggerSchema("The axis about which rate information is desired. 0 = axisPrimary, 1 = axisSecondary, 2 = axisTertiary.")] TelescopeAxis Axis, 
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -294,7 +294,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/canpark")]
         public ActionResult<BoolResponse> CanPark(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -317,7 +317,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/canpulseguide")]
         public ActionResult<BoolResponse> CanPulseGuide(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -340,7 +340,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/cansetdeclinationrate")]
         public ActionResult<BoolResponse> CanSetDeclinationRate(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -363,7 +363,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/cansetguiderates")]
         public ActionResult<BoolResponse> CanSetGuideRates(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -386,7 +386,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/cansetpark")]
         public ActionResult<BoolResponse> CanSetPark(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -409,7 +409,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/cansetpierside")]
         public ActionResult<BoolResponse> CanSetPierSide(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -432,7 +432,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/cansetrightascensionrate")]
         public ActionResult<BoolResponse> CanSetRightAscensionRate(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -455,7 +455,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/cansettracking")]
         public ActionResult<BoolResponse> CanSetTracking(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -478,7 +478,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/canslew")]
         public ActionResult<BoolResponse> CanSlew(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -501,7 +501,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/canslewaltaz")]
         public ActionResult<BoolResponse> CanSlewAltAz(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -524,7 +524,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/canslewaltazasync")]
         public ActionResult<BoolResponse> CanSlewAltAzAsync(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -547,7 +547,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/canslewasync")]
         public ActionResult<BoolResponse> CanSlewAsync(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -570,7 +570,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/cansync")]
         public ActionResult<BoolResponse> CanSync(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -593,7 +593,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/cansyncaltaz")]
         public ActionResult<BoolResponse> CanSyncAltAz(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -616,7 +616,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/canunpark")]
         public ActionResult<BoolResponse> CanUnpark(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -639,7 +639,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/declination")]
         public ActionResult<DoubleResponse> Declination(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -662,7 +662,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/declinationrate")]
         public ActionResult<DoubleResponse> DeclinationRate(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -686,7 +686,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/declinationrate")]
         public ActionResult<Response> DeclinationRate(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Declination tracking rate (arcseconds per SI second). Please note that rightascensionrate units are arcseconds per sidereal second.")] double DeclinationRate, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -712,7 +712,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/destinationsideofpier")]
         public ActionResult<IntResponse> DestinationSideOfPier(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][SwaggerSchema("Right Ascension coordinate (0.0 to 23.99999999 hours)")] double RightAscension, 
             [Required][SwaggerSchema("Declination coordinate (-90.0 to +90.0 degrees)")] double Declination, 
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -737,7 +737,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/doesrefraction")]
         public ActionResult<BoolResponse> DoesRefraction(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -761,7 +761,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/doesrefraction")]
         public ActionResult<Response> DoesRefraction(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Determines whether atmospheric refraction is applied to coordinates.")] bool DoesRefraction, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -784,7 +784,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/equatorialsystem")]
         public ActionResult<IntResponse> EquatorialSystem(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -807,7 +807,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/findhome")]
         public ActionResult<Response> FindHome(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -830,7 +830,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/focallength")]
         public ActionResult<DoubleResponse> FocalLength(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -853,7 +853,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/guideratedeclination")]
         public ActionResult<DoubleResponse> GuideRateDeclination(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -877,7 +877,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/guideratedeclination")]
         public ActionResult<Response> GuideRateDeclination(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Declination movement rate offset degrees/sec).")] double GuideRateDeclination, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -900,7 +900,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/guideraterightascension")]
         public ActionResult<DoubleResponse> GuideRateRightAscension(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -924,7 +924,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/guideraterightascension")]
         public ActionResult<Response> GuideRateRightAscension(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("RightAscension movement rate offset (degrees/sec).")] double GuideRateRightAscension, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -948,7 +948,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/ispulseguiding")]
         public ActionResult<BoolResponse> IsPulseGuiding(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -973,7 +973,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/moveaxis")]
         public ActionResult<Response> MoveAxis(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][Range(0,2)][SwaggerSchema("The axis about which rate information is desired. 0 = axisPrimary, 1 = axisSecondary, 2 = axisTertiary.")] TelescopeAxis Axis,
             [Required][FromForm][SwaggerSchema("The rate of motion (deg/sec) about the specified axis")] double Rate, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -998,7 +998,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/park")]
         public ActionResult<Response> Park(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1023,7 +1023,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/pulseguide")]
         public ActionResult<Response> PulseGuide(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The direction in which the guide-rate motion is to be made. 0 = guideNorth, 1 = guideSouth, 2 = guideEast, 3 = guideWest")] GuideDirection Direction, 
             [Required][FromForm][SwaggerSchema("The duration of the guide-rate motion (milliseconds)")] int Duration, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1047,7 +1047,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/rightascension")]
         public ActionResult<DoubleResponse> RightAscension(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1070,7 +1070,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/rightascensionrate")]
         public ActionResult<DoubleResponse> RightAscensionRate(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1094,7 +1094,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/rightascensionrate")]
         public ActionResult<Response> RightAscensionRate(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Right ascension tracking rate (arcseconds per sideral second). Please note that the declinationrate units are arcseconds per SI second.")] double RightAscensionRate, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1118,7 +1118,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/setpark")]
         public ActionResult<Response> SetPark(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1141,7 +1141,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/sideofpier")]
         public ActionResult<IntResponse> SideOfPier(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1165,7 +1165,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/sideofpier")]
         public ActionResult<Response> SideOfPier(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema(">New pointing state.")] PointingState SideOfPier, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1189,7 +1189,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/siderealtime")]
         public ActionResult<DoubleResponse> SiderealTime(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1212,7 +1212,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/siteelevation")]
         public ActionResult<DoubleResponse> SiteElevation(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1236,7 +1236,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/siteelevation")]
         public ActionResult<Response> SiteElevation(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Elevation above mean sea level (metres).")] double SiteElevation, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1260,7 +1260,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/sitelatitude")]
         public ActionResult<DoubleResponse> SiteLatitude(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1284,7 +1284,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/sitelatitude")]
         public ActionResult<Response> SiteLatitude(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Site latitude (degrees)")] double SiteLatitude, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1308,7 +1308,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/sitelongitude")]
         public ActionResult<DoubleResponse> SiteLongitude(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1332,7 +1332,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/sitelongitude")]
         public ActionResult<Response> SiteLongitude(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Site longitude (degrees, positive East, WGS84)")] double SiteLongitude, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1356,7 +1356,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/slewing")]
         public ActionResult<BoolResponse> Slewing(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1379,7 +1379,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/slewsettletime")]
         public ActionResult<IntResponse> SlewSettleTime(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1403,7 +1403,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/slewsettletime")]
         public ActionResult<Response> SlewSettleTime(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Settling time (integer sec.).")] short SlewSettleTime, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1429,7 +1429,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/slewtoaltaz")]
         public ActionResult<Response> SlewToAltAz(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Azimuth coordinate (degrees, North-referenced, positive East/clockwise)")] double Azimuth, 
             [Required][FromForm][SwaggerSchema("Altitude coordinate (degrees, positive up)")] double Altitude, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1456,7 +1456,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/slewtoaltazasync")]
         public ActionResult<Response> SlewToAltAzAsync(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Azimuth coordinate (degrees, North-referenced, positive East/clockwise)")] double Azimuth, 
             [Required][FromForm][SwaggerSchema("Altitude coordinate (degrees, positive up)")] double Altitude, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1483,7 +1483,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/slewtocoordinates")]
         public ActionResult<Response> SlewToCoordinates(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Right Ascension coordinate (hours)")] double RightAscension, 
             [Required][FromForm][SwaggerSchema("Declination coordinate (degrees)")] double Declination, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1510,7 +1510,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/slewtocoordinatesasync")]
         public ActionResult<Response> SlewToCoordinatesAsync(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Right Ascension coordinate (hours)")] double RightAscension, 
             [Required][FromForm][SwaggerSchema("Declination coordinate (degrees)")] double Declination, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1535,7 +1535,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/slewtotarget")]
         public ActionResult<Response> SlewToTarget(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1558,7 +1558,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/slewtotargetasync")]
         public ActionResult<Response> SlewToTargetAsync(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1583,7 +1583,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/synctoaltaz")]
         public ActionResult<Response> SyncToAltAz(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Azimuth coordinate (degrees, North-referenced, positive East/clockwise)")] double Azimuth, 
             [Required][FromForm][SwaggerSchema("Altitude coordinate (degrees, positive up)")] double Altitude, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1610,7 +1610,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/synctocoordinates")]
         public ActionResult<Response> SyncToCoordinates(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Right Ascension coordinate (hours)")] double RightAscension, 
             [Required][FromForm][SwaggerSchema("Declination coordinate (degrees)")] double Declination, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -1635,7 +1635,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/synctotarget")]
         public ActionResult<Response> SyncToTarget(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1658,7 +1658,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/targetdeclination")]
         public ActionResult<DoubleResponse> TargetDeclination(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1682,7 +1682,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/targetdeclination")]
         public ActionResult<Response> TargetDeclination(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Target declination(degrees)")] double TargetDeclination, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1706,7 +1706,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/targetrightascension")]
         public ActionResult<DoubleResponse> TargetRightAscension(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1730,7 +1730,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/targetrightascension")]
         public ActionResult<Response> TargetRightAscension(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Target right ascension(hours)")] double TargetRightAscension, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1754,7 +1754,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/tracking")]
         public ActionResult<BoolResponse> Tracking(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1778,7 +1778,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/tracking")]
         public ActionResult<Response> Tracking(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Tracking enabled / disabled")] bool Tracking, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1802,7 +1802,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/trackingrate")]
         public ActionResult<IntResponse> TrackingRate(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1826,7 +1826,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/trackingrate")]
         public ActionResult<Response> TrackingRate(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("New tracking rate")] int TrackingRate, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1850,7 +1850,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/trackingrates")]
         public ActionResult<DriveRatesResponse> TrackingRates(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1873,7 +1873,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/utcdate")]
         public ActionResult<StringResponse> UTCDate(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -1897,7 +1897,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/utcdate")]
         public ActionResult<Response> UTCDate(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("UTC date/time in ISO 8601 format.")] DateTime UTCDate, 
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
@@ -1921,7 +1921,7 @@ namespace ASCOM.Alpaca.Simulators
         [Produces(MediaTypeNames.Application.Json)]
         [Route("{DeviceNumber}/unpark")]
         public ActionResult<Response> UnPark(
-            [DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
