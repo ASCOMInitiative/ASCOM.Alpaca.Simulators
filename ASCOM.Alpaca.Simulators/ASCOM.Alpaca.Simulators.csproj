@@ -19,7 +19,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Octokit" Version="0.52.0" />
+    <PackageReference Include="Octokit" Version="3.0.0" />
     <PackageReference Include="Semver" Version="2.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.2.3" />
