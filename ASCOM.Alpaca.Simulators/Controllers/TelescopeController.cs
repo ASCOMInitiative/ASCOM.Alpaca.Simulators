@@ -604,7 +604,7 @@ namespace ASCOM.Alpaca.Simulators
         /// Indicates whether the telescope can be unparked.
         /// </summary>
         /// <remarks>
-        /// <para>True if this telescope is capable of programmed unparking (UnPark() method)</para>
+        /// <para>True if this telescope is capable of programmed unparking (Unpark() method)</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
         /// <param name="ClientID">Client's unique ID.</param>

@@ -454,7 +454,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanUnPark: " + TelescopeHardware.CanUnpark);
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanUnpark: " + TelescopeHardware.CanUnpark);
                 return TelescopeHardware.CanUnpark;
             }
         }
@@ -1285,8 +1285,8 @@ namespace ASCOM.Simulators
 
         public void Unpark()
         {
-            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "UnPark: ");
-            CheckCapability(TelescopeHardware.CanUnpark, "UnPark");
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "Unpark: ");
+            CheckCapability(TelescopeHardware.CanUnpark, "Unpark");
 
             TelescopeHardware.ChangePark(false);
             TelescopeHardware.Tracking = true;
