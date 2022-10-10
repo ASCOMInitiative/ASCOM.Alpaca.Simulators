@@ -72,7 +72,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         /// <summary>
-        /// Indicates whether the telescope is at the park position
+        /// Indicates whether the dome is at the park position
         /// </summary>
         /// <remarks>
         /// <para>True if the dome is in the programmed park position. Set only following a Park() operation and reset with any slew operation.</para>
