@@ -4,6 +4,32 @@
         <name>ascom.alpaca.simulators</name>
     </assembly>
     <members>
+        <member name="M:ASCOM.Alpaca.Simulators.ProcessBaseController.ProcessRequest(System.Func{System.Boolean},System.UInt32,System.UInt32,System.UInt32,System.String)">
+            <summary>
+            This function logs the incoming API call then executes the passed function
+            By executing the function this can catch any errors
+            If it completes successfully a bool response is returned with an http 200
+            If no device is available an HTTP 400 is returned
+            If the device call fails an Alpaca JSON error is returned
+            </summary>
+            <param name="Operation">The operation to preform on the device. Often this is just a lambda that returns a property. By passing it in as a function it can be executed inside a try catch and handle the exception.</param>
+            <param name="TransactionID">The current server transaction id</param>
+            <param name="ClientID">The client id</param>
+            <param name="ClientTransactionID">The client transaction id</param>
+            <param name="Payload">Any payload values, optional, only used for logging</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.ProcessBaseController.LogAPICall(System.Net.IPAddress,System.String,System.UInt32,System.UInt32,System.UInt32,System.String)">
+            <summary>
+            Log out an API request to the ASCOM Standard Logger Instance. This logs at a level of Verbose.
+            </summary>
+            <param name="remoteIpAddress">The IP Address of the remote computer</param>
+            <param name="request">The requested API</param>
+            <param name="clientID">The Client ID</param>
+            <param name="clientTransactionID">The Client Transaction ID</param>
+            <param name="transactionID">The Server Transaction ID</param>
+            <param name="payload">The function payload if any exists</param>
+        </member>
         <member name="M:ASCOM.Alpaca.Simulators.CameraController.BayerOffsetX(System.UInt32,System.UInt32,System.UInt32)">
             <summary>
             Returns the X offset of the Bayer matrix.
@@ -1292,7 +1318,7 @@
         </member>
         <member name="M:ASCOM.Alpaca.Simulators.DomeController.AtPark(System.UInt32,System.UInt32,System.UInt32)">
             <summary>
-            Indicates whether the telescope is at the park position
+            Indicates whether the dome is at the park position
             </summary>
             <remarks>
             <para>True if the dome is in the programmed park position. Set only following a Park() operation and reset with any slew operation.</para>
@@ -2339,6 +2365,371 @@
             <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
             <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         </member>
+        <member name="T:ASCOM.Alpaca.Simulators.SimulatorController">
+            <summary>
+            OmniSim only, not part of Alpaca
+            </summary>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.ResetCamera(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Resets a device settings to the simulator default
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.ResetCoverCalibrator(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Resets a device settings to the simulator default
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.ResetDome(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Resets a device settings to the simulator default
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.ResetFilterWheel(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Resets a device settings to the simulator default
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.ResetFocuser(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Resets a device settings to the simulator default
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.ResetObservingConditions(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Resets a device settings to the simulator default
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.ResetRotator(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Resets a device settings to the simulator default
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.ResetSafetyMonitor(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Resets a device settings to the simulator default
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.ResetSwitch(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Resets a device settings to the simulator default
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.ResetTelescope(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Resets a device settings to the simulator default
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.RestartCamera(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Restarts a device simulator to the simulator stored settings and a clean state. This can be used to restart a device so it behaves like the OmniSim server was just freshly started, without restarting the whole OmniSim.
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.RestartCoverCalibrator(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Restarts a device simulator to the simulator stored settings and a clean state. This can be used to restart a device so it behaves like the OmniSim server was just freshly started, without restarting the whole OmniSim.
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.RestartDome(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Restarts a device simulator to the simulator stored settings and a clean state. This can be used to restart a device so it behaves like the OmniSim server was just freshly started, without restarting the whole OmniSim.
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.RestartFilterWheel(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Restarts a device simulator to the simulator stored settings and a clean state. This can be used to restart a device so it behaves like the OmniSim server was just freshly started, without restarting the whole OmniSim.
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.RestartFocuser(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Restarts a device simulator to the simulator stored settings and a clean state. This can be used to restart a device so it behaves like the OmniSim server was just freshly started, without restarting the whole OmniSim.
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.RestartObservingConditions(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Restarts a device simulator to the simulator stored settings and a clean state. This can be used to restart a device so it behaves like the OmniSim server was just freshly started, without restarting the whole OmniSim.
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.RestartRotator(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Restarts a device simulator to the simulator stored settings and a clean state. This can be used to restart a device so it behaves like the OmniSim server was just freshly started, without restarting the whole OmniSim.
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.RestartSafetyMonitor(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Restarts a device simulator to the simulator stored settings and a clean state. This can be used to restart a device so it behaves like the OmniSim server was just freshly started, without restarting the whole OmniSim.
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.RestartSwitch(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Restarts a device simulator to the simulator stored settings and a clean state. This can be used to restart a device so it behaves like the OmniSim server was just freshly started, without restarting the whole OmniSim.
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.RestartTelescope(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim only API - Restarts a device simulator to the simulator stored settings and a clean state. This can be used to restart a device so it behaves like the OmniSim server was just freshly started, without restarting the whole OmniSim.
+            </summary>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.GetXMLProfileCamera(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Gets a copy of the profile. This is returned as a string value in the standard Response Value field.
+            </summary>
+            <remarks>
+            <para>This method returns the version of the ASCOM device interface contract to which this device complies. Only one interface version is current at a moment in time and all new devices should be built to the latest interface version. Applications can choose which device interface versions they support and it is in their interest to support previous versions as well as the current version to ensure they can use the largest number of devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.GetXMLCoverCalibrator(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Gets a copy of the profile. This is returned as a string value in the standard Response Value field.
+            </summary>
+            <remarks>
+            <para>This method returns the version of the ASCOM device interface contract to which this device complies. Only one interface version is current at a moment in time and all new devices should be built to the latest interface version. Applications can choose which device interface versions they support and it is in their interest to support previous versions as well as the current version to ensure they can use the largest number of devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.GetXMLDome(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Gets a copy of the profile. This is returned as a string value in the standard Response Value field.
+            </summary>
+            <remarks>
+            <para>This method returns the version of the ASCOM device interface contract to which this device complies. Only one interface version is current at a moment in time and all new devices should be built to the latest interface version. Applications can choose which device interface versions they support and it is in their interest to support previous versions as well as the current version to ensure they can use the largest number of devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.GetXMLFilterWheel(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Gets a copy of the profile. This is returned as a string value in the standard Response Value field.
+            </summary>
+            <remarks>
+            <para>This method returns the version of the ASCOM device interface contract to which this device complies. Only one interface version is current at a moment in time and all new devices should be built to the latest interface version. Applications can choose which device interface versions they support and it is in their interest to support previous versions as well as the current version to ensure they can use the largest number of devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.GetXMLFocuser(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Gets a copy of the profile. This is returned as a string value in the standard Response Value field.
+            </summary>
+            <remarks>
+            <para>This method returns the version of the ASCOM device interface contract to which this device complies. Only one interface version is current at a moment in time and all new devices should be built to the latest interface version. Applications can choose which device interface versions they support and it is in their interest to support previous versions as well as the current version to ensure they can use the largest number of devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.GetXMLObservingConditions(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Gets a copy of the profile. This is returned as a string value in the standard Response Value field.
+            </summary>
+            <remarks>
+            <para>This method returns the version of the ASCOM device interface contract to which this device complies. Only one interface version is current at a moment in time and all new devices should be built to the latest interface version. Applications can choose which device interface versions they support and it is in their interest to support previous versions as well as the current version to ensure they can use the largest number of devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.GetXMLRotator(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Gets a copy of the profile. This is returned as a string value in the standard Response Value field.
+            </summary>
+            <remarks>
+            <para>This method returns the version of the ASCOM device interface contract to which this device complies. Only one interface version is current at a moment in time and all new devices should be built to the latest interface version. Applications can choose which device interface versions they support and it is in their interest to support previous versions as well as the current version to ensure they can use the largest number of devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.GetXMLSafetyMonitor(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Gets a copy of the profile. This is returned as a string value in the standard Response Value field.
+            </summary>
+            <remarks>
+            <para>This method returns the version of the ASCOM device interface contract to which this device complies. Only one interface version is current at a moment in time and all new devices should be built to the latest interface version. Applications can choose which device interface versions they support and it is in their interest to support previous versions as well as the current version to ensure they can use the largest number of devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.GetXMLSwitch(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Gets a copy of the profile. This is returned as a string value in the standard Response Value field.
+            </summary>
+            <remarks>
+            <para>This method returns the version of the ASCOM device interface contract to which this device complies. Only one interface version is current at a moment in time and all new devices should be built to the latest interface version. Applications can choose which device interface versions they support and it is in their interest to support previous versions as well as the current version to ensure they can use the largest number of devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.SimulatorController.GetXMLTelescope(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Gets a copy of the profile. This is returned as a string value in the standard Response Value field.
+            </summary>
+            <remarks>
+            <para>This method returns the version of the ASCOM device interface contract to which this device complies. Only one interface version is current at a moment in time and all new devices should be built to the latest interface version. Applications can choose which device interface versions they support and it is in their interest to support previous versions as well as the current version to ensure they can use the largest number of devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
         <member name="M:ASCOM.Alpaca.Simulators.SwitchController.MaxSwitch(System.UInt32,System.UInt32,System.UInt32)">
             <summary>
             The number of switch devices managed by this driver
@@ -2878,7 +3269,7 @@
             Indicates whether the telescope can be unparked.
             </summary>
             <remarks>
-            <para>True if this telescope is capable of programmed unparking (UnPark() method)</para>
+            <para>True if this telescope is capable of programmed unparking (Unpark() method)</para>
             </remarks>
             <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
             <param name="ClientID">Client's unique ID.</param>
@@ -3686,6 +4077,11 @@
             Reset all device settings profiles.
             </summary>
         </member>
+        <member name="T:ASCOM.Alpaca.Simulators.Logging">
+            <summary>
+            Support code and storage for an ASCOM logger.
+            </summary>
+        </member>
         <member name="P:ASCOM.Alpaca.Simulators.Pages.CameraControl.Device">
             <summary>
             This access the device type not the interface to allow the device specific settings to be accessed.
@@ -3780,6 +4176,25 @@
             <summary>
             This access the device type not the interface to allow the device specific settings to be accessed.
             </summary>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Program.StartBrowser(System.Int32)">
+            <summary>
+            Starts the system default handler (normally a browser) for local host and the current port.
+            </summary>
+            <param name="port"></param>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            Creates a asp.net host builder. Sets the content root if a bundled application.
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Program.WriteAndLog(System.String)">
+            <summary>
+            Writes to the console and logs to the primary log provider at the informational level.
+            </summary>
+            <param name="message">The message to write out</param>
         </member>
         <member name="T:Alpaca.AlpacaController">
             <summary>
@@ -3976,32 +4391,6 @@
             <response code="200">Transaction complete or exception</response>
             <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
             <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        </member>
-        <member name="M:Alpaca.AlpacaController.ProcessRequest(System.Func{System.Boolean},System.UInt32,System.UInt32,System.UInt32,System.String)">
-            <summary>
-            This function logs the incoming API call then executes the passed function
-            By executing the function this can catch any errors
-            If it completes successfully a bool response is returned with an http 200
-            If no device is available an HTTP 400 is returned
-            If the device call fails an Alpaca JSON error is returned
-            </summary>
-            <param name="Operation">The operation to preform on the device. Often this is just a lambda that returns a property. By passing it in as a function it can be executed inside a try catch and handle the exception.</param>
-            <param name="TransactionID">The current server transaction id</param>
-            <param name="ClientID">The client id</param>
-            <param name="ClientTransactionID">The client transaction id</param>
-            <param name="Payload">Any payload values, optional, only used for logging</param>
-            <returns></returns>
-        </member>
-        <member name="M:Alpaca.AlpacaController.LogAPICall(System.Net.IPAddress,System.String,System.UInt32,System.UInt32,System.UInt32,System.String)">
-            <summary>
-            Log out an API request to the ASCOM Standard Logger Instance. This logs at a level of Verbose.
-            </summary>
-            <param name="remoteIpAddress">The IP Address of the remote computer</param>
-            <param name="request">The requested API</param>
-            <param name="clientID">The Client ID</param>
-            <param name="clientTransactionID">The Client Transaction ID</param>
-            <param name="transactionID">The Server Transaction ID</param>
-            <param name="payload">The function payload if any exists</param>
         </member>
     </members>
 </doc>
