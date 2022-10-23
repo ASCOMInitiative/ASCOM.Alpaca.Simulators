@@ -372,5 +372,58 @@ namespace ASCOM.Alpaca.Simulators
                 Profile.WriteValue("RequireStrictURLCase", value.ToString());
             }
         }
+
+        #region SSL Settings
+        internal static bool UseSSL
+        {
+            get
+            {
+                if (bool.TryParse(Profile.GetValue("UseSSL", false.ToString()), out bool result))
+                {
+                    return result;
+                }
+                return true;
+            }
+            set
+            {
+                Profile.WriteValue("UseSSL", value.ToString());
+            }
+        }
+
+        internal static string SSLCertPath
+        {
+            get
+            {
+                var path = System.IO.Path.Combine(XMLProfile.AlpacaDataPath, SettingsFolderName, "test.pfx");
+                return Profile.GetValue("SSLCertPath", path);
+            }
+            set
+            {
+                Profile.WriteValue("SSLCertPath", value.ToString());
+            }
+        }
+
+        internal static string SSLCertPassword
+        {
+            get;
+            set;
+        } = "1234567";
+
+        internal static ushort SSLPort
+        {
+            get
+            {
+                if(ServerPort == ushort.MaxValue)
+                {
+                    return (ushort)(ServerPort - 1);
+                }
+                else
+                {
+                    return (ushort)(ServerPort + 1);
+                }
+            }
+        }
+
+        #endregion
     }
 }

@@ -230,6 +230,45 @@
 </fieldset>
 
 <fieldset>
+    <legend>SSL Settings (preview)</legend>
+    <div class="grid-container-two">
+        <div class="grid-item-right">
+            <span>Enable SSL:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox" @bind="UseSSL">
+        </div>
+
+        <div class="grid-item-right">
+            <span>SSL Port:</span>
+        </div>
+        <div class="grid-item-left">
+            <span>@ServerSettings.SSLPort</span>
+        </div>
+
+        <div class="grid-item-right">
+            <span>SSL Cert Path:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="text" style="width:21ch;" @bind=SSLPath>
+        </div>
+
+        <div class="grid-item-right">
+            <span>SSL Cert Password:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="text" style="width:21ch;" @bind=SSLPassword>
+        </div>
+
+        <div class="grid-item-right">
+        </div>
+        <div class="grid-item-right">
+            <button @onclick="SaveSSLSettings" style="min-width:12ch; vertical-align:middle;">Save</button>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
     <legend>Shutdown Driver</legend>
     <div class="grid-container-two">
         <div class="grid-item-right">
@@ -356,6 +395,24 @@
         get;
         set;
     } = ServerSettings.RunSwagger;
+
+    bool UseSSL
+    {
+        get;
+        set;
+    } = ServerSettings.UseSSL;
+
+    string SSLPath
+    {
+        get;
+        set;
+    } = ServerSettings.SSLCertPath;
+
+    string SSLPassword
+    {
+        get;
+        set;
+    } = ServerSettings.SSLCertPassword;
 
     void SaveDiscovery()
     {
@@ -492,6 +549,20 @@
             ServerSettings.RunSwagger = RunSwagger;
 
             DisplaySuccess("Open API Settings saved!");
+        }
+        catch (Exception ex)
+        {
+            DisplayError(ex.Message);
+        }
+    }
+
+    void SaveSSLSettings()
+    {
+        try
+        {
+            ServerSettings.UseSSL = UseSSL;
+
+            DisplaySuccess("SSL settings changed! Please restart OmniSim for them to take effect.");
         }
         catch (Exception ex)
         {

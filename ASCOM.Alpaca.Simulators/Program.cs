@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -125,16 +127,61 @@ namespace ASCOM.Alpaca.Simulators
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        private static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        private static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            var builder = Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>()
 #if BUNDLED
                     .UseContentRoot(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location))
 #endif
-                    .UseKestrel();
+                    .UseKestrel().ConfigureKestrel(options =>
+                    {
+                        try
+                        {
+                            if (ServerSettings.UseSSL)
+                            {
+                                if (!System.IO.File.Exists(ServerSettings.SSLCertPath))
+                                {
+                                    Logging.LogInformation("Generating Self Signed SSL Certificate");
+                                    var cert = SSL.SelfCert.BuildSelfSignedServerCertificate("TestCert", ServerSettings.SSLCertPassword);
+                                    SSL.SelfCert.SaveCertificate(cert, ServerSettings.SSLCertPassword, ServerSettings.SSLCertPath);
+                                }
+
+                                try
+                                {
+                                    options.Listen(IPAddress.Any, ServerSettings.SSLPort, listenOptions =>
+                                    {
+                                        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+                                        listenOptions.UseHttps(ServerSettings.SSLCertPath, ServerSettings.SSLCertPassword);
+                                    });
+                                }
+                                catch(Exception ex)
+                                {
+                                    Logging.LogError($"Failed to start SSL load with error: {ex.Message}");
+                                }
+
+                                if (ServerSettings.AllowRemoteAccess) {
+                                    options.Listen(IPAddress.Any, ServerSettings.ServerPort);
+                                }
+                                else
+                                {
+                                    options.Listen(IPAddress.Loopback, ServerSettings.ServerPort);
+                                }
+                            }
+                        }
+
+                        catch (Exception ex)
+                        {
+                            Logging.LogError($"Failed to start SSL with error: {ex.Message}");
+                        }
+                    }
+                    );
                 });
+
+            return builder;
+        }
 
         /// <summary>
         /// Writes to the console and logs to the primary log provider at the informational level.
