@@ -14,7 +14,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             try
             {
-                Releases = await LetsMake.GitHubReleases.GetReleases("DanielVanNoord", "ASCOM.Alpaca.Simulators");
+                Releases = await LetsMake.GitHubReleases.GetReleases("ASCOMInitiative", "ASCOM.Alpaca.Simulators");
             }
             catch(Exception ex)
             {
