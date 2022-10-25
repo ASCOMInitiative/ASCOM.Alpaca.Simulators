@@ -313,7 +313,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             get
             {
-                if (bool.TryParse(Profile.GetValue("LogToConsole", false.ToString()), out bool result))
+                if (bool.TryParse(Profile.GetValue("LogToConsole", true.ToString()), out bool result))
                 {
                     return result;
                 }
