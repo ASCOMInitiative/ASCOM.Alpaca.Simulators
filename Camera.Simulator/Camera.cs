@@ -2521,7 +2521,7 @@ namespace ASCOM.Simulators
             exposureMin = Convert.ToDouble(Profile.GetValue(STR_MinExposure, "0.001"), CultureInfo.InvariantCulture);
             exposureResolution = Convert.ToDouble(Profile.GetValue(STR_ExposureResolution, "0.001"), CultureInfo.InvariantCulture);
 
-            string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(GetType()).Location);
+            string fullPath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
             if (Convert.ToBoolean(Profile.GetValue(STR_UseCustomImage, false.ToString())))
             {
                 imagePath = Profile.GetValue(STR_ImagePath, Path.Combine(fullPath, @"m42-800x600.jpg"));

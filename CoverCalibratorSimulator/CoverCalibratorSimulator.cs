@@ -243,10 +243,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-
-                string driverInfo = $"CoverCalibrator driver version: {fvi.FileVersion}.";
+                string driverInfo = $"CoverCalibrator driver version: {Assembly.GetExecutingAssembly().GetName().Version}.";
                 LogVerbose("DriverInfo Get", driverInfo);
                 return driverInfo;
             }

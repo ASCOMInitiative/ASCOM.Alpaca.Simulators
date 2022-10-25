@@ -1,8 +1,7 @@
-using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
 using ASCOM.Tools;
+using OmniSim.Tools;
 using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace ASCOM.Alpaca.Simulators
@@ -19,7 +18,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 try
                 {
-                    return System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
+                    return VersionAccess.GetVersionFromType(typeof(ServerSettings));
                 }
                 catch
                 {
@@ -34,8 +33,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 try
                 {
-                    System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-                    return FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
+                    return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0-Error";
                 }
                 catch
                 {
