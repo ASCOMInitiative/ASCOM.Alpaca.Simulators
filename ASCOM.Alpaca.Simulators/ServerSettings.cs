@@ -45,7 +45,6 @@ namespace ASCOM.Alpaca.Simulators
         //Change this to be unique for your server, it is the name of the settings folder
         private const string _settingFolderName = "ASCOM-Alpaca-Simulator";
 
-
         internal static string SettingsFolderName
         {
             get
@@ -94,7 +93,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        private readonly static XMLProfile Profile = new XMLProfile(SettingsFolderName, ServerFolderName);
+        private static readonly XMLProfile Profile = new XMLProfile(SettingsFolderName, ServerFolderName);
 
         internal static void Reset()
         {
@@ -372,6 +371,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         #region SSL Settings
+
         internal static bool UseSSL
         {
             get
@@ -411,7 +411,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             get
             {
-                if(ServerPort == ushort.MaxValue)
+                if (ServerPort == ushort.MaxValue)
                 {
                     return (ushort)(ServerPort - 1);
                 }
@@ -422,6 +422,6 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        #endregion
+        #endregion SSL Settings
     }
 }
