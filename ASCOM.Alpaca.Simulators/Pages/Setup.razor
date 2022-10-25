@@ -553,9 +553,23 @@
     {
         try
         {
+            bool SettingsChanged = false;
+
+            if(ServerSettings.UseSSL != UseSSL)
+            {
+                SettingsChanged = true;
+            }
+
             ServerSettings.UseSSL = UseSSL;
 
-            DisplaySuccess("SSL settings changed! Please restart OmniSim for them to take effect.");
+            DisplaySuccess("SSL settings changed!");
+
+            if (SettingsChanged) //If any core settings change call a restart.
+            {
+                DisplayWarning("Automatically reloading OmniSim, a full restart may be required to apply all settings.");
+                System.Threading.Thread.Sleep(2000);
+                Program.Main(null);
+            }
         }
         catch (Exception ex)
         {
