@@ -121,12 +121,19 @@ namespace ASCOM.Alpaca.Simulators
         /// <param name="port"></param>
         internal static void StartBrowser(int port)
         {
-            ProcessStartInfo psi = new ProcessStartInfo
+            try
             {
-                FileName = string.Format("http://localhost:{0}", port),
-                UseShellExecute = true
-            };
-            Process.Start(psi);
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = string.Format("http://localhost:{0}", port),
+                    UseShellExecute = true
+                };
+                Process.Start(psi);
+            }
+            catch(Exception ex)
+            {
+                Logging.LogError(ex.Message);
+            }
         }
 
         /// <summary>
