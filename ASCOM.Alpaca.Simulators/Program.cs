@@ -110,6 +110,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 Logging.LogError(ex.Message);
             }
         }
