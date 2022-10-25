@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -41,14 +42,28 @@ namespace ASCOM.Alpaca.Simulators
                 Console.WriteLine($"http://localhost:{ServerSettings.ServerPort}");
             }
 
-            //Already running, start the browser, detects based on port in use
             try
             {
-                if(IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpConnections().Any(con => con.LocalEndPoint.Port == ServerSettings.ServerPort))
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    WriteAndLog("Detected driver port already open, starting web browser on IP and Port. If this fails something else is using the port");
-                    StartBrowser(ServerSettings.ServerPort);
-                    return;
+                    //Already running, start the browser, detects based on port in use
+                    if (IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpConnections().Any(con => con.LocalEndPoint.Port == ServerSettings.ServerPort))
+                    {
+                        WriteAndLog("Detected driver port already open, starting web browser on IP and Port. If this fails something else is using the port");
+                        StartBrowser(ServerSettings.ServerPort);
+                        return;
+                    }
+                }
+                else
+                {
+                    //This was working fine for .Net Core 3.1. Initial tests for .Net 5 show a change in how single file deployments work on Linux
+                    //This should probably be changed to a Mutex or another similar lock
+                    if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName)).Count() > 1)
+                    {
+                        WriteAndLog("Detected driver already running, starting web browser on IP and Port");
+                        StartBrowser(ServerSettings.ServerPort);
+                        return;
+                    }
                 }
             }
             catch(Exception ex)
