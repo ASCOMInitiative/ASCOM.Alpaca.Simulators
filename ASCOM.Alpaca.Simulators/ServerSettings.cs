@@ -394,7 +394,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             get
             {
-                var path = System.IO.Path.Combine(XMLProfile.AlpacaDataPath, SettingsFolderName, "test.pfx");
+                var path = System.IO.Path.Combine(XMLProfile.AlpacaDataPath, SettingsFolderName, "UnsafeAutoSSL.pfx");
                 return Profile.GetValue("SSLCertPath", path);
             }
             set
