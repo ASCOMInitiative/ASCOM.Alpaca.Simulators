@@ -125,8 +125,9 @@ namespace ASCOM.Alpaca.Simulators
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
                 Logging.LogError(ex.Message);
+                Console.WriteLine("A fatal error has occurred and the OmniSim is shutting down.");
+                Console.WriteLine(ex.Message);
             }
         }
 
