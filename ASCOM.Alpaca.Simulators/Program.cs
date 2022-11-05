@@ -47,7 +47,8 @@ namespace ASCOM.Alpaca.Simulators
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     //Already running, start the browser, detects based on port in use
-                    if (IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpConnections().Any(con => con.LocalEndPoint.Port == ServerSettings.ServerPort))
+                    var con1 = IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpConnections().Where(con => con.LocalEndPoint.Port == ServerSettings.ServerPort);
+                    if (IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpConnections().Any(con => con.LocalEndPoint.Port == ServerSettings.ServerPort && (con.State == TcpState.Listen || con.State == TcpState.Established)))
                     {
                         WriteAndLog("Detected driver port already open, starting web browser on IP and Port. If this fails something else is using the port");
                         StartBrowser(ServerSettings.ServerPort);
