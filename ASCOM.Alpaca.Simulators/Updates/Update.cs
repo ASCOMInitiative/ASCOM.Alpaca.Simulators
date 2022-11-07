@@ -18,7 +18,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             catch(Exception ex)
             {
-
+                Logging.LogError(ex.Message);
             }
         }
 
@@ -40,7 +40,7 @@ namespace ASCOM.Alpaca.Simulators
                                 {
                                     if (SemVersion.TryParse(Release.TagName, SemVersionStyles.AllowV, out SemVersion latestrelease))
                                     {
-                                        if(latestrelease > currentversion)
+                                        if(latestrelease.CompareSortOrderTo(currentversion) == 1)
                                         {
                                             return true;
                                         }
