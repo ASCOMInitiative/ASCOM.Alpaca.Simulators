@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using LetsMake;
-using Semver;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -32,15 +31,15 @@ namespace ASCOM.Alpaca.Simulators
                     {
                         if (Releases.Count > 0)
                         {
-                            if (SemVersion.TryParse(ServerSettings.ServerVersion, SemVersionStyles.AllowV, out SemVersion currentversion))
+                            if (SemanticVersion.TryParse(ServerSettings.ServerVersion, out SemanticVersion currentversion))
                             {
                                 var Release = Releases?.Latest();
     
                                 if (Release != null)
                                 {
-                                    if (SemVersion.TryParse(Release.TagName, SemVersionStyles.AllowV, out SemVersion latestrelease))
+                                    if (SemanticVersion.TryParse(Release.TagName, out SemanticVersion latestrelease))
                                     {
-                                        if(latestrelease.CompareSortOrderTo(currentversion) == 1)
+                                        if(latestrelease > currentversion)
                                         {
                                             return true;
                                         }

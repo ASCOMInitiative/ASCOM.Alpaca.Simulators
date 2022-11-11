@@ -1,5 +1,4 @@
 ﻿using Octokit;
-using Semver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,17 +57,17 @@ namespace LetsMake
             return null;
         }
 
-        public static SemVersion ReleaseSemVersionFromTag(this Release release)
+        public static SemanticVersion ReleaseSemVersionFromTag(this Release release)
         {
             if (release == null)
             {
                 throw new ArgumentNullException(nameof(release));
             }
-            if (!string.IsNullOrEmpty(release.TagName) && SemVersion.TryParse(release.TagName, SemVersionStyles.AllowV, out SemVersion _latest_release_version))
+            if (!string.IsNullOrEmpty(release.TagName) && SemanticVersion.TryParse(release.TagName, out SemanticVersion _latest_release_version))
             {
                 return _latest_release_version;
             }
-            return SemVersion.ParsedFrom(0, 0, 0, release.TagName ?? "No Tag");
+            return new SemanticVersion(0, 0, 0, release.TagName ?? "No Tag");
         }
     }
 }

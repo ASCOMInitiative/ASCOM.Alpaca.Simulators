@@ -1,6 +1,5 @@
 ﻿@page "/update"
 
-@using Semver;
 @using Octokit;
 @using LetsMake;
 
@@ -47,14 +46,14 @@
     {
         try
         {
-            if (SemVersion.TryParse(ServerSettings.ServerVersion, SemVersionStyles.AllowV, out SemVersion currentversion))
+            if (SemanticVersion.TryParse(ServerSettings.ServerVersion, out SemanticVersion currentversion))
             {
                 var LatestRelease = ASCOM.Alpaca.Simulators.Update.Releases?.LatestRelease();
                 var LatestPrerelease = ASCOM.Alpaca.Simulators.Update.Releases?.LatestPrerelease();
 
-                SemVersion.TryParse(LatestRelease.TagName, SemVersionStyles.AllowV, out SemVersion latestrelease);
+                SemanticVersion.TryParse(LatestRelease.TagName, out SemanticVersion latestrelease);
 
-                SemVersion.TryParse(LatestPrerelease.TagName, SemVersionStyles.AllowV, out SemVersion latestprerelease);
+                SemanticVersion.TryParse(LatestPrerelease.TagName, out SemanticVersion latestprerelease);
 
                 if(currentversion == latestrelease || currentversion == latestprerelease)
                 {
@@ -72,7 +71,7 @@
                 }
                 if(latestrelease == null)
                 {
-                    latestrelease = new SemVersion(0);
+                    latestrelease = new SemanticVersion(0);
                 }
                 if (latestprerelease != null)
                 {
