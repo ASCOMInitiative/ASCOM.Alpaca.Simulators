@@ -35,25 +35,21 @@
 //     8) Whether the cooler always starts at ambient temperature when the cooler is turned on or whether it starts at the temperature it has "warmed up to" since the cooler was turned off.
 //     9) Whether or not the camera powers up with cooling enabled
 
+using ASCOM.Common;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.ColorSpaces.Conversion;
+using SixLabors.ImageSharp.PixelFormats;
 using System;
-using System.Collections;
-using System.Drawing;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Timers;
-using System.Collections.Generic;
-using ASCOM.Common.DeviceInterfaces;
-using ASCOM.Common.Alpaca;
 using System.Runtime.CompilerServices;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.ColorSpaces;
-using SixLabors.ImageSharp.ColorSpaces.Conversion;
-using ASCOM.Common.Interfaces;
-using ASCOM.Common;
+using System.Timers;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
+
 namespace ASCOM.Simulators
 {
     /// <summary>
@@ -68,6 +64,7 @@ namespace ASCOM.Simulators
         private static string s_csDriverDescription = "Camera V3 simulator";
 
         #region Profile string constants
+
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
         private const string STR_InterfaceVersion = "InterfaceVersion";
@@ -116,6 +113,7 @@ namespace ASCOM.Simulators
 
         // Cooler configuration strings
         private const string STR_CoolerAmbientTemperature = "CoolerAmbientTemperature";
+
         private const string STR_CoolerSetPoint = "CoolerSetPoint";
         private const string STR_CoolerDeltaTMax = "CoolerDeltaTMax";
         private const string STR_CoolerMode = "CoolerMode";
@@ -127,12 +125,14 @@ namespace ASCOM.Simulators
         private const string STR_CoolerUnderDampedCycles = "CoolerUnderDampedCycles";
         private const string STR_CoolerSetPointMinimum = "CoolerSetPointMinimum";
         private const string STR_CoolerGraphRange = "CoolerGraphRange";
-        #endregion
+
+        #endregion Profile string constants
 
         #region Camera cooler modes and initial conditions
 
         // Available cooler behavioural modes - When adding a new cooler mode, define its name here and add it the coolerModes array to ensure that it will appear in the list of options. Next update places where switch statements configure behaviour based on cooling Mode.
         internal const string COOLERMODE_WELL_BEHAVED = "Well behaved approach to setpoint (Default)";
+
         internal const string COOLERMODE_ALWAYS_AT_SETPOINT = "Always at setpoint";
         internal const string COOLERMODE_SINGLE_OVERSHOOT = "Single overshoot to setpoint";
         internal const string COOLERMODE_UNDERDAMPED = "Under damped approach to setpoint";
@@ -140,7 +140,8 @@ namespace ASCOM.Simulators
         internal List<string> coolerModes = new List<string>() { COOLERMODE_WELL_BEHAVED, COOLERMODE_SINGLE_OVERSHOOT, COOLERMODE_UNDERDAMPED, COOLERMODE_ALWAYS_AT_SETPOINT, COOLERMODE_NEVER_GETS_TO_SETPOINT }; // Collection containing all available cooler modes
 
         // Cooler default characteristics - See void coolerTimer_Elapsed(object sender, ElapsedEventArgs e) for a description of cooler operation
-        private const double COOLER_AMBIENT_TEMPERATURE_DEFAULT = 10; // Ambient temperature (C) when the camera is initially created  
+        private const double COOLER_AMBIENT_TEMPERATURE_DEFAULT = 10; // Ambient temperature (C) when the camera is initially created
+
         private const double COOLER_CCD_SET_POINT_DEFAULT = -20; // Camera initial set point
         private const double COOLER_DELTAT_MAX_DEFAULT = 40; // Maximum temperature (C) below ambient to which the camera cooler can cool when the cooler is running at 100%
         private const double COOLER_TIME_TO_SETPOINT_DEFAULT = 30; // Time (seconds) to reach the CCD temperature set point when starting from ambient
@@ -155,6 +156,7 @@ namespace ASCOM.Simulators
 
         // Cooler behavioural configuration
         internal const double COOLER_NEVER_GETS_TO_SETPOINT_REDUCTION_FACTOR = 0.1; // Arbitrary factor to increase the returned CCD temperature so that it never reaches the setpoint. The achieved temperature will be (1.0 - REDUCTION_FACTOR) of the setpoint
+
         private const double COOLER_USE_FULL_POWER = 0.75; // Fraction of the cooling curve temperature change above which cooler power will be reported as 100%. e.g. 0.95 means the first 95% of the temperature change will be reported as 100% cooler power and the last 5% as the calculated power.
         internal const double COOLER_SETPOINT_REACHED_OFFSET = 0.1; // Temperature offset from the setpoint at which the cooler will deem that it has arrived at the setpoint. i.e. when the CCD is within +-COOLER_SETPOINT_REACHED_OFFSET of the setpoint
         private const double OVERSHOOT_INCREASE_TO_TIME_FRACTION = 0.5; // Fraction of the cooling time during which the overshoot component increases to its configured value
@@ -163,6 +165,7 @@ namespace ASCOM.Simulators
 
         // Cooler simulator variables
         internal double coolerDeltaTMax; // Maximum difference between ambient temperature and the cooler setpoint
+
         internal string coolerMode; // Description of current cooler behaviour
         internal double coolerTimeToSetPoint; // Length of time (seconds) that the cooler will take getting to the setpoint from ambient
         internal bool coolerResetToAmbient; // Flag to indicate whether the cooler should reset to ambient whenever cooling is set on
@@ -179,7 +182,7 @@ namespace ASCOM.Simulators
         private bool coolerAtTemperature; // Flag indicating whether the cooler has reached its final temperature
         private static Random randomGenerator; // Ensure that there is only one of these for all camera instances so that fluctuations are not correlated between cameras
 
-        #endregion
+        #endregion Camera cooler modes and initial conditions
 
         #region Internal properties
 
@@ -188,6 +191,7 @@ namespace ASCOM.Simulators
 
         //Pixel
         internal double pixelSizeX;
+
         internal double pixelSizeY;
         internal double fullWellCapacity;
         internal int maxADU;
@@ -195,6 +199,7 @@ namespace ASCOM.Simulators
 
         //CCD
         internal int cameraXSize;
+
         internal int cameraYSize;
         internal bool canAsymmetricBin;
         internal short maxBinX;
@@ -214,6 +219,7 @@ namespace ASCOM.Simulators
 
         //cooling
         internal bool hasCooler;
+
         private bool coolerOn;
         internal bool canSetCcdTemperature;
         internal bool canGetCoolerPower;
@@ -225,6 +231,7 @@ namespace ASCOM.Simulators
 
         // Gain
         internal IList<string> gains;
+
         internal short gainMin;
         internal short gainMax;
         internal short gain;
@@ -232,6 +239,7 @@ namespace ASCOM.Simulators
 
         // Offset
         internal IList<string> offsets;
+
         internal int offsetMin;
         internal int offsetMax;
         internal int offset;
@@ -239,6 +247,7 @@ namespace ASCOM.Simulators
 
         // Exposure
         internal bool canAbortExposure;
+
         internal bool canStopExposure;
         internal double exposureMax;
         internal double exposureMin;
@@ -254,12 +263,14 @@ namespace ASCOM.Simulators
 
         // readout
         internal bool canFastReadout;
+
         private bool fastReadout;
         private short readoutMode;
         internal IList<string> readoutModes;
 
         // guiding
         internal bool canPulseGuide;
+
         private System.Timers.Timer pulseGuideRaTimer;
         private volatile bool isPulseGuidingRa;
         private System.Timers.Timer pulseGuideDecTimer;
@@ -267,6 +278,7 @@ namespace ASCOM.Simulators
 
         // simulation
         internal string imagePath;
+
         internal bool applyNoise;
         private float[,,] imageData;    // room for a 3 plane colour image
         private bool darkFrame;
@@ -285,13 +297,13 @@ namespace ASCOM.Simulators
         private System.Timers.Timer coolerTimer;
 
         // supported actions
-        // should really use constants for the action names, 
+        // should really use constants for the action names,
         private IList<string> supportedActions = new List<string> { "SetFanSpeed", "GetFanSpeed" };
 
-        // SetFanSpeed, GetFanSpeed. These commands control a hypothetical CCD camera heat sink fan, range 0 (off) to 3 (full speed) 
+        // SetFanSpeed, GetFanSpeed. These commands control a hypothetical CCD camera heat sink fan, range 0 (off) to 3 (full speed)
         private int fanMode;
 
-        #endregion
+        #endregion Internal properties
 
         #region Enums
 
@@ -309,9 +321,9 @@ namespace ASCOM.Simulators
             OffsetMinMax = 2
         }
 
-        #endregion
+        #endregion Enums
 
-        IProfile Profile;
+        private IProfile Profile;
 
         #region Camera Constructor and Dispose
 
@@ -367,7 +379,7 @@ namespace ASCOM.Simulators
             GC.Collect();
         }
 
-        #endregion
+        #endregion Camera Constructor and Dispose
 
         #region Cooler Timer
 
@@ -375,32 +387,32 @@ namespace ASCOM.Simulators
         /// Adjust the CCD temperature and power periodically to simulate cooling and warming up
         /// </summary>
         /// <remarks>
-        ///  
+        ///
         /// NOTES
-        ///    
+        ///
         /// 1) The cooler timer only runs while the camera is cooling or warming up, at other times it is disabled.
-        /// 
+        ///
         /// 2) Each cooler mode, including warming up, is responsible for determining when it has reached its target temperature and indicating this by setting the coolerAtTemperature variable to True.
-        /// 
+        ///
         /// 3) Newton's cooling equation is used to calculate how the CCD temperature changes over time. The equation describes an exponential approach to the setpoint that, theoretically, will only be reached in an infinite period of time.
-        ///    To work round this the camera deems that the CCD is at the setpoint temperature when the calculated temperature reaches a small offset from the setpoint, e.g. 0.1C, by which time the rate of temperature change is low. 
-        ///    
-        ///    The advantage of this approach is that the time to arrive at the specified offset can be controlled precisely by suitable choice of cooling constant. Please see the CalculateCoolerConstant method for details of 
+        ///    To work round this the camera deems that the CCD is at the setpoint temperature when the calculated temperature reaches a small offset from the setpoint, e.g. 0.1C, by which time the rate of temperature change is low.
+        ///
+        ///    The advantage of this approach is that the time to arrive at the specified offset can be controlled precisely by suitable choice of cooling constant. Please see the CalculateCoolerConstant method for details of
         ///    Newton's cooling equation and how the cooler calculates the cooling constant in practice.
-        /// 
+        ///
         /// 4) The reported CCD temperature is adjusted to allow for the specified offset so that the CCD temperature smoothly approaches the required setpoint temperature rather than the (setpoint + offset) temperature.
-        ///    
+        ///
         /// 5) All temperature changes are managed through the same process, regardless of mode:
         ///    a) The Camera.SetCCTTemperature or Camera.CoolerOn properties set the coolerAtTemperature variable to False and start the cooler timer
         ///    b) The coolerTimer_Elapsed event is called multiple times as time passes and the relevant "mode code" calculates a new CCD temperature and cooler power on each call
         ///    c) At some point, the mode code determines that the setpoint has been reached and sets the coolerAtTemperature variable to True as well as setting the CCD temperature precisely to the setpoint
         ///    d) If the coolerAtTemperature variable is True, a cooling cycle completed log message is written and the cooler timer is disabled
-        ///    
+        ///
         /// 6) At "times to temperature" of less than 100 seconds, the cooler timer period is calculated from the "time to temperature" to ensure that at least 100 CCD temperature and power updates are made during
         ///    a full cooling cycle from ambient to maximum cooler temperature. At longer "times to temperature", updates will occur every second.
-        ///    
+        ///
         /// 7) Random temperature fluctuations, if configured (coolerFluctuation > 0.0), are applied in the Camera.CCDTemperature and Camera.HeatSinkTemperature properties before the calculated values are returned to the caller.
-        /// 
+        ///
         /// </remarks>
         private void coolerTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -412,7 +424,6 @@ namespace ASCOM.Simulators
 
             if (coolerOn) // The cooler is on and we are cooling or warming to the setpoint or have just arrived at it
             {
-
                 // Calculate the cooler temperature based on the supplied parameters. The CCD temperature is returned in the ccdTemperature global variable and whether or not the CCD is at temperature is returned in the coolerAtTemperature global variable
                 CalculateCoolerTemperature(currentCoolingTimeFractionU, overallTimeToSetpointU, ccdStartTemperature, targetCcdTemperature, coolerUnderDampedCycles, coolerOvershoot, heatSinkTemperature, coolerDeltaTMax, coolerConstant, coolerMode);
 
@@ -465,7 +476,7 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Calculate the CCD temperature for the current cooler mode using the supplied parameters. 
+        /// Calculate the CCD temperature for the current cooler mode using the supplied parameters.
         /// </summary>
         /// <param name="currentCoolingTimeFraction"></param>
         /// <param name="overallTimeToSetpoint"></param>
@@ -560,8 +571,8 @@ namespace ASCOM.Simulators
 
                 case COOLERMODE_SINGLE_OVERSHOOT:
                     // Newton's cooling curve is used as the foundation for CCD temperature prediction in this mode.
-                    // However, overshoot delivery requires that the Newton's temperature be modified to create the more complex overshoot behaviour. This is achieved by defining phases, 
-                    // specified as fractions of the expected cooling time to the setpoint, which introduce specific incremental temperature offsets that are added to the Newton's temperature 
+                    // However, overshoot delivery requires that the Newton's temperature be modified to create the more complex overshoot behaviour. This is achieved by defining phases,
+                    // specified as fractions of the expected cooling time to the setpoint, which introduce specific incremental temperature offsets that are added to the Newton's temperature
                     // to create the desired CCD temperature.
 
                     // This mode caters for two general cases:
@@ -569,7 +580,7 @@ namespace ASCOM.Simulators
                     //    Phase 1) Cooling time fraction 0.0 to 1.0 - Follow Newton's cooling curve from the initial CCD temperature to the setpoint
                     //
                     // 2) Some overshoot (coolerOvershoot > 0.0) - CCD temperature behaviour is managed in three phases through the cooling cycle:
-                    //    Phase 1) Cooling time fraction 0.0 to OVERSHOOT_INCREASE_TO_TIME_FRACTION ................................. Proceed from the current CCD temperature through the setpoint to the required overshoot temperature. 
+                    //    Phase 1) Cooling time fraction 0.0 to OVERSHOOT_INCREASE_TO_TIME_FRACTION ................................. Proceed from the current CCD temperature through the setpoint to the required overshoot temperature.
                     //    Phase 2) Cooling time fraction OVERSHOOT_INCREASE_TO_TIME_FRACTION to OVERSHOOT_DECREASE_TO_TIME_FRACTION . Return from the overshoot temperature through the setpoint to the Newton's curve temperature
                     //    Phase 3) Cooling time fraction OVERSHOOT_DECREASE_TO_TIME_FRACTION to 1.0 ................................. Follow Newton's cooling curve to the setpoint
 
@@ -646,7 +657,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion
+        #endregion Cooler Timer
 
         #region Common Methods
 
@@ -701,6 +712,7 @@ namespace ASCOM.Simulators
                         throw new InvalidValueException("Action-SetFanMode", ActionParameters, "0 to 3");
                     case "GetFanSpeed":
                         return fanMode.ToString();
+
                     default:
                         break;
                 }
@@ -709,7 +721,7 @@ namespace ASCOM.Simulators
             throw new MethodNotImplementedException("Action-" + ActionName);
         }
 
-        #endregion
+        #endregion Common Methods
 
         #region ICamera Members
 
@@ -743,8 +755,10 @@ namespace ASCOM.Simulators
                     cameraState = CameraState.Idle;
                     imageReady = false;
                     break;
+
                 case CameraState.Idle:
                     break;
+
                 case CameraState.Error:
                     Log.LogMessage("AbortExposure", "Camera Error");
                     throw new ASCOM.InvalidOperationException("AbortExposure not possible because of an error");
@@ -1060,7 +1074,6 @@ namespace ASCOM.Simulators
 
                 if (connected & coolerPowerUpState) CoolerOn = true; // If we are connecting enable the cooler immediately if required through configuration
 
-
                 if (!connected) // We have just disconnected so free memory used by large objects
                 {
                     imageArray = null;
@@ -1095,7 +1108,6 @@ namespace ASCOM.Simulators
             }
             set
             {
-
                 CheckConnected("Can't set CoolerOn when not connected");
                 CheckCapabilityEnabled("CoolerOn", hasCooler);
                 Log.LogMessage("CoolerOn", "set {0}", value);
@@ -1103,7 +1115,6 @@ namespace ASCOM.Simulators
 
                 if (coolerOn)// Set the correct cooler temperature starting point, depending on configuration and usage history
                 {
-
                     if (coolerResetToAmbient)
                     {
                         ccdTemperature = heatSinkTemperature; // Configuration requires that CCD temperature is reset to ambient
@@ -1339,7 +1350,6 @@ namespace ASCOM.Simulators
                             for (int k = 0; k < 3; k++)
                                 imageArrayVariantColour[j, i, k] = imageArrayColour[j, i, k];
                         }
-
                     }
                     return imageArrayVariantColour;
                 }
@@ -1352,7 +1362,6 @@ namespace ASCOM.Simulators
                         {
                             imageArrayVariant[j, i] = imageArray[j, i];
                         }
-
                     }
                     return imageArrayVariant;
                 }
@@ -1585,6 +1594,7 @@ namespace ASCOM.Simulators
                     pulseGuideRaTimer.AutoReset = false;     // only one tick
                     pulseGuideRaTimer.Enabled = true;
                     break;
+
                 case GuideDirection.North:
                 case GuideDirection.South:
                     if (pulseGuideDecTimer == null)
@@ -1597,6 +1607,7 @@ namespace ASCOM.Simulators
                     pulseGuideDecTimer.AutoReset = false;     // only one tick
                     pulseGuideDecTimer.Enabled = true;
                     break;
+
                 default:
                     break;
             }
@@ -1923,8 +1934,10 @@ namespace ASCOM.Simulators
                     cameraState = CameraState.Idle;
                     imageReady = true;
                     break;
+
                 case CameraState.Idle:
                     break;
+
                 case CameraState.Error:
                 default:
                     Log.LogMessage("StopExposure", "Not exposing");
@@ -1933,7 +1946,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion
+        #endregion ICamera Members
 
         #region ICameraV2 properties
 
@@ -1941,7 +1954,7 @@ namespace ASCOM.Simulators
         /// Returns the X offset of the Bayer matrix, as defined in <see cref=""SensorType/>.
         /// Value returned must be in the range 0 to M-1, where M is the width of the Bayer matrix.
         /// The offset is relative to the 0,0 pixel in the sensor array, and does not change to reflect
-        /// subframe settings. 
+        /// subframe settings.
         /// </summary>
         /// <value>The Bayer offset X.</value>
         public short BayerOffsetX
@@ -1960,7 +1973,7 @@ namespace ASCOM.Simulators
         /// Returns the Y offset of the Bayer matrix, as defined in <see cref=""SensorType/>.
         /// Value returned must be in the range 0 to M-1, where M is the height of the Bayer matrix.
         /// The offset is relative to the 0,0 pixel in the sensor array, and does not change to reflect
-        /// subframe settings. 
+        /// subframe settings.
         /// </summary>
         /// <value>The Bayer offset Y.</value>
         public short BayerOffsetY
@@ -1976,7 +1989,7 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// If True, the <see cref="FastReadout"/> function is available. 
+        /// If True, the <see cref="FastReadout"/> function is available.
         /// </summary>
         /// <value>
         /// 	<c>true</c> if the <see cref="FastReadout"/> function is available; otherwise, <c>false</c>.
@@ -1997,7 +2010,7 @@ namespace ASCOM.Simulators
         /// This string may contain line endings and may be hundreds to thousands of characters long.
         /// It is intended to display detailed information on the ASCOM driver, including version
         /// and copyright data.. See the <see cref="Description"/> property for descriptive info on the camera itself.
-        /// To get the driver version for compatibility reasons, use the <see cref="InterfaceVersion"/> property. 
+        /// To get the driver version for compatibility reasons, use the <see cref="InterfaceVersion"/> property.
         /// </summary>
         /// <value>The driver info string</value>
         public string DriverInfo
@@ -2015,7 +2028,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// A string containing only the major and minor version of the driver. This must be in the form "n.n".
         /// Not to be confused with the InterfaceVersion property, which is the version of this specification
-        /// supported by the driver (currently 2). 
+        /// supported by the driver (currently 2).
         /// </summary>
         public string DriverVersion
         {
@@ -2030,7 +2043,7 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Returns the maximum exposure time in seconds supported by <see cref="StartExposure"/>. 
+        /// Returns the maximum exposure time in seconds supported by <see cref="StartExposure"/>.
         /// </summary>
         /// <value>The max exposure.</value>
         public double ExposureMax
@@ -2045,7 +2058,7 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Returns the minimum exposure time in seconds supported by <see cref="StartExposure"/>. 
+        /// Returns the minimum exposure time in seconds supported by <see cref="StartExposure"/>.
         /// </summary>
         /// <value>The min exposure.</value>
         public double ExposureMin
@@ -2076,7 +2089,7 @@ namespace ASCOM.Simulators
 
         /// <summary>
         /// When set to True, the camera will operate in Fast mode; when set False,
-        /// the camera will operate normally. This property should default to False. 
+        /// the camera will operate normally. This property should default to False.
         /// </summary>
         /// <value><c>true</c> if [fast readout]; otherwise, <c>false</c>.</value>
         public bool FastReadout
@@ -2125,6 +2138,7 @@ namespace ASCOM.Simulators
                     case GainMode.Gains:
                         CheckRange("Gain", 0, value, gains.Count - 1);
                         break;
+
                     case GainMode.GainMinMax:
                         CheckRange("Gain", gainMin, value, gainMax);
                         break;
@@ -2215,7 +2229,7 @@ namespace ASCOM.Simulators
 
         /// <summary>
         /// If valid, returns an integer between 0 and 100, where 0 indicates 0% progress
-        /// (function just started) and 100 indicates 100% progress (i.e. completion). 
+        /// (function just started) and 100 indicates 100% progress (i.e. completion).
         /// </summary>
         /// <value>The percent completed.</value>
         public short PercentCompleted
@@ -2239,9 +2253,11 @@ namespace ASCOM.Simulators
 
                         Log.LogMessage("PercentCompleted", "state {0}, get {1}", cameraState, pc);
                         return pc;
+
                     case CameraState.Idle:
                         Log.LogMessage("PercentCompleted", "imageready {0}", (short)(imageReady ? 100 : 0));
                         return (short)(imageReady ? 100 : 0);
+
                     default:
                         Log.LogMessage("PercentCompleted", "state {0}, invalid", cameraState);
                         throw new ASCOM.InvalidOperationException("get PercentCompleted is not valid if the camera is not active");
@@ -2299,7 +2315,7 @@ namespace ASCOM.Simulators
 
         /// <summary>
         /// This property provides an array of strings, each of which describes an available readout mode
-        /// of the camera. 
+        /// of the camera.
         /// </summary>
         /// <value>The readout modes.</value>
         public IList<string> ReadoutModes
@@ -2336,7 +2352,7 @@ namespace ASCOM.Simulators
 
         /// <summary>
         /// SensorType returns a value indicating whether the sensor is monochrome,
-        /// or what Bayer matrix it encodes. 
+        /// or what Bayer matrix it encodes.
         /// </summary>
         /// <value>The type of the sensor.</value>
         public SensorType SensorType
@@ -2350,7 +2366,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion
+        #endregion ICameraV2 properties
 
         #region ICameraV3 members
 
@@ -2380,6 +2396,7 @@ namespace ASCOM.Simulators
                     case OffsetMode.Offsets:
                         CheckRange("Offset", 0, value, offsets.Count - 1);
                         break;
+
                     case OffsetMode.OffsetMinMax:
                         CheckRange("Offset", offsetMin, value, offsetMax);
                         break;
@@ -2469,13 +2486,12 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion
+        #endregion ICameraV3 members
 
         #region Private
 
         internal void ReadFromProfile()
         {
-
             // Read cooler configuration properties
             heatSinkTemperature = Convert.ToDouble(Profile.GetValue(STR_CoolerAmbientTemperature, COOLER_AMBIENT_TEMPERATURE_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
             coolerDeltaTMax = Convert.ToDouble(Profile.GetValue(STR_CoolerDeltaTMax, COOLER_DELTAT_MAX_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
@@ -2582,7 +2598,6 @@ namespace ASCOM.Simulators
                 }
             }
 
-
             // Validate the cooler mode, if invalid select the default and write this back to the profile.
             if (!coolerModes.Contains(coolerMode))
             {
@@ -2596,7 +2611,6 @@ namespace ASCOM.Simulators
         /// </summary>
         internal void SaveCoolerToProfile()
         {
-
             // Save the cooler configuration to the Profile
             Profile.WriteValue(STR_CoolerAmbientTemperature, heatSinkTemperature.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue(STR_CoolerDeltaTMax, coolerDeltaTMax.ToString(CultureInfo.InvariantCulture));
@@ -2610,7 +2624,6 @@ namespace ASCOM.Simulators
             Profile.WriteValue(STR_CoolerUnderDampedCycles, coolerUnderDampedCycles.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue(STR_CoolerSetPointMinimum, coolerSetPointMinimum.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue(STR_CoolerGraphRange, coolerGraphRange.ToString(CultureInfo.InvariantCulture));
-
         }
 
         /// <summary>
@@ -2618,7 +2631,6 @@ namespace ASCOM.Simulators
         /// </summary>
         internal void SaveToProfile()
         {
-
             // Save camera configuration to the Profile
             Profile.WriteValue(STR_InterfaceVersion, interfaceVersion.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue(STR_PixelSizeX, pixelSizeX.ToString(CultureInfo.InvariantCulture));
@@ -2759,7 +2771,7 @@ namespace ASCOM.Simulators
                 targetCcdTemperature = heatSinkTemperature - coolerDeltaTMax;
             }
 
-            coolerPower = coolerOn ? 100.0 : 0.0; // Set the cooler power depending on whether or not the cooler is on 
+            coolerPower = coolerOn ? 100.0 : 0.0; // Set the cooler power depending on whether or not the cooler is on
             ccdTemperature = heatSinkTemperature; // Set the CCD temperature to ambient
             ccdStartTemperature = heatSinkTemperature; // Set the cooling cycle start temperature to ambient
             coolerAtTemperature = !coolerOn; // Indicate whether we are at temperature as the inverse of whether or not the cooler is on
@@ -2900,9 +2912,12 @@ namespace ASCOM.Simulators
         }
 
         private delegate void GetData(int x, int y);
+
         private Image<Rgba32> bmp;
+
         // Bayer offsets
         private int x0;
+
         private int x1;
         private int x2;
         private int x3;
@@ -2922,7 +2937,6 @@ namespace ASCOM.Simulators
         /// </summary>
         private void ReadImageFile()
         {
-
             // Create or reuse the image data array
             if (sensorType == SensorType.Monochrome)
             {
@@ -2949,16 +2963,19 @@ namespace ASCOM.Simulators
                         stepX = 1;
                         stepY = 1;
                         break;
+
                     case SensorType.RGGB:
                         getData = new GetData(RGGBData);
                         stepX = 2;
                         stepY = 2;
                         break;
+
                     case SensorType.CMYG:
                         getData = new GetData(CMYGData);
                         stepX = 2;
                         stepY = 2;
                         break;
+
                     case SensorType.CMYG2:
                         getData = new GetData(CMYG2Data);
                         stepX = 2;
@@ -2968,16 +2985,19 @@ namespace ASCOM.Simulators
                         // y2 = (bayerOffsetY + 2) & 3;
                         // y3 = (bayerOffsetY + 3) & 3;
                         break;
+
                     case SensorType.LRGB:
                         getData = new GetData(LRGBData);
                         stepX = 4;
                         stepY = 4;
                         break;
+
                     case SensorType.Color:
                         getData = new GetData(ColorData);
                         stepX = 1;
                         stepY = 1;
                         break;
+
                     default:
                         break;
                 }
@@ -2999,9 +3019,8 @@ namespace ASCOM.Simulators
                         getData(x, y);
                     }
                 }
-
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.log.LogError(ex.Message);
             }
@@ -3010,12 +3029,11 @@ namespace ASCOM.Simulators
         // get data using the sensor types
         private void MonochromeData(int x, int y)
         {
-
             ColorSpaceConverter converter = new ColorSpaceConverter();
 
-            
             imageData[x, y, 0] = (converter.ToHsl(bmp[x, y]).L * 255);
         }
+
         private void RGGBData(int x, int y)
         {
             var px = bmp[x / 2, y / 2];
@@ -3024,6 +3042,7 @@ namespace ASCOM.Simulators
             imageData[x + x0, y + y1, 0] = px.G;      // green
             imageData[x + x1, y + y1, 0] = px.B;      // blue
         }
+
         private void CMYGData(int x, int y)
         {
             var px = bmp[x / 2, y / 2];
@@ -3032,6 +3051,7 @@ namespace ASCOM.Simulators
             imageData[x + x0, y + y1, 0] = px.G;                    // green
             imageData[x + x1, y + y1, 0] = (px.R + px.B) / 2;       // magenta
         }
+
         private void CMYG2Data(int x, int y)
         {
             var px = bmp[x / 2, y / 2];
@@ -3045,11 +3065,10 @@ namespace ASCOM.Simulators
             imageData[x + x0, y + y3, 0] = (px.G + px.B) / 2;      // cyan
             imageData[x + x1, y + y3, 0] = (px.R + px.G) / 2;      // yellow
         }
+
         private void LRGBData(int x, int y)
         {
             ColorSpaceConverter converter = new ColorSpaceConverter();
-
-
 
             var px = bmp[x / 2, y / 2];
             imageData[x + x0, y + y0, 0] = converter.ToHsl(px).L * 255;
@@ -3072,6 +3091,7 @@ namespace ASCOM.Simulators
             imageData[x + x2, y + y3, 0] = (px.B);
             imageData[x + x3, y + y3, 0] = converter.ToHsl(px).L * 255;
         }
+
         private void ColorData(int x, int y)
         {
             imageData[x, y, 0] = (bmp[x, y].R);
@@ -3160,21 +3180,21 @@ namespace ASCOM.Simulators
         ///
         /// The cooling equation shows that the temperature exponentially approaches the setpoint and thus requires infinite time to achieve the final temperature, assuming infinite precision observation and calculation.
         /// To work round this, in the simulator we define that the setpoint is reached when the CCD temperature reaches a small offset (COOLER_SETPOINT_REACHED_OFFSET) from the setpoint e.g. 0.1C.
-        /// 
-        /// When the cooler is at the offset temperature (setpoint + COOLER_SETPOINT_REACHED_OFFSET, equation 3 gives:     k = -ln[(TemperatureAtoffset - SetpointTemperature) / TemperatureChange] / TimeToOfffset   ...4    
-        /// 
+        ///
+        /// When the cooler is at the offset temperature (setpoint + COOLER_SETPOINT_REACHED_OFFSET, equation 3 gives:     k = -ln[(TemperatureAtoffset - SetpointTemperature) / TemperatureChange] / TimeToOfffset   ...4
+        ///
         /// "TemperatureAtoffset" in equation 4 can be replaced with (SetpointTemperature + SetPointReachedOffset) giving: k = -ln[(SetpointTemperature + SetPointReachedOffset - SetpointTemperature) / TemperatureChange] / TimeToOfffset   ...5
         /// which simplifies to:                                                                                           k = -ln[SetPointReachedOffset / TemperatureChange] / t   ...6
         ///
         /// Equation 6 allows the cooling constant to be calculated that will cause the cooler reach a temperature of "SetPointReachedOffset" degrees from the setpoint in "t" seconds when cooling over "TemperatureChange" degrees
-        /// 
-        /// For this cooler, "TemperatureCahnge" is taken as the maximum delta T that the cooler can achieve, which can only be changed through configuration. This means that the cooler shows realistic behaviour where 
+        ///
+        /// For this cooler, "TemperatureCahnge" is taken as the maximum delta T that the cooler can achieve, which can only be changed through configuration. This means that the cooler shows realistic behaviour where
         /// small temperature changes are achieved more rapidly than larger changes.
         ///
-        /// The COOLER_SETPOINT_REACHED_OFFSET variable determines how far the cooler proceeds down the cooling curve before declaring that it has arrived. Larger values make use of the earlier part of the curve which 
-        /// give a slower descent towards the setpoint and less time inching in towards it. Smaller values use more of the curve, which results in a quicker descent to the vicinity of the setpoint and then a longer 
+        /// The COOLER_SETPOINT_REACHED_OFFSET variable determines how far the cooler proceeds down the cooling curve before declaring that it has arrived. Larger values make use of the earlier part of the curve which
+        /// give a slower descent towards the setpoint and less time inching in towards it. Smaller values use more of the curve, which results in a quicker descent to the vicinity of the setpoint and then a longer
         /// time spent inching towards the exact value. The value of 0.1sec has been determined experimentally to provide realistic behaviour.
-        ///    
+        ///
         ///</remarks>
         internal double CalculateCoolerConstant(double TimeToSetpoint, double coolerDeltaTMax)
         {
@@ -3184,7 +3204,7 @@ namespace ASCOM.Simulators
             return coolingConstant;
         }
 
-        #endregion
+        #endregion Private
 
         #region Checks
 
@@ -3238,6 +3258,6 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion
+        #endregion Checks
     }
 }

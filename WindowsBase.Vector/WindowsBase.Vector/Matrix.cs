@@ -5,10 +5,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -23,430 +23,443 @@
 //	Chris Toshok (toshok@ximian.com)
 //
 
-using System;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace System.Windows.Media {
+namespace System.Windows.Media
+{
+    [Serializable]
+    [TypeConverter(typeof(MatrixConverter))]
+    public struct Matrix : IFormattable
+    {
+        private double _m11;
+        private double _m12;
+        private double _m21;
+        private double _m22;
+        private double _offsetX;
+        private double _offsetY;
 
-	[Serializable] 
-	[TypeConverter (typeof(MatrixConverter))] 
-	public struct Matrix : IFormattable {
+        public Matrix(double m11,
+                   double m12,
+                   double m21,
+                   double m22,
+                   double offsetX,
+                   double offsetY)
+        {
+            this._m11 = m11;
+            this._m12 = m12;
+            this._m21 = m21;
+            this._m22 = m22;
+            this._offsetX = offsetX;
+            this._offsetY = offsetY;
+        }
 
-		double _m11;
-		double _m12;
-		double _m21;
-		double _m22;
-		double _offsetX;
-		double _offsetY;
+        public void Append(Matrix matrix)
+        {
+            double _m11;
+            double _m21;
+            double _m12;
+            double _m22;
+            double _offsetX;
+            double _offsetY;
 
-		public Matrix (double m11,
-			       double m12,
-			       double m21,
-			       double m22,
-			       double offsetX,
-			       double offsetY)
-		{
-			this._m11 = m11;
-			this._m12 = m12;
-			this._m21 = m21;
-			this._m22 = m22;
-			this._offsetX = offsetX;
-			this._offsetY = offsetY;
-		}
+            _m11 = this._m11 * matrix.M11 + this._m12 * matrix.M21;
+            _m12 = this._m11 * matrix.M12 + this._m12 * matrix.M22;
+            _m21 = this._m21 * matrix.M11 + this._m22 * matrix.M21;
+            _m22 = this._m21 * matrix.M12 + this._m22 * matrix.M22;
 
-		public void Append (Matrix matrix)
-		{
-			double _m11;
-			double _m21;
-			double _m12;
-			double _m22;
-			double _offsetX;
-			double _offsetY;
+            _offsetX = this._offsetX * matrix.M11 + this._offsetY * matrix.M21 + matrix.OffsetX;
+            _offsetY = this._offsetX * matrix.M12 + this._offsetY * matrix.M22 + matrix.OffsetY;
 
-			_m11 = this._m11 * matrix.M11 + this._m12 * matrix.M21;
-			_m12 = this._m11 * matrix.M12 + this._m12 * matrix.M22;
-			_m21 = this._m21 * matrix.M11 + this._m22 * matrix.M21;
-			_m22 = this._m21 * matrix.M12 + this._m22 * matrix.M22;
+            this._m11 = _m11;
+            this._m12 = _m12;
+            this._m21 = _m21;
+            this._m22 = _m22;
+            this._offsetX = _offsetX;
+            this._offsetY = _offsetY;
+        }
 
-			_offsetX = this._offsetX * matrix.M11 + this._offsetY * matrix.M21 + matrix.OffsetX;
-			_offsetY = this._offsetX * matrix.M12 + this._offsetY * matrix.M22 + matrix.OffsetY;
+        public bool Equals(Matrix value)
+        {
+            return (_m11 == value.M11 &&
+                _m12 == value.M12 &&
+                _m21 == value.M21 &&
+                _m22 == value.M22 &&
+                _offsetX == value.OffsetX &&
+                _offsetY == value.OffsetY);
+        }
 
-			this._m11 = _m11;
-			this._m12 = _m12;
-			this._m21 = _m21;
-			this._m22 = _m22;
-			this._offsetX = _offsetX;
-			this._offsetY = _offsetY;
-		}
+        public override bool Equals(object o)
+        {
+            if (!(o is Matrix))
+                return false;
 
-		public bool Equals (Matrix value)
-		{
-			return (_m11 == value.M11 &&
-				_m12 == value.M12 &&
-				_m21 == value.M21 &&
-				_m22 == value.M22 &&
-				_offsetX == value.OffsetX &&
-				_offsetY == value.OffsetY);
-		}
+            return Equals((Matrix)o);
+        }
 
-		public override bool Equals (object o)
-		{
-			if (!(o is Matrix))
-				return false;
+        public static bool Equals(Matrix matrix1,
+                       Matrix matrix2)
+        {
+            return matrix1.Equals(matrix2);
+        }
 
-			return Equals ((Matrix)o);
-		}
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = _m11.GetHashCode();
+                hashCode = (hashCode * 397) ^ _m12.GetHashCode();
+                hashCode = (hashCode * 397) ^ _m21.GetHashCode();
+                hashCode = (hashCode * 397) ^ _m22.GetHashCode();
+                hashCode = (hashCode * 397) ^ _offsetX.GetHashCode();
+                hashCode = (hashCode * 397) ^ _offsetY.GetHashCode();
+                return hashCode;
+            }
+        }
 
-		public static bool Equals (Matrix matrix1,
-					   Matrix matrix2)
-		{
-			return matrix1.Equals (matrix2);
-		}
+        public void Invert()
+        {
+            if (!HasInverse)
+                throw new InvalidOperationException("Transform is not invertible.");
 
-		public override int GetHashCode ()
-		{
-			unchecked
-			{
-				var hashCode = _m11.GetHashCode ();
-				hashCode = (hashCode * 397) ^ _m12.GetHashCode ();
-				hashCode = (hashCode * 397) ^ _m21.GetHashCode ();
-				hashCode = (hashCode * 397) ^ _m22.GetHashCode ();
-				hashCode = (hashCode * 397) ^ _offsetX.GetHashCode ();
-				hashCode = (hashCode * 397) ^ _offsetY.GetHashCode ();
-				return hashCode;
-			}
-		}
+            double d = Determinant;
 
-		public void Invert ()
-		{
-			if (!HasInverse)
-				throw new InvalidOperationException ("Transform is not invertible.");
+            /* 1/(ad-bc)[d -b; -c a] */
 
-			double d = Determinant;
+            double _m11 = this._m22;
+            double _m12 = -this._m12;
+            double _m21 = -this._m21;
+            double _m22 = this._m11;
 
-			/* 1/(ad-bc)[d -b; -c a] */
+            double _offsetX = this._m21 * this._offsetY - this._m22 * this._offsetX;
+            double _offsetY = this._m12 * this._offsetX - this._m11 * this._offsetY;
 
-			double _m11 = this._m22;
-			double _m12 = -this._m12;
-			double _m21 = -this._m21;
-			double _m22 = this._m11;
+            this._m11 = _m11 / d;
+            this._m12 = _m12 / d;
+            this._m21 = _m21 / d;
+            this._m22 = _m22 / d;
+            this._offsetX = _offsetX / d;
+            this._offsetY = _offsetY / d;
+        }
 
-			double _offsetX = this._m21 * this._offsetY - this._m22 * this._offsetX;
-			double _offsetY = this._m12 * this._offsetX - this._m11 * this._offsetY;
+        public static Matrix Multiply(Matrix trans1,
+                           Matrix trans2)
+        {
+            Matrix m = trans1;
+            m.Append(trans2);
+            return m;
+        }
 
-			this._m11 = _m11 / d;
-			this._m12 = _m12 / d;
-			this._m21 = _m21 / d;
-			this._m22 = _m22 / d;
-			this._offsetX = _offsetX / d;
-			this._offsetY = _offsetY / d;
-		}
+        public static bool operator ==(Matrix matrix1,
+                        Matrix matrix2)
+        {
+            return matrix1.Equals(matrix2);
+        }
 
-		public static Matrix Multiply (Matrix trans1,
-					       Matrix trans2)
-		{
-			Matrix m = trans1;
-			m.Append (trans2);
-			return m;
-		}
+        public static bool operator !=(Matrix matrix1,
+                        Matrix matrix2)
+        {
+            return !matrix1.Equals(matrix2);
+        }
 
-		public static bool operator == (Matrix matrix1,
-						Matrix matrix2)
-		{
-			return matrix1.Equals (matrix2);
-		}
+        public static Matrix operator *(Matrix trans1,
+                         Matrix trans2)
+        {
+            Matrix result = trans1;
+            result.Append(trans2);
+            return result;
+        }
 
-		public static bool operator != (Matrix matrix1,
-						Matrix matrix2)
-		{
-			return !matrix1.Equals (matrix2);
-		}
+        public static Matrix Parse(string source)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            Matrix value;
+            if (source.Trim() == "Identity")
+            {
+                value = Identity;
+            }
+            else
+            {
+                var tokenizer = new NumericListTokenizer(source, CultureInfo.InvariantCulture);
+                double m11;
+                double m12;
+                double m21;
+                double m22;
+                double offsetX;
+                double offsetY;
+                if (double.TryParse(tokenizer.GetNextToken(), NumberStyles.Float, CultureInfo.InvariantCulture, out m11)
+                    && double.TryParse(tokenizer.GetNextToken(), NumberStyles.Float, CultureInfo.InvariantCulture, out m12)
+                    && double.TryParse(tokenizer.GetNextToken(), NumberStyles.Float, CultureInfo.InvariantCulture, out m21)
+                    && double.TryParse(tokenizer.GetNextToken(), NumberStyles.Float, CultureInfo.InvariantCulture, out m22)
+                    && double.TryParse(tokenizer.GetNextToken(), NumberStyles.Float, CultureInfo.InvariantCulture, out offsetX)
+                    && double.TryParse(tokenizer.GetNextToken(), NumberStyles.Float, CultureInfo.InvariantCulture, out offsetY))
+                {
+                    if (!tokenizer.HasNoMoreTokens())
+                    {
+                        throw new InvalidOperationException("Invalid Matrix format: " + source);
+                    }
+                    value = new Matrix(m11, m12, m21, m22, offsetX, offsetY);
+                }
+                else
+                {
+                    throw new FormatException(string.Format("Invalid Matrix format: {0}", source));
+                }
+            }
+            return value;
+        }
 
-		public static Matrix operator * (Matrix trans1,
-						 Matrix trans2)
-		{
-			Matrix result = trans1;
-			result.Append (trans2);
-			return result;
-		}
+        public void Prepend(Matrix matrix)
+        {
+            double _m11;
+            double _m21;
+            double _m12;
+            double _m22;
+            double _offsetX;
+            double _offsetY;
 
-		public static Matrix Parse (string source)
-		{
-			if (source == null)
-				throw new ArgumentNullException ("source");
-			Matrix value;
-			if (source.Trim () == "Identity")
-			{
-				value = Identity;
-			}
-			else
-			{
-				var tokenizer = new NumericListTokenizer (source, CultureInfo.InvariantCulture);
-				double m11;
-				double m12;
-				double m21;
-				double m22;
-				double offsetX;
-				double offsetY;
-				if (double.TryParse (tokenizer.GetNextToken (), NumberStyles.Float, CultureInfo.InvariantCulture, out m11)
-				    && double.TryParse (tokenizer.GetNextToken (), NumberStyles.Float, CultureInfo.InvariantCulture, out m12)
-				    && double.TryParse (tokenizer.GetNextToken (), NumberStyles.Float, CultureInfo.InvariantCulture, out m21)
-				    && double.TryParse (tokenizer.GetNextToken (), NumberStyles.Float, CultureInfo.InvariantCulture, out m22)
-				    && double.TryParse (tokenizer.GetNextToken (), NumberStyles.Float, CultureInfo.InvariantCulture, out offsetX)
-				    && double.TryParse (tokenizer.GetNextToken (), NumberStyles.Float, CultureInfo.InvariantCulture, out offsetY))
-				{
-					if (!tokenizer.HasNoMoreTokens ())
-					{
-						throw new InvalidOperationException ("Invalid Matrix format: " + source);
-					}
-					value = new Matrix (m11, m12, m21, m22, offsetX, offsetY);
-				}
-				else
-				{
-					throw new FormatException (string.Format ("Invalid Matrix format: {0}", source));
-				}
-			}
-			return value;
-		}
+            _m11 = matrix.M11 * this._m11 + matrix.M12 * this._m21;
+            _m12 = matrix.M11 * this._m12 + matrix.M12 * this._m22;
+            _m21 = matrix.M21 * this._m11 + matrix.M22 * this._m21;
+            _m22 = matrix.M21 * this._m12 + matrix.M22 * this._m22;
 
-		public void Prepend (Matrix matrix)
-		{
-			double _m11;
-			double _m21;
-			double _m12;
-			double _m22;
-			double _offsetX;
-			double _offsetY;
+            _offsetX = matrix.OffsetX * this._m11 + matrix.OffsetY * this._m21 + this._offsetX;
+            _offsetY = matrix.OffsetX * this._m12 + matrix.OffsetY * this._m22 + this._offsetY;
 
-			_m11 = matrix.M11 * this._m11 + matrix.M12 * this._m21;
-			_m12 = matrix.M11 * this._m12 + matrix.M12 * this._m22;
-			_m21 = matrix.M21 * this._m11 + matrix.M22 * this._m21;
-			_m22 = matrix.M21 * this._m12 + matrix.M22 * this._m22;
+            this._m11 = _m11;
+            this._m12 = _m12;
+            this._m21 = _m21;
+            this._m22 = _m22;
+            this._offsetX = _offsetX;
+            this._offsetY = _offsetY;
+        }
 
-			_offsetX = matrix.OffsetX * this._m11 + matrix.OffsetY * this._m21 + this._offsetX;
-			_offsetY = matrix.OffsetX * this._m12 + matrix.OffsetY * this._m22 + this._offsetY;
+        public void Rotate(double angle)
+        {
+            // R_theta==[costheta -sintheta; sintheta costheta],
+            double theta = angle * Math.PI / 180;
 
-			this._m11 = _m11;
-			this._m12 = _m12;
-			this._m21 = _m21;
-			this._m22 = _m22;
-			this._offsetX = _offsetX;
-			this._offsetY = _offsetY;
-		}
+            Matrix r_theta = new Matrix(Math.Cos(theta), Math.Sin(theta),
+                             -Math.Sin(theta), Math.Cos(theta),
+                             0, 0);
 
-		public void Rotate (double angle)
-		{
-			// R_theta==[costheta -sintheta; sintheta costheta],	
- 			double theta = angle * Math.PI / 180;
+            Append(r_theta);
+        }
 
-			Matrix r_theta = new Matrix (Math.Cos (theta), Math.Sin(theta),
-						     -Math.Sin (theta), Math.Cos(theta),
-						     0, 0);
+        public void RotateAt(double angle,
+                      double centerX,
+                      double centerY)
+        {
+            Translate(-centerX, -centerY);
+            Rotate(angle);
+            Translate(centerX, centerY);
+        }
 
-			Append (r_theta);
-		}
+        public void RotateAtPrepend(double angle,
+                         double centerX,
+                         double centerY)
+        {
+            Matrix m = Matrix.Identity;
+            m.RotateAt(angle, centerX, centerY);
+            Prepend(m);
+        }
 
-		public void RotateAt (double angle,
-				      double centerX,
-				      double centerY)
-		{
-			Translate (-centerX, -centerY);
-			Rotate (angle);
-			Translate (centerX, centerY);
-		}
+        public void RotatePrepend(double angle)
+        {
+            Matrix m = Matrix.Identity;
+            m.Rotate(angle);
+            Prepend(m);
+        }
 
-		public void RotateAtPrepend (double angle,
-					     double centerX,
-					     double centerY)
-		{
-			Matrix m = Matrix.Identity;
-			m.RotateAt (angle, centerX, centerY);
-			Prepend (m);
-		}
+        public void Scale(double scaleX,
+                   double scaleY)
+        {
+            Matrix scale = new Matrix(scaleX, 0,
+                           0, scaleY,
+                           0, 0);
 
-		public void RotatePrepend (double angle)
-		{
-			Matrix m = Matrix.Identity;
-			m.Rotate (angle);
-			Prepend (m);
-		}
+            Append(scale);
+        }
 
-		public void Scale (double scaleX,
-				   double scaleY)
-		{
-			Matrix scale = new Matrix (scaleX, 0,
-						   0, scaleY,
-						   0, 0);
+        public void ScaleAt(double scaleX,
+                     double scaleY,
+                     double centerX,
+                     double centerY)
+        {
+            Translate(-centerX, -centerY);
+            Scale(scaleX, scaleY);
+            Translate(centerX, centerY);
+        }
 
-			Append (scale);
-		}
+        public void ScaleAtPrepend(double scaleX,
+                        double scaleY,
+                        double centerX,
+                        double centerY)
+        {
+            Matrix m = Matrix.Identity;
+            m.ScaleAt(scaleX, scaleY, centerX, centerY);
+            Prepend(m);
+        }
 
-		public void ScaleAt (double scaleX,
-				     double scaleY,
-				     double centerX,
-				     double centerY)
-		{
-			Translate (-centerX, -centerY);
-			Scale (scaleX, scaleY);
-			Translate (centerX, centerY);
-		}
+        public void ScalePrepend(double scaleX,
+                      double scaleY)
+        {
+            Matrix m = Matrix.Identity;
+            m.Scale(scaleX, scaleY);
+            Prepend(m);
+        }
 
-		public void ScaleAtPrepend (double scaleX,
-					    double scaleY,
-					    double centerX,
-					    double centerY)
-		{
-			Matrix m = Matrix.Identity;
-			m.ScaleAt (scaleX, scaleY, centerX, centerY);
-			Prepend (m);
-		}
+        public void SetIdentity()
+        {
+            _m11 = _m22 = 1.0;
+            _m12 = _m21 = 0.0;
+            _offsetX = _offsetY = 0.0;
+        }
 
-		public void ScalePrepend (double scaleX,
-					  double scaleY)
-		{
-			Matrix m = Matrix.Identity;
-			m.Scale (scaleX, scaleY);
-			Prepend (m);
-		}
+        public void Skew(double skewX,
+                  double skewY)
+        {
+            Matrix skew_m = new Matrix(1, Math.Tan(skewY * Math.PI / 180),
+                            Math.Tan(skewX * Math.PI / 180), 1,
+                            0, 0);
+            Append(skew_m);
+        }
 
-		public void SetIdentity ()
-		{
-			_m11 = _m22 = 1.0;
-			_m12 = _m21 = 0.0;
-			_offsetX = _offsetY = 0.0;
-		}
+        public void SkewPrepend(double skewX,
+                     double skewY)
+        {
+            Matrix m = Matrix.Identity;
+            m.Skew(skewX, skewY);
+            Prepend(m);
+        }
 
-		public void Skew (double skewX,
-				  double skewY)
-		{
-			Matrix skew_m = new Matrix (1, Math.Tan (skewY * Math.PI / 180),
-						    Math.Tan (skewX * Math.PI / 180), 1,
-						    0, 0);
-			Append (skew_m);
-		}
+        public override string ToString()
+        {
+            return ToString(null);
+        }
 
-		public void SkewPrepend (double skewX,
-					 double skewY)
-		{
-			Matrix m = Matrix.Identity;
-			m.Skew (skewX, skewY);
-			Prepend (m);
-		}
+        public string ToString(IFormatProvider provider)
+        {
+            return ToString(null, provider);
+        }
 
-		public override string ToString ()
-		{
-			return ToString (null);
-		}
+        string IFormattable.ToString(string format,
+            IFormatProvider provider)
+        {
+            return ToString(provider);
+        }
 
-		public string ToString (IFormatProvider provider)
-		{
-			return ToString (null, provider);
-		}
+        private string ToString(string format, IFormatProvider provider)
+        {
+            if (IsIdentity)
+                return "Identity";
 
-		string IFormattable.ToString (string format,
-			IFormatProvider provider)
-		{
-			return ToString (provider);
-		}
+            if (provider == null)
+                provider = CultureInfo.CurrentCulture;
 
-		private string ToString (string format, IFormatProvider provider)
-		{
-			if (IsIdentity)
-				return "Identity";
+            if (format == null)
+                format = string.Empty;
 
-			if (provider == null)
-				provider = CultureInfo.CurrentCulture;
+            var separator = NumericListTokenizer.GetSeparator(provider);
 
-			if (format == null)
-				format = string.Empty;
+            var matrixFormat = string.Format(
+                "{{0:{0}}}{1}{{1:{0}}}{1}{{2:{0}}}{1}{{3:{0}}}{1}{{4:{0}}}{1}{{5:{0}}}",
+                format, separator);
+            return string.Format(provider, matrixFormat,
+                _m11, _m12, _m21, _m22, _offsetX, _offsetY);
+        }
 
-			var separator = NumericListTokenizer.GetSeparator (provider);
+        public Point Transform(Point point)
+        {
+            return Point.Multiply(point, this);
+        }
 
-			var matrixFormat = string.Format (
-				"{{0:{0}}}{1}{{1:{0}}}{1}{{2:{0}}}{1}{{3:{0}}}{1}{{4:{0}}}{1}{{5:{0}}}",
-				format, separator);
-			return string.Format (provider, matrixFormat,
-				_m11, _m12, _m21, _m22, _offsetX, _offsetY);
-		}
+        public void Transform(Point[] points)
+        {
+            for (int i = 0; i < points.Length; i++)
+                points[i] = Transform(points[i]);
+        }
 
-		public Point Transform (Point point)
-		{
-			return Point.Multiply (point, this);
-		}
+        public Vector Transform(Vector vector)
+        {
+            return Vector.Multiply(vector, this);
+        }
 
-		public void Transform (Point[] points)
-		{
-			for (int i = 0; i < points.Length; i ++)
-				points[i] = Transform (points[i]);
-		}
+        public void Transform(Vector[] vectors)
+        {
+            for (int i = 0; i < vectors.Length; i++)
+                vectors[i] = Transform(vectors[i]);
+        }
 
-		public Vector Transform (Vector vector)
-		{
-			return Vector.Multiply (vector, this);
-		}
+        public void Translate(double offsetX,
+                       double offsetY)
+        {
+            this._offsetX += offsetX;
+            this._offsetY += offsetY;
+        }
 
-		public void Transform (Vector[] vectors)
-		{
-			for (int i = 0; i < vectors.Length; i ++)
-				vectors[i] = Transform (vectors[i]);
-		}
+        public void TranslatePrepend(double offsetX,
+                          double offsetY)
+        {
+            Matrix m = Matrix.Identity;
+            m.Translate(offsetX, offsetY);
+            Prepend(m);
+        }
 
-		public void Translate (double offsetX,
-				       double offsetY)
-		{
-			this._offsetX += offsetX;
-			this._offsetY += offsetY;
-		}
+        public double Determinant
+        {
+            get { return _m11 * _m22 - _m12 * _m21; }
+        }
 
-		public void TranslatePrepend (double offsetX,
-					      double offsetY)
-		{
-			Matrix m = Matrix.Identity;
-			m.Translate (offsetX, offsetY);
-			Prepend (m);
-		}
+        public bool HasInverse
+        {
+            get { return Determinant != 0; }
+        }
 
-		public double Determinant {
-			get { return _m11 * _m22 - _m12 * _m21; }
-		}
+        public static Matrix Identity
+        {
+            get { return new Matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0); }
+        }
 
-		public bool HasInverse {
-			get { return Determinant != 0; }
-		}
+        public bool IsIdentity
+        {
+            get { return Equals(Matrix.Identity); }
+        }
 
-		public static Matrix Identity {
-			get { return new Matrix (1.0, 0.0, 0.0, 1.0, 0.0, 0.0); }
-		}
+        public double M11
+        {
+            get { return _m11; }
+            set { _m11 = value; }
+        }
 
-		public bool IsIdentity {
-			get { return Equals (Matrix.Identity); }
-		}
+        public double M12
+        {
+            get { return _m12; }
+            set { _m12 = value; }
+        }
 
-		public double M11 { 
-			get { return _m11; }
-			set { _m11 = value; }
-		}
-		public double M12 { 
-			get { return _m12; }
-			set { _m12 = value; }
-		}
-		public double M21 { 
-			get { return _m21; }
-			set { _m21 = value; }
-		}
-		public double M22 { 
-			get { return _m22; }
-			set { _m22 = value; }
-		}
-		public double OffsetX { 
-			get { return _offsetX; }
-			set { _offsetX = value; }
-		}
-		public double OffsetY { 
-			get { return _offsetY; }
-			set { _offsetY = value; }
-		}
-	}
+        public double M21
+        {
+            get { return _m21; }
+            set { _m21 = value; }
+        }
 
+        public double M22
+        {
+            get { return _m22; }
+            set { _m22 = value; }
+        }
+
+        public double OffsetX
+        {
+            get { return _offsetX; }
+            set { _offsetX = value; }
+        }
+
+        public double OffsetY
+        {
+            get { return _offsetY; }
+            set { _offsetY = value; }
+        }
+    }
 }

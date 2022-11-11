@@ -25,7 +25,6 @@
 // _Dome from being created and used as the [default] interface
 //
 using ASCOM.Common;
-using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
 using System;

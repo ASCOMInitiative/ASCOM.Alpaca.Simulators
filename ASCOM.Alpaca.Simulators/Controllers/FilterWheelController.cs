@@ -108,12 +108,11 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/position")]
         public ActionResult<Response> Position(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema(Description = "Sets the filter wheel position")] short Position, 
+            [Required][FromForm][SwaggerSchema(Description = "Sets the filter wheel position")] short Position,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => { DeviceManager.GetFilterWheel(DeviceNumber).Position = Position; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
-        
     }
 }

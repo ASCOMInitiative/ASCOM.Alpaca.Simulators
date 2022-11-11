@@ -153,7 +153,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/reverse")]
         public ActionResult<Response> Reverse(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("True if the rotation and angular direction must be reversed to match the optical characteristcs")] bool Reverse, 
+            [Required][FromForm][SwaggerSchema("True if the rotation and angular direction must be reversed to match the optical characteristcs")] bool Reverse,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -247,7 +247,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/move")]
         public ActionResult<Response> Move(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)][FromForm][SwaggerSchema("Relative position to move in degrees from current Position.")] double Position, 
+            [Required][DefaultValue(0)][FromForm][SwaggerSchema("Relative position to move in degrees from current Position.")] double Position,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -272,7 +272,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/moveabsolute")]
         public ActionResult<Response> MoveAbsolute(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)][FromForm][SwaggerSchema("Absolute position in degrees.")] double Position, 
+            [Required][DefaultValue(0)][FromForm][SwaggerSchema("Absolute position in degrees.")] double Position,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -297,7 +297,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/movemechanical")]
         public ActionResult<Response> MoveMechanical(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)][FromForm][SwaggerSchema("Absolute position in degrees.")] double Position, 
+            [Required][DefaultValue(0)][FromForm][SwaggerSchema("Absolute position in degrees.")] double Position,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -322,7 +322,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/sync")]
         public ActionResult<Response> Sync(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)][FromForm][SwaggerSchema("Absolute position in degrees.")] double Position, 
+            [Required][DefaultValue(0)][FromForm][SwaggerSchema("Absolute position in degrees.")] double Position,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {

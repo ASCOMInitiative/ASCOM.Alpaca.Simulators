@@ -1,18 +1,11 @@
 ﻿using ASCOM.Alpaca.Simulators;
-using ASCOM.Common;
 using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
-using ASCOM.Common.Helpers;
-using ASCOM.Tools;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Net;
 using System.Net.Mime;
 
 namespace Alpaca

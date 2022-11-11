@@ -1,11 +1,9 @@
-﻿using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Cryptography;
-using System;
-using Octokit.Internal;
-using System.Runtime.InteropServices;
-using System.Runtime.ConstrainedExecution;
+﻿using System;
 using System.IO;
+using System.Net;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ASCOM.Alpaca.Simulators.SSL
 {
@@ -31,7 +29,7 @@ namespace ASCOM.Alpaca.Simulators.SSL
                                                 new OidCollection { new Oid("1.3.6.1.5.5.7.3.1") }, false),
                         sanBuilder.Build() }
                 };
-                  
+
                 var certificate = request.CreateSelfSigned(new DateTimeOffset(DateTime.UtcNow.AddDays(-1)), new DateTimeOffset(DateTime.UtcNow.AddDays(3650)));
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

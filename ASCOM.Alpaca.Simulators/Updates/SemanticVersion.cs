@@ -23,11 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using System.Diagnostics;
-using System.Globalization;
-using System.Text.RegularExpressions;
-using System.Text;
 using System;
+using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
+
 /// <summary>
 /// An implementation of semantic versioning (https://semver.org)
 /// that can be converted to/from <see cref="System.Version"/>.
@@ -631,6 +631,7 @@ public sealed class SemanticVersion : IComparable, IComparable<SemanticVersion>,
             {
                 case ParseFailureKind.ArgumentException:
                     return new ArgumentNullException("version");
+
                 case ParseFailureKind.ArgumentOutOfRangeException:
                     throw new ArgumentOutOfRangeException("ValidateRangeTooSmall", _exceptionArgument);
                 case ParseFailureKind.FormatException:

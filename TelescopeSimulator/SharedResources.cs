@@ -4,7 +4,7 @@
 // ================
 //
 // This class is a container for all shared resources that may be needed
-// by the drivers served by the Local Server. 
+// by the drivers served by the Local Server.
 //
 // NOTES:
 //
@@ -13,8 +13,6 @@
 // Written by:	Bob Denny	29-May-2007
 //
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ASCOM.Simulators
 {
@@ -29,12 +27,14 @@ namespace ASCOM.Simulators
         SlewHome,
         SlewHandpad
     }
+
     public enum SlewSpeed
     {
         SlewSlow,
         SlewMedium,
         SlewFast
     }
+
     public enum SlewDirection
     {
         SlewNorth,
@@ -50,7 +50,6 @@ namespace ASCOM.Simulators
 
     public static class SharedResources
     {
-        
         //private static int s_z = 0;
 
         //private SharedResources() { }							// Prevent creation of instances
@@ -61,11 +60,13 @@ namespace ASCOM.Simulators
 
         //Constant Definitions
         public const string PROGRAM_ID = "ASCOM.Simulator.Telescope";  //Key used to store the settings
+
         public const string REGISTRATION_VERSION = "1";
 
         //public static double DEG_RAD = 0.0174532925;
         public const double DEG_RAD = Math.PI / 180;
-        public const double RAD_DEG =  180.0 / Math.PI;        //57.2957795;
+
+        public const double RAD_DEG = 180.0 / Math.PI;        //57.2957795;
         public const double HRS_RAD = 0.2617993881;
         public const double RAD_HRS = 3.81971863;
         public const double EARTH_ANG_ROT_DEG_MIN = 0.25068447733746215; //Angular rotation of earth in degrees/min
@@ -78,6 +79,7 @@ namespace ASCOM.Simulators
         // Simulation Parameters
         // ---------------------
         internal const double INSTRUMENT_APERTURE = 0.2;            // 8 inch = 20 cm
+
         internal const double INSTRUMENT_APERTURE_AREA = 0.0269;    // 3 inch obstruction
         internal const double INSTRUMENT_FOCAL_LENGTH = 1.26;      // f/6.3 instrument
         public const string INSTRUMENT_NAME = "Alpaca Telescope Sim";       // Our name
@@ -105,26 +107,32 @@ namespace ASCOM.Simulators
         public enum MessageType
         {
             none,
+
             /// <summary>
             /// Capabilities: Can Flags, Alignment Mode
             /// </summary>
             Capabilities,
+
             /// <summary>
             /// Slew, Sync, Park/Unpark, Find Home
             /// </summary>
             Slew,
+
             /// <summary>
             /// Get: Alt/Az, RA/Dec, Target RA/Dec
             /// </summary>
             Gets,
+
             /// <summary>
             /// Polls: Tracking, Slewing, At's
             /// </summary>
             Polls,
+
             /// <summary>
             /// UTC, Siderial Time
             /// </summary>
             Time,
+
             /// <summary>
             /// All Other messages
             /// </summary>

@@ -4,7 +4,7 @@
 // Astronomy Functions
 //
 // Description:	Astronomy functions class that wraps up the NOVAS fucntions in a
-//              quick way to call them. 
+//              quick way to call them.
 //
 // Author:		(rbt) Robert Turner <robert@robertturnerastro.com>
 //
@@ -18,15 +18,12 @@
 
 using ASCOM.Tools;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 
 namespace ASCOM.Simulators
 {
     public static class AstronomyFunctions
     {
-
         //----------------------------------------------------------------------------------------
         // Calculate Precession
         //----------------------------------------------------------------------------------------
@@ -192,7 +189,6 @@ namespace ASCOM.Simulators
             return RangeDec(dec);
         }
 
-
         /// <summary>
         /// Calculate Altitude and Azimuth From Ra/Dec and Site, ra in hours, the rest degrees
         /// </summary>
@@ -257,7 +253,6 @@ namespace ASCOM.Simulators
         /// <returns></returns>
         public static double CalculateAltAzm(double rightAscension, double declination, double latitude, double longitude, out double azimuth)
         {
-
             double lst = LocalSiderealTime(longitude);      // Hours
             double ha = (lst - rightAscension) * SharedResources.HRS_RAD;  // Radians
             double dec = declination * SharedResources.DEG_RAD;
@@ -281,7 +276,6 @@ namespace ASCOM.Simulators
 
         public static Vector CalculateAltAzm(double rightAscension, double declination, double latitude)
         {
-
             double lst = TelescopeHardware.SiderealTime;      // Hours
             double ha = (lst - rightAscension) * SharedResources.HRS_RAD;  // Radians
             double dec = declination * SharedResources.DEG_RAD;
@@ -317,7 +311,6 @@ namespace ASCOM.Simulators
 
             return hourAngle;
         }
-
 
         //----------------------------------------------------------------------------------------
         // Range RA and DEC

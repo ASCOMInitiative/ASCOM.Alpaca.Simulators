@@ -30,6 +30,7 @@ using System.Threading;
 using System.Windows;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
+
 namespace ASCOM.Simulators
 {
     public static class TelescopeHardware
@@ -305,7 +306,6 @@ namespace ASCOM.Simulators
         /// </summary>
         static TelescopeHardware()
         {
-            
         }
 
         public static void ClearProfile()
@@ -324,7 +324,6 @@ namespace ASCOM.Simulators
                 SouthernHemisphere = false;
                 //Connected = false;
                 rateMoveAxes = new Vector();
-
 
                 LogMessage("TelescopeHardware", string.Format("Alignment mode 1: {0}", alignmentMode));
                 connectStates = new ConcurrentDictionary<long, bool>();

@@ -63,7 +63,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/averageperiod")]
         public ActionResult<Response> AveragePeriod(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(1)][FromForm][SwaggerSchema("Time period(hours) over which to average sensor readings")] double AveragePeriod, 
+            [Required][DefaultValue(1)][FromForm][SwaggerSchema("Time period(hours) over which to average sensor readings")] double AveragePeriod,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -399,7 +399,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <para>Gets a description of the sensor with the name specified in the SensorName parameter</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="SensorName">Name of the sensor whose description is required</param>  
+        /// <param name="SensorName">Name of the sensor whose description is required</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -410,7 +410,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/sensordescription")]
         public ActionResult<StringResponse> SensorDescription(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][SwaggerSchema("Name of the sensor whose description is required")] string SensorName, 
+            [Required][SwaggerSchema("Name of the sensor whose description is required")] string SensorName,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -424,7 +424,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <para>Gets the time since the sensor specified in the SensorName parameter was last updated</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="SensorName">Name of the sensor whose description is required</param>  
+        /// <param name="SensorName">Name of the sensor whose description is required</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -435,7 +435,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/timesincelastupdate")]
         public ActionResult<DoubleResponse> TimeSinceLastUpdate(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            string SensorName, 
+            string SensorName,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {

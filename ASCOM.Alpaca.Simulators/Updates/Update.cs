@@ -1,7 +1,6 @@
-﻿using System;
+﻿using LetsMake;
+using System;
 using System.Collections.Generic;
-
-using LetsMake;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -9,13 +8,13 @@ namespace ASCOM.Alpaca.Simulators
     {
         internal static IReadOnlyList<Octokit.Release> Releases = null;
 
-        internal async static void CheckForUpdates()
+        internal static async void CheckForUpdates()
         {
             try
             {
                 Releases = await LetsMake.GitHubReleases.GetReleases("ASCOMInitiative", "ASCOM.Alpaca.Simulators");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logging.LogError(ex.Message);
             }
@@ -34,12 +33,12 @@ namespace ASCOM.Alpaca.Simulators
                             if (SemanticVersion.TryParse(ServerSettings.ServerVersion, out SemanticVersion currentversion))
                             {
                                 var Release = Releases?.Latest();
-    
+
                                 if (Release != null)
                                 {
                                     if (SemanticVersion.TryParse(Release.TagName, out SemanticVersion latestrelease))
                                     {
-                                        if(latestrelease > currentversion)
+                                        if (latestrelease > currentversion)
                                         {
                                             return true;
                                         }
@@ -49,7 +48,7 @@ namespace ASCOM.Alpaca.Simulators
                         }
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logging.LogError($"Failed to check for new version, {ex.Message}");
                 }

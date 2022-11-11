@@ -1,10 +1,8 @@
 using ASCOM.Common;
-using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace ASCOM.Simulators
@@ -25,6 +23,7 @@ namespace ASCOM.Simulators
             get;
             private set;
         }
+
         /// <summary>
         /// Resets all stored device settings
         /// </summary>
@@ -105,7 +104,7 @@ namespace ASCOM.Simulators
                     }
                     UniqueID = profile.GetValue(UNIQUE_ID_PROFILE_NAME);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     TL.LogError($"CoverCalibrator {deviceNumber} - {ex.Message}");
                 }
@@ -483,9 +482,11 @@ namespace ASCOM.Simulators
         #endregion ICoverCalibrator Implementation
 
         #region Alpaca Information
+
         public string DeviceName { get => DRIVER_DESCRIPTION; }
         public string UniqueID { get; private set; }
-        #endregion
+
+        #endregion Alpaca Information
 
         #region Private properties and methods
 

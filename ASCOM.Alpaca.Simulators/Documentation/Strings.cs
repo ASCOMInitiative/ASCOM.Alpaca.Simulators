@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ASCOM.Alpaca.Simulators
+﻿namespace ASCOM.Alpaca.Simulators
 {
     public class Strings
     {

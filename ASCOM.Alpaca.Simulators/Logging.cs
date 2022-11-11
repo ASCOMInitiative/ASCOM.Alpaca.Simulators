@@ -1,7 +1,5 @@
 using ASCOM.Common;
-using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
-using ASCOM.Tools;
 using System.Net;
 
 namespace ASCOM.Alpaca.Simulators

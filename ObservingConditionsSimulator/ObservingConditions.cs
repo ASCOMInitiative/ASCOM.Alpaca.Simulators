@@ -1,21 +1,15 @@
 ﻿using ASCOM.Common;
-using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading;
 
 namespace ASCOM.Simulators
 {
-
     /// <summary>
     /// ASCOM ObservingConditions Driver for Observing Conditions OCSimulator.
     /// </summary>
-    public class ObservingConditions :  IObservingConditions, IAlpacaDevice, ISimulation
+    public class ObservingConditions : IObservingConditions, IAlpacaDevice, ISimulation
     {
         #region Variables and Constants
 
@@ -24,9 +18,10 @@ namespace ASCOM.Simulators
 
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
-        #endregion
+        #endregion Variables and Constants
 
         #region Class initialiser
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OCSimulator"/> class.
         /// Must be public for COM registration.
@@ -75,7 +70,7 @@ namespace ASCOM.Simulators
         public int DeviceNumber { get; private set; }
         public string UniqueID { get; private set; }
 
-        #endregion
+        #endregion Class initialiser
 
         #region Common properties and methods.
 
@@ -156,7 +151,7 @@ namespace ASCOM.Simulators
             get { return OCSimulator.Name(); }
         }
 
-        #endregion
+        #endregion Common properties and methods.
 
         #region ObservingConditions Implementation
 
@@ -245,9 +240,11 @@ namespace ASCOM.Simulators
         {
             get { return OCSimulator.WindSpeed(); }
         }
-        #endregion
+
+        #endregion ObservingConditions Implementation
 
         #region ISimulation
+
         public void ResetSettings()
         {
             OCSimulator.ClearProfile();
@@ -257,6 +254,7 @@ namespace ASCOM.Simulators
         {
             return OCSimulator.driverProfile.GetProfile();
         }
-        #endregion
+
+        #endregion ISimulation
     }
 }

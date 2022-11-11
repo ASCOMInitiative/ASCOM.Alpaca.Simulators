@@ -316,6 +316,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         #region Restart devices
+
         /// <summary>
         /// OmniSim only API - Restarts a device simulator to the simulator stored settings and a clean state. This can be used to restart a device so it behaves like the OmniSim server was just freshly started, without restarting the whole OmniSim.
         /// </summary>
@@ -565,9 +566,11 @@ namespace ASCOM.Alpaca.Simulators
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting Telescope {DeviceNumber} to a clean state.");
         }
-        #endregion
+
+        #endregion Restart devices
 
         #region XMLProfile
+
         /// <summary>
         /// Gets a copy of the profile. This is returned as a string value in the standard Response Value field.
         /// </summary>
@@ -797,6 +800,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() => (TelescopeAccess(DeviceNumber) as ISimulation).GetXMLProfile(), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
-        #endregion
+
+        #endregion XMLProfile
     }
 }

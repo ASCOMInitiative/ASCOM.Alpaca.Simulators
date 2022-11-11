@@ -16,18 +16,16 @@
 // --------------------------------------------------------------------------------
 //
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
-using ASCOM.Common.DeviceInterfaces;
-using ASCOM.Common.Alpaca;
-using System.Runtime.CompilerServices;
-using ASCOM.Common.Interfaces;
 using ASCOM.Common;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
+
 namespace ASCOM.Simulators
 {
     //
@@ -48,6 +46,7 @@ namespace ASCOM.Simulators
         /// The DeviceID is used by ASCOM applications to load the driver at runtime.
         /// </summary>
         internal static string driverID = "ASCOM.Simulator.Switch";
+
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
         /// </summary>
@@ -59,8 +58,9 @@ namespace ASCOM.Simulators
         private const bool EXPOSE_OCHTAG_DEFAULT = true;
 
         // Supported actions
-        const string OCH_TAG = "OCHTag"; const string OCH_TAG_UPPER_CASE = "OCHTAG";
-        const string OCH_TEST_POWER_REPORT = "OCHTestPowerReport"; const string OCH_TEST_POWER_REPORT_UPPER_CASE = "OCHTESTPOWERREPORT";
+        private const string OCH_TAG = "OCHTag"; private const string OCH_TAG_UPPER_CASE = "OCHTAG";
+
+        private const string OCH_TEST_POWER_REPORT = "OCHTestPowerReport"; private const string OCH_TEST_POWER_REPORT_UPPER_CASE = "OCHTESTPOWERREPORT";
 
         internal static bool traceState;
         private static bool exposeOCHState;
@@ -73,12 +73,12 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
         /// </summary>
-        readonly ILogger tl;
+        private readonly ILogger tl;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
-        readonly IProfile Profile;
+        private readonly IProfile Profile;
 
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
@@ -155,8 +155,10 @@ namespace ASCOM.Simulators
             {
                 case OCH_TAG_UPPER_CASE when exposeOCHState:
                     return "SwitchSimulator";
+
                 case OCH_TEST_POWER_REPORT_UPPER_CASE:
                     return "All observatory power systems are functioning properly. Supplied parameters: " + actionParameters;
+
                 default:
                     throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
             }
@@ -257,7 +259,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion
+        #endregion Common properties and methods.
 
         #region ISwitchV2 Implementation
 
@@ -304,7 +306,6 @@ namespace ASCOM.Simulators
             Validate("SetSwitchName", id);
             switches[id].Name = name;
             switches[id].Save(Profile, id);
-
         }
 
         /// <summary>
@@ -423,7 +424,8 @@ namespace ASCOM.Simulators
             switches[id].SetValue(value, "SetSwitchValue");
         }
 
-        #endregion analogue members
+        #endregion analogue switch members
+
         #endregion ISwitchV2 Implementation
 
         #region Private properties and methods
@@ -561,7 +563,7 @@ namespace ASCOM.Simulators
             switches.Add(new LocalSwitch("Raining") { Description = "Rain monitor, true if raining", CanWrite = false });
         }
 
-        #endregion
+        #endregion Private properties and methods
 
         private void LogMessage(string source, string details)
         {

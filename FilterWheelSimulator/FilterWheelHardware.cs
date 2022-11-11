@@ -1,33 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ASCOM.Common.Interfaces;
+using System;
 using System.Diagnostics;
 using System.Drawing;
-using ASCOM.Common.DeviceInterfaces;
 using System.Timers;
-using ASCOM.Common.Interfaces;
 
 namespace ASCOM.Simulators
 {
-    // 
+    //
     // Implements the simulated hardware
     //
     public class FilterWheelHardware
     {
-
         #region variables
 
         // Timer variables
         private static int m_iTimeInterval;             // Time to move between filter positions (miilisecs)
+
         private static int m_iTimeToMove;               // Time required to complete the current Move
         private static int m_iTimeElapsed;              // Keeps track of the elapsed time of the current Move
         private static int m_iTimerTickInterval = 100;  // How often we pump the hardware
 
         public static bool m_bConnected;                // Tracked connected state, public so the handbox can test without
-                                                        // invoking the full method
+
+        // invoking the full method
         public static short m_sPosition;                // Current filter position, public so the handbox can test without
-                                                        // invoking the full method
+
+        // invoking the full method
         private static short m_sTargetPosition;         // Filter position we want to get to
+
         private static bool m_bMoving;                  // FilterWheel in motion?
         private static int m_iSlots;                    // Number of filter wheel positions
         private static string[] m_asFilterNames;        // Array of filter name strings
@@ -50,7 +50,6 @@ namespace ASCOM.Simulators
         private const string g_csDriverDescription = "FilterWheelSimulator FilterWheel";
         public static IProfile g_Profile;
 
-
         // Exception codes/messages
         public const string ERR_SOURCE = "ASCOM FilterWheel Simulator";
 
@@ -72,9 +71,9 @@ namespace ASCOM.Simulators
         private static int SCODE_SETUP_NOT_ALLOWED = ErrorCodes.DriverBase + 0x406;
         private const string MSG_SETUP_NOT_ALLOWED = "Setup not allowed whilst connected";
 
-        #endregion
+        #endregion variables
 
-        static Timer timer = new Timer(100)
+        private static Timer timer = new Timer(100)
         {
             AutoReset = true,
         };
@@ -245,43 +244,56 @@ namespace ASCOM.Simulators
         }
 
         // For the setup dialog
-        public static string[] FullFilterNames { get { return m_asFilterNames; } }
+        public static string[] FullFilterNames
+        { get { return m_asFilterNames; } }
 
         // For the setup dialog
-        public static int[] FullFocusOffsets { get { return m_aiFocusOffsets; } }
+        public static int[] FullFocusOffsets
+        { get { return m_aiFocusOffsets; } }
 
         // For the setup dialog
-        public static Color[] FullFilterColours { get { return m_acFilterColours; } }
+        public static Color[] FullFilterColours
+        { get { return m_acFilterColours; } }
 
         // For the setup dialog
-        public static bool ImplementsNames { get { return m_bImplementsNames; } }
+        public static bool ImplementsNames
+        { get { return m_bImplementsNames; } }
 
         // For the setup dialog
-        public static bool ImplementsOffsets { get { return m_bImplementsOffsets; } }
+        public static bool ImplementsOffsets
+        { get { return m_bImplementsOffsets; } }
 
         // For the setup dialog
-        public static bool PreemptMoves { get { return m_bPreemptMoves; } }
+        public static bool PreemptMoves
+        { get { return m_bPreemptMoves; } }
 
         // For the Handbox
-        public static int Slots { get { return m_iSlots; } }
+        public static int Slots
+        { get { return m_iSlots; } }
 
         // For the Handbox
-        public static bool Moving { get { return m_bMoving; } }
+        public static bool Moving
+        { get { return m_bMoving; } }
 
         // For the Handbox
-        public static int Interval { get { return m_iTimeInterval; } }
+        public static int Interval
+        { get { return m_iTimeInterval; } }
 
         // For the Handbox
-        public static string CurrFilterName { get { return m_asFilterNames[m_sPosition]; } }
+        public static string CurrFilterName
+        { get { return m_asFilterNames[m_sPosition]; } }
 
         // For the Handbox
-        public static int CurrFilterOffset { get { return m_aiFocusOffsets[m_sPosition]; } }
+        public static int CurrFilterOffset
+        { get { return m_aiFocusOffsets[m_sPosition]; } }
 
         // For the Handbox
-        public static Color CurrFilterColour { get { return m_acFilterColours[m_sPosition]; } }
+        public static Color CurrFilterColour
+        { get { return m_acFilterColours[m_sPosition]; } }
 
         // Sends the Pump interval from the Handbox
-        public static int TimerTickInverval { set { m_iTimerTickInterval = value; } }
+        public static int TimerTickInverval
+        { set { m_iTimerTickInterval = value; } }
 
         public static void AbortMove()
         {
@@ -320,9 +332,7 @@ namespace ASCOM.Simulators
             }
         }
 
-
-        #endregion
-
+        #endregion Properties and Methods
 
         #region private utilities
 
@@ -429,7 +439,6 @@ namespace ASCOM.Simulators
                 Trace.WriteLine(Text);
         }
 
-        #endregion
-
+        #endregion private utilities
     }
 }

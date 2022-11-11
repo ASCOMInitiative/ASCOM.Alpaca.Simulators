@@ -14,9 +14,9 @@ namespace ASCOM.Alpaca.Simulators
         private ConsoleLogger consoleLogger = new ConsoleLogger();
         private TraceLogger traceLogger;
 
-        public LogLevel LoggingLevel 
+        public LogLevel LoggingLevel
         {
-            get; 
+            get;
             private set;
         }
 
@@ -32,7 +32,6 @@ namespace ASCOM.Alpaca.Simulators
             }
             catch
             {
-
             }
         }
 
@@ -41,7 +40,6 @@ namespace ASCOM.Alpaca.Simulators
             LoggingLevel = level;
             consoleLogger.SetMinimumLoggingLevel(level);
             traceLogger.SetMinimumLoggingLevel(level);
-
         }
 
         public MultiLogger(string path)

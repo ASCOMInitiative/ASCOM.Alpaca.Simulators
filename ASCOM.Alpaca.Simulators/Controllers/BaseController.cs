@@ -1,5 +1,4 @@
-﻿using Alpaca;
-using ASCOM.Common;
+﻿using ASCOM.Common;
 using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Helpers;

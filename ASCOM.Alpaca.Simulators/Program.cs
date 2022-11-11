@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -67,7 +66,7 @@ namespace ASCOM.Alpaca.Simulators
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logging.LogError(ex.Message);
             }
@@ -111,9 +110,9 @@ namespace ASCOM.Alpaca.Simulators
             {
                 Update.CheckForUpdates();
             }
-            catch
+            catch (Exception ex)
             {
-
+                Logging.LogError(ex.Message);
             }
 
             try
@@ -147,7 +146,7 @@ namespace ASCOM.Alpaca.Simulators
                 };
                 Process.Start(psi);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logging.LogError(ex.Message);
             }
@@ -188,12 +187,13 @@ namespace ASCOM.Alpaca.Simulators
                                         listenOptions.UseHttps(ServerSettings.SSLCertPath, ServerSettings.SSLCertPassword);
                                     });
                                 }
-                                catch(Exception ex)
+                                catch (Exception ex)
                                 {
                                     Logging.LogError($"Failed to start SSL load with error: {ex.Message}");
                                 }
 
-                                if (ServerSettings.AllowRemoteAccess) {
+                                if (ServerSettings.AllowRemoteAccess)
+                                {
                                     options.Listen(IPAddress.Any, ServerSettings.ServerPort);
                                 }
                                 else
@@ -202,7 +202,6 @@ namespace ASCOM.Alpaca.Simulators
                                 }
                             }
                         }
-
                         catch (Exception ex)
                         {
                             Logging.LogError($"Failed to start SSL with error: {ex.Message}");

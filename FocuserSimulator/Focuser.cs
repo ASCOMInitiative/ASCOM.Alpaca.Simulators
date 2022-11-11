@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Globalization;
+﻿using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
-using System.Collections.Generic;
-using ASCOM.Common.Alpaca;
-using System.Runtime.CompilerServices;
 using ASCOM.Common.Interfaces;
-using ASCOM.Common;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
+
 namespace ASCOM.Simulators
 {
     //
@@ -26,7 +22,7 @@ namespace ASCOM.Simulators
     /// ASCOM Focuser Driver for a Focuser.
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
-    /// 
+    ///
     public class Focuser : IFocuserV3, IDisposable, IAlpacaDevice, ISimulation
     {
         #region Constants
@@ -69,7 +65,7 @@ namespace ASCOM.Simulators
         /// </summary>
         private readonly IProfile Profile;
 
-        #endregion
+        #endregion Constants
 
         internal ILogger TL;// Shared tracelogger between this instances classes
 
@@ -95,7 +91,7 @@ namespace ASCOM.Simulators
         private MotorState motorState = MotorState.idle;
         private DateTime settleFinishTime;
 
-        #endregion
+        #endregion local parameters
 
         #region Constructor and dispose
 
@@ -185,7 +181,7 @@ namespace ASCOM.Simulators
             GC.SuppressFinalize(this);
         }
 
-        #endregion
+        #endregion Constructor and dispose
 
         #region Private Properties
 
@@ -203,12 +199,12 @@ namespace ASCOM.Simulators
         internal DateTime MouseDownTime { get; set; }
         internal int SettleTime { get; set; }
 
-        #endregion
+        #endregion Private Properties
 
         #region IFocuserV3 Members
 
         /// <summary>
-        /// True if the focuser is capable of absolute position; 
+        /// True if the focuser is capable of absolute position;
         /// that is, being commanded to a specific step location.
         /// </summary>
         public bool Absolute { get; set; }
@@ -223,8 +219,8 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Transmits an arbitrary string to the device and does not 
-        /// wait for a response. Optionally, protocol framing characters 
+        /// Transmits an arbitrary string to the device and does not
+        /// wait for a response. Optionally, protocol framing characters
         /// may be added to the string before transmission.
         /// mode.
         /// </summary>
@@ -235,8 +231,8 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Transmits an arbitrary string to the device and waits 
-        /// for a boolean response. Optionally, protocol framing 
+        /// Transmits an arbitrary string to the device and waits
+        /// for a boolean response. Optionally, protocol framing
         /// characters may be added to the string before transmission.
         /// </summary>
         /// <exception cref="MethodNotImplementedException"></exception>
@@ -246,8 +242,8 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Transmits an arbitrary string to the device and waits 
-        /// for a string response. Optionally, protocol framing 
+        /// Transmits an arbitrary string to the device and waits
+        /// for a string response. Optionally, protocol framing
         /// characters may be added to the string before transmission.
         /// </summary>
         /// <exception cref="MethodNotImplementedException"></exception>
@@ -334,10 +330,10 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Immediately stop any focuser motion due to a previous Move() 
-        /// method call. Some focusers may not support this function, in 
-        /// which case an exception will be raised. Recommendation: Host 
-        /// software should call this method upon initialization and, if 
+        /// Immediately stop any focuser motion due to a previous Move()
+        /// method call. Some focusers may not support this function, in
+        /// which case an exception will be raised. Recommendation: Host
+        /// software should call this method upon initialization and, if
         /// it fails, disable the Halt button in the user interface.
         /// </summary>
         public void Halt()
@@ -380,9 +376,9 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// State of the connection to the focuser. et True to start the link to the focuser; 
-        /// set False to terminate the link. The current link status can also be read 
-        /// back as this property. An exception will be raised if the link fails to 
+        /// State of the connection to the focuser. et True to start the link to the focuser;
+        /// set False to terminate the link. The current link status can also be read
+        /// back as this property. An exception will be raised if the link fails to
         /// change state for any reason.
         /// </summary>
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
@@ -393,22 +389,22 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Maximum increment size allowed by the focuser; i.e. the maximum number 
-        /// of steps allowed in one move operation. For most focusers this is the 
-        /// same as the MaxStep property. This is normally used to limit the 
+        /// Maximum increment size allowed by the focuser; i.e. the maximum number
+        /// of steps allowed in one move operation. For most focusers this is the
+        /// same as the MaxStep property. This is normally used to limit the
         /// Increment display in the host software.
         /// </summary>
         public int MaxIncrement { get; internal set; }
 
         /// <summary>
-        /// Maximum step position permitted. The focuser can step between 0 and MaxStep. 
-        /// If an attempt is made to move the focuser beyond these limits, 
+        /// Maximum step position permitted. The focuser can step between 0 and MaxStep.
+        /// If an attempt is made to move the focuser beyond these limits,
         /// it will automatically stop at the limit.
         /// </summary>
         public int MaxStep { get; internal set; }
 
         /// <summary>
-        /// Step size (microns) for the focuser. Raises an exception if 
+        /// Step size (microns) for the focuser. Raises an exception if
         /// the focuser does not intrinsically know what the step size is.
         /// </summary>
         public void Move(int value)
@@ -443,8 +439,8 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Current focuser position, in steps. Valid only for absolute positioning 
-        /// focusers (see the Absolute property). An exception will be raised for 
+        /// Current focuser position, in steps. Valid only for absolute positioning
+        /// focusers (see the Absolute property). An exception will be raised for
         /// relative positioning focusers.
         /// </summary>
         public int Position
@@ -463,11 +459,10 @@ namespace ASCOM.Simulators
         /// </summary>
         public void SetupDialog()
         {
-
         }
 
         /// <summary>
-        /// Step size (microns) for the focuser. Raises an exception if the focuser 
+        /// Step size (microns) for the focuser. Raises an exception if the focuser
         /// does not intrinsically know what the step size is.
         /// </summary>
         public double StepSize
@@ -501,12 +496,12 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// The state of temperature compensation mode (if available), else always 
-        /// False. If the TempCompAvailable property is True, then setting TempComp 
-        /// to True puts the focuser into temperature tracking mode. While in 
-        /// temperature tracking mode, Move commands will be rejected by the 
-        /// focuser. Set to False to turn off temperature tracking. An exception 
-        /// will be raised if TempCompAvailable is False and an attempt is made 
+        /// The state of temperature compensation mode (if available), else always
+        /// False. If the TempCompAvailable property is True, then setting TempComp
+        /// to True puts the focuser into temperature tracking mode. While in
+        /// temperature tracking mode, Move commands will be rejected by the
+        /// focuser. Set to False to turn off temperature tracking. An exception
+        /// will be raised if TempCompAvailable is False and an attempt is made
         /// to set TempComp to true.
         /// </summary>
         public bool TempComp
@@ -521,21 +516,21 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// True if focuser has temperature compensation available. Will be True 
-        /// only if the focuser's temperature compensation can be turned on and 
+        /// True if focuser has temperature compensation available. Will be True
+        /// only if the focuser's temperature compensation can be turned on and
         /// off via the TempComp property.
         /// </summary>
         public bool TempCompAvailable { get; internal set; }
 
         /// <summary>
-        /// Current ambient temperature as measured by the focuser. Raises an 
-        /// exception if ambient temperature is not available. Commonly 
-        /// available on focusers with a built-in temperature compensation 
+        /// Current ambient temperature as measured by the focuser. Raises an
+        /// exception if ambient temperature is not available. Commonly
+        /// available on focusers with a built-in temperature compensation
         /// mode.
         /// </summary>
         public double Temperature { get; internal set; }
 
-        #endregion
+        #endregion IFocuserV3 Members
 
         #region Private Members
 
@@ -580,7 +575,6 @@ namespace ASCOM.Simulators
                 {
                     _position = Target;
                     LogMessage("Moving", "  Set position = target");
-
                 }
                 else
                 {
@@ -611,6 +605,7 @@ namespace ASCOM.Simulators
                         LogMessage("MoveTimer", "Settle start, time " + SettleTime.ToString());
                     }
                     return;
+
                 case MotorState.settling:
                     if (settleFinishTime < DateTime.Now)
                     {
@@ -695,17 +690,19 @@ namespace ASCOM.Simulators
         }
 
         #region ISimulator
+
         public void ResetSettings()
         {
             Profile.Clear();
             LoadFocuserKeyValues();
         }
 
-        public string GetXMLProfile() 
+        public string GetXMLProfile()
         {
             return Profile.GetProfile();
         }
-        #endregion
+
+        #endregion ISimulator
 
         /// <summary>
         /// Log a message making sure that the TraceLogger exists.
@@ -722,6 +719,6 @@ namespace ASCOM.Simulators
             catch { } // Ignore errors here
         }
 
-        #endregion
+        #endregion Private Members
     }
 }

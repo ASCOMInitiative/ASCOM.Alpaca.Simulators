@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ASCOM.Common.Interfaces;
+using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using ASCOM.Common.DeviceInterfaces;
-using ASCOM.Common.Interfaces;
 
 namespace ASCOM.Simulators
 {
@@ -112,7 +108,8 @@ namespace ASCOM.Simulators
         //        this.Description = (string)cells["colDescription"].Value;
         //    }
         //}
-        #endregion
+
+        #endregion constructors
 
         /// <summary>
         /// Sets the value with a check that the value is correct.

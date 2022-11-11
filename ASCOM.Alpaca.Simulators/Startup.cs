@@ -1,4 +1,3 @@
-using ASCOM.Common.Alpaca;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -68,7 +67,6 @@ namespace ASCOM.Alpaca.Simulators
                     {
                         Logging.LogInformation("Failed to find simulator xml documentation.");
                     }
-
 
                     if (File.Exists(Path.Combine(AppContext.BaseDirectory, "ASCOM.Common.xml")))
                     {
@@ -227,7 +225,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 Logging.LogError(ex.Message);
             }
-            
+
             //Serve static files, mostly CSS
             app.UseStaticFiles();
 

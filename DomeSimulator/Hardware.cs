@@ -25,13 +25,13 @@
 // -----------------------------------------------------------------------------
 using ASCOM.Common.DeviceInterfaces;
 using System;
-using System.Timers;
 using System.Runtime.CompilerServices;
+using System.Timers;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
+
 namespace ASCOM.Simulators
 {
-
     public enum Going
     {
         slewCCW = -1        // just running till halt
@@ -172,7 +172,6 @@ namespace ASCOM.Simulators
             double slew;
             double distance;
 
-
             // Azimuth slew simulation
             if (g_eSlewing != Going.slewNowhere)
             {
@@ -300,7 +299,6 @@ namespace ASCOM.Simulators
         {
             get
             {
-
                 // Non-standard, Slewing true if shutter is opening/closing
                 if (g_bSlewingOpenClose)
                 {

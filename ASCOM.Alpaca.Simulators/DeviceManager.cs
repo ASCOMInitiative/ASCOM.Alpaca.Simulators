@@ -1,6 +1,4 @@
-using Alpaca;
 using ASCOM.Alpaca.Discovery;
-using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Simulators;
 using ASCOM.Tools;
@@ -30,16 +28,17 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         // These store the actual instance of the device drivers. They are keyed to the Device Number
-        private readonly static Dictionary<int, ICameraV3> cameraV3s = new Dictionary<int, ICameraV3>();
-        private readonly static Dictionary<int, ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int, ICoverCalibratorV1>();
-        private readonly static Dictionary<int, IDomeV2> domeV2s = new Dictionary<int, IDomeV2>();
-        private readonly static Dictionary<int, IFilterWheelV2> filterWheelV2s = new Dictionary<int, IFilterWheelV2>();
-        private readonly static Dictionary<int, IFocuserV3> focuserV3s = new Dictionary<int, IFocuserV3>();
-        private readonly static Dictionary<int, IObservingConditions> observingConditions = new Dictionary<int, IObservingConditions>();
-        private readonly static Dictionary<int, IRotatorV3> rotatorV3s = new Dictionary<int, IRotatorV3>();
-        private readonly static Dictionary<int, ISafetyMonitor> safetyMonitors = new Dictionary<int, ISafetyMonitor>();
-        private readonly static Dictionary<int, ISwitchV2> switchV2s = new Dictionary<int, ISwitchV2>();
-        private readonly static Dictionary<int, ITelescopeV3> telescopeV3s = new Dictionary<int, ITelescopeV3>();
+        private static readonly Dictionary<int, ICameraV3> cameraV3s = new Dictionary<int, ICameraV3>();
+
+        private static readonly Dictionary<int, ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int, ICoverCalibratorV1>();
+        private static readonly Dictionary<int, IDomeV2> domeV2s = new Dictionary<int, IDomeV2>();
+        private static readonly Dictionary<int, IFilterWheelV2> filterWheelV2s = new Dictionary<int, IFilterWheelV2>();
+        private static readonly Dictionary<int, IFocuserV3> focuserV3s = new Dictionary<int, IFocuserV3>();
+        private static readonly Dictionary<int, IObservingConditions> observingConditions = new Dictionary<int, IObservingConditions>();
+        private static readonly Dictionary<int, IRotatorV3> rotatorV3s = new Dictionary<int, IRotatorV3>();
+        private static readonly Dictionary<int, ISafetyMonitor> safetyMonitors = new Dictionary<int, ISafetyMonitor>();
+        private static readonly Dictionary<int, ISwitchV2> switchV2s = new Dictionary<int, ISwitchV2>();
+        private static readonly Dictionary<int, ITelescopeV3> telescopeV3s = new Dictionary<int, ITelescopeV3>();
 
         private static string ServerFolderName
         {
@@ -282,7 +281,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 ASCOM.Simulators.TelescopeHardware.ClearProfile();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logging.LogError($"Failed to reset Telescope settings with error: {ex.Message}");
             }
@@ -469,6 +468,7 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         //Use only lowercase for case sensitive OSes
+
         #region Settings Folder Names
 
         private static string Telescope
@@ -620,6 +620,7 @@ namespace ASCOM.Alpaca.Simulators
                 }
             }
         }
-        #endregion
+
+        #endregion Settings Folder Names
     }
 }

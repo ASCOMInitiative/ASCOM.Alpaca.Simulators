@@ -41,7 +41,6 @@ namespace LetsMake
                 throw new ArgumentNullException(nameof(releases));
             }
             return releases.Where(rp => rp.Prerelease).Latest();
-
         }
 
         public static Release Latest(this IEnumerable<Release> releases)

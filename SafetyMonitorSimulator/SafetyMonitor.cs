@@ -1,12 +1,8 @@
-﻿using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Collections;
+﻿using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
-using ASCOM.Common.Alpaca;
-using System.Collections.Generic;
 using ASCOM.Common.Interfaces;
-using ASCOM.Common;
+using System;
+using System.Collections.Generic;
 
 namespace ASCOM.Simulators
 {
@@ -61,12 +57,10 @@ namespace ASCOM.Simulators
 
         private static bool _isSafe;
 
-        ILogger Logger;
-        IProfile Profile;
+        private ILogger Logger;
+        private IProfile Profile;
 
-        #endregion
-
-
+        #endregion Constants
 
         #region ISafetyMonitor Public Members
 
@@ -102,7 +96,6 @@ namespace ASCOM.Simulators
                 }
                 UniqueID = profile.GetValue(UNIQUE_ID_PROFILE_NAME);
             }
-
             catch (Exception ex)
             {
                 logger.LogError($"SafetyMonitor {deviceNumber} - {ex.Message}");
@@ -114,7 +107,6 @@ namespace ASCOM.Simulators
         public string DeviceName { get => Name; }
         public int DeviceNumber { get; private set; }
         public string UniqueID { get; private set; }
-
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="SafetyMonitor"/> is connected.
@@ -186,12 +178,14 @@ namespace ASCOM.Simulators
         /// <value>State of the Monitor</value>
         public bool IsSafe
         {
-            get {
+            get
+            {
                 if (!Connected)
                 {
                     return false;
                 }
-                return _isSafe; }
+                return _isSafe;
+            }
         }
 
         /// <summary>
@@ -203,8 +197,8 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Transmits an arbitrary string to the device and does 
-        /// not wait for a response. Optionally, protocol framing 
+        /// Transmits an arbitrary string to the device and does
+        /// not wait for a response. Optionally, protocol framing
         /// characters may be added to the string before transmission.
         /// </summary>
         public void CommandBlind(string command, bool raw)
@@ -213,8 +207,8 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Transmits an arbitrary string to the device and waits 
-        /// for a boolean response. Optionally, protocol framing 
+        /// Transmits an arbitrary string to the device and waits
+        /// for a boolean response. Optionally, protocol framing
         /// characters may be added to the string before transmission.
         /// </summary>
         public bool CommandBool(string command, bool raw)
@@ -223,8 +217,8 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Transmits an arbitrary string to the device and waits 
-        /// for a string response. Optionally, protocol framing 
+        /// Transmits an arbitrary string to the device and waits
+        /// for a string response. Optionally, protocol framing
         /// characters may be added to the string before transmission.
         /// </summary>
         public string CommandString(string command, bool raw)
@@ -241,7 +235,7 @@ namespace ASCOM.Simulators
             get { return new List<string>(); }
         }
 
-        #endregion
+        #endregion ISafetyMonitor Public Members
 
         #region SafetyMonitor Private Members
 
@@ -309,6 +303,6 @@ namespace ASCOM.Simulators
             Profile.Clear();
         }
 
-        #endregion
+        #endregion SafetyMonitor Private Members
     }
 }

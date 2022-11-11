@@ -1,50 +1,38 @@
 ﻿// tabs=4
 // --------------------------------------------------------------------------------
-// 
+//
 // ASCOM FilterWheel driver for FilterWheelSimulator
-// 
+//
 // Description:	A port of the VB6 ASCOM Filterwheel simulator to VB.Net.
 // Converted and built in Visual Studio 2008.
 // The port leaves some messy code - it could really do with
 // a ground up re-write!
-// 
+//
 // Implements:	ASCOM FilterWheel interface version: 5.1.0
 // Author:		Mark Crossley <mark@markcrossley.co.uk>
-// 
+//
 // Edit Log:
-// 
+//
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
 // 06-Jun-2009	mpc	1.0.0	Initial edit, from FilterWheel template
 // --------------------------------------------------------------------------------
-// 
+//
 // Your driver's ID is ASCOM.FilterWheelSim.FilterWheel  ???
-// 
+//
 // The Guid attribute sets the CLSID for ASCOM.FilterWheelSim.FilterWheel
 // The ClassInterface/None addribute prevents an empty interface called
 // _FilterWheel from being created and used as the [default] interface
-// 
+//
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using ASCOM.Common;
-using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
-using Microsoft.VisualBasic;
+using System;
+using System.Collections.Generic;
 
 namespace ASCOM.Simulators
 {
-
     public class FilterWheel : IFilterWheelV2, IAlpacaDevice, ISimulation // Early-bind interface implemented by this driver
     {
         // ==========
@@ -53,9 +41,9 @@ namespace ASCOM.Simulators
 
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
-        // 
+        //
         // Constructor - Must be public for COM registration!
-        // 
+        //
         public FilterWheel(int deviceNumber, ILogger logger, IProfile profile)
         {
             logger.LogInformation($"FilterWheel {deviceNumber} - Starting initialization");
@@ -86,6 +74,7 @@ namespace ASCOM.Simulators
         }
 
         #region ISimulation
+
         public void ResetSettings()
         {
             FilterWheelHardware.g_Profile.Clear();
@@ -95,7 +84,8 @@ namespace ASCOM.Simulators
         {
             return FilterWheelHardware.g_Profile.GetProfile();
         }
-        #endregion
+
+        #endregion ISimulation
 
         public string DeviceName { get => Name; }
         public int DeviceNumber { get; private set; }
@@ -104,9 +94,10 @@ namespace ASCOM.Simulators
         public void Dispose()
         {
         }
-        // 
+
+        //
         // PUBLIC COM INTERFACE IFilterWheel IMPLEMENTATION
-        // 
+        //
         public bool Connected
         {
             get
@@ -193,12 +184,11 @@ namespace ASCOM.Simulators
         {
         }
 
-
         public short Position
         {
             get
             {
-               return FilterWheelHardware.Position;
+                return FilterWheelHardware.Position;
             }
             set
             {
@@ -224,14 +214,12 @@ namespace ASCOM.Simulators
 
         public void SetupDialog()
         {
-
         }
 
-
         // ---------------------------------------------------------------------
-        // 
+        //
         // check_connected() - Raise an error if the focuser is not connected
-        // 
+        //
         // ---------------------------------------------------------------------
         private void check_connected()
         {
@@ -239,5 +227,4 @@ namespace ASCOM.Simulators
                 throw new NotConnectedException(MSG_NOT_CONNECTED);
         }
     }
-
 }

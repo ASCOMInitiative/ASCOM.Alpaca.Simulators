@@ -47,11 +47,11 @@ namespace ASCOM.Alpaca.Simulators
         /// Indicates whether the dome is in the home position.
         /// </summary>
         /// <remarks>
-        /// <para>Indicates whether the dome is in the home position. 
-        /// This is normally used following a FindHome() operation. 
-        /// The value is reset with any azimuth slew operation that moves the dome away from the home position. 
-        /// AtHome may also become true during normal slew operations, 
-        /// if the dome passes through the home position and the dome controller hardware is capable of detecting that; 
+        /// <para>Indicates whether the dome is in the home position.
+        /// This is normally used following a FindHome() operation.
+        /// The value is reset with any azimuth slew operation that moves the dome away from the home position.
+        /// AtHome may also become true during normal slew operations,
+        /// if the dome passes through the home position and the dome controller hardware is capable of detecting that;
         /// or at the end of a slew operation if the dome comes to rest at the home position.</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
@@ -365,7 +365,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/slaved")]
         public ActionResult<Response> Slaved(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("True if telescope is slaved to dome, otherwise false")] bool Slaved, 
+            [Required][FromForm][SwaggerSchema("True if telescope is slaved to dome, otherwise false")] bool Slaved,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -551,7 +551,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/slewtoaltitude")]
         public ActionResult<Response> SlewToAltitude(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Target dome altitude (degrees, horizon zero and increasing positive to 90 zenith0")] double Altitude, 
+            [Required][FromForm][SwaggerSchema("Target dome altitude (degrees, horizon zero and increasing positive to 90 zenith0")] double Altitude,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -576,7 +576,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/slewtoazimuth")]
         public ActionResult<Response> SlewToAzimuth(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Target dome azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)")] double Azimuth, 
+            [Required][FromForm][SwaggerSchema("Target dome azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)")] double Azimuth,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -601,7 +601,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/synctoazimuth")]
         public ActionResult<Response> SyncToAzimuth(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Target dome azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)")] double Azimuth, 
+            [Required][FromForm][SwaggerSchema("Target dome azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)")] double Azimuth,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {

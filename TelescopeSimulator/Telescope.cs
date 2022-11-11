@@ -4,7 +4,7 @@
 //
 // ASCOM Telescope driver for Telescope
 //
-// Description:	ASCOM Driver for Simulated Telescope 
+// Description:	ASCOM Driver for Simulated Telescope
 //
 // Implements:	ASCOM Telescope interface version: 2.0
 // Author:		(rbt) Robert Turner <robert@robertturnerastro.com>
@@ -17,18 +17,16 @@
 // 29 Dec 2010  cdr         Extensive refactoring and bug fixes
 // --------------------------------------------------------------------------------
 //
+using ASCOM.Common;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
+using ASCOM.Tools;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using ASCOM.Common.DeviceInterfaces;
-using System.Collections.Generic;
-using ASCOM.Common.Interfaces;
-using ASCOM.Common;
-using ASCOM.Tools;
 
 namespace ASCOM.Simulators
 {
@@ -46,18 +44,19 @@ namespace ASCOM.Simulators
         // Driver private data (rate collections)
         //
         private AxisRates[] m_AxisRates;
+
         private TrackingRates m_TrackingRates;
         private TrackingRatesSimple m_TrackingRatesSimple;
         private long objectId;
 
-        const string SlewToHA = "SlewToHA"; const string SlewToHAUpper = "SLEWTOHA";
-        const string AssemblyVersionNumber = "AssemblyVersionNumber"; const string AssemblyVersionNumberUpper = "ASSEMBLYVERSIONNUMBER";
-        const string TimeUntilPointingStateCanChange = "TIMEUNTILPOINTINGSTATECANCHANGE";
-        const string AvailableTimeInThisPointingState = "AVAILABLETIMEINTHISPOINTINGSTATE";
+        private const string SlewToHA = "SlewToHA"; private const string SlewToHAUpper = "SLEWTOHA";
+        private const string AssemblyVersionNumber = "AssemblyVersionNumber"; private const string AssemblyVersionNumberUpper = "ASSEMBLYVERSIONNUMBER";
+        private const string TimeUntilPointingStateCanChange = "TIMEUNTILPOINTINGSTATECANCHANGE";
+        private const string AvailableTimeInThisPointingState = "AVAILABLETIMEINTHISPOINTINGSTATE";
 
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
-        ILogger Logger;
+        private ILogger Logger;
 
         //
         // Constructor - Must be public for COM registration!
@@ -110,6 +109,7 @@ namespace ASCOM.Simulators
                 Logger.LogError(ex.Message);
             }
         }
+
         public string DeviceName { get => Name; }
         public int DeviceNumber { get; private set; }
         public string UniqueID { get; private set; }
@@ -131,6 +131,7 @@ namespace ASCOM.Simulators
                 case AssemblyVersionNumberUpper:
                     Response = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                     break;
+
                 case SlewToHAUpper:
                     //Assume that we have just been supplied with an HA
                     //Let errors just go straight back to the caller
@@ -139,12 +140,15 @@ namespace ASCOM.Simulators
                     this.SlewToCoordinates(RA, 0.0);
                     Response = "Slew successful!";
                     break;
+
                 case AvailableTimeInThisPointingState:
                     Response = TelescopeHardware.AvailableTimeInThisPointingState.ToString();
                     break;
+
                 case TimeUntilPointingStateCanChange:
                     Response = TelescopeHardware.TimeUntilPointingStateCanChange.ToString();
                     break;
+
                 default:
                     throw new ASCOM.InvalidOperationException("Command: '" + ActionName + "' is not recognised by the Scope Simulator .NET driver. " + AssemblyVersionNumberUpper + " " + SlewToHAUpper);
             }
@@ -190,10 +194,13 @@ namespace ASCOM.Simulators
                 {
                     case AlignmentMode.AltAz:
                         return AlignmentMode.AltAz;
+
                     case AlignmentMode.GermanPolar:
                         return AlignmentMode.GermanPolar;
+
                     case AlignmentMode.Polar:
                         return AlignmentMode.Polar;
+
                     default:
                         return AlignmentMode.GermanPolar;
                 }
@@ -265,12 +272,15 @@ namespace ASCOM.Simulators
                 case TelescopeAxis.Primary:
                     //                    return m_AxisRates[0];
                     return new AxisRates(TelescopeAxis.Primary);
+
                 case TelescopeAxis.Secondary:
                     //                    return m_AxisRates[1];
                     return new AxisRates(TelescopeAxis.Secondary);
+
                 case TelescopeAxis.Tertiary:
                     //                    return m_AxisRates[2];
                     return new AxisRates(TelescopeAxis.Tertiary);
+
                 default:
                     return null;
             }
@@ -613,14 +623,17 @@ namespace ASCOM.Simulators
                         eq = EquatorialCoordinateType.Topocentric;
                         output = "Local";
                         break;
+
                     case 2:
                         eq = EquatorialCoordinateType.J2000;
                         output = "J2000";
                         break;
+
                     case 3:
                         eq = EquatorialCoordinateType.J2050;
                         output = "J2050";
                         break;
+
                     case 4:
                         eq = EquatorialCoordinateType.B1950;
                         output = "B1950";
@@ -742,9 +755,11 @@ namespace ASCOM.Simulators
                 case TelescopeAxis.Primary:
                     TelescopeHardware.rateMoveAxes.X = Rate;
                     break;
+
                 case TelescopeAxis.Secondary:
                     TelescopeHardware.rateMoveAxes.Y = Rate;
                     break;
+
                 case TelescopeAxis.Tertiary:
                     // not implemented
                     break;
@@ -796,6 +811,7 @@ namespace ASCOM.Simulators
                         TelescopeHardware.isPulseGuidingDec = false;
                         TelescopeHardware.guideDuration.Y = 0;
                         break;
+
                     case GuideDirection.East:
                     case GuideDirection.West:
                         TelescopeHardware.isPulseGuidingRa = false;
@@ -805,7 +821,6 @@ namespace ASCOM.Simulators
             }
             else
             {
-
                 //DateTime endTime = DateTime.Now + TimeSpan.FromMilliseconds(Duration);
 
                 switch (Direction)
@@ -815,6 +830,7 @@ namespace ASCOM.Simulators
                         TelescopeHardware.isPulseGuidingDec = true;
                         TelescopeHardware.guideDuration.Y = Duration / 1000.0;
                         break;
+
                     case GuideDirection.South:
                         TelescopeHardware.guideRate.Y = -Math.Abs(TelescopeHardware.guideRate.Y);
                         //TelescopeHardware.pulseGuideDecEndTime = endTime;
@@ -828,6 +844,7 @@ namespace ASCOM.Simulators
                         TelescopeHardware.isPulseGuidingRa = true;
                         TelescopeHardware.guideDuration.X = Duration / 1000.0;
                         break;
+
                     case GuideDirection.West:
                         TelescopeHardware.guideRate.X = Math.Abs(TelescopeHardware.guideRate.X);
                         //TelescopeHardware.pulseGuideRaEndTime = endTime;
@@ -1294,7 +1311,7 @@ namespace ASCOM.Simulators
             SharedResources.TrafficEnd("(done)");
         }
 
-        #endregion
+        #endregion ITelescope Members
 
         #region new pier side properties
 
@@ -1322,9 +1339,10 @@ namespace ASCOM.Simulators
         //    }
         //}
 
-        #endregion
+        #endregion new pier side properties
 
         #region private methods
+
         private void CheckRate(TelescopeAxis axis, double rate)
         {
             IAxisRates rates = AxisRates(axis);
@@ -1418,7 +1436,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion
+        #endregion private methods
 
         #region IDisposable Members
 
@@ -1434,7 +1452,8 @@ namespace ASCOM.Simulators
             m_TrackingRatesSimple.Dispose();
             m_TrackingRatesSimple = null;
         }
-        #endregion
+
+        #endregion IDisposable Members
 
         #region Simulation Members
 
@@ -1447,7 +1466,8 @@ namespace ASCOM.Simulators
         {
             return TelescopeHardware.s_Profile.GetProfile();
         }
-        #endregion
+
+        #endregion Simulation Members
     }
 
     //
@@ -1494,7 +1514,7 @@ namespace ASCOM.Simulators
             set { m_dMinimum = value; }
         }
 
-        #endregion
+        #endregion IRate Members
 
         #region IDisposable Members
 
@@ -1510,13 +1530,13 @@ namespace ASCOM.Simulators
             // nothing to do?
         }
 
-        #endregion
+        #endregion IDisposable Members
     }
 
     //
     // AxisRates is a strongly-typed collection that must be enumerable by
     // both COM and .NET. The IAxisRates and IEnumerable interfaces provide
-    // this polymorphism. 
+    // this polymorphism.
     //
     // The Guid attribute sets the CLSID for ASCOM.Telescope.AxisRates
     // The ClassInterface/None attribute prevents an empty interface called
@@ -1537,13 +1557,13 @@ namespace ASCOM.Simulators
         {
             m_axis = Axis;
             //
-            // This collection must hold zero or more Rate objects describing the 
+            // This collection must hold zero or more Rate objects describing the
             // rates of motion ranges for the Telescope.MoveAxis() method
-            // that are supported by your driver. It is OK to leave this 
+            // that are supported by your driver. It is OK to leave this
             // array empty, indicating that MoveAxis() is not supported.
             //
             // Note that we are constructing a rate array for the axis passed
-            // to the constructor. Thus we switch() below, and each case should 
+            // to the constructor. Thus we switch() below, and each case should
             // initialize the array for the rate for the selected axis.
             //
             double maxRate = TelescopeHardware.MaximumSlewRate;
@@ -1554,10 +1574,12 @@ namespace ASCOM.Simulators
                     // Example: m_Rates = new Rate[] { new Rate(10.5, 30.2), new Rate(54.0, 43.6) }
                     m_Rates = new Rate[] { new Rate(0.0, maxRate / 3), new Rate(maxRate / 2, maxRate) };
                     break;
+
                 case TelescopeAxis.Secondary:
                     // TODO Initialize this array with any Secondary axis rates that your driver may provide
                     m_Rates = new Rate[] { new Rate(0.0, maxRate / 3), new Rate(maxRate / 2, maxRate) };
                     break;
+
                 case TelescopeAxis.Tertiary:
                     // TODO Initialize this array with any Tertiary axis rates that your driver may provide
                     m_Rates = new Rate[] { new Rate(0.0, maxRate / 3), new Rate(maxRate / 2, maxRate) };
@@ -1589,7 +1611,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion
+        #endregion IAxisRates Members
 
         #region IDisposable Members
 
@@ -1609,7 +1631,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion
+        #endregion IDisposable Members
 
         #region IEnumerator implementation
 
@@ -1633,12 +1655,13 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion
+        #endregion IEnumerator implementation
     }
+
     //
     // TrackingRates is a strongly-typed collection that must be enumerable by
     // both COM and .NET. The ITrackingRates and IEnumerable interfaces provide
-    // this polymorphism. 
+    // this polymorphism.
     //
     // The Guid attribute sets the CLSID for ASCOM.Telescope.TrackingRates
     // The ClassInterface/None attribute prevents an empty interface called
@@ -1678,7 +1701,6 @@ namespace ASCOM.Simulators
             return this as IEnumerator;
         }
 
-
         public DriveRate this[int index]
         {
             get
@@ -1688,7 +1710,8 @@ namespace ASCOM.Simulators
                 return m_TrackingRates[index - 1];
             }	// 1-based
         }
-        #endregion
+
+        #endregion ITrackingRates Members
 
         #region IEnumerator implementation
 
@@ -1712,7 +1735,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion
+        #endregion IEnumerator implementation
 
         #region IDisposable Members
 
@@ -1728,7 +1751,7 @@ namespace ASCOM.Simulators
             if (disposing)
             {
                 // free managed resources
-                /* Following code commented out in Platform 6.4 because m_TrackingRates is a global variable for the whole driver and there could be more than one 
+                /* Following code commented out in Platform 6.4 because m_TrackingRates is a global variable for the whole driver and there could be more than one
                  * instance of the TrackingRates class (created by the calling application). One instance should not invalidate the variable that could be in use
                  * by other instances of which this one is unaware.
 
@@ -1737,7 +1760,8 @@ namespace ASCOM.Simulators
                 */
             }
         }
-        #endregion
+
+        #endregion IDisposable Members
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), Guid("46753368-42d1-424a-85fa-26eee8f4c178")]
@@ -1783,7 +1807,8 @@ namespace ASCOM.Simulators
                 return m_TrackingRates[index - 1];
             }	// 1-based
         }
-        #endregion
+
+        #endregion ITrackingRates Members
 
         #region IEnumerator implementation
 
@@ -1807,7 +1832,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion
+        #endregion IEnumerator implementation
 
         #region IDisposable Members
 
@@ -1823,7 +1848,7 @@ namespace ASCOM.Simulators
             if (disposing)
             {
                 // free managed resources
-                /* Following code commented out in Platform 6.4 because m_TrackingRates is a global variable for the whole driver and there could be more than one 
+                /* Following code commented out in Platform 6.4 because m_TrackingRates is a global variable for the whole driver and there could be more than one
                  * instance of the TrackingRatesSimple class (created by the calling application). One instance should not invalidate the variable that could be in use
                  * by other instances of which this one is unaware.
 
@@ -1834,6 +1859,7 @@ namespace ASCOM.Simulators
                 */
             }
         }
-        #endregion
+
+        #endregion IDisposable Members
     }
 }

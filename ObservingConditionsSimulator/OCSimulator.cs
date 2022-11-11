@@ -14,7 +14,6 @@
 // Modified by Chris Rowland and Peter Simpson to handle multiple hardware devices March 2011
 //
 using ASCOM.Common;
-using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
 using System;
 using System.Collections.Concurrent;
@@ -25,6 +24,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
+
 namespace ASCOM.Simulators
 {
     /// <summary>
@@ -247,7 +247,7 @@ namespace ASCOM.Simulators
         // Miscellaneous variables
         private static int uniqueClientNumber = 0; // Unique number that increments on each call to UniqueClientNumber
 
-        private readonly static object connectLockObject = new object();
+        private static readonly object connectLockObject = new object();
         private static ConcurrentDictionary<long, bool> connectStates;
         private static DateTime initialConnectionTime;
         private static DateTime mostRecentUpdateTime;
@@ -272,7 +272,6 @@ namespace ASCOM.Simulators
         /// </summary>
         static OCSimulator()
         {
-            
         }
 
         internal static void Init()
@@ -606,7 +605,7 @@ namespace ASCOM.Simulators
         {
             CheckConnected("TimeSinceLastUpdate");
 
-            if (PropertyName  == null || PropertyName == "") // Return the most recent update time of any sensor
+            if (PropertyName == null || PropertyName == "") // Return the most recent update time of any sensor
             {
                 double timeSinceLastUpdate = DateTime.Now.Subtract(mostRecentUpdateTime).TotalSeconds;
                 LogMessage("TimeSinceLastUpdate", "Most recent sensor update time: " + timeSinceLastUpdate.ToString());
@@ -989,8 +988,6 @@ namespace ASCOM.Simulators
         }
 
         #endregion Profile management
-
-
 
         public static void LogMessage(string message)
         {

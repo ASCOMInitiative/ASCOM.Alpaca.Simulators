@@ -199,7 +199,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/tempcomp")]
         public ActionResult<Response> TempComp(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Set true to enable the focuser's temperature compensation mode, otherwise false for normal operation.")] bool TempComp, 
+            [Required][FromForm][SwaggerSchema("Set true to enable the focuser's temperature compensation mode, otherwise false for normal operation.")] bool TempComp,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -293,7 +293,7 @@ namespace ASCOM.Alpaca.Simulators
         [Route("{DeviceNumber}/move")]
         public ActionResult<Response> Move(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Step distance or absolute position, depending on the value of the Absolute property")] int Position, 
+            [Required][FromForm][SwaggerSchema("Step distance or absolute position, depending on the value of the Absolute property")] int Position,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
