@@ -22,25 +22,35 @@ namespace ASCOM.Alpaca.Simulators
                 }
                 catch
                 {
-                    return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+                    try
+                    {
+                        return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+                    }
+                    catch
+                    {
+                        return "1.0.0-Error";
+                    }
+
                 }
             }
         }
 
-        internal static string Version
+        internal static SemanticVersion ServerSemVersion
         {
             get
             {
-                try
+                if (SemanticVersion.TryParse(ServerVersion, out SemanticVersion currentversion))
                 {
-                    return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0-Error";
+                    return currentversion;
                 }
-                catch
-                {
-                }
-                return "1.0.0-Error";
+                return null;
             }
         }
+
+        internal static GithubUpdateChecker UpdateChecker
+        {
+            get;
+        } = new GithubUpdateChecker(ServerSemVersion, "ASCOMInitiative", "ASCOM.Alpaca.Simulators");
 
         //Change this to be unique for your server, it is the name of the settings folder
         private const string _settingFolderName = "ASCOM-Alpaca-Simulator";

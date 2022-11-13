@@ -12,7 +12,7 @@
 
 <fieldset>
     <legend>Updates</legend>
-    @if (ASCOM.Alpaca.Simulators.Update.UpdateAvailable)
+    @if (ServerSettings.UpdateChecker.UpdateAvailable)
     {
         @if (HasNewerRelease)
         {
@@ -46,42 +46,18 @@
     {
         try
         {
-            if (SemanticVersion.TryParse(ServerSettings.ServerVersion, out SemanticVersion currentversion))
+            if (ServerSettings.UpdateChecker.HasNewerRelease)
             {
-                var LatestRelease = ASCOM.Alpaca.Simulators.Update.Releases?.LatestRelease();
-                var LatestPrerelease = ASCOM.Alpaca.Simulators.Update.Releases?.LatestPrerelease();
+                HasNewerRelease = true;
+                LatestVersion = ServerSettings.UpdateChecker.LatestRelease.ReleaseSemVersionFromTag().ToString();
+                URL = ServerSettings.UpdateChecker.LatestRelease.HtmlUrl;
+            }
 
-                SemanticVersion.TryParse(LatestRelease.TagName, out SemanticVersion latestrelease);
-
-                SemanticVersion.TryParse(LatestPrerelease.TagName, out SemanticVersion latestprerelease);
-
-                if(currentversion == latestrelease || currentversion == latestprerelease)
-                {
-                    UpToDate = true;
-                }
-
-                if (latestrelease != null)
-                {
-                    if(currentversion < latestrelease)
-                    {
-                        HasNewerRelease = true;
-                        LatestVersion = LatestRelease.TagName;
-                        URL = LatestRelease.HtmlUrl;
-                    }
-                }
-                if(latestrelease == null)
-                {
-                    latestrelease = new SemanticVersion(0);
-                }
-                if (latestprerelease != null)
-                {
-                    if(currentversion < latestprerelease && latestrelease < latestprerelease)
-                    {
-                        HasNewerPreview = true;
-                        LatestPreviewVersion = LatestPrerelease.TagName;
-                        PreviewURL = LatestPrerelease.HtmlUrl;
-                    }
-                }
+            if (ServerSettings.UpdateChecker.HasNewerPrerelease)
+            {
+                HasNewerPreview = true;
+                LatestPreviewVersion = ServerSettings.UpdateChecker.LatestPrerelease.ReleaseSemVersionFromTag().ToString();
+                PreviewURL = ServerSettings.UpdateChecker.LatestPrerelease.HtmlUrl;
             }
         }
         catch
@@ -119,9 +95,11 @@
 
     bool UpToDate
     {
-        get;
-        set;
-    } = false;
+        get
+        {
+            return !ServerSettings.UpdateChecker.UpdateAvailable;
+        }
+    }
 
     bool HasNewerPreview
     {

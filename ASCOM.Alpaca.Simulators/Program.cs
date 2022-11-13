@@ -108,7 +108,7 @@ namespace ASCOM.Alpaca.Simulators
 
             try
             {
-                Update.CheckForUpdates();
+                ServerSettings.UpdateChecker.CheckForUpdates();
             }
             catch (Exception ex)
             {
