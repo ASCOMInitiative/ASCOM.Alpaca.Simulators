@@ -48,36 +48,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             get
             {
-                try
-                {
-                    if (Releases != null)
-                    {
-                        if (Releases.Count > 0)
-                        {
-                            if (SemanticVersion.TryParse(ServerSettings.ServerVersion, out SemanticVersion currentversion))
-                            {
-                                var Release = Releases?.Latest();
-
-                                if (Release != null)
-                                {
-                                    if (SemanticVersion.TryParse(Release.TagName, out SemanticVersion latestrelease))
-                                    {
-                                        if (latestrelease > currentversion)
-                                        {
-                                            return true;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                catch
-                {
-                    return false;
-                }
-
-                return false;
+                return HasNewerRelease || HasNewerPrerelease;
             }
         }
 
