@@ -4,6 +4,7 @@
 @inject NavigationManager NavManager
 
 @using ASCOM.Common.Interfaces 
+@using LetsMake
 
 <fieldset>
     <legend>Server Settings</legend>
@@ -13,6 +14,12 @@
         </div>
         <div class="grid-item-left">
             <span>@ServerSettings.ServerVersion</span>
+        </div>
+        <div class="grid-item-right">
+            <span>Latest Version: @UpdateText</span>
+        </div>
+        <div class="grid-item-left">
+            <button @onclick="CheckForUpdates" style="min-width:12ch; vertical-align:middle;">Check for Updates</button>
         </div>
         <div class="grid-item-right">
             <span>Server Location:</span>
@@ -406,6 +413,27 @@
         get;
         set;
     } = ServerSettings.SSLCertPassword;
+
+    string UpdateText
+    {
+        get
+        {
+            try
+            {
+                return ServerSettings.UpdateChecker.Releases?.Latest().TagName ?? "Unknown";
+            }
+            catch
+            {
+
+            }
+            return "Unknown";
+        }
+    }
+
+    void CheckForUpdates()
+    {
+        ServerSettings.CheckForUpdates();
+    }
 
     void SaveDiscovery()
     {
