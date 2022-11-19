@@ -1,8 +1,10 @@
 using ASCOM.Common.Interfaces;
 using ASCOM.Tools;
+using LetsMake;
 using OmniSim.Tools;
 using System;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -115,6 +117,22 @@ namespace ASCOM.Alpaca.Simulators
             {
                 Logging.LogError(ex.Message);
             }
+        }
+
+        internal static void CheckForUpdates()
+        {
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await ServerSettings.UpdateChecker.CheckForUpdates();
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogError(ex.Message);
+                }
+            }
+            );
         }
 
         internal static string Location
