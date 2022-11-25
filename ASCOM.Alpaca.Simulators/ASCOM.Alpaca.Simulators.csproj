@@ -11,6 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Setup\**" />
+    <Content Remove="Setup\**" />
+    <EmbeddedResource Remove="Setup\**" />
+    <None Remove="Setup\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ASCOM.Alpaca.Device" Version="1.0.36-beta" />
     <PackageReference Include="ASCOM.Common.Components" Version="1.0.36-beta-swashbuckle" />
     <PackageReference Include="ASCOM.Exceptions" Version="6.6.1" />
