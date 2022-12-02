@@ -447,6 +447,11 @@ namespace ASCOM.Simulators
         {
             get
             {
+                if (!Absolute)
+                {
+                    LogMessage("Position", "Position cannot be read for a relative focuser");
+                    throw new PropertyNotImplementedException("Position", "Position cannot be read for a relative focuser");
+                }
                 if (!(TL == null)) LogMessage("Position", _position.ToString());
                 return _position;
             }
