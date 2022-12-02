@@ -171,22 +171,26 @@
         }
     }
 
-    int Position
+    string Position
     {
         get
         {
             if (Connected)
             {
-                try
+                if (Device.Absolute)
                 {
-                    return Device.Position;
-                }
-                catch
-                {
+                    try
+                    {
+                        return Device.Position.ToString();
+                    }
+                    catch
+                    {
 
+                    }
                 }
+                return "Relative";
             }
-            return 0;
+            return "Unknown";
         }
     }
 
