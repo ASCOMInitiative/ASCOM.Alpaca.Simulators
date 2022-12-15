@@ -8,5 +8,7 @@
         public const string ClientIDDescription = @"Client's unique ID. (A uint32 with a range of 0 to 4294967295). The client should choose a value at start-up, e.g. a random value between 0 and 65535, and send this value on every transaction to help associate entries in device logs with this particular client.";
 
         public const string URLCapitalizationDescription = @"The API URL is required to be lowercase. Supplied URL: ";
+        public const string FormCapitalizationDescription = @"The API Form is required to match the Alpaca Specification. Unknown Form Key(s): ";
+        public const string QueryCapitalizationDescription = @"The API Query is required to match the Alpaca Specification. Unknown Query Key(s): ";
     }
 }

@@ -12,6 +12,38 @@ namespace ASCOM.Alpaca.Simulators
 {
     public class ProcessBaseController : Controller
     {
+        internal bool BadRequestAlpacaProtocol(out BadRequestObjectResult Result)
+        {
+
+            if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+            {
+                Result = BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
+                Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
+                return true;
+            }
+
+            if (HttpContext.Request.HasFormContentType)
+            {
+                if (HttpContext.Request.Form.Keys.Any(key => !ValidAlpacaKeys.ValidFormKeys.Contains(key)))
+                {
+                    var keys = HttpContext.Request.Form.Keys.Where(key => !ValidAlpacaKeys.ValidFormKeys.Contains(key));
+                    Result = BadRequest(Strings.FormCapitalizationDescription + string.Join(", ", keys));
+                    Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
+                    return true;
+                }
+            }
+
+            if (HttpContext.Request.Query.Keys.Any(key => !ValidAlpacaKeys.ValidParameterKeys.Contains(key)))
+            {
+                var keys = HttpContext.Request.Query.Keys.Where(key => !ValidAlpacaKeys.ValidParameterKeys.Contains(key));
+                Result = BadRequest(Strings.QueryCapitalizationDescription + string.Join(", ", keys));
+                Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
+                return true;
+            }
+            Result = null;
+            return false;
+        }
+
         /// <summary>
         /// This function logs the incoming API call then executes the passed function
         /// By executing the function this can catch any errors
@@ -33,9 +65,9 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RequireStrictURLCase)
                 {
-                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
+                        return result;
                     }
                 }
 
@@ -64,9 +96,9 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RequireStrictURLCase)
                 {
-                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
+                        return result;
                     }
                 }
 
@@ -104,9 +136,9 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RequireStrictURLCase)
                 {
-                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
+                        return result;
                     }
                 }
 
@@ -135,9 +167,9 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RequireStrictURLCase)
                 {
-                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
+                        return result;
                     }
                 }
 
@@ -175,9 +207,9 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RequireStrictURLCase)
                 {
-                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
+                        return result;
                     }
                 }
 
@@ -206,9 +238,9 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RequireStrictURLCase)
                 {
-                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
+                        return result;
                     }
                 }
 
@@ -237,9 +269,9 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RequireStrictURLCase)
                 {
-                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
+                        return result;
                     }
                 }
 
@@ -268,9 +300,9 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RequireStrictURLCase)
                 {
-                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
+                        return result;
                     }
                 }
 
@@ -299,9 +331,9 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RequireStrictURLCase)
                 {
-                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
+                        return result;
                     }
                 }
 
@@ -330,9 +362,9 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RequireStrictURLCase)
                 {
-                    if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
-                        return BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
+                        return result;
                     }
                 }
 
