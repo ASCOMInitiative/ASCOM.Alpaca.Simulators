@@ -9,7 +9,7 @@ namespace ASCOM.Alpaca.Simulators
             "ClientTransactionID",
             "RightAscension",
             "Declination",
-            "ID",
+            "Id",
             "SensorName",
             "Axis"
         };
@@ -46,7 +46,7 @@ namespace ASCOM.Alpaca.Simulators
             "TempComp",
             "AveragePeriod",
             "Reverse",
-            "ID",
+            "Id",
             "State",
             "Name",
             "Value",
