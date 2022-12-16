@@ -37,12 +37,29 @@ namespace ASCOM.Alpaca.Simulators
                     Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
                     return true;
                 }
+
+
+                if (HttpContext.Request.Query.Any())
+                {
+                    var keys = HttpContext.Request.Query.Keys;
+                    Result = BadRequest(Strings.FormWithQueryDescription + string.Join(", ", keys));
+                    Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
+                    return true;
+                }
             }
 
             if (HttpContext.Request.Query.Keys.Any(key => !ValidAlpacaKeys.ValidParameterKeys.Contains(key)))
             {
                 var keys = HttpContext.Request.Query.Keys.Where(key => !ValidAlpacaKeys.ValidParameterKeys.Contains(key));
-                Result = BadRequest(Strings.QueryCapitalizationDescription + string.Join(", ", keys));
+                Result = BadRequest(Strings.FormCapitalizationDescription + string.Join(", ", keys));
+                Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
+                return true;
+            }
+
+            if (HttpContext.Request.Method == "GET" && HttpContext.Request.HasFormContentType && HttpContext.Request.Form.Keys.Any())
+            {
+                var keys = HttpContext.Request.Form.Keys;
+                Result = BadRequest(Strings.QueryWithFormDescription + string.Join(", ", keys));
                 Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
                 return true;
             }

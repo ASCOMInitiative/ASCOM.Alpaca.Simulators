@@ -10,5 +10,7 @@
         public const string URLCapitalizationDescription = @"The API URL is required to be lowercase. Supplied URL: ";
         public const string FormCapitalizationDescription = @"The API Form is required to match the Alpaca Specification. Unknown Form Key(s): ";
         public const string QueryCapitalizationDescription = @"The API Query is required to match the Alpaca Specification. Unknown Query Key(s): ";
+        public const string FormWithQueryDescription = @"A Form request should not have any Query Keys. Unknown Query Key(s): ";
+        public const string QueryWithFormDescription = @"A Query request should not have any Form Keys. Unknown Form Key(s): ";
     }
 }
