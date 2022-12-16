@@ -14,6 +14,12 @@ namespace ASCOM.Alpaca.Simulators
     {
         internal bool BadRequestAlpacaProtocol(out BadRequestObjectResult Result)
         {
+            Result = null;
+            //Only check on Alpaca routes, all others may pass
+            if (!HttpContext.Request.Path.ToString().Contains("api/"))
+            {
+                return false;
+            }
 
             if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
             {
@@ -40,7 +46,7 @@ namespace ASCOM.Alpaca.Simulators
                 Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
                 return true;
             }
-            Result = null;
+
             return false;
         }
 
