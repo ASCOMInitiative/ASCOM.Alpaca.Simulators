@@ -373,10 +373,17 @@ namespace ASCOM.Simulators
         {
             get
             {
-                SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "CanSetPointingState: ");
-                CheckVersionOne("CanSetPointingState");
-                SharedResources.TrafficEnd(TelescopeHardware.CanSetPointingState.ToString());
-                return TelescopeHardware.CanSetPointingState;
+                if(AlignmentMode == AlignmentMode.GermanPolar) 
+                { 
+                    SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "CanSetPointingState: ");
+                    CheckVersionOne("CanSetPointingState");
+                    SharedResources.TrafficEnd(TelescopeHardware.CanSetPointingState.ToString());
+                    return TelescopeHardware.CanSetPointingState;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 
