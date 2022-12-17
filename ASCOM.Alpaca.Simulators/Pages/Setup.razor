@@ -433,6 +433,8 @@
     void CheckForUpdates()
     {
         ServerSettings.CheckForUpdates();
+        System.Threading.Thread.Sleep(1500);
+        NavManager.NavigateTo("/update");
     }
 
     void SaveDiscovery()
