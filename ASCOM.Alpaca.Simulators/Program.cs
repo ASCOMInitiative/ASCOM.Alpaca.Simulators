@@ -158,7 +158,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     webBuilder.UseStartup<Startup>()
 #if BUNDLED
-                    .UseContentRoot(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location))
+                    .UseContentRoot(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location))
 #endif
                     .UseKestrel().ConfigureKestrel(options =>
                     {
