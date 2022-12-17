@@ -48,7 +48,7 @@ namespace ASCOM.Alpaca.Simulators
                 }
             }
 
-            if (HttpContext.Request.Query.Keys.Any(key => !ValidAlpacaKeys.ValidParameterKeys.Contains(key)))
+            if (HttpContext.Request.Query.Keys.Any(key => !ValidAlpacaKeys.ValidParameterKeys.Contains(key.ToLower())))
             {
                 var keys = HttpContext.Request.Query.Keys.Where(key => !ValidAlpacaKeys.ValidParameterKeys.Contains(key));
                 Result = BadRequest(Strings.FormCapitalizationDescription + string.Join(", ", keys));

@@ -5,13 +5,13 @@ namespace ASCOM.Alpaca.Simulators
     internal class ValidAlpacaKeys
     {
         internal static List<string> ValidParameterKeys = new List<string>{
-            "ClientID" ,
-            "ClientTransactionID",
-            "RightAscension",
-            "Declination",
-            "Id",
-            "SensorName",
-            "Axis"
+            "clientid" ,
+            "clienttransactionid",
+            "rightascension",
+            "declination",
+            "id",
+            "sensorname",
+            "axis"
         };
 
         internal static List<string> ValidFormKeys = new List<string> {
