@@ -21,6 +21,7 @@
 using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
+using ASCOM.Tools;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -68,10 +69,13 @@ namespace ASCOM.Simulators
         private const double SOLAR_RATE_DEG_SEC = 15.0 / 3600;
         private const double LUNAR_RATE_DEG_SEC = 14.515 / 3600;
         private const double KING_RATE_DEG_SEC = 15.037 / 3600;
-        private const double DEGREES_TO_ARCSEC = 3600.0;
-        private const double ARCSEC_TO_DEGREES = 1.0 / DEGREES_TO_ARCSEC;
-        private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.9972695601852;
+        private const double DEGREES_TO_ARCSECONDS = 3600.0;
+        private const double ARCSECONDS_TO_DEGREES = 1.0 / DEGREES_TO_ARCSECONDS;
+        private const double ARCSECONDS_PER_RA_SECOND = 15.0; // To convert "seconds of RA" (24 hours = a whole circle) to arc seconds (360 degrees = a whole circle)
+        private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.99726956631945;
         private const double SI_SECONDS_TO_SIDEREAL_SECONDS = 1.0 / SIDEREAL_SECONDS_TO_SI_SECONDS;
+        private const double SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND = 360.0 / (24.0 * 60.0 * 60.0); // Degrees per sidereal second, given the earth's rotation of 360 degrees in 1 sidereal day
+        private const double SIDEREAL_RATE_DEG_PER_SI_SECOND = SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND / SIDEREAL_SECONDS_TO_SI_SECONDS; // Degrees per SI second
 
         #endregion Constants
 
@@ -663,24 +667,32 @@ namespace ASCOM.Simulators
                 // Determine the changes in current axis position and target axis position required as a result of tracking
                 if (Tracking) // Tracking is enabled
                 {
-                    double haChange = GetTrackingChange(timeInSecondsSinceLastUpdate); // Find the hour angle change that occurred during this interval
+                    double haChange = GetTrackingChangeInDegrees(timeInSecondsSinceLastUpdate); // Find the hour angle change (in degrees )that occurred during this interval
                     switch (alignmentMode)
                     {
                         case AlignmentMode.GermanPolar: // In polar aligned mounts an HA change moves only the RA (primary) axis so update this, no change is required to the Dec (secondary) axis
                         case AlignmentMode.Polar:
-                            change.X = haChange; // Set the change in the RA (primary) current axis position due to tracking
+                            change.X = haChange; // Set the change in the RA (primary) current axis position due to tracking 
                             targetAxes.X += haChange; // Update the slew target's RA (primary) axis position that will also have changed due to tracking
                             break;
-
                         case AlignmentMode.AltAz: // In Alt/Az aligned mounts the HA change moves both RA (primary) and Dec (secondary) axes so both need to be updated
                             change = ConvertRateToAltAz(haChange); // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking
                             targetAxes = MountFunctions.ConvertRaDecToAxes(targetRaDec, false); // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
                             break;
                     }
 
-                    // We are tracking so apply any RightAScensionRate and DeclinationRate rate offsets, this assumes a polar mount.
+                    // We are tracking so apply any RightAScensionRate and DeclinationRate rate offsets, this assumes a polar mount. 
                     // This correction is not applied when MoveAxis is in effect because the interface specification says it is one or the other of these and not both at the same time
+                    Vector changePreOffset = change;
                     change += Vector.Multiply(rateRaDecOffsetInternal, timeInSecondsSinceLastUpdate);
+
+                    TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. " +
+                        $"Mount RA normal tracking movment: {changePreOffset.X} degrees. " +
+                        $"RA normal tracking movement rate  {changePreOffset.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arcseconds per SI second. " +
+                        $"Length of sideral day at this tracking rate = {Utilities.HoursToHMS(1.0 / (changePreOffset.X / timeInSecondsSinceLastUpdate) * (360.0 / 3600.0), ":", ":", "", 3)}. hh:mm:ss.xxx" +
+                        $"RightAscensionRate additional movement: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees. " +
+                        $"RA movement rate including any RightAscensionrate additional movement: {change.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arcseconds per SI second. "
+                        );
                 }
             }
 
@@ -705,7 +717,7 @@ namespace ASCOM.Simulators
             // update the displayed values
             UpdatePositions();
 
-            // check and update slew state
+            // check and update slew state 
             switch (SlewState)
             {
                 case SlewType.SlewSettle:
@@ -1280,7 +1292,7 @@ namespace ASCOM.Simulators
             set
             {
                 rateRaDecOffsetExternal.Y = value; // Save the provided rate to be returned through the Get property
-                rateRaDecOffsetInternal.Y = value * ARCSEC_TO_DEGREES; // Save the rate in the internal units that the simulator uses
+                rateRaDecOffsetInternal.Y = value * ARCSECONDS_TO_DEGREES; // Save the rate in the internal units that the simulator uses
             }
         }
 
@@ -1367,14 +1379,28 @@ namespace ASCOM.Simulators
             }
         }
 
-        // converts the rate between seconds per sidereal second and seconds per second
+        /// <summary>
+        /// Manages RightAscensionRate. Units are "seconds of RA per sidereal second".
+        /// </summary>
+        /// <remarks>
+        /// 1) This property retains the value supplied by set RightAscensionRate in the rateRaDecOffsetExternal.X vector element so that it can be returned by get RightAscensionRate.
+        /// 2) The set RightAscensionRate value is also converted to the internal units used by the simulator (arcsec per SI second) and stored in the rateRaDecOffsetInternal.X vector element
+        /// </remarks>
         public static double RightAscensionRate
         {
             get { return rateRaDecOffsetExternal.X; }
             set
             {
-                rateRaDecOffsetExternal.X = value; // Save the provided rate to be returned through the Get property
-                rateRaDecOffsetInternal.X = value * SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSEC_TO_DEGREES; // Save the rate in the internal units that the simulator uses
+                // Save the provided rate (seconds of RA per sidereal second) to be returned through the Get property
+                rateRaDecOffsetExternal.X = value;
+
+                // Save the provided rate for internal use in the units (degrees per SI second) that the simulator uses.
+                // SIDEREAL_SECONDS_TO_SI_SECONDS converts from sidereal seconds to SI seconds
+                // Have to divide by the SIDEREAL_SECONDS_TO_SI_SECONDS conversion factor (0.99726956631945) because SI seconds are longer than sidereal seconds and hence the simulator movement will be greater in one SI second than in one sidereal second
+                // ARCSECONDS_PER_RA_SECOND converts from seconds of RA (1 circle = 24 hours) to arcseconds (1 circle = 360 degrees)
+                // ARCSECONDS_TO_DEGREES converts from arc seconds to degrees
+                rateRaDecOffsetInternal.X = (value / SIDEREAL_SECONDS_TO_SI_SECONDS) * ARCSECONDS_PER_RA_SECOND * ARCSECONDS_TO_DEGREES;
+                TL.LogMessage(LogLevel.Information, "RightAscensionRate Set", $"Value to be set (as received): {value} seconds per sidereal second. Converted to internal rate of: {value / SIDEREAL_SECONDS_TO_SI_SECONDS} seconds per SI second = {rateRaDecOffsetInternal.X} degrees per SI second.");
             }
         }
 
@@ -1613,11 +1639,11 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// returns the mount traacking movement in hour angle during the update intervaaal
+        /// returns the mount tracking movement in hour angle during the update interval
         /// </summary>
         /// <param name="updateInterval">The update interval.</param>
         /// <returns></returns>
-        private static double GetTrackingChange(double updateInterval)
+        private static double GetTrackingChangeInDegrees(double updateInterval)
         {
             if (!Tracking)
             {
@@ -1630,17 +1656,14 @@ namespace ASCOM.Simulators
             switch (TrackingRate)
             {
                 case DriveRate.Sidereal:
-                    haChange = SIDEREAL_RATE_DEG_SEC * updateInterval;     // change in degrees
+                    haChange = SIDEREAL_RATE_DEG_PER_SI_SECOND * updateInterval;     // change in degrees
                     break;
-
                 case DriveRate.Solar:
                     haChange = SOLAR_RATE_DEG_SEC * updateInterval;     // change in degrees
                     break;
-
                 case DriveRate.Lunar:
                     haChange = LUNAR_RATE_DEG_SEC * updateInterval;     // change in degrees
                     break;
-
                 case DriveRate.King:
                     haChange = KING_RATE_DEG_SEC * updateInterval;     // change in degrees
                     break;
