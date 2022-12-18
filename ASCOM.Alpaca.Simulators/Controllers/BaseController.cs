@@ -50,8 +50,8 @@ namespace ASCOM.Alpaca.Simulators
 
             if (HttpContext.Request.Query.Keys.Any(key => !ValidAlpacaKeys.ValidParameterKeys.Contains(key.ToLower())))
             {
-                var keys = HttpContext.Request.Query.Keys.Where(key => !ValidAlpacaKeys.ValidParameterKeys.Contains(key));
-                Result = BadRequest(Strings.FormCapitalizationDescription + string.Join(", ", keys));
+                var keys = HttpContext.Request.Query.Keys.Where(key => !ValidAlpacaKeys.ValidParameterKeys.Contains(key.ToLower()));
+                Result = BadRequest(Strings.QueryCapitalizationDescription + string.Join(", ", keys));
                 Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
                 return true;
             }
