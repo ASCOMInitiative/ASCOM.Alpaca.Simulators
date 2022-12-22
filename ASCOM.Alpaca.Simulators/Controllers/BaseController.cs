@@ -30,9 +30,9 @@ namespace ASCOM.Alpaca.Simulators
 
             if (HttpContext.Request.HasFormContentType)
             {
-                if (HttpContext.Request.Form.Keys.Any(key => !ValidAlpacaKeys.ValidFormKeys.Contains(key)))
+                if (HttpContext.Request.Form.Keys.Any(key => !ValidAlpacaKeys.ValidFormKeys.Contains(key) && ValidAlpacaKeys.ValidFormKeys.Contains(key, StringComparer.OrdinalIgnoreCase)))
                 {
-                    var keys = HttpContext.Request.Form.Keys.Where(key => !ValidAlpacaKeys.ValidFormKeys.Contains(key));
+                    var keys = HttpContext.Request.Form.Keys.Where(key => !ValidAlpacaKeys.ValidFormKeys.Contains(key) && ValidAlpacaKeys.ValidFormKeys.Contains(key, StringComparer.OrdinalIgnoreCase));
                     Result = BadRequest(Strings.FormCapitalizationDescription + string.Join(", ", keys));
                     Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
                     return true;
@@ -46,14 +46,6 @@ namespace ASCOM.Alpaca.Simulators
                     Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
                     return true;
                 }
-            }
-
-            if (HttpContext.Request.Query.Keys.Any(key => !ValidAlpacaKeys.ValidParameterKeys.Contains(key.ToLower())))
-            {
-                var keys = HttpContext.Request.Query.Keys.Where(key => !ValidAlpacaKeys.ValidParameterKeys.Contains(key.ToLower()));
-                Result = BadRequest(Strings.QueryCapitalizationDescription + string.Join(", ", keys));
-                Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
-                return true;
             }
 
             if (HttpContext.Request.Method == "GET" && HttpContext.Request.HasFormContentType && HttpContext.Request.Form.Keys.Any())
