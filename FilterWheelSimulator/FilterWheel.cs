@@ -47,6 +47,7 @@ namespace ASCOM.Simulators
         public FilterWheel(int deviceNumber, ILogger logger, IProfile profile)
         {
             logger.LogInformation($"FilterWheel {deviceNumber} - Starting initialization");
+            FilterWheelHardware.Logger = logger;
             DeviceNumber = deviceNumber;
 
             FilterWheelHardware.g_Profile = profile;

@@ -1,4 +1,5 @@
-﻿using ASCOM.Common.Interfaces;
+﻿using ASCOM.Common;
+using ASCOM.Common.Interfaces;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -39,6 +40,12 @@ namespace ASCOM.Simulators
 
         private const string m_sRegVer = "1";             // Used to track id registry entries exist or need updating
 
+        internal static ILogger Logger
+        {
+            get;
+            set;
+        }
+
 
         //
         // Create some 'realistic' defaults
@@ -46,15 +53,12 @@ namespace ASCOM.Simulators
         private static Color[] DefaultColors = new Color[8] {Color.Red, Color.Green, Color.Blue, Color.Gray,
                                                 Color.DarkRed, Color.Teal, Color.Violet, Color.Black};
 
-        public static bool m_bLogTraffic;                 // Do we log traffic?
-
         //
         // Sync object
         //
         private static object s_objSync = new object();	// Better than lock(this) - Jeffrey Richter, MSDN Jan 2003
 
         public const string g_csDriverID = "ASCOM.Simulator.FilterWheel";
-        private const string g_csDriverDescription = "FilterWheelSimulator FilterWheel";
         public static IProfile g_Profile;
 
         // Exception codes/messages
@@ -129,7 +133,7 @@ namespace ASCOM.Simulators
             {
                 lock (s_objSync)
                 {
-                    LogTraffic("Get Connected = " + m_bConnected);
+                    Logger.LogVerbose("FilterWheel - Get Connected = " + m_bConnected);
                     return m_bConnected;
                 }
             }
@@ -137,13 +141,13 @@ namespace ASCOM.Simulators
             {
                 lock (s_objSync)
                 {
-                    LogTraffic("Set Connected = " + m_bConnected + " -> " + value);
+                    Logger.LogInformation("FilterWheel - Set Connected = " + m_bConnected + " -> " + value);
 
                     // We are always connected to the hardware in the simulator
                     // So just keep a record of the state change
                     m_bConnected = value;
 
-                    LogTraffic("  (set connected, done)");
+                    Logger.LogVerbose("FilterWheel -   (set connected, done)");
                 }
             }
         }
@@ -163,7 +167,7 @@ namespace ASCOM.Simulators
                     else
                         ret = m_sPosition;      // Otherwise return position
 
-                    LogTraffic("Get Position = " + ret.ToString());
+                    Logger.LogVerbose("FilterWheel - Get Position = " + ret.ToString());
 
                     return ret;
                 }
@@ -174,12 +178,12 @@ namespace ASCOM.Simulators
                 {
                     int Jumps;      // number of slot positions we have to move
 
-                    LogTraffic("Set Position = " + value + " ...");
+                    Logger.LogInformation("FilterWheel - Set Position = " + value + " ...");
 
                     // position range check
                     if (value >= m_iSlots || value < 0)
                     {
-                        LogTraffic("  (set postion failed, out of range)");
+                        Logger.LogError("FilterWheel -   (set position failed, out of range)");
 
                         throw new DriverException("Position: " + MSG_VAL_OUTOFRANGE, SCODE_VAL_OUTOFRANGE);
                     }
@@ -189,7 +193,7 @@ namespace ASCOM.Simulators
                     // check if we are already there!
                     if (value == m_sPosition)
                     {
-                        LogTraffic("  (set position, no move required)");
+                        Logger.LogInformation("FilterWheel -   (set position, no move required)");
                         return;
                     }
 
@@ -200,7 +204,7 @@ namespace ASCOM.Simulators
                             AbortMove();   // Stop the motor
                         else
                         {
-                            LogTraffic("  (set position failed, already moving)");
+                            Logger.LogInformation("FilterWheel -   (set position failed, already moving)");
 
                             throw new DriverException("Position: " + MSG_MOVING, SCODE_MOVING);
                         }
@@ -214,7 +218,7 @@ namespace ASCOM.Simulators
                     m_bMoving = true;
 
                     // log action
-                    LogTraffic(" (set position in progress)...");
+                    Logger.LogVerbose("FilterWheel -  (set position in progress)...");
                 }
             }
         }
@@ -223,14 +227,12 @@ namespace ASCOM.Simulators
         {
             get
             {
-                LogTraffic("Get FilterNames...");
+                Logger.LogVerbose("FilterWheel - Get FilterNames...");
 
                 string[] temp = m_asFilterNames;
                 Array.Resize(ref temp, m_iSlots);
-                if (m_bLogTraffic)
                     for (int i = 0; i < m_iSlots; i++)
-                        LogTraffic(" Filter " + i.ToString() + " = " + temp[i].ToString());
-                LogTraffic("  (filternames done)");
+                        Logger.LogVerbose("FilterWheel -  Filter " + i.ToString() + " = " + temp[i].ToString());
                 return temp;
             }
         }
@@ -239,13 +241,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                LogTraffic("Get FocusOffsets..." + Environment.NewLine);
+                Logger.LogVerbose("FilterWheel - Get FocusOffsets..." + Environment.NewLine);
                 int[] temp = m_aiFocusOffsets;
                 Array.Resize(ref temp, m_iSlots);
-                if (m_bLogTraffic)
                     for (int i = 0; i < m_iSlots; i++)
-                        LogTraffic(" Offset " + i.ToString() + " = " + temp[i].ToString() + Environment.NewLine);
-                LogTraffic(" (focusoffsets done)" + Environment.NewLine);
+                        Logger.LogVerbose("FilterWheel -  Offset " + i.ToString() + " = " + temp[i].ToString() + Environment.NewLine);
                 return temp;
             }
         }
@@ -304,14 +304,14 @@ namespace ASCOM.Simulators
 
         public static void AbortMove()
         {
-            LogTraffic("Abort move");
+            Logger.LogInformation("FilterWheel - Abort move");
             // Clear the elapsed time
             m_iTimeElapsed = 0;
             // Stop moving
             m_bMoving = false;
             // Set the postion intermediate between start and end
             m_sPosition = (short)Math.Floor(Math.Abs(m_sTargetPosition - m_sPosition) / 2.0);
-            LogTraffic("  (abort done)");
+            Logger.LogInformation("FilterWheel - Abort done");
         }
 
         public static void UpdateState()
@@ -332,8 +332,6 @@ namespace ASCOM.Simulators
                         m_bMoving = false;
                         // Set the new position
                         m_sPosition = m_sTargetPosition;
-                        // log action
-                        LogTraffic("  (position done)");
                     }
                 }
             }
@@ -373,7 +371,7 @@ namespace ASCOM.Simulators
             }
             catch(Exception ex)
             {
-                LogTraffic(ex.Message);
+                Logger.LogError($"FilterWheel - {ex.Message}");
                 SetDefaultSettings();
             }
         }
@@ -436,12 +434,6 @@ namespace ASCOM.Simulators
         private static void CheckConnected()
         {
             if (!m_bConnected) throw new ASCOM.DriverException(MSG_NOT_CONNECTED, SCODE_NOT_CONNECTED);
-        }
-
-        private static void LogTraffic(string Text)
-        {
-            if (m_bLogTraffic)
-                Trace.WriteLine(Text);
         }
 
         #endregion private utilities
