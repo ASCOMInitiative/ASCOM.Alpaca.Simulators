@@ -119,14 +119,6 @@ namespace ASCOM.Simulators
             LoadSettings();
         }
 
-        public static void Finalize_()	// "Finalize" exists in parent
-        {
-            //Profile.WriteValue(s_sProgID, "Position", s_fPosition.ToString(), "");
-            //Profile.WriteValue(s_sProgID, "RotationRate", RotationRate.ToString(), "");
-            //Profile.WriteValue(s_sProgID, "CanReverse", s_bCanReverse.ToString(), "");
-            //Profile.WriteValue(s_sProgID, "Reverse", s_bReverse.ToString(), "");
-        }
-
         public static bool Connected
         {
             get

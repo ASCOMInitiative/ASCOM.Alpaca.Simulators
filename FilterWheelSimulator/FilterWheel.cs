@@ -216,16 +216,5 @@ namespace ASCOM.Simulators
         public void SetupDialog()
         {
         }
-
-        // ---------------------------------------------------------------------
-        //
-        // check_connected() - Raise an error if the focuser is not connected
-        //
-        // ---------------------------------------------------------------------
-        private void check_connected()
-        {
-            if (!FilterWheelHardware.Connected)
-                throw new NotConnectedException(MSG_NOT_CONNECTED);
-        }
     }
 }
