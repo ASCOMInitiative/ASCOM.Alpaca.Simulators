@@ -39,6 +39,13 @@ namespace ASCOM.Simulators
 
         private const string m_sRegVer = "1";             // Used to track id registry entries exist or need updating
 
+
+        //
+        // Create some 'realistic' defaults
+        //
+        private static Color[] DefaultColors = new Color[8] {Color.Red, Color.Green, Color.Blue, Color.Gray,
+                                                Color.DarkRed, Color.Teal, Color.Violet, Color.Black};
+
         public static bool m_bLogTraffic;                 // Do we log traffic?
 
         //
@@ -361,11 +368,12 @@ namespace ASCOM.Simulators
                 {
                     m_asFilterNames[i] = g_Profile.GetValue($"FilterNames {i}");
                     m_aiFocusOffsets[i] = Convert.ToInt32(g_Profile.GetValue($"FocusOffsets {i}"));
-                    m_acFilterColours[i] = ColorTranslator.FromWin32(Convert.ToInt32(g_Profile.GetValue($"FilterColours {i}")));
+                    m_acFilterColours[i] = Color.FromName(g_Profile.GetValue($"Filter {i} Color", DefaultColors[i].Name));
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                LogTraffic(ex.Message);
                 SetDefaultSettings();
             }
         }
@@ -375,10 +383,7 @@ namespace ASCOM.Simulators
             //
             // initialize variables that are not present
             //
-            // Create some 'realistic' defaults
-            //
-            Color[] colours = new Color[8] {Color.Red, Color.Green, Color.Blue, Color.Gray,
-                                                Color.DarkRed, Color.Teal, Color.Violet, Color.Black};
+
             string[] names = new string[8] { "Red", "Green", "Blue", "Clear", "Ha", "OIII", "LPR", "Dark" };
             Random rand = new Random();
 
@@ -393,7 +398,7 @@ namespace ASCOM.Simulators
             {
                 g_Profile.WriteValue($"FilterNames {i}", names[i]);
                 g_Profile.WriteValue($"FocusOffsets {i}", rand.Next(10000).ToString());
-                g_Profile.WriteValue($"FilterColours {i}", ColorTranslator.ToWin32(colours[i]).ToString());
+                g_Profile.WriteValue($"Filter {i} Color", DefaultColors[i].Name);
             }
         }
 
@@ -409,7 +414,7 @@ namespace ASCOM.Simulators
             {
                 g_Profile.WriteValue($"FilterNames {i}", names[i]);
                 g_Profile.WriteValue($"FocusOffsets {i}", offsets[i].ToString());
-                g_Profile.WriteValue($"FilterColours {i}", ColorTranslator.ToWin32(colors[i]).ToString());
+                g_Profile.WriteValue($"Filter {i} Color", colors[i].Name);
             }
             g_Profile.WriteValue("ImplementsNames", implementsNames.ToString());
             g_Profile.WriteValue("ImplementsOffsets", implementsOffsets.ToString());
