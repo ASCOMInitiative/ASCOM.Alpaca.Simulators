@@ -3245,7 +3245,7 @@ namespace ASCOM.Simulators
             if (!imageReady)
             {
                 Log.LogMessage(identifier, "image not ready");
-                throw new NotConnectedException("Can't read " + identifier + " when no image is ready");
+                throw new InvalidOperationException("Can't read " + identifier + " when no image is ready");
             }
         }
 
