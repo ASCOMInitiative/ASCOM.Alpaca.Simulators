@@ -668,7 +668,6 @@ namespace ASCOM.Simulators
             Vector changePreOffset = new Vector();
 
             // Apply tracking changes
-            // Apply tracking changes
             if ((rateMoveAxes.X == 0.0) & (rateMoveAxes.Y == 0.0)) // No MoveAxis rates have been set so handle normally
             {
                 // Determine the changes in current axis position and target axis position required as a result of tracking
@@ -690,10 +689,9 @@ namespace ASCOM.Simulators
                             // Apply any RightAscensionRate and DeclinationRate rate offsets
                             change += Vector.Multiply(rateRaDecOffsetInternal, timeInSecondsSinceLastUpdate);
                             TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"RA internal offset rate: {rateRaDecOffsetInternal.X}, Dec internal offset rate: {rateRaDecOffsetInternal.Y}. " +
-                                $"Total change this interval: {change.X}, {change.Y}. Time since last update: {timeInSecondsSinceLastUpdate}"
-                                );
-
+                                $"Total change this interval: {change.X}, {change.Y}. Time since last update: {timeInSecondsSinceLastUpdate}");
                             break;
+
                         case AlignmentMode.AltAz: // In Alt/Az aligned mounts the HA change moves both RA (primary) and Dec (secondary) axes so both need to be updated
 
                             // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking plus any RA / dec rate offsets
@@ -706,11 +704,10 @@ namespace ASCOM.Simulators
 
                             TL.LogMessage(LogLevel.Verbose, "MoveAxes - Alt/Az", $"Target RA : {targetRaDec.X.ToHMS()}: Target Dec: {targetRaDec.Y.ToDMS()}");
                             TL.LogMessage(LogLevel.Verbose, "MoveAxes - Alt/Az", $"Round trip: {targetradec.X.ToHMS()}: Round trip: {targetradec.Y.ToDMS()}");
-
                             break;
                     }
 
-                    TL.LogMessage(LogLevel.Verbose,"MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. HA change {haChange} degrees. Alignment mode: {alignmentMode}, Mount RA normal tracking movement: {changePreOffset.X} degrees. ");
+                    TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. HA change {haChange} degrees. Alignment mode: {alignmentMode}, Mount RA normal tracking movement: {changePreOffset.X} degrees. ");
                     TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"RA normal tracking movement rate  {changePreOffset.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second. " +
                         $"Length of sidereal day at this tracking rate = {(1.0 / (changePreOffset.X / timeInSecondsSinceLastUpdate) * (360.0 / 3600.0)).ToHMS()}");
                     TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"RightAscensionRate additional movement: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees. " +
