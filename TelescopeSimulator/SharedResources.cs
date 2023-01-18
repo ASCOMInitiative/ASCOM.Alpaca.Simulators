@@ -73,7 +73,7 @@ namespace ASCOM.Simulators
 
         public const double SIDRATE = 0.9972695677;
 
-        public const double TIMER_INTERVAL = .25; //4 ticks per second
+        public const double TIMER_INTERVAL = 0.01; //4 ticks per second
 
         // ---------------------
         // Simulation Parameters
@@ -196,6 +196,26 @@ namespace ASCOM.Simulators
                 //m_trafficForm.TrafficEnd(msg);
             }
             lastMsg = MessageType.none;
+        }
+
+        /// <summary>
+        /// Extension method to format a double in sexagesimal HH:MM:SS.sss format
+        /// </summary>
+        /// <param name="value">Value to be presented</param>
+        /// <returns>HH:MM:SS.sss formatted string</returns>
+        public static string ToHMS(this double value)
+        {
+            return Tools.Utilities.HoursToHMS(value, ":", ":", "", 3);
+        }
+
+        /// <summary>
+        /// Extension method to format a double in sexagesimal DD:MM:SS.sss format
+        /// </summary>
+        /// <param name="value">Value to be presented</param>
+        /// <returns>DDD:MM:SS.sss formatted string</returns>
+        public static string ToDMS(this double value)
+        {
+            return Tools.Utilities.DegreesToDMS(value, ":", ":", "", 3);
         }
 
         private static MessageType lastMsg = MessageType.none;
