@@ -658,46 +658,79 @@ namespace ASCOM.Simulators
             double timeInSecondsSinceLastUpdate = (now - lastUpdateTime).TotalSeconds;
             lastUpdateTime = now;
 
+            // Find the hour angle change (in degrees) due to tracking that occurred during this interval
+            double haChange = GetTrackingChangeInDegrees(timeInSecondsSinceLastUpdate);
+
             // This vector accumulates all changes to the current primary and secondary axis positions as a result of movement during this update interval
             Vector change = new Vector();
 
+            // Placeholder for changes prior to applying RA/Dec rate offsets
+            Vector changePreOffset = new Vector();
+
             // Apply tracking changes
-            if (rateMoveAxes.X == 0.0) // No axis move rate has been set for the primary RA axis so normal tracking applies, if it has been enabled
+            if ((rateMoveAxes.X == 0.0) & (rateMoveAxes.Y == 0.0)) // No MoveAxis rates have been set so handle normally
             {
                 // Determine the changes in current axis position and target axis position required as a result of tracking
                 if (Tracking) // Tracking is enabled
                 {
-                    double haChange = GetTrackingChangeInDegrees(timeInSecondsSinceLastUpdate); // Find the hour angle change (in degrees )that occurred during this interval
                     switch (alignmentMode)
                     {
                         case AlignmentMode.GermanPolar: // In polar aligned mounts an HA change moves only the RA (primary) axis so update this, no change is required to the Dec (secondary) axis
                         case AlignmentMode.Polar:
+                            // Set the change in the primary (RA) axis position due to tracking 
                             change.X = haChange; // Set the change in the RA (primary) current axis position due to tracking 
-                            targetAxes.X += haChange; // Update the slew target's RA (primary) axis position that will also have changed due to tracking
+
+                            // Save the current change for reporting later
+                            changePreOffset = change;
+
+                            // Update the slew target's RA (primary) axis position that will also have changed due to tracking
+                            targetAxes.X += haChange;
+
+                            // Apply any RightAscensionRate and DeclinationRate rate offsets
+                            change += Vector.Multiply(rateRaDecOffsetInternal, timeInSecondsSinceLastUpdate);
+                            TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"RA internal offset rate: {rateRaDecOffsetInternal.X}, Dec internal offset rate: {rateRaDecOffsetInternal.Y}. " +
+                                $"Total change this interval: {change.X}, {change.Y}. Time since last update: {timeInSecondsSinceLastUpdate}");
                             break;
+
                         case AlignmentMode.AltAz: // In Alt/Az aligned mounts the HA change moves both RA (primary) and Dec (secondary) axes so both need to be updated
-                            change = ConvertRateToAltAz(haChange); // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking
-                            targetAxes = MountFunctions.ConvertRaDecToAxes(targetRaDec, false); // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
+
+                            // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking plus any RA / dec rate offsets
+                            change = ConvertRateToAltAz(haChange / timeInSecondsSinceLastUpdate + rateRaDecOffsetInternal.X, rateRaDecOffsetInternal.Y, timeInSecondsSinceLastUpdate);
+
+                            // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
+                            targetAxes = MountFunctions.ConvertRaDecToAxes(targetRaDec, false);
+
+                            Vector targetradec = MountFunctions.ConvertAxesToRaDec(targetAxes);
+
+                            TL.LogMessage(LogLevel.Verbose, "MoveAxes - Alt/Az", $"Target RA : {targetRaDec.X.ToHMS()}: Target Dec: {targetRaDec.Y.ToDMS()}");
+                            TL.LogMessage(LogLevel.Verbose, "MoveAxes - Alt/Az", $"Round trip: {targetradec.X.ToHMS()}: Round trip: {targetradec.Y.ToDMS()}");
                             break;
                     }
 
-                    // We are tracking so apply any RightAScensionRate and DeclinationRate rate offsets, this assumes a polar mount. 
-                    // This correction is not applied when MoveAxis is in effect because the interface specification says it is one or the other of these and not both at the same time
-                    Vector changePreOffset = change;
-                    change += Vector.Multiply(rateRaDecOffsetInternal, timeInSecondsSinceLastUpdate);
-
-                    TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. " +
-                        $"Mount RA normal tracking movment: {changePreOffset.X} degrees. " +
-                        $"RA normal tracking movement rate  {changePreOffset.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arcseconds per SI second. " +
-                        $"Length of sideral day at this tracking rate = {Utilities.HoursToHMS(1.0 / (changePreOffset.X / timeInSecondsSinceLastUpdate) * (360.0 / 3600.0), ":", ":", "", 3)}. hh:mm:ss.xxx" +
-                        $"RightAscensionRate additional movement: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees. " +
-                        $"RA movement rate including any RightAscensionrate additional movement: {change.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arcseconds per SI second. "
+                    TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. HA change {haChange} degrees. Alignment mode: {alignmentMode}, Mount RA normal tracking movement: {changePreOffset.X} degrees. ");
+                    TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"RA normal tracking movement rate  {changePreOffset.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second. " +
+                        $"Length of sidereal day at this tracking rate = {(1.0 / (changePreOffset.X / timeInSecondsSinceLastUpdate) * (360.0 / 3600.0)).ToHMS()}");
+                    TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"RightAscensionRate additional movement: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees. " +
+                        $"RA movement rate including any RightAscensionrate additional movement: {change.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second. "
                         );
-                }
-            }
+                } // Mount is tracking
+                else // Mount is not tracking
+                {
+                    // No axis change
+                    TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Tracking disabled - no changes.Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
+                } // Mount is not tracking
 
-            // MoveAxis movement allowing for the time since the last movement correction was applied.
-            change += Vector.Multiply(rateMoveAxes, timeInSecondsSinceLastUpdate);
+                // Move towards the target position if slewing
+                change += DoSlew();
+
+            } // MoveAxis is not active
+            else // A moveAxis rate has been set so treat as a Move 
+            {
+                // Calculate movement allowing for the time since the last movement correction was applied.
+                change = Vector.Multiply(rateMoveAxes, timeInSecondsSinceLastUpdate);
+                TL.LogMessage(LogLevel.Verbose, "MoveAxes MoveAxis", $"Primary axis move rate: {rateMoveAxes.X}, Secondary axis move rate: {rateMoveAxes.Y}. Applied changes - Primary axis: {change.X}, Secondary axis: {change.Y}. Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
+
+            } // MoveAxis is active
 
             // Move towards the target position if slewing
             change += DoSlew();
@@ -1939,47 +1972,111 @@ namespace ASCOM.Simulators
         /// </summary>
         /// <param name="haChange">The ha change.</param>
         /// <returns></returns>
-        private static Vector ConvertRateToAltAz(double haChange)
+        private static Vector ConvertRateToAltAz(double haChange, double decChange, double timeInSecondsThisInterval)
         {
             Vector change = new Vector();
 
-            double latRad = latitude * SharedResources.DEG_RAD;
-            double azmRad = altAzm.X * SharedResources.DEG_RAD;
-            double zenithAngle = (90 - altAzm.Y) * SharedResources.DEG_RAD;     // in radians
+            double phi = Latitude * SharedResources.DEG_RAD; // Site latitude in radians
+            double ha = (SiderealTime - currentRaDec.X) * SharedResources.HRS_RAD; // Current hour angle in radians
+            double dec = currentRaDec.Y * SharedResources.DEG_RAD; // Current declination in radians
+            double hadot = haChange * SharedResources.DEG_RAD; // Rate of change in HA due to tracking plus any RA offset rate in radians per second
+            double decdot = decChange * SharedResources.DEG_RAD; // Rate of change in declination due to any declination rate offset in radians per second
 
-            // get the azimuth and elevation rates, as a ratio of the tracking rate
-            double elevationRate = Math.Sin(azmRad) * Math.Cos(latRad);
+#pragma warning disable IDE0018 // Suppress In-line variable declaration
 
-            // fails at zenith so set a very large value, the limit check will trap this
-            double azimuthRate;
-            if (altAzm.Y != 90.0)
-            {
-                azimuthRate = (Math.Sin(latRad) * Math.Sin(zenithAngle) - Math.Cos(latRad) * Math.Cos(zenithAngle) * Math.Cos(azmRad)) / Math.Sin(zenithAngle);
-            }
-            else // altAzm.Y is 90.0
-            {
-                if (altAzm.X >= 90 && altAzm.X <= 270)
-                {
-                    azimuthRate = 10000.0;
-                }
-                else
-                {
-                    azimuthRate = -10000.0;
-                }
-            }
+            double a; // Azimuth (N through E, radians)
+            double e; // Elevation (radians)
+            double ad; // Rate of change of azimuth (radians per unit time)
+            double ed; // Rate of change of elevation (radians per unit time)
 
-            // get the changes in altitude and azimuth using the hour angle change and rates.
-            change.Y = elevationRate * haChange;
-            change.X = azimuthRate * haChange;
+#pragma warning restore IDE0018 // Enable In-line variable declaration
 
-            // stop the secondary going past the vertical
-            if (change.Y > 90 - altAzm.Y) change.Y = 0;
+            // Calculate azimuth and elevation rates (radians per second)
+            Tran(phi, ha, dec, hadot, decdot, out a, out e, out ad, out ed);
 
-            // limit the primary to the maximum slew rate
-            if (change.X < -slewSpeedFast) change.X = -slewSpeedFast;
-            if (change.X > slewSpeedFast) change.X = slewSpeedFast;
+            double azimuthChange = ad * timeInSecondsThisInterval; // Change in azimuth this interval in radians
+            double elevationChange = ed * timeInSecondsThisInterval; // Change in elevation this interval in radians
+
+            change.X = azimuthChange * SharedResources.RAD_DEG; // Convert azimuth change in radians to degrees
+            change.Y = elevationChange * SharedResources.RAD_DEG; // Convert elevation change in radians to degrees
 
             return change;
+        }
+
+        /// <summary>
+        /// Convert [HA,Dec] position and rate into [Az,El] position and rate.
+        /// </summary>
+        /// <param name="phi">site latitude (radians)</param>
+        /// <param name="ha"> hour angle (radians)</param>
+        /// <param name="dec">declination (radians)</param>
+        /// <param name="hadot">rate of change of ha (radians per unit time)</param>
+        /// <param name="decdot">rate of change of declination (radians per unit time)</param>
+        /// <param name="a">azimuth (N through E, radians)</param>
+        /// <param name="e">elevation (radians)</param>
+        /// <param name="ad">rate of change of a (radians per unit time)</param>
+        /// <param name="ed">rate of change of e (radians per unit time)</param>
+        /// <remarks>
+        /// 1) For sidereal tracking ha should include the sidereal rate as well as any differential rate.
+        /// 
+        /// 2) The units of the velocity arguments are up to the caller.
+        ///
+        /// This revision:  2023 January 9
+        ///
+        /// Author P.T.Wallace.
+        /// 
+        /// 
+        /// </remarks>
+        static void Tran(double phi, double ha, double dec, double hadot, double decdot, out double a, out double e, out double ad, out double ed)
+        {
+            double sh, ch, sd, cd, x, y, z, w, xd, yd, zd, sp, cp, rxy2, rxy, xyp;
+
+            /* Functions of HA and Dec. */
+            sh = Math.Sin(ha);
+            ch = Math.Cos(ha);
+            sd = Math.Sin(dec);
+            cd = Math.Cos(dec);
+
+            /* Unit vector (right-handed) P & V. */
+            x = ch * cd;
+            y = -sh * cd;
+            z = sd;
+
+            w = decdot * sd;
+            xd = hadot * y - w * ch;
+            yd = -hadot * x + w * sh;
+            zd = decdot * cd;
+
+            /* Rotate P & V into Cartesian [2pi-Az,El]. */
+            sp = Math.Sin(phi);
+            cp = Math.Cos(phi);
+            w = x * sp - z * cp;
+            z = x * cp + z * sp;
+            x = w;
+
+            w = xd * sp - zd * cp;
+            zd = xd * cp + zd * sp;
+            xd = w;
+
+            /* Vector's component in XY plane. */
+            rxy2 = x * x + y * y;
+            rxy = Math.Sqrt(rxy2);
+
+            /* Position and velocity in [Az,El]. */
+            xyp = x * xd + y * yd;
+            if (rxy != 0.0)
+            {
+                a = Math.Atan2(y, -x);
+                e = Math.Atan2(z, rxy);
+                ad = -(x * yd - y * xd) / rxy2;
+                ed = (zd * rxy2 - z * xyp) / rxy;
+            }
+            else
+            {
+                a = 0.0;
+                e = (z != 0.0) ? Math.Atan2(z, rxy) : 0.0;
+                ad = 0.0;
+                ed = 0.0;
+            }
         }
 
         /// <summary>
