@@ -80,6 +80,7 @@ namespace ASCOM.Alpaca.Simulators
                     }
 
                     c.EnableAnnotations();
+                    c.MapType<uint>(() => new OpenApiSchema { Type = "integer", Format = "uint32" });
                 });
             }
 
