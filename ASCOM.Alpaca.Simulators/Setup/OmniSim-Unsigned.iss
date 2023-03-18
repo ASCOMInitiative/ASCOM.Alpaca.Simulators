@@ -8,7 +8,7 @@
 #define MyAppUpdatesURL "https://github.com/ASCOMInitiative/ASCOM.Alpaca.Simulators/releases"
 #define MyAppExeName "ascom.alpaca.simulators.exe"
 #define MyAppAuthor "Daniel Van Noord"
-#define MyAppCopyright "Copyright © 2022 " + MyAppAuthor
+#define MyAppCopyright "Copyright ï¿½ 2022-23 " + MyAppAuthor
 #define MyAppVersion GetFileVersion("..\bin\ascom.alpaca.simulators.windows-x64\ascom.alpaca.simulators.exe")  ; Create version number variable
 
 [Setup]
