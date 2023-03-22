@@ -686,8 +686,24 @@ namespace ASCOM.Simulators
                             // Update the slew target's RA (primary) axis position that will also have changed due to tracking
                             targetAxes.X += haChange;
 
-                            // Apply any RightAscensionRate and DeclinationRate rate offsets
-                            change += Vector.Multiply(rateRaDecOffsetInternal, timeInSecondsSinceLastUpdate);
+                            // Apply the RightAscensionRate offset
+                            // The RA rate offset (rateRaDecOffsetInternal.X) is subtracted because the primary RA axis increases its angle value in a clockwise direction
+                            // but RA decreases when moving in this direction
+                            change.X -= rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate;
+
+                            // Apply the DeclinationRate offset
+                            // The relationship between the declination axis rotation direction and the associated declination value switches from
+                            // correlated (declination increases as mechanical angle increases) to inverted (declination decreases as mechanical angle increases) depending on the mount pointing state.
+                            // In addition, the sense of required rate corrections is inverted when in the southern hemisphere compared to the northern hemisphere
+                            if (Latitude >= 0.0) // Northern hemisphere (Yes, very hemisphereist, by assuming that 0.0 latitude is in the northern hemisphere)
+                            {
+                                change.Y += (SideOfPier == PointingState.Normal ? +rateRaDecOffsetInternal.Y : -rateRaDecOffsetInternal.Y) * timeInSecondsSinceLastUpdate; // Add or subtract declination rate depending on pointing state
+                            }
+                            else // Southern hemisphere
+                            {
+                                change.Y += (SideOfPier == PointingState.Normal ? -rateRaDecOffsetInternal.Y : +rateRaDecOffsetInternal.Y) * timeInSecondsSinceLastUpdate; // Add or subtract declination rate depending on pointing state
+                            }
+
                             TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"RA internal offset rate: {rateRaDecOffsetInternal.X}, Dec internal offset rate: {rateRaDecOffsetInternal.Y}. " +
                                 $"Total change this interval: {change.X}, {change.Y}. Time since last update: {timeInSecondsSinceLastUpdate}");
                             break;
@@ -697,8 +713,10 @@ namespace ASCOM.Simulators
                             // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking plus any RA / dec rate offsets
                             change = ConvertRateToAltAz(haChange / timeInSecondsSinceLastUpdate + rateRaDecOffsetInternal.X, rateRaDecOffsetInternal.Y, timeInSecondsSinceLastUpdate);
 
-                            // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
-                            targetAxes = MountFunctions.ConvertRaDecToAxes(targetRaDec, false);
+                            // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking plus any RA / dec rate offsets
+                            // The RA rate offset (rateRaDecOffsetInternal.X) is subtracted because the primary RA axis increases its angle value in a clockwise direction
+                            // but RA decreases when moving in this direction
+                            change = ConvertRateToAltAz(haChange / timeInSecondsSinceLastUpdate - rateRaDecOffsetInternal.X, rateRaDecOffsetInternal.Y, timeInSecondsSinceLastUpdate);
 
                             Vector targetradec = MountFunctions.ConvertAxesToRaDec(targetAxes);
 
@@ -1885,34 +1903,139 @@ namespace ASCOM.Simulators
         private static Vector PulseGuide(double updateInterval)
         {
             Vector change = new Vector();
-            // PulseGuide implementation
-            if (isPulseGuidingRa)
+            double guideTime;
+
+            // Handle AltAz alignment differently to Polar and German polar.
+            switch (alignmentMode)
             {
-                if (guideDuration.X <= 0)
-                {
-                    isPulseGuidingRa = false;
-                }
-                else
-                {
-                    // assume polar mount only
-                    var gd = guideDuration.X > updateInterval ? updateInterval : guideDuration.X;
-                    guideDuration.X -= gd;
-                    // assumes guide rate is in deg/sec
-                    change.X = guideRate.X * gd;
-                }
-            }
-            if (isPulseGuidingDec)
-            {
-                if (guideDuration.Y <= 0)
-                {
-                    isPulseGuidingDec = false;
-                }
-                else
-                {
-                    var gd = guideDuration.Y > updateInterval ? updateInterval : guideDuration.Y;
-                    guideDuration.Y -= gd;
-                    change.Y = guideRate.Y * gd;
-                }
+                case AlignmentMode.AltAz:
+
+                    // Only run the process if we are currently pulse guiding
+                    if (IsPulseGuiding)
+                    {
+                        // Set a flag when RA pulse guiding is complete
+                        if (guideDuration.X <= 0)
+                        {
+                            isPulseGuidingRa = false;
+                            guideDuration.X = 0.0;
+                        }
+
+                        // Set a flag when declination pulse guiding is complete
+                        if (guideDuration.Y <= 0)
+                        {
+                            isPulseGuidingDec = false;
+                            guideDuration.Y = 0.0;
+                        }
+
+                        // If pulse guiding is active on either axis undertake the calculation
+                        if ((guideDuration.X > 0.0) | (guideDuration.Y > 0.0))
+                        {
+                            // Calculate the time during which pulse guiding was actually active in this time interval, either the whole interval or part of it
+                            double guideTimeRA = guideDuration.X > updateInterval ? updateInterval : guideDuration.X;
+                            double guideTimeDeclination = guideDuration.Y > updateInterval ? updateInterval : guideDuration.Y;
+
+                            // Update the remaining time of the pulse guide interval
+                            if (guideDuration.X > 0.0)
+                                guideDuration.X -= updateInterval;
+                            if (guideDuration.Y > 0.0)
+                                guideDuration.Y -= updateInterval;
+
+                            // Calculate the change due to any RA and declination pulse guiding in this interval
+                            change = ConvertRateToAltAz(guideRate.X * guideTimeRA / updateInterval, guideRate.Y * guideTimeDeclination / updateInterval, updateInterval);
+                        }
+                    }
+                    break;
+
+                case AlignmentMode.Polar:
+                    if (isPulseGuidingRa)
+                    {
+                        if (guideDuration.X <= 0)
+                        {
+                            isPulseGuidingRa = false;
+                        }
+                        else
+                        {
+                            // assume polar mount only
+                            guideTime = guideDuration.X > updateInterval ? updateInterval : guideDuration.X;
+                            guideDuration.X -= guideTime;
+
+                            // assumes guide rate is in deg/sec
+                            change.X = guideRate.X * guideTime;
+                        }
+                    }
+                    if (isPulseGuidingDec)
+                    {
+                        if (guideDuration.Y <= 0)
+                        {
+                            isPulseGuidingDec = false;
+                        }
+                        else
+                        {
+                            guideTime = guideDuration.Y > updateInterval ? updateInterval : guideDuration.Y;
+                            guideDuration.Y -= guideTime;
+
+                            // Calculate the change in this interval allowing for inversion of declination direction when in the southern hemisphere.
+                            if (SouthernHemisphere) // Invert the change to match the simulator mechanical axis scale
+                            {
+                                change.Y = -guideRate.Y * guideTime;
+                            }
+                            else // Northern hemisphere
+                            {
+                                change.Y = guideRate.Y * guideTime;
+                            }
+                        }
+                    }
+                    break;
+
+                case AlignmentMode.GermanPolar:
+                    if (isPulseGuidingRa)
+                    {
+                        if (guideDuration.X <= 0)
+                        {
+                            isPulseGuidingRa = false;
+                        }
+                        else
+                        {
+                            // assume polar mount only
+                            guideTime = guideDuration.X > updateInterval ? updateInterval : guideDuration.X;
+                            guideDuration.X -= guideTime;
+
+                            // assumes guide rate is in deg/sec
+                            change.X = guideRate.X * guideTime;
+                        }
+                    }
+                    if (isPulseGuidingDec)
+                    {
+                        if (guideDuration.Y <= 0)
+                        {
+                            isPulseGuidingDec = false;
+                        }
+                        else
+                        {
+                            guideTime = guideDuration.Y > updateInterval ? updateInterval : guideDuration.Y;
+                            guideDuration.Y -= guideTime;
+
+                            // Calculate the change in this interval allowing for inversion of declination direction when the pointing state is through the pole.
+                            if (SideOfPier == PointingState.Normal) // Normal state
+                            {
+                                change.Y = guideRate.Y * guideTime;
+                            }
+                            else // Through the pole state
+                            {
+                                change.Y = -guideRate.Y * guideTime;
+                            }
+
+                            // Invert the direction of the declination change when in the southern hemisphere to match the simulator mechanical axis specification
+                            if (SouthernHemisphere)
+                            {
+                                change.Y = -change.Y;
+                            }
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
             }
             return change;
         }
