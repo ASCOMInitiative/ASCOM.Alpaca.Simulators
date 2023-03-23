@@ -883,7 +883,9 @@ namespace ASCOM.Simulators
             {
                 latitude = value;
                 s_Profile.WriteValue("Latitude", value.ToString(CultureInfo.InvariantCulture));
-                if (latitude < 0) { SouthernHemisphere = true; }
+
+                // Assign the Southern hemisphere property to true or false depending on the site latitude
+                SouthernHemisphere = latitude <= 0.0;
             }
         }
 
