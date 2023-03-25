@@ -73,7 +73,7 @@ namespace ASCOM.Simulators
 
         public const double SIDRATE = 0.9972695677;
 
-        public const double TIMER_INTERVAL = .25; //4 ticks per second
+        public const double TIMER_INTERVAL = 0.1; //4 ticks per second
 
         // ---------------------
         // Simulation Parameters
