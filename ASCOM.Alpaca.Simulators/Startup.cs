@@ -80,6 +80,8 @@ namespace ASCOM.Alpaca.Simulators
                     }
 
                     c.EnableAnnotations();
+                    c.SchemaFilter<SwaggerExcludeFilter>();
+                    c.MapType<uint>(() => new OpenApiSchema { Type = "integer", Format = "uint32", Minimum = 0, Maximum = 4294967295});
                 });
             }
 

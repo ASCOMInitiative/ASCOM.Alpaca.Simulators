@@ -78,7 +78,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RequireStrictURLCase)
+                if (ServerSettings.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
@@ -109,7 +109,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RequireStrictURLCase)
+                if (ServerSettings.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
@@ -149,7 +149,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RequireStrictURLCase)
+                if (ServerSettings.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
@@ -180,7 +180,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RequireStrictURLCase)
+                if (ServerSettings.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
@@ -220,7 +220,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RequireStrictURLCase)
+                if (ServerSettings.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
@@ -251,7 +251,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RequireStrictURLCase)
+                if (ServerSettings.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
@@ -282,7 +282,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RequireStrictURLCase)
+                if (ServerSettings.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
@@ -313,7 +313,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RequireStrictURLCase)
+                if (ServerSettings.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
@@ -344,7 +344,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RequireStrictURLCase)
+                if (ServerSettings.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {
@@ -375,7 +375,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RequireStrictURLCase)
+                if (ServerSettings.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
                     {

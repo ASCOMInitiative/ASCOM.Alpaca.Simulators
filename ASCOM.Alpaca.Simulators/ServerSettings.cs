@@ -382,11 +382,11 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static bool RequireStrictURLCase
+        internal static bool RunInStrictAlpacaMode
         {
             get
             {
-                if (bool.TryParse(Profile.GetValue("RequireStrictURLCase", true.ToString()), out bool result))
+                if (bool.TryParse(Profile.GetValue("RunInStrictAlpacaMode", true.ToString()), out bool result))
                 {
                     return result;
                 }
@@ -394,7 +394,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             set
             {
-                Profile.WriteValue("RequireStrictURLCase", value.ToString());
+                Profile.WriteValue("RunInStrictAlpacaMode", value.ToString());
             }
         }
 

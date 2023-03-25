@@ -300,7 +300,7 @@
     {
         get;
         set;
-    } = ServerSettings.RequireStrictURLCase;
+    } = ServerSettings.RunInStrictAlpacaMode;
 
     bool LocalHostOnlyOnHost
     {
@@ -477,7 +477,7 @@
 
             ServerSettings.AutoStartBrowser = StartBrowser;
 
-            ServerSettings.RequireStrictURLCase = StrictAPIMode;
+            ServerSettings.RunInStrictAlpacaMode = StrictAPIMode;
 
             DisplaySuccess("Server Settings Saved");
 
