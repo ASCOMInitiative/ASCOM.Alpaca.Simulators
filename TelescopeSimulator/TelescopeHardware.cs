@@ -813,9 +813,6 @@ namespace ASCOM.Simulators
 
             } // MoveAxis is active
 
-            // Move towards the target position if slewing
-            change += DoSlew();
-
             // handle HC button moves
             change += HcMoves();
 
