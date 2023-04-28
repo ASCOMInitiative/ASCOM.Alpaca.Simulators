@@ -27,7 +27,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Name of the Driver
         /// </summary>
-        private const string name = "Alpaca SafetyMonitor Sim";
+        private const string name = "Alpaca Safety Monitor Simulator";
 
         /// <summary>
         /// Description of the driver

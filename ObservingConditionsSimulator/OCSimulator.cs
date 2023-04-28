@@ -56,7 +56,7 @@ namespace ASCOM.Simulators
         public const string PROPERTY_WINDSPEED = "WindSpeed";
 
         public const string DRIVER_PROGID = "ASCOM.Simulator.ObservingConditions";
-        public const string DRIVER_DISPLAY_NAME = "Alpaca Observing Conditions Sim"; // Driver description that displays in the ASCOM Chooser.
+        public const string DRIVER_DISPLAY_NAME = "Alpaca Observing Conditions Simulator"; // Driver description that displays in the ASCOM Chooser.
         public const string DEVICE_TYPE = "ObservingConditions";
         public const string OBSERVINGCONDITIONS_DEVICE_NAME = "ObservingConditions";
         public const string SIMULATOR_PROGID = "Simulator";

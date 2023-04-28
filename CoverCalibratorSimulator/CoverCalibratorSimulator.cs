@@ -273,7 +273,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                string name = "CoverCalibrator Simulator";
+                string name = "Alpaca Cover Calibrator Simulator";
                 LogVerbose("Name Get", name);
                 return name;
             }

@@ -82,7 +82,7 @@ namespace ASCOM.Simulators
 
         internal const double INSTRUMENT_APERTURE_AREA = 0.0269;    // 3 inch obstruction
         internal const double INSTRUMENT_FOCAL_LENGTH = 1.26;      // f/6.3 instrument
-        public const string INSTRUMENT_NAME = "Alpaca Telescope Sim";       // Our name
+        public const string INSTRUMENT_NAME = "Alpaca Telescope Simulator";       // Our name
         public const string INSTRUMENT_DESCRIPTION = "Software Telescope Simulator for ASCOM";
 
         internal const uint ERROR_BASE = 0x80040400;
