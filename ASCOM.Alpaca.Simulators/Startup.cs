@@ -233,6 +233,9 @@ namespace ASCOM.Alpaca.Simulators
 
             app.UseRouting();
 
+            // Add special handling to ignore badly cased ClientTransaqctionID form parameters
+            app.UseFormIdMiddleware();
+
             //Allow authentication, either Cookie or Basic HTTP Auth
             app.UseAuthentication();
             app.UseAuthorization();

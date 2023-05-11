@@ -4077,6 +4077,21 @@
             Reset all device settings profiles.
             </summary>
         </member>
+        <member name="T:ASCOM.Alpaca.Simulators.FormIdMiddleware">
+            <summary>
+            Middleware to ignore mis-cased ClientTransactionID parameters
+            </summary>
+            <remarks>Removing mis-cased ClientTransactionID parameters from the key list ensures that the ClientTransactionID parameter is zero in the response.
+            Removing mis-cased ClientID parameters from the key list ensures that a 200 OK response is returned instead of a 400 Bad Request.
+            </remarks>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.FormIdMiddleware.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Run the middleware code
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="T:ASCOM.Alpaca.Simulators.Logging">
             <summary>
             Support code and storage for an ASCOM logger.
