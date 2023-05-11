@@ -14,7 +14,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             get;
             set;
-        } = 0;
+        } = 1;
 
         /// <summary>
         /// A server wide Transaction ID Counter
