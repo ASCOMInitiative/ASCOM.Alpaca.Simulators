@@ -253,7 +253,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                string name = "Alpaca Switch V2 Sim";
+                string name = "Alpaca Switch Simulator";
                 LogMessage("Name Get", name);
                 return name;
             }

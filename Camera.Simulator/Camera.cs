@@ -63,6 +63,9 @@ namespace ASCOM.Simulators
         // Driver ID and descriptive string that shows in the Chooser
         private static string s_csDriverDescription = "Camera V3 simulator";
 
+        // Value returned through the Name property
+        private const string DEVICE_NAME="Alpaca Camera Simulator";
+
         #region Profile string constants
 
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
@@ -2222,8 +2225,8 @@ namespace ASCOM.Simulators
             {
                 CheckSupportedInThisInterfaceVersion("Name", 2);
                 CheckConnected("Name");
-                Log.LogMessage("Name", "Sim {0}", SensorName);
-                return "Sim " + SensorName;
+                Log.LogMessage("Name", DEVICE_NAME);
+                return DEVICE_NAME;
             }
         }
 

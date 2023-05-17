@@ -148,7 +148,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return "Alpaca Filter Wheel Sim";
+                return "Alpaca Filter Wheel Simulator";
             }
         }
 

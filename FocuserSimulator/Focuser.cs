@@ -32,7 +32,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Name of the Driver
         /// </summary>
-        private const string name = "Alpaca Focuser Sim";
+        private const string name = "Alpaca Focuser Simulator";
 
         /// <summary>
         /// Description of the driver
