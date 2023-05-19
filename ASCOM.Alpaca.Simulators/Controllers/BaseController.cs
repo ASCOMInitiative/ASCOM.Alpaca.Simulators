@@ -12,7 +12,7 @@ namespace ASCOM.Alpaca.Simulators
 {
     public class ProcessBaseController : Controller
     {
-        internal bool BadRequestAlpacaProtocol(out BadRequestObjectResult Result)
+        internal bool BadRequestAlpacaProtocol(out BadRequestObjectResult Result, ref uint ClientID, ref uint ClientTransactionID)
         {
             Result = null;
             //Only check on Alpaca routes, all others may pass
@@ -30,14 +30,33 @@ namespace ASCOM.Alpaca.Simulators
 
             if (HttpContext.Request.HasFormContentType)
             {
-                if (HttpContext.Request.Form.Keys.Any(key => !ValidAlpacaKeys.ValidFormKeys.Contains(key) && ValidAlpacaKeys.ValidFormKeys.Contains(key, StringComparer.OrdinalIgnoreCase)))
+                foreach(var key in HttpContext.Request.Form.Keys)
                 {
-                    var keys = HttpContext.Request.Form.Keys.Where(key => !ValidAlpacaKeys.ValidFormKeys.Contains(key) && ValidAlpacaKeys.ValidFormKeys.Contains(key, StringComparer.OrdinalIgnoreCase));
-                    Result = BadRequest(Strings.FormCapitalizationDescription + string.Join(", ", keys));
-                    Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
-                    return true;
-                }
+                    var Validator = ValidAlpacaKeys.AlpacaFormValidators.FirstOrDefault(x => x.ExternalKeyFailsValidation(key), null);
 
+                    if(Validator != null)
+                    {
+                        Logging.Log.LogWarning($"Incorrect capitalization on optional key {Validator.Key}, received {key}");
+                        //We zero out optional keys
+                        if (Validator.IsOptional)
+                        {
+                            if (Validator.Key == "ClientID")
+                            {
+                                ClientID = 0;
+                            }
+                            else if (Validator.Key == "ClientTransactionID")
+                            {
+                                ClientTransactionID = 0;
+                            }
+                        }
+                        else
+                        {
+                            Result = BadRequest(Strings.FormCapitalizationDescription + $"{Validator.Key}, received: {key}");
+                            Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
+                            return true;
+                        }
+                    }
+                }
 
                 if (HttpContext.Request.Query.Any())
                 {
@@ -80,7 +99,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RunInStrictAlpacaMode)
                 {
-                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
                         return result;
                     }
@@ -111,7 +130,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RunInStrictAlpacaMode)
                 {
-                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
                         return result;
                     }
@@ -151,7 +170,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RunInStrictAlpacaMode)
                 {
-                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
                         return result;
                     }
@@ -182,7 +201,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RunInStrictAlpacaMode)
                 {
-                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
                         return result;
                     }
@@ -222,7 +241,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RunInStrictAlpacaMode)
                 {
-                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
                         return result;
                     }
@@ -253,7 +272,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RunInStrictAlpacaMode)
                 {
-                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
                         return result;
                     }
@@ -284,7 +303,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RunInStrictAlpacaMode)
                 {
-                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
                         return result;
                     }
@@ -315,7 +334,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RunInStrictAlpacaMode)
                 {
-                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
                         return result;
                     }
@@ -346,7 +365,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RunInStrictAlpacaMode)
                 {
-                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
                         return result;
                     }
@@ -377,7 +396,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (ServerSettings.RunInStrictAlpacaMode)
                 {
-                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result))
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
                         return result;
                     }

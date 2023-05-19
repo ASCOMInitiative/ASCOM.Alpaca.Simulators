@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -14,7 +15,13 @@ namespace ASCOM.Alpaca.Simulators
             "axis"
         };
 
-        internal static List<string> ValidFormKeys = new List<string> {
+        private static List<string> OptionalFormKeys = new List<string>
+        {
+            "ClientID",
+            "ClientTransactionID"
+        };
+
+        private static List<string> ValidFormKeys = new List<string> {
             "ClientID",
             "ClientTransactionID",
             "BinX",
@@ -70,7 +77,43 @@ namespace ASCOM.Alpaca.Simulators
             "Tracking",
             "TrackingRate",
             "UTCDate",
-
         };
+
+        internal static List<AlpacaKeyValidator> AlpacaFormValidators = new List<AlpacaKeyValidator>();
+
+        static ValidAlpacaKeys()
+        {
+            foreach(var key in ValidFormKeys) 
+            {
+                AlpacaFormValidators.Add(new AlpacaKeyValidator(key, OptionalFormKeys.Contains(key)));
+            }
+        }
     }
+
+    internal class AlpacaKeyValidator
+    {
+        internal bool IsOptional
+        {
+            get;
+            private set;
+        }
+
+        internal string Key
+        {
+            get;
+            private set;
+        }
+
+        internal bool ExternalKeyFailsValidation(string external_key)
+        {
+            //Fails capitalization test
+            return string.Equals(Key, external_key, StringComparison.OrdinalIgnoreCase) && Key != external_key;
+        }
+
+        internal AlpacaKeyValidator(string key, bool is_optional = false)
+        {
+            Key = key;
+            IsOptional = is_optional;
+        }
+    } 
 }
