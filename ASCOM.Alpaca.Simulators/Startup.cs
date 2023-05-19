@@ -14,6 +14,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -101,6 +103,9 @@ namespace ASCOM.Alpaca.Simulators
 
             //Do not automatically change JSON to Camel Case
             services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+
+            //Skip null entries, this should just be the optional driver exception
+            services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
 
             // Force API Validation errors to return HTTP 400, BadRequest
             services.Configure<ApiBehaviorOptions>(options =>
