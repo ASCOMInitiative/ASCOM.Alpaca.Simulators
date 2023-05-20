@@ -12,7 +12,6 @@ namespace ASCOM.Alpaca.Simulators
     {
         internal const string ServerName = "ASCOM Alpaca Simulators";
         internal const string Manufacturer = "ASCOM Initiative";
-        internal static readonly int[] APIVersions = { 1 };
 
         internal static string ServerVersion
         {
@@ -274,6 +273,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 Discovery.DiscoveryManager.DiscoveryResponder.LocalRespondOnlyToLocalHost = value;
                 Profile.WriteValue("PreventRemoteDisconnects", value.ToString());
+                ASCOM.Alpaca.Razor.FunctionManager.PreventRemoteDisconnects = value;
             }
         }
 
@@ -395,6 +395,7 @@ namespace ASCOM.Alpaca.Simulators
             set
             {
                 Profile.WriteValue("RunInStrictAlpacaMode", value.ToString());
+                ASCOM.Alpaca.Razor.FunctionManager.RunInStrictAlpacaMode = value;
             }
         }
 

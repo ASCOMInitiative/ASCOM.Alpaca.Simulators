@@ -1,4 +1,5 @@
 ﻿using Alpaca;
+using ASCOM.Alpaca.Razor;
 using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Helpers;
@@ -886,7 +887,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
 
-                if (ServerSettings.AllowImageBytesDownload && HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
+                if (FunctionManager.AllowImageBytesDownload && HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
                 {
                     var response = ((Array)DeviceManager.GetCamera(DeviceNumber).ImageArray).ToByteArray(1, ClientTransactionID, TransactionID, AlpacaErrors.AlpacaNoError, string.Empty);
 
@@ -1010,7 +1011,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 Array bytes = null;
 
-                if (ServerSettings.AllowImageBytesDownload && HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
+                if (FunctionManager.AllowImageBytesDownload && HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
                 {
                     if (type == typeof(int))
                     {
