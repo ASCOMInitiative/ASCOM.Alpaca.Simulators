@@ -92,6 +92,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <param name="ClientTransactionID">The client transaction id</param>
         /// <param name="Payload">Any payload values, optional, only used for logging</param>
         /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult<BoolResponse> ProcessRequest(Func<bool> Operation, uint TransactionID, uint ClientID, uint ClientTransactionID, string Payload = "")
         {
             try
@@ -123,6 +124,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult<DriveRatesResponse> ProcessRequest(Func<ITrackingRates> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
@@ -163,6 +165,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult<DoubleResponse> ProcessRequest(Func<double> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
@@ -194,6 +197,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult<AxisRatesResponse> ProcessRequest(Func<IAxisRates> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
@@ -234,6 +238,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult<IntArray2DResponse> ProcessRequest(Func<int[,]> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
@@ -265,6 +270,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult<StringListResponse> ProcessRequest(Func<IList<string>> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
@@ -296,6 +302,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult<IntListResponse> ProcessRequest(Func<IList<int>> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
@@ -327,6 +334,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult<IntResponse> ProcessRequest(Func<int> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
@@ -358,6 +366,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult<StringResponse> ProcessRequest(Func<string> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
@@ -389,6 +398,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult<Response> ProcessRequest(Action Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
