@@ -1,4 +1,3 @@
-using ASCOM.Alpaca.Simulators;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -47,7 +46,7 @@ namespace ASCOM.Alpaca.Pages
 
             try
             {
-                if (ServerSettings.UseAuth)
+                if (_userService.UseAuth)
                 {
                     auth = await _userService.Authenticate(paramUsername, paramPassword);
                 }
@@ -87,7 +86,7 @@ namespace ASCOM.Alpaca.Pages
             }
             catch (Exception ex)
             {
-                Logging.LogError(ex.Message);
+                ASCOM.Alpaca.Simulators.Logging.LogError(ex.Message);
             }
 
             return LocalRedirect(returnUrl);
