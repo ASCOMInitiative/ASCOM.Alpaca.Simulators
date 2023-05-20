@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-namespace ASCOM.Alpaca.Simulators.Discovery
+namespace ASCOM.Alpaca
 {
     public static class DiscoveryManager
     {
