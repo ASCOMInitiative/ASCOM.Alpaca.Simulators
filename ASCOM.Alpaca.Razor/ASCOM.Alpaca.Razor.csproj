@@ -25,10 +25,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\OmniSim.Tools\OmniSim.Tools.csproj" />
-  </ItemGroup>
-
   <PropertyGroup>
     <DocumentationFile>.\ASCOM.Alpaca.Razor.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
