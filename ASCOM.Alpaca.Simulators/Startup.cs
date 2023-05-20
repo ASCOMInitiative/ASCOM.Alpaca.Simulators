@@ -32,7 +32,6 @@ namespace ASCOM.Alpaca.Simulators
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddMvc();
             services.AddBlazoredToast();
 
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -40,7 +39,7 @@ namespace ASCOM.Alpaca.Simulators
 
             ASCOM.Alpaca.Razor.StartupHelpers.ConfigureSwagger(services, xmlPath);
             ASCOM.Alpaca.Razor.StartupHelpers.ConfigureAlpacaAPIBehavoir(services);
-            ASCOM.Alpaca.Razor.StartupHelpers.ConfigureAuthenticationService(services);
+            ASCOM.Alpaca.Razor.StartupHelpers.ConfigureAuthentication(services);
 
             services.AddScoped<IUserService, UserService>();
         }
@@ -72,10 +71,7 @@ namespace ASCOM.Alpaca.Simulators
 
             app.UseRouting();
 
-            //Allow authentication, either Cookie or Basic HTTP Auth
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseCookiePolicy();
+            Razor.StartupHelpers.ConfigureAuthentication(app);
 
             //Map Endpoints, primarily Blazor UI and REST Controllers
             app.UseEndpoints(endpoints =>

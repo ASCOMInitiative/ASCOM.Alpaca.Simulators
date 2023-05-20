@@ -79,6 +79,9 @@ namespace ASCOM.Alpaca.Razor
 
         public static void ConfigureAlpacaAPIBehavoir(IServiceCollection services)
         {
+            //Add MVC
+            services.AddMvc();
+
             //Do not automatically change JSON to Camel Case
             services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
@@ -118,6 +121,11 @@ namespace ASCOM.Alpaca.Razor
                     return new BadRequestObjectResult(message);
                 };
             });
+        }
+
+        public static void ConfigureAlpacaAPIBehavoir(WebApplication app)
+        {
+            app.MapControllers();
         }
 
         public static void ConfigureDiscovery(IApplicationBuilder app)
@@ -191,7 +199,7 @@ namespace ASCOM.Alpaca.Razor
 
         }
 
-        public static void ConfigureAuthenticationService(IServiceCollection services)
+        public static void ConfigureAuthentication(IServiceCollection services)
         {
             // configure basic authentication
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
@@ -204,6 +212,14 @@ namespace ASCOM.Alpaca.Razor
 
             // configure DI for application services
             services.AddScoped<AuthorizationFilter>();
+        }
+
+        public static void ConfigureAuthentication(IApplicationBuilder app)
+        {
+            //Allow authentication, either Cookie or Basic HTTP Auth
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseCookiePolicy();
         }
     }
 }
