@@ -81,6 +81,17 @@ namespace ASCOM.Alpaca.Simulators
                         Logging.LogInformation("Failed to find ASCOM.Common xml documentation.");
                     }
 
+                    if (File.Exists(Path.Combine(AppContext.BaseDirectory, "ASCOM.Alpaca.Razor.xml")))
+                    {
+                        xmlPath = Path.Combine(AppContext.BaseDirectory, "ASCOM.Alpaca.Razor.xml");
+
+                        c.IncludeXmlComments(xmlPath);
+                    }
+                    else
+                    {
+                        Logging.LogInformation("Failed to find ASCOM.Alpaca.Razor xml documentation.");
+                    }
+
                     c.EnableAnnotations();
                     c.SchemaFilter<SwaggerExcludeFilter>();
                     c.MapType<uint>(() => new OpenApiSchema { Type = "integer", Format = "uint32", Minimum = 0, Maximum = 4294967295});
