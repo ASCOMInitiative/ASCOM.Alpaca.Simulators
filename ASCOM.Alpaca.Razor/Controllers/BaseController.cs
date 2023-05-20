@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
-namespace ASCOM.Alpaca.Simulators
+namespace ASCOM.Alpaca
 {
     public class ProcessBaseController : Controller
     {

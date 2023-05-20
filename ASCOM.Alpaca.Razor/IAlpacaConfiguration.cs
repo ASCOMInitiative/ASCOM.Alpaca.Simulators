@@ -1,4 +1,4 @@
-﻿namespace ASCOM.Alpaca.Razor
+﻿namespace ASCOM.Alpaca
 {
     public interface IAlpacaConfiguration
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace ASCOM.Alpaca.Simulators
+namespace ASCOM.Alpaca
 {
     /// <summary>
     /// This controller catches all requests on the /api that do not have a controller and return an HTTP 400.

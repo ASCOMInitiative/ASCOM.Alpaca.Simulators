@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ASCOM.Alpaca.Simulators
+namespace ASCOM.Alpaca
 {
     internal class DeviceNotFoundException : Exception
     {
