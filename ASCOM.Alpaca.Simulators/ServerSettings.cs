@@ -190,7 +190,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             set
             {
-                Discovery.DiscoveryManager.DiscoveryResponder.AllowRemoteAccess = value;
+                DiscoveryManager.DiscoveryResponder.AllowRemoteAccess = value;
                 Profile.WriteValue("AllowRemoteAccess", value.ToString());
             }
         }
@@ -211,16 +211,16 @@ namespace ASCOM.Alpaca.Simulators
 
                 if (value)
                 {
-                    if (!Discovery.DiscoveryManager.IsRunning)
+                    if (!DiscoveryManager.IsRunning)
                     {
-                        Discovery.DiscoveryManager.Start(ServerPort, LocalRespondOnlyToLocalHost, true);
+                        DiscoveryManager.Start(ServerPort, LocalRespondOnlyToLocalHost, true);
                     }
                 }
                 else
                 {
-                    if (Discovery.DiscoveryManager.IsRunning)
+                    if (DiscoveryManager.IsRunning)
                     {
-                        Discovery.DiscoveryManager.Stop();
+                        DiscoveryManager.Stop();
                     }
                 }
             }
@@ -254,7 +254,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             set
             {
-                Discovery.DiscoveryManager.DiscoveryResponder.LocalRespondOnlyToLocalHost = value;
+                DiscoveryManager.DiscoveryResponder.LocalRespondOnlyToLocalHost = value;
                 Profile.WriteValue("LocalRespondOnlyToLocalHost", value.ToString());
             }
         }
@@ -271,7 +271,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             set
             {
-                Discovery.DiscoveryManager.DiscoveryResponder.LocalRespondOnlyToLocalHost = value;
+                DiscoveryManager.DiscoveryResponder.LocalRespondOnlyToLocalHost = value;
                 Profile.WriteValue("PreventRemoteDisconnects", value.ToString());
             }
         }

@@ -25,5 +25,7 @@ namespace ASCOM.Alpaca.Simulators
         public bool AllowRemoteAccess => ServerSettings.AllowRemoteAccess;
 
         public bool LocalRespondOnlyToLocalHost => ServerSettings.LocalRespondOnlyToLocalHost;
+
+        public bool RunSwagger => ServerSettings.RunSwagger;
     }
 }

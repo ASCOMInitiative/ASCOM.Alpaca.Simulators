@@ -56,5 +56,6 @@
         {
             get;
         }
+        bool RunSwagger { get; }
     }
 }
