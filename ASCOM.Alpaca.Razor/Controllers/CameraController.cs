@@ -1,6 +1,4 @@
-﻿using Alpaca;
-using ASCOM.Alpaca.Razor;
-using ASCOM.Common.Alpaca;
+﻿using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Helpers;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +10,7 @@ using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
-namespace ASCOM.Alpaca.Simulators
+namespace ASCOM.Alpaca
 {
     [ServiceFilter(typeof(AuthorizationFilter))]
     [ApiController]

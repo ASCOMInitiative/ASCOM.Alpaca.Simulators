@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ASCOM.Alpaca.Simulators
+namespace ASCOM.Alpaca
 {
     internal class ValidAlpacaKeys
     {

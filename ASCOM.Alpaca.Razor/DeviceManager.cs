@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.Alpaca.Simulators
+namespace ASCOM.Alpaca
 {
     public static class DeviceManager
     {

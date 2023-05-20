@@ -1,4 +1,4 @@
-﻿namespace ASCOM.Alpaca.Simulators
+﻿namespace ASCOM.Alpaca
 {
     public class Strings
     {

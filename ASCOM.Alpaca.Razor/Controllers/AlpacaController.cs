@@ -1,6 +1,4 @@
-﻿using ASCOM.Alpaca.Razor;
-using ASCOM.Alpaca.Simulators;
-using ASCOM.Common.Alpaca;
+﻿using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -9,7 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 
-namespace Alpaca
+namespace ASCOM.Alpaca
 {
     /// <summary>
     /// A Custom REST MVC controller with additions to help handle Alpaca responses and error responses.
