@@ -17,5 +17,13 @@ namespace ASCOM.Alpaca.Simulators
         public string Location => ServerSettings.Location;
 
         public bool AllowImageBytesDownload => ServerSettings.AllowImageBytesDownload;
+
+        public bool AllowDiscovery => ServerSettings.AllowDiscovery;
+
+        public int ServerPort => ServerSettings.ServerPort;
+
+        public bool AllowRemoteAccess => ServerSettings.AllowRemoteAccess;
+
+        public bool LocalRespondOnlyToLocalHost => ServerSettings.LocalRespondOnlyToLocalHost;
     }
 }

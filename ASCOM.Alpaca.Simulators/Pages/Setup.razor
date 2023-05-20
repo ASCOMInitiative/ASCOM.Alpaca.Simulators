@@ -512,7 +512,7 @@
         try
         {
             ServerSettings.LoggingLevel = LoggingLevel;
-            Logging.Log.SetMinimumLoggingLevel(LoggingLevel);
+            ASCOM.Alpaca.Simulators.Logging.Log.SetMinimumLoggingLevel(LoggingLevel);
             ServerSettings.LogToConsole = LogToConsole;
             DisplaySuccess("Logging Settings Saved");
         }

@@ -76,6 +76,8 @@ namespace ASCOM.Alpaca.Simulators
                 Logging.LogError(ex.Message);
             }
 
+            ASCOM.Alpaca.Logging.AttachLogger(Logging.Log);
+
             //Load configuration
             DeviceManager.LoadConfiguration(new AlpacaConfiguration());
 
