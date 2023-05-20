@@ -3,11 +3,6 @@ using System.Threading.Tasks;
 
 namespace ASCOM.Alpaca
 {
-    public interface IUserService
-    {
-        Task<bool> Authenticate(string username, string password);
-    }
-
     public class UserService : IUserService
     {
         //ToDo, don't hard code support multiple users
@@ -15,6 +10,7 @@ namespace ASCOM.Alpaca
         {
             return await Task.Run(() =>
             {
+                //ToDo
                 try
                 {
                     return username == ServerSettings.UserName && Hash.Validate(ServerSettings.Password, password);
@@ -26,6 +22,11 @@ namespace ASCOM.Alpaca
             }
 
             );
+        }
+
+        public bool UseAuth
+        {
+            get => ServerSettings.UseAuth;
         }
     }
 }

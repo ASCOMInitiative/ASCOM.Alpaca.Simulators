@@ -1,5 +1,4 @@
-﻿using ASCOM.Alpaca.Simulators;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -23,7 +22,7 @@ namespace ASCOM.Alpaca
         public void OnAuthorization(AuthorizationFilterContext filterContext)
         {
             // If not using Auth don't even check
-            if (!ServerSettings.UseAuth)
+            if (!userService.UseAuth)
             {
                 return;
             }

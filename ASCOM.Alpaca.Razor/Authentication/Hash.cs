@@ -1,16 +1,15 @@
-﻿using ASCOM.Alpaca.Simulators;
-using System;
+﻿using System;
 using System.Security.Cryptography;
 
 namespace ASCOM.Alpaca
 {
-    internal static class Hash
+    public static class Hash
     {
         internal const int iters = 1000;
         internal const int salt_length = 16;
         internal const int key_length = 20;
 
-        internal static string GetStoragePassword(string password)
+        public static string GetStoragePassword(string password)
         {
             byte[] salt = RandomNumberGenerator.GetBytes(salt_length);
 
@@ -23,7 +22,7 @@ namespace ASCOM.Alpaca
             return Convert.ToBase64String(hashBytes);
         }
 
-        internal static bool Validate(string stored, string password)
+        public static bool Validate(string stored, string password)
         {
             try
             {
