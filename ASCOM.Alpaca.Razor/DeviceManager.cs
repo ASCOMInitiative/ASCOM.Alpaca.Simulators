@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 
 namespace ASCOM.Alpaca.Simulators
 {
-    internal static class DeviceManager
+    public static class DeviceManager
     {
-        internal static uint RawTransactionID
+        public static uint RawTransactionID
         {
             get;
             set;
@@ -19,7 +19,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <summary>
         /// A server wide Transaction ID Counter
         /// </summary>
-        internal static uint ServerTransactionID
+        public static uint ServerTransactionID
         {
             get
             {
@@ -28,17 +28,17 @@ namespace ASCOM.Alpaca.Simulators
         }
 
         // These store the actual instance of the device drivers. They are keyed to the Device Number
-        private static readonly Dictionary<int, ICameraV3> cameraV3s = new Dictionary<int, ICameraV3>();
+        public static readonly Dictionary<int, ICameraV3> cameraV3s = new Dictionary<int, ICameraV3>();
 
-        private static readonly Dictionary<int, ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int, ICoverCalibratorV1>();
-        private static readonly Dictionary<int, IDomeV2> domeV2s = new Dictionary<int, IDomeV2>();
-        private static readonly Dictionary<int, IFilterWheelV2> filterWheelV2s = new Dictionary<int, IFilterWheelV2>();
-        private static readonly Dictionary<int, IFocuserV3> focuserV3s = new Dictionary<int, IFocuserV3>();
-        private static readonly Dictionary<int, IObservingConditions> observingConditions = new Dictionary<int, IObservingConditions>();
-        private static readonly Dictionary<int, IRotatorV3> rotatorV3s = new Dictionary<int, IRotatorV3>();
-        private static readonly Dictionary<int, ISafetyMonitor> safetyMonitors = new Dictionary<int, ISafetyMonitor>();
-        private static readonly Dictionary<int, ISwitchV2> switchV2s = new Dictionary<int, ISwitchV2>();
-        private static readonly Dictionary<int, ITelescopeV3> telescopeV3s = new Dictionary<int, ITelescopeV3>();
+        public static readonly Dictionary<int, ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int, ICoverCalibratorV1>();
+        public static readonly Dictionary<int, IDomeV2> domeV2s = new Dictionary<int, IDomeV2>();
+        public static readonly Dictionary<int, IFilterWheelV2> filterWheelV2s = new Dictionary<int, IFilterWheelV2>();
+        public static readonly Dictionary<int, IFocuserV3> focuserV3s = new Dictionary<int, IFocuserV3>();
+        public static readonly Dictionary<int, IObservingConditions> observingConditions = new Dictionary<int, IObservingConditions>();
+        public static readonly Dictionary<int, IRotatorV3> rotatorV3s = new Dictionary<int, IRotatorV3>();
+        public static readonly Dictionary<int, ISafetyMonitor> safetyMonitors = new Dictionary<int, ISafetyMonitor>();
+        public static readonly Dictionary<int, ISwitchV2> switchV2s = new Dictionary<int, ISwitchV2>();
+        public static readonly Dictionary<int, ITelescopeV3> telescopeV3s = new Dictionary<int, ITelescopeV3>();
 
         private static string ServerFolderName
         {
@@ -55,236 +55,84 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        static DeviceManager()
-        {
-            //Only one instance of each in this simulator
-            LoadCamera(0);
-
-            LoadCoverCalibrator(0);
-
-            LoadDome(0);
-
-            LoadFilterWheel(0);
-
-            LoadFocuser(0);
-
-            LoadObservingConditions(0);
-
-            LoadRotator(0);
-
-            LoadSafetyMonitor(0);
-
-            LoadSwitch(0);
-
-            LoadTelescope(0);
-        }
-
-        internal static void LoadCamera(int DeviceID)
+        public static void LoadCamera(int DeviceID, ICameraV3 Device)
         {
             //Remove if the simulated instance already exists
             cameraV3s.Remove(DeviceID);
             //Add the new instance
-            cameraV3s.Add(DeviceID, new ASCOM.Simulators.Camera(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, Camera, (uint)DeviceID)));
+            cameraV3s.Add(DeviceID, Device);
         }
 
-        internal static void LoadCoverCalibrator(int DeviceID)
+        public static void LoadCoverCalibrator(int DeviceID, ICoverCalibratorV1 Device)
         {
             //Remove if the simulated instance already exists
             coverCalibratorV1s.Remove(DeviceID);
             //Add the new instance
-            coverCalibratorV1s.Add(0, new ASCOM.Simulators.CoverCalibratorSimulator(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, CoverCalibrator, (uint)DeviceID)));
+            coverCalibratorV1s.Add(0, Device);
         }
 
-        internal static void LoadDome(int DeviceID)
+        public static void LoadDome(int DeviceID, IDomeV2 Device)
         {
             //Remove if the simulated instance already exists
             domeV2s.Remove(DeviceID);
             //Add the new instance
-            domeV2s.Add(DeviceID, new ASCOM.Simulators.Dome(DeviceID, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, Dome, (uint)DeviceID)));
+            domeV2s.Add(DeviceID, Device);
         }
 
-        internal static void LoadFilterWheel(int DeviceID)
+        public static void LoadFilterWheel(int DeviceID, IFilterWheelV2 Device)
         {
             //Remove if the simulated instance already exists
             filterWheelV2s.Remove(DeviceID);
             //Add the new instance
-            filterWheelV2s.Add(DeviceID, new ASCOM.Simulators.FilterWheel(DeviceID, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, FilterWheel, (uint)DeviceID)));
+            filterWheelV2s.Add(DeviceID, Device);
         }
 
-        internal static void LoadFocuser(int DeviceID)
+        public static void LoadFocuser(int DeviceID, IFocuserV3 Device)
         {
             //Remove if the simulated instance already exists
             focuserV3s.Remove(DeviceID);
             //Add the new instance
-            focuserV3s.Add(DeviceID, new ASCOM.Simulators.Focuser(DeviceID, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, Focuser, (uint)DeviceID)));
+            focuserV3s.Add(DeviceID, Device);
         }
 
-        internal static void LoadObservingConditions(int DeviceID)
+        public static void LoadObservingConditions(int DeviceID, IObservingConditions Device)
         {
             //Remove if the simulated instance already exists
             observingConditions.Remove(DeviceID);
             //Add the new instance
-            observingConditions.Add(DeviceID, new ASCOM.Simulators.ObservingConditions(DeviceID, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, ObservingConditions, (uint)DeviceID)));
+            observingConditions.Add(DeviceID, Device);
         }
 
-        internal static void LoadRotator(int DeviceID)
+        public static void LoadRotator(int DeviceID, IRotatorV3 Device)
         {
             //Remove if the simulated instance already exists
             rotatorV3s.Remove(DeviceID);
             //Add the new instance
-            rotatorV3s.Add(DeviceID, new ASCOM.Simulators.Rotator(DeviceID, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, Rotator, (uint)DeviceID)));
+            rotatorV3s.Add(DeviceID, Device);
         }
 
-        internal static void LoadSafetyMonitor(int DeviceID)
+        public static void LoadSafetyMonitor(int DeviceID, ISafetyMonitor Device)
         {
             //Remove if the simulated instance already exists
             safetyMonitors.Remove(DeviceID);
             //Add the new instance
-            safetyMonitors.Add(DeviceID, new ASCOM.Simulators.SafetyMonitor(DeviceID, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, SafetyMonitor, (uint)DeviceID)));
+            safetyMonitors.Add(DeviceID, Device);
         }
 
-        internal static void LoadSwitch(int DeviceID)
+        public static void LoadSwitch(int DeviceID, ISwitchV2 Device)
         {
             //Remove if the simulated instance already exists
             switchV2s.Remove(DeviceID);
             //Add the new instance
-            switchV2s.Add(DeviceID, new ASCOM.Simulators.Switch(DeviceID, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, Switch, (uint)DeviceID)));
+            switchV2s.Add(DeviceID, Device);
         }
 
-        internal static void LoadTelescope(int DeviceID)
+        public static void LoadTelescope(int DeviceID, ITelescopeV3 Device)
         {
             //Remove if the simulated instance already exists
             telescopeV3s.Remove(DeviceID);
             //Add the new instance
-            telescopeV3s.Add(DeviceID, new ASCOM.Simulators.Telescope(DeviceID, Logging.Log,
-                new XMLProfile(ServerSettings.SettingsFolderName, Telescope, (uint)DeviceID)));
-        }
-
-        /// <summary>
-        /// Reset all device settings profiles.
-        /// </summary>
-        internal static void Reset()
-        {
-            foreach (var dev in cameraV3s.Values)
-            {
-                try
-                {
-                    (dev as ASCOM.Simulators.Camera)?.ResetSettings();
-                }
-                catch (Exception ex)
-                {
-                    Logging.LogError($"Failed to reset Camera settings with error: {ex.Message}");
-                }
-            }
-
-            foreach (var dev in coverCalibratorV1s.Values)
-            {
-                try
-                {
-                    (dev as ASCOM.Simulators.CoverCalibratorSimulator)?.ResetSettings();
-                }
-                catch (Exception ex)
-                {
-                    Logging.LogError($"Failed to reset CoverCalibrator settings with error: {ex.Message}");
-                }
-            }
-
-            foreach (var dev in domeV2s.Values)
-            {
-                try
-                {
-                    (dev as ASCOM.Simulators.Dome)?.ResetSettings();
-                }
-                catch (Exception ex)
-                {
-                    Logging.LogError($"Failed to reset Dome settings with error: {ex.Message}");
-                }
-            }
-
-            foreach (var dev in filterWheelV2s.Values)
-            {
-                try
-                {
-                    (dev as ASCOM.Simulators.FilterWheel)?.ResetSettings();
-                }
-                catch (Exception ex)
-                {
-                    Logging.LogError($"Failed to reset Filter Wheel settings with error: {ex.Message}");
-                }
-            }
-
-            foreach (var dev in focuserV3s.Values)
-            {
-                try
-                {
-                    (dev as ASCOM.Simulators.Focuser)?.ResetSettings();
-                }
-                catch (Exception ex)
-                {
-                    Logging.LogError($"Failed to reset Focuser settings with error: {ex.Message}");
-                }
-            }
-
-            foreach (var dev in observingConditions.Values)
-            {
-                try
-                {
-                    (dev as ASCOM.Simulators.ObservingConditions)?.ResetSettings();
-                }
-                catch (Exception ex)
-                {
-                    Logging.LogError($"Failed to reset Observing Conditions settings with error: {ex.Message}");
-                }
-            }
-
-            try
-            {
-                ASCOM.Simulators.RotatorHardware.ResetProfile();
-            }
-            catch (Exception ex)
-            {
-                Logging.LogError($"Failed to reset Rotator settings with error: {ex.Message}");
-            }
-
-            foreach (var dev in safetyMonitors.Values)
-            {
-                try
-                {
-                    (dev as ASCOM.Simulators.SafetyMonitor)?.ResetSettings();
-                }
-                catch (Exception ex)
-                {
-                    Logging.LogError($"Failed to reset SafetyMonitor settings with error: {ex.Message}");
-                }
-            }
-
-            foreach (var dev in switchV2s.Values)
-            {
-                try
-                {
-                    (dev as ASCOM.Simulators.Switch)?.ResetSettings();
-                }
-                catch (Exception ex)
-                {
-                    Logging.LogError($"Failed to reset Switch settings with error: {ex.Message}");
-                }
-            }
-
-            try
-            {
-                ASCOM.Simulators.TelescopeHardware.ClearProfile();
-            }
-            catch (Exception ex)
-            {
-                Logging.LogError($"Failed to reset Telescope settings with error: {ex.Message}");
-            }
+            telescopeV3s.Add(DeviceID, Device);
         }
 
         //Returns a list of every single device type for the Management API
@@ -347,7 +195,7 @@ namespace ASCOM.Alpaca.Simulators
 
         //These methods allow access to specific devices for the API controllers and the device Blazor UI Pages
 
-        internal static ICameraV3 GetCamera(uint DeviceID)
+        public static ICameraV3 GetCamera(uint DeviceID)
         {
             if (cameraV3s.ContainsKey((int)DeviceID))
             {
@@ -359,7 +207,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ICoverCalibratorV1 GetCoverCalibrator(uint DeviceID)
+        public static ICoverCalibratorV1 GetCoverCalibrator(uint DeviceID)
         {
             if (coverCalibratorV1s.ContainsKey((int)DeviceID))
             {
@@ -371,7 +219,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static IDomeV2 GetDome(uint DeviceID)
+        public static IDomeV2 GetDome(uint DeviceID)
         {
             if (domeV2s.ContainsKey((int)DeviceID))
             {
@@ -383,7 +231,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static IFilterWheelV2 GetFilterWheel(uint DeviceID)
+        public static IFilterWheelV2 GetFilterWheel(uint DeviceID)
         {
             if (filterWheelV2s.ContainsKey((int)DeviceID))
             {
@@ -395,7 +243,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static IFocuserV3 GetFocuser(uint DeviceID)
+        public static IFocuserV3 GetFocuser(uint DeviceID)
         {
             if (focuserV3s.ContainsKey((int)DeviceID))
             {
@@ -407,7 +255,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static IObservingConditions GetObservingConditions(uint DeviceID)
+        public static IObservingConditions GetObservingConditions(uint DeviceID)
         {
             if (observingConditions.ContainsKey((int)DeviceID))
             {
@@ -419,7 +267,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static IRotatorV3 GetRotator(uint DeviceID)
+        public static IRotatorV3 GetRotator(uint DeviceID)
         {
             if (rotatorV3s.ContainsKey((int)DeviceID))
             {
@@ -431,7 +279,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ISafetyMonitor GetSafetyMonitor(uint DeviceID)
+        public static ISafetyMonitor GetSafetyMonitor(uint DeviceID)
         {
             if (safetyMonitors.ContainsKey((int)DeviceID))
             {
@@ -443,7 +291,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ISwitchV2 GetSwitch(uint DeviceID)
+        public static ISwitchV2 GetSwitch(uint DeviceID)
         {
             if (switchV2s.ContainsKey((int)DeviceID))
             {
@@ -455,7 +303,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ITelescopeV3 GetTelescope(uint DeviceID)
+        public static ITelescopeV3 GetTelescope(uint DeviceID)
         {
             if (telescopeV3s.ContainsKey((int)DeviceID))
             {
@@ -471,7 +319,7 @@ namespace ASCOM.Alpaca.Simulators
 
         #region Settings Folder Names
 
-        private static string Telescope
+        public static string Telescope
         {
             get
             {
@@ -486,7 +334,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        private static string Camera
+        public static string Camera
         {
             get
             {
@@ -501,7 +349,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        private static string Dome
+        public static string Dome
         {
             get
             {
@@ -516,7 +364,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        private static string FilterWheel
+        public static string FilterWheel
         {
             get
             {
@@ -531,7 +379,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        private static string Focuser
+        public static string Focuser
         {
             get
             {
@@ -546,7 +394,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        private static string ObservingConditions
+        public static string ObservingConditions
         {
             get
             {
@@ -561,7 +409,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        private static string Rotator
+        public static string Rotator
         {
             get
             {
@@ -576,7 +424,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        private static string SafetyMonitor
+        public static string SafetyMonitor
         {
             get
             {
@@ -591,7 +439,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        private static string Switch
+        public static string Switch
         {
             get
             {
@@ -606,7 +454,7 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        private static string CoverCalibrator
+        public static string CoverCalibrator
         {
             get
             {

@@ -1,4 +1,5 @@
-﻿using ASCOM.Common;
+﻿using ASCOM.Alpaca.Razor;
+using ASCOM.Common;
 using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Helpers;
@@ -24,7 +25,7 @@ namespace ASCOM.Alpaca.Simulators
             if (HttpContext.Request.Path.ToString().Any(char.IsUpper))
             {
                 Result = BadRequest(Strings.URLCapitalizationDescription + HttpContext.Request.Path.ToString());
-                Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
+                Logging.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
                 return true;
             }
 
@@ -36,7 +37,7 @@ namespace ASCOM.Alpaca.Simulators
 
                     if(Validator != null)
                     {
-                        Logging.Log.LogWarning($"Incorrect capitalization on optional key {Validator.Key}, received {key}");
+                        Logging.LogWarning($"Incorrect capitalization on optional key {Validator.Key}, received {key}");
                         //We zero out optional keys
                         if (Validator.IsOptional)
                         {
@@ -52,7 +53,7 @@ namespace ASCOM.Alpaca.Simulators
                         else
                         {
                             Result = BadRequest(Strings.FormCapitalizationDescription + $"{Validator.Key}, received: {key}");
-                            Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
+                            Logging.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
                             return true;
                         }
                     }
@@ -62,7 +63,7 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     var keys = HttpContext.Request.Query.Keys;
                     Result = BadRequest(Strings.FormWithQueryDescription + string.Join(", ", keys));
-                    Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
+                    Logging.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
                     return true;
                 }
             }
@@ -71,7 +72,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 var keys = HttpContext.Request.Form.Keys;
                 Result = BadRequest(Strings.QueryWithFormDescription + string.Join(", ", keys));
-                Logging.Log.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
+                Logging.LogError($"Error on request {HttpContext.Request.Path} with details: {Result.Value?.ToString()}");
                 return true;
             }
 
@@ -91,13 +92,13 @@ namespace ASCOM.Alpaca.Simulators
         /// <param name="ClientTransactionID">The client transaction id</param>
         /// <param name="Payload">Any payload values, optional, only used for logging</param>
         /// <returns></returns>
-        internal ActionResult<BoolResponse> ProcessRequest(Func<bool> Operation, uint TransactionID, uint ClientID, uint ClientTransactionID, string Payload = "")
+        public ActionResult<BoolResponse> ProcessRequest(Func<bool> Operation, uint TransactionID, uint ClientID, uint ClientTransactionID, string Payload = "")
         {
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RunInStrictAlpacaMode)
+                if (FunctionManager.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
@@ -122,13 +123,13 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal ActionResult<DriveRatesResponse> ProcessRequest(Func<ITrackingRates> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
+        public ActionResult<DriveRatesResponse> ProcessRequest(Func<ITrackingRates> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RunInStrictAlpacaMode)
+                if (FunctionManager.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
@@ -162,13 +163,13 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal ActionResult<DoubleResponse> ProcessRequest(Func<double> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
+        public ActionResult<DoubleResponse> ProcessRequest(Func<double> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RunInStrictAlpacaMode)
+                if (FunctionManager.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
@@ -193,13 +194,13 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal ActionResult<AxisRatesResponse> ProcessRequest(Func<IAxisRates> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
+        public ActionResult<AxisRatesResponse> ProcessRequest(Func<IAxisRates> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RunInStrictAlpacaMode)
+                if (FunctionManager.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
@@ -233,13 +234,13 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal ActionResult<IntArray2DResponse> ProcessRequest(Func<int[,]> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
+        public ActionResult<IntArray2DResponse> ProcessRequest(Func<int[,]> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RunInStrictAlpacaMode)
+                if (FunctionManager.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
@@ -264,13 +265,13 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal ActionResult<StringListResponse> ProcessRequest(Func<IList<string>> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
+        public ActionResult<StringListResponse> ProcessRequest(Func<IList<string>> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RunInStrictAlpacaMode)
+                if (FunctionManager.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
@@ -295,13 +296,13 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal ActionResult<IntListResponse> ProcessRequest(Func<IList<int>> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
+        public ActionResult<IntListResponse> ProcessRequest(Func<IList<int>> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RunInStrictAlpacaMode)
+                if (FunctionManager.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
@@ -326,13 +327,13 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal ActionResult<IntResponse> ProcessRequest(Func<int> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
+        public ActionResult<IntResponse> ProcessRequest(Func<int> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RunInStrictAlpacaMode)
+                if (FunctionManager.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
@@ -357,13 +358,13 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal ActionResult<StringResponse> ProcessRequest(Func<string> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
+        public ActionResult<StringResponse> ProcessRequest(Func<string> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RunInStrictAlpacaMode)
+                if (FunctionManager.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
@@ -388,13 +389,13 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal ActionResult<Response> ProcessRequest(Action Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
+        public ActionResult<Response> ProcessRequest(Action Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
             {
                 LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
 
-                if (ServerSettings.RunInStrictAlpacaMode)
+                if (FunctionManager.RunInStrictAlpacaMode)
                 {
                     if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
                     {
@@ -428,11 +429,11 @@ namespace ASCOM.Alpaca.Simulators
         {
             if (payload == null || payload == string.Empty)
             {
-                Logging.Log.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request}");
+                Logging.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request}");
             }
             else
             {
-                Logging.Log.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request} with payload {payload}");
+                Logging.LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request} with payload {payload}");
             }
         }
     }

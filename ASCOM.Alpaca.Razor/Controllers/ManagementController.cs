@@ -1,4 +1,5 @@
 ﻿using ASCOM.Alpaca.Discovery;
+using ASCOM.Alpaca.Razor;
 using ASCOM.Common.Alpaca;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             var TransactionID = DeviceManager.ServerTransactionID;
             Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
-            return new IntListResponse(ClientTransactionID, TransactionID, ServerSettings.APIVersions);
+            return new IntListResponse(ClientTransactionID, TransactionID, new int[] {1});
         }
 
         /// <summary>
@@ -58,7 +59,7 @@ namespace ASCOM.Alpaca.Simulators
             var TransactionID = DeviceManager.ServerTransactionID;
             Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
 
-            return new AlpacaDescriptionResponse(ClientTransactionID, TransactionID, new AlpacaDeviceDescription(ServerSettings.ServerName, ServerSettings.Manufacturer, ServerSettings.ServerVersion, ServerSettings.Location));
+            return new AlpacaDescriptionResponse(ClientTransactionID, TransactionID, new AlpacaDeviceDescription(FunctionManager.ServerName, FunctionManager.Manufacturer, FunctionManager.ServerVersion, FunctionManager.Location));
         }
 
         /// <summary>
