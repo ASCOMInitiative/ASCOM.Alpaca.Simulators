@@ -59,7 +59,7 @@ namespace ASCOM.Alpaca.Simulators
             var TransactionID = DeviceManager.ServerTransactionID;
             Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
 
-            return new AlpacaDescriptionResponse(ClientTransactionID, TransactionID, new AlpacaDeviceDescription(FunctionManager.ServerName, FunctionManager.Manufacturer, FunctionManager.ServerVersion, FunctionManager.Location));
+            return new AlpacaDescriptionResponse(ClientTransactionID, TransactionID, new AlpacaDeviceDescription(DeviceManager.Configuration.ServerName, DeviceManager.Configuration.Manufacturer, DeviceManager.Configuration.ServerVersion, DeviceManager.Configuration.Location));
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 using ASCOM.Alpaca.Discovery;
+using ASCOM.Alpaca.Razor;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Simulators;
 using ASCOM.Tools;
@@ -27,6 +28,8 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        internal static IAlpacaConfiguration Configuration { get; private set; }
+
         // These store the actual instance of the device drivers. They are keyed to the Device Number
         public static readonly Dictionary<int, ICameraV3> cameraV3s = new Dictionary<int, ICameraV3>();
 
@@ -53,6 +56,11 @@ namespace ASCOM.Alpaca.Simulators
                     return "Server".ToLowerInvariant();
                 }
             }
+        }
+
+        public static void LoadConfiguration(IAlpacaConfiguration configuration)
+        {
+            Configuration = configuration;
         }
 
         public static void LoadCamera(int DeviceID, ICameraV3 Device)

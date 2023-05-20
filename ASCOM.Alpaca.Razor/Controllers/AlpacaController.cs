@@ -187,7 +187,7 @@ namespace Alpaca
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            if (Connected || !FunctionManager.PreventRemoteDisconnects)
+            if (Connected || !DeviceManager.Configuration.PreventRemoteDisconnects)
             {
                 return ProcessRequest(() => { GetDevice(DeviceNumber).Connected = Connected; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Connected={Connected}");
             }

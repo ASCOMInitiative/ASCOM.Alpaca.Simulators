@@ -76,11 +76,10 @@ namespace ASCOM.Alpaca.Simulators
                 Logging.LogError(ex.Message);
             }
 
+            //Load configuration
+            DeviceManager.LoadConfiguration(new AlpacaConfiguration());
+
             //Load devices
-
-            ASCOM.Alpaca.Razor.FunctionManager.RunInStrictAlpacaMode = ServerSettings.RunInStrictAlpacaMode;
-            ASCOM.Alpaca.Razor.FunctionManager.PreventRemoteDisconnects = ServerSettings.PreventRemoteDisconnects;
-
             DriverManager.LoadCamera(0);
             DriverManager.LoadCoverCalibrator(0);
             DriverManager.LoadDome(0);
