@@ -2,7 +2,7 @@
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
 
-namespace ASCOM.Alpaca.Simulators
+namespace ASCOM.Alpaca
 {
     public class SwaggerExcludeFilter : ISchemaFilter
     {
