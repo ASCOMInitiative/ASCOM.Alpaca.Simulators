@@ -273,7 +273,6 @@ namespace ASCOM.Alpaca.Simulators
             {
                 Discovery.DiscoveryManager.DiscoveryResponder.LocalRespondOnlyToLocalHost = value;
                 Profile.WriteValue("PreventRemoteDisconnects", value.ToString());
-                ASCOM.Alpaca.Razor.FunctionManager.PreventRemoteDisconnects = value;
             }
         }
 
@@ -395,7 +394,6 @@ namespace ASCOM.Alpaca.Simulators
             set
             {
                 Profile.WriteValue("RunInStrictAlpacaMode", value.ToString());
-                ASCOM.Alpaca.Razor.FunctionManager.RunInStrictAlpacaMode = value;
             }
         }
 

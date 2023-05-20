@@ -159,6 +159,7 @@ namespace ASCOM.Alpaca.Simulators
             }
 
             //Start Swagger on the Swagger endpoints if enabled.
+            
             if (ServerSettings.RunSwagger)
             {
                 app.UseSwagger();

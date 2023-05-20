@@ -887,7 +887,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 Logging.LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID);
 
-                if (FunctionManager.AllowImageBytesDownload && HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
+                if (DeviceManager.Configuration.AllowImageBytesDownload && HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
                 {
                     var response = ((Array)DeviceManager.GetCamera(DeviceNumber).ImageArray).ToByteArray(1, ClientTransactionID, TransactionID, AlpacaErrors.AlpacaNoError, string.Empty);
 
@@ -1011,7 +1011,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 Array bytes = null;
 
-                if (FunctionManager.AllowImageBytesDownload && HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
+                if (DeviceManager.Configuration.AllowImageBytesDownload && HttpContext.Request.Headers.Accept.Any(header => header.Contains(ASCOM.Common.Alpaca.AlpacaConstants.IMAGE_BYTES_MIME_TYPE)))
                 {
                     if (type == typeof(int))
                     {
