@@ -9,17 +9,17 @@ using System.Net.Sockets;
 
 namespace ASCOM.Alpaca.Simulators.Discovery
 {
-    internal static class DiscoveryManager
+    public static class DiscoveryManager
     {
-        internal static Responder DiscoveryResponder
+        public static Responder DiscoveryResponder
         {
             get;
             private set;
         }
 
-        internal static bool IsRunning => !DiscoveryResponder?.Disposed ?? false;
+        public static bool IsRunning => !DiscoveryResponder?.Disposed ?? false;
 
-        internal static List<IPAddress> AdapterAddress
+        public static List<IPAddress> AdapterAddress
         {
             get
             {
@@ -51,37 +51,37 @@ namespace ASCOM.Alpaca.Simulators.Discovery
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logging.Log.Log(LogLevel.Error, $"Failed to read adapter address with error {ex.Message}");
+                                    Logging.LogError($"Failed to read adapter address with error {ex.Message}");
                                 }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Logging.Log.Log(LogLevel.Error, $"Failed to read network adapter with error {ex.Message}");
+                        Logging.LogError($"Failed to read network adapter with error {ex.Message}");
                     }
                 }
                 return Addresses;
             }
         }
 
-        internal static void Start()
+        public static void Start()
         {
-            if (ServerSettings.AllowDiscovery)
+            if (DeviceManager.Configuration.AllowDiscovery)
             {
                 Console.WriteLine("Starting discovery responder from defaults");
 
-                DiscoveryResponder = new Responder(ServerSettings.ServerPort, true, false, Logging.Log)
+                DiscoveryResponder = new Responder(DeviceManager.Configuration.ServerPort, true, false, Logging.Log)
                 {
-                    AllowRemoteAccess = ServerSettings.AllowRemoteAccess,
-                    LocalRespondOnlyToLocalHost = ServerSettings.LocalRespondOnlyToLocalHost
+                    AllowRemoteAccess = DeviceManager.Configuration.AllowRemoteAccess,
+                    LocalRespondOnlyToLocalHost = DeviceManager.Configuration.LocalRespondOnlyToLocalHost
                 };
             }
         }
 
-        internal static void Start(int port, bool localHostOnly, bool ipv6)
+        public static void Start(int port, bool localHostOnly, bool ipv6)
         {
-            if (ServerSettings.AllowDiscovery)
+            if (DeviceManager.Configuration.AllowDiscovery)
             {
                 Console.WriteLine($"Starting Discovery on port: 32227");
 
@@ -93,12 +93,12 @@ namespace ASCOM.Alpaca.Simulators.Discovery
                 DiscoveryResponder = new Responder(port, true, ipv6, Logging.Log)
                 {
                     AllowRemoteAccess = !localHostOnly,
-                    LocalRespondOnlyToLocalHost = ServerSettings.LocalRespondOnlyToLocalHost
+                    LocalRespondOnlyToLocalHost = DeviceManager.Configuration.LocalRespondOnlyToLocalHost
                 };
             }
         }
 
-        internal static void Stop()
+        public static void Stop()
         {
             DiscoveryResponder.Dispose();
         }
