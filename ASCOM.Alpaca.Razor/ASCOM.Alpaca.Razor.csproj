@@ -30,8 +30,9 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <DocumentationFile>.\ascom.alpaca.razor.xml</DocumentationFile>
+    <DocumentationFile>.\ASCOM.Alpaca.Razor.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <Target Name="_ResolveCopyLocalNuGetPkgXmls" AfterTargets="ResolveReferences">
