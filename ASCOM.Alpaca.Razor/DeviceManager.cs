@@ -1,10 +1,10 @@
 using ASCOM.Alpaca.Discovery;
 using ASCOM.Alpaca.Razor;
 using ASCOM.Common.DeviceInterfaces;
-using ASCOM.Simulators;
 using ASCOM.Tools;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace ASCOM.Alpaca
@@ -43,162 +43,127 @@ namespace ASCOM.Alpaca
         public static readonly Dictionary<int, ISwitchV2> switchV2s = new Dictionary<int, ISwitchV2>();
         public static readonly Dictionary<int, ITelescopeV3> telescopeV3s = new Dictionary<int, ITelescopeV3>();
 
-        private static string ServerFolderName
-        {
-            get
-            {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    return "Server";
-                }
-                else
-                {
-                    return "Server".ToLowerInvariant();
-                }
-            }
-        }
+        static List<AlpacaConfiguredDevice> AlpacaDevices = new List<AlpacaConfiguredDevice>();
 
         public static void LoadConfiguration(IAlpacaConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public static void LoadCamera(int DeviceID, ICameraV3 Device)
+        public static void LoadCamera(int DeviceID, ICameraV3 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             cameraV3s.Remove(DeviceID);
             //Add the new instance
             cameraV3s.Add(DeviceID, Device);
+
+            AlpacaDevices.Remove(AlpacaDevices.FirstOrDefault(a => a.UniqueID == UniqueID));
+            AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "Camera", DeviceID, UniqueID));
         }
 
-        public static void LoadCoverCalibrator(int DeviceID, ICoverCalibratorV1 Device)
+        public static void LoadCoverCalibrator(int DeviceID, ICoverCalibratorV1 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             coverCalibratorV1s.Remove(DeviceID);
             //Add the new instance
             coverCalibratorV1s.Add(0, Device);
+
+            AlpacaDevices.Remove(AlpacaDevices.FirstOrDefault(a => a.UniqueID == UniqueID));
+            AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "CoverCalibrator", DeviceID, UniqueID));
         }
 
-        public static void LoadDome(int DeviceID, IDomeV2 Device)
+        public static void LoadDome(int DeviceID, IDomeV2 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             domeV2s.Remove(DeviceID);
             //Add the new instance
             domeV2s.Add(DeviceID, Device);
+
+            AlpacaDevices.Remove(AlpacaDevices.FirstOrDefault(a => a.UniqueID == UniqueID));
+            AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "Dome", DeviceID, UniqueID));
         }
 
-        public static void LoadFilterWheel(int DeviceID, IFilterWheelV2 Device)
+        public static void LoadFilterWheel(int DeviceID, IFilterWheelV2 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             filterWheelV2s.Remove(DeviceID);
             //Add the new instance
             filterWheelV2s.Add(DeviceID, Device);
+
+            AlpacaDevices.Remove(AlpacaDevices.FirstOrDefault(a => a.UniqueID == UniqueID));
+            AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "FilterWheel", DeviceID, UniqueID));
         }
 
-        public static void LoadFocuser(int DeviceID, IFocuserV3 Device)
+        public static void LoadFocuser(int DeviceID, IFocuserV3 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             focuserV3s.Remove(DeviceID);
             //Add the new instance
             focuserV3s.Add(DeviceID, Device);
+
+            AlpacaDevices.Remove(AlpacaDevices.FirstOrDefault(a => a.UniqueID == UniqueID));
+            AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "Focuser", DeviceID, UniqueID));
         }
 
-        public static void LoadObservingConditions(int DeviceID, IObservingConditions Device)
+        public static void LoadObservingConditions(int DeviceID, IObservingConditions Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             observingConditions.Remove(DeviceID);
             //Add the new instance
             observingConditions.Add(DeviceID, Device);
+
+            AlpacaDevices.Remove(AlpacaDevices.FirstOrDefault(a => a.UniqueID == UniqueID));
+            AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "ObservingConditions", DeviceID, UniqueID));
         }
 
-        public static void LoadRotator(int DeviceID, IRotatorV3 Device)
+        public static void LoadRotator(int DeviceID, IRotatorV3 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             rotatorV3s.Remove(DeviceID);
             //Add the new instance
             rotatorV3s.Add(DeviceID, Device);
+
+            AlpacaDevices.Remove(AlpacaDevices.FirstOrDefault(a => a.UniqueID == UniqueID));
+            AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "Rotator", DeviceID, UniqueID));
         }
 
-        public static void LoadSafetyMonitor(int DeviceID, ISafetyMonitor Device)
+        public static void LoadSafetyMonitor(int DeviceID, ISafetyMonitor Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             safetyMonitors.Remove(DeviceID);
             //Add the new instance
             safetyMonitors.Add(DeviceID, Device);
+
+            AlpacaDevices.Remove(AlpacaDevices.FirstOrDefault(a => a.UniqueID == UniqueID));
+            AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "SafetyMonitor", DeviceID, UniqueID));
         }
 
-        public static void LoadSwitch(int DeviceID, ISwitchV2 Device)
+        public static void LoadSwitch(int DeviceID, ISwitchV2 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             switchV2s.Remove(DeviceID);
             //Add the new instance
             switchV2s.Add(DeviceID, Device);
+
+            AlpacaDevices.Remove(AlpacaDevices.FirstOrDefault(a => a.UniqueID == UniqueID));
+            AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "Switch", DeviceID, UniqueID));
         }
 
-        public static void LoadTelescope(int DeviceID, ITelescopeV3 Device)
+        public static void LoadTelescope(int DeviceID, ITelescopeV3 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             telescopeV3s.Remove(DeviceID);
             //Add the new instance
             telescopeV3s.Add(DeviceID, Device);
+
+            AlpacaDevices.Remove(AlpacaDevices.FirstOrDefault(a => a.UniqueID == UniqueID));
+            AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "Telescope", DeviceID, UniqueID));
         }
 
         //Returns a list of every single device type for the Management API
         internal static List<AlpacaConfiguredDevice> GetDevices()
         {
-            List<AlpacaConfiguredDevice> devices = new List<AlpacaConfiguredDevice>();
-
-            foreach (var dev in cameraV3s)
-            {
-                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "Camera", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
-            }
-
-            foreach (var dev in coverCalibratorV1s)
-            {
-                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "CoverCalibrator", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
-            }
-
-            foreach (var dev in domeV2s)
-            {
-                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "Dome", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
-            }
-
-            foreach (var dev in filterWheelV2s)
-            {
-                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "FilterWheel", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
-            }
-
-            foreach (var dev in focuserV3s)
-            {
-                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "Focuser", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
-            }
-
-            foreach (var dev in observingConditions)
-            {
-                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "ObservingConditions", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
-            }
-
-            foreach (var dev in rotatorV3s)
-            {
-                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "Rotator", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
-            }
-
-            foreach (var dev in safetyMonitors)
-            {
-                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "SafetyMonitor", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
-            }
-
-            foreach (var dev in switchV2s)
-            {
-                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "Switch", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
-            }
-
-            foreach (var dev in telescopeV3s)
-            {
-                devices.Add(new AlpacaConfiguredDevice((dev.Value as IAlpacaDevice).DeviceName, "Telescope", (dev.Value as IAlpacaDevice).DeviceNumber, (dev.Value as IAlpacaDevice).UniqueID));
-            }
-
-            return devices;
+            return AlpacaDevices;
         }
 
         //These methods allow access to specific devices for the API controllers and the device Blazor UI Pages

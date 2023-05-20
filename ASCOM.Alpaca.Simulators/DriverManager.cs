@@ -7,52 +7,63 @@ namespace ASCOM.Alpaca.Simulators
     {
         internal static void LoadCamera(int DeviceID)
         {
-            DeviceManager.LoadCamera(DeviceID, new ASCOM.Simulators.Camera(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Camera, (uint)DeviceID)));
+            var dev = new ASCOM.Simulators.Camera(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Camera, (uint)DeviceID));
+
+            DeviceManager.LoadCamera(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
         internal static void LoadCoverCalibrator(int DeviceID)
         {
-            DeviceManager.LoadCoverCalibrator(DeviceID, new ASCOM.Simulators.CoverCalibratorSimulator(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.CoverCalibrator, (uint)DeviceID)));
+            var dev = new ASCOM.Simulators.CoverCalibratorSimulator(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.CoverCalibrator, (uint)DeviceID));
+            DeviceManager.LoadCoverCalibrator(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
         internal static void LoadDome(int DeviceID)
         {
-            DeviceManager.LoadDome(DeviceID, new ASCOM.Simulators.Dome(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Dome, (uint)DeviceID)));
+            var dev = new ASCOM.Simulators.Dome(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Dome, (uint)DeviceID));
+            DeviceManager.LoadDome(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
         internal static void LoadFilterWheel(int DeviceID)
         {
-            DeviceManager.LoadFilterWheel(DeviceID, new ASCOM.Simulators.FilterWheel(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.FilterWheel, (uint)DeviceID)));
+            var dev = new ASCOM.Simulators.FilterWheel(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.FilterWheel, (uint)DeviceID));
+            DeviceManager.LoadFilterWheel(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
         internal static void LoadFocuser(int DeviceID)
         {
-            DeviceManager.LoadFocuser(DeviceID, new ASCOM.Simulators.Focuser(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Focuser, (uint)DeviceID)));
+            var dev = new ASCOM.Simulators.Focuser(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Focuser, (uint)DeviceID));
+            DeviceManager.LoadFocuser(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
         internal static void LoadObservingConditions(int DeviceID)
         {
-            DeviceManager.LoadObservingConditions(DeviceID, new ASCOM.Simulators.ObservingConditions(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.ObservingConditions, (uint)DeviceID)));
+            var dev = new ASCOM.Simulators.ObservingConditions(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.ObservingConditions, (uint)DeviceID));
+            DeviceManager.LoadObservingConditions(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
         internal static void LoadRotator(int DeviceID) 
         {
-            DeviceManager.LoadRotator(DeviceID, new ASCOM.Simulators.Rotator(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Rotator, (uint)DeviceID)));
+            var dev = new ASCOM.Simulators.Rotator(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Rotator, (uint)DeviceID));
+            DeviceManager.LoadRotator(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
         internal static void LoadSafetyMonitor(int DeviceID)
         {
-            DeviceManager.LoadSafetyMonitor(DeviceID, new ASCOM.Simulators.SafetyMonitor(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.SafetyMonitor, (uint)DeviceID )));
+            var dev = new ASCOM.Simulators.SafetyMonitor(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.SafetyMonitor, (uint)DeviceID));
+            DeviceManager.LoadSafetyMonitor(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
         internal static void LoadSwitch(int DeviceID)
         {
-            DeviceManager.LoadSwitch(DeviceID, new ASCOM.Simulators.Switch(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Switch, (uint)DeviceID)));
+            var dev = new ASCOM.Simulators.Switch(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Switch, (uint)DeviceID));
+            DeviceManager.LoadSwitch(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
         internal static void LoadTelescope(int DeviceID)
         {
-            DeviceManager.LoadTelescope(DeviceID, new ASCOM.Simulators.Telescope(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Telescope, (uint)DeviceID)));
+            var dev = new ASCOM.Simulators.Telescope(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Telescope, (uint)DeviceID));
+            DeviceManager.LoadTelescope(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
         /// <summary>

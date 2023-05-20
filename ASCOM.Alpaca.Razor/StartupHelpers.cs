@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -63,6 +64,16 @@ namespace ASCOM.Alpaca.Razor
                     c.SchemaFilter<SwaggerExcludeFilter>();
                     c.MapType<uint>(() => new OpenApiSchema { Type = "integer", Format = "uint32", Minimum = 0, Maximum = 4294967295 });
                 });
+            }
+        }
+
+        public static void ConfigureSwagger(IApplicationBuilder app)
+        {
+            if (DeviceManager.Configuration.RunSwagger)
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json",
+                                 $"{DeviceManager.Configuration.ServerName} v1"));
             }
         }
 
@@ -178,6 +189,21 @@ namespace ASCOM.Alpaca.Razor
                 Logging.LogError(ex.Message);
             }
 
+        }
+
+        public static void ConfigureAuthenticationService(IServiceCollection services)
+        {
+            // configure basic authentication
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+                options =>
+                {
+                    options.SlidingExpiration = true;
+                    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+                }
+                );
+
+            // configure DI for application services
+            services.AddScoped<AuthorizationFilter>();
         }
     }
 }
