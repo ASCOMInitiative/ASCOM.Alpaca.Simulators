@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="ASCOM.Common.Components" Version="1.0.96" />
+    <PackageReference Include="ASCOM.Exception.Library" Version="6.6.1" />
     <PackageReference Include="ASCOM.Tools" Version="1.0.96" />
   </ItemGroup>
 
