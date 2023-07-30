@@ -49,6 +49,11 @@ namespace ASCOM.Simulators
         private TrackingRatesSimple m_TrackingRatesSimple;
         private long objectId;
 
+        // Local copies of the guide rates are kept here because the TelescopeHardware GuideRateRightAscension and GuideRateDeclination values
+        // can have their direction signs changed during PulseGuide operations.
+        private double currentGuideRateRightAscension;
+        private double currentGuideRateDeclination;
+
         private const string SlewToHA = "SlewToHA"; private const string SlewToHAUpper = "SLEWTOHA";
         private const string AssemblyVersionNumber = "AssemblyVersionNumber"; private const string AssemblyVersionNumberUpper = "ASSEMBLYVERSIONNUMBER";
         private const string TimeUntilPointingStateCanChange = "TIMEUNTILPOINTINGSTATECANCHANGE";
@@ -78,6 +83,11 @@ namespace ASCOM.Simulators
                 m_AxisRates[2] = new AxisRates(TelescopeAxis.Tertiary);
                 m_TrackingRates = new TrackingRates();
                 m_TrackingRatesSimple = new TrackingRatesSimple();
+
+                // Initialise the guide rates from the Telescope hardware default values
+                currentGuideRateRightAscension = TelescopeHardware.GuideRateRightAscension;
+                currentGuideRateDeclination = TelescopeHardware.GuideRateDeclination;
+                
                 // get a unique instance id
                 objectId = TelescopeHardware.GetId();
 
@@ -122,10 +132,10 @@ namespace ASCOM.Simulators
 
         public string Action(string ActionName, string ActionParameters)
         {
-            //throw new MethodNotImplementedException("Action");
-            string Response = "";
             if (ActionName == null)
                 throw new InvalidValueException("no ActionName is provided");
+
+            string Response;
             switch (ActionName.ToUpper(CultureInfo.InvariantCulture))
             {
                 case AssemblyVersionNumberUpper:
@@ -687,13 +697,14 @@ namespace ASCOM.Simulators
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateDeclination: ");
                 CheckVersionOne("GuideRateDeclination");
                 SharedResources.TrafficEnd(TelescopeHardware.GuideRateDeclination.ToString(CultureInfo.InvariantCulture));
-                return TelescopeHardware.GuideRateDeclination;
+                return currentGuideRateDeclination; // Return the value set by the user
             }
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateDeclination->: ");
                 CheckVersionOne("GuideRateDeclination");
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
+                currentGuideRateDeclination = value; // Save the value set by the user so that it can be returned by GET GuideRateDeclination
                 TelescopeHardware.GuideRateDeclination = value;
             }
         }
@@ -705,13 +716,14 @@ namespace ASCOM.Simulators
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateRightAscension: ");
                 CheckVersionOne("GuideRateRightAscension");
                 SharedResources.TrafficEnd(TelescopeHardware.GuideRateRightAscension.ToString(CultureInfo.InvariantCulture));
-                return TelescopeHardware.GuideRateRightAscension;
+                return currentGuideRateRightAscension; // Return the value set by the user
             }
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateRightAscension->: ");
                 CheckVersionOne("GuideRateRightAscension");
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
+                currentGuideRateRightAscension = value; // Save the value set by the user so that it can be returned by GET GuideRateRightAscension
                 TelescopeHardware.GuideRateRightAscension = value;
             }
         }
