@@ -1,6 +1,10 @@
+using ASCOM.Common;
+using ASCOM.Simulators;
+using ASCOM.Tools;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -24,7 +28,7 @@ namespace ASCOM.Alpaca.Simulators
                 WriteAndLog("Reseting Server settings");
                 ServerSettings.Reset();
                 WriteAndLog("Reseting Device settings");
-                DeviceManager.Reset();
+                DriverManager.Reset();
                 WriteAndLog("Settings reset, shutting down");
                 return;
             }
@@ -71,6 +75,23 @@ namespace ASCOM.Alpaca.Simulators
             {
                 Logging.LogError(ex.Message);
             }
+
+            ASCOM.Alpaca.Logging.AttachLogger(Logging.Log);
+
+            //Load configuration
+            DeviceManager.LoadConfiguration(new AlpacaConfiguration());
+
+            //Load devices
+            DriverManager.LoadCamera(0);
+            DriverManager.LoadCoverCalibrator(0);
+            DriverManager.LoadDome(0);
+            DriverManager.LoadFilterWheel(0);
+            DriverManager.LoadFocuser(0);
+            DriverManager.LoadObservingConditions(0);
+            DriverManager.LoadRotator(0);
+            DriverManager.LoadSafetyMonitor(0);
+            DriverManager.LoadSwitch(0);
+            DriverManager.LoadTelescope(0);
 
             //Add the --urls argument for IHostBuilder
             if (!args?.Any(str => str.Contains("--urls")) ?? true)

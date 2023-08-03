@@ -75,7 +75,7 @@
         {
             try
             {
-                @foreach (var address in ASCOM.Alpaca.Simulators.Discovery.DiscoveryManager.AdapterAddress)
+                @foreach (var address in DiscoveryManager.AdapterAddress)
                 {
                     <tr>
                         <td>@address</td>
@@ -89,12 +89,9 @@
         }
         else
         {
-            @foreach (var address in Startup.Addresses)
-            {
-                <tr>
-                    <td>@address</td>
-                </tr>
-            }
+            <tr>
+                <td>localhost</td>
+            </tr>
         }
     </table>
 </fieldset>
@@ -512,7 +509,7 @@
         try
         {
             ServerSettings.LoggingLevel = LoggingLevel;
-            Logging.Log.SetMinimumLoggingLevel(LoggingLevel);
+            ASCOM.Alpaca.Simulators.Logging.Log.SetMinimumLoggingLevel(LoggingLevel);
             ServerSettings.LogToConsole = LogToConsole;
             DisplaySuccess("Logging Settings Saved");
         }

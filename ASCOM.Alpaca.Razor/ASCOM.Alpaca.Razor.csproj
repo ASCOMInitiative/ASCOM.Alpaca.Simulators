@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ASCOM.Alpaca.Device" Version="1.0.96" />
+    <PackageReference Include="ASCOM.Common.Components" Version="1.0.96" />
+    <PackageReference Include="ASCOM.Exception.Library" Version="6.6.1" />
+    <PackageReference Include="ASCOM.Tools" Version="1.0.96" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>.\ASCOM.Alpaca.Razor.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <Target Name="_ResolveCopyLocalNuGetPkgXmls" AfterTargets="ResolveReferences">
+    <ItemGroup>
+      <!-- Copy XML files from all PackageReferences to output dir -->
+      <ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).xml')" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)'!='' and Exists('%(RootDir)%(Directory)%(Filename).xml')" />
+    </ItemGroup>
+  </Target>
+
+</Project>
