@@ -15,7 +15,7 @@ namespace ASCOM.Alpaca
     /// </summary>
     public abstract class AlpacaController : ProcessBaseController
     {
-        public abstract IAscomDevice GetDevice(uint DeviceNumber);
+        public abstract IAscomDeviceV2 GetDevice(uint DeviceNumber);
 
         #region Common Methods
 

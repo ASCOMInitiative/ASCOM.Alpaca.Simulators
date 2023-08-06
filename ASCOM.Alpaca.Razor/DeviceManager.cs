@@ -31,17 +31,17 @@ namespace ASCOM.Alpaca
         internal static IAlpacaConfiguration Configuration { get; private set; }
 
         // These store the actual instance of the device drivers. They are keyed to the Device Number
-        public static readonly Dictionary<int, ICameraV3> cameraV3s = new Dictionary<int, ICameraV3>();
+        public static readonly Dictionary<int, ICameraV4> cameraV3s = new Dictionary<int, ICameraV4>();
 
-        public static readonly Dictionary<int, ICoverCalibratorV1> coverCalibratorV1s = new Dictionary<int, ICoverCalibratorV1>();
-        public static readonly Dictionary<int, IDomeV2> domeV2s = new Dictionary<int, IDomeV2>();
-        public static readonly Dictionary<int, IFilterWheelV2> filterWheelV2s = new Dictionary<int, IFilterWheelV2>();
-        public static readonly Dictionary<int, IFocuserV3> focuserV3s = new Dictionary<int, IFocuserV3>();
-        public static readonly Dictionary<int, IObservingConditions> observingConditions = new Dictionary<int, IObservingConditions>();
-        public static readonly Dictionary<int, IRotatorV3> rotatorV3s = new Dictionary<int, IRotatorV3>();
-        public static readonly Dictionary<int, ISafetyMonitor> safetyMonitors = new Dictionary<int, ISafetyMonitor>();
-        public static readonly Dictionary<int, ISwitchV2> switchV2s = new Dictionary<int, ISwitchV2>();
-        public static readonly Dictionary<int, ITelescopeV3> telescopeV3s = new Dictionary<int, ITelescopeV3>();
+        public static readonly Dictionary<int, ICoverCalibratorV2> coverCalibratorV1s = new Dictionary<int, ICoverCalibratorV2>();
+        public static readonly Dictionary<int, IDomeV3> domeV2s = new Dictionary<int, IDomeV3>();
+        public static readonly Dictionary<int, IFilterWheelV3> filterWheelV2s = new Dictionary<int, IFilterWheelV3>();
+        public static readonly Dictionary<int, IFocuserV4> focuserV3s = new Dictionary<int, IFocuserV4>();
+        public static readonly Dictionary<int, IObservingConditionsV2> observingConditions = new Dictionary<int, IObservingConditionsV2>();
+        public static readonly Dictionary<int, IRotatorV4> rotatorV3s = new Dictionary<int, IRotatorV4>();
+        public static readonly Dictionary<int, ISafetyMonitorV3> safetyMonitors = new Dictionary<int, ISafetyMonitorV3>();
+        public static readonly Dictionary<int, ISwitchV3> switchV2s = new Dictionary<int, ISwitchV3>();
+        public static readonly Dictionary<int, ITelescopeV4> telescopeV3s = new Dictionary<int, ITelescopeV4>();
 
         static List<AlpacaConfiguredDevice> AlpacaDevices = new List<AlpacaConfiguredDevice>();
 
@@ -50,7 +50,7 @@ namespace ASCOM.Alpaca
             Configuration = configuration;
         }
 
-        public static void LoadCamera(int DeviceID, ICameraV3 Device, string AlpacaName, string UniqueID)
+        public static void LoadCamera(int DeviceID, ICameraV4 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             cameraV3s.Remove(DeviceID);
@@ -61,7 +61,7 @@ namespace ASCOM.Alpaca
             AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "Camera", DeviceID, UniqueID));
         }
 
-        public static void LoadCoverCalibrator(int DeviceID, ICoverCalibratorV1 Device, string AlpacaName, string UniqueID)
+        public static void LoadCoverCalibrator(int DeviceID, ICoverCalibratorV2 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             coverCalibratorV1s.Remove(DeviceID);
@@ -72,7 +72,7 @@ namespace ASCOM.Alpaca
             AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "CoverCalibrator", DeviceID, UniqueID));
         }
 
-        public static void LoadDome(int DeviceID, IDomeV2 Device, string AlpacaName, string UniqueID)
+        public static void LoadDome(int DeviceID, IDomeV3 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             domeV2s.Remove(DeviceID);
@@ -83,7 +83,7 @@ namespace ASCOM.Alpaca
             AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "Dome", DeviceID, UniqueID));
         }
 
-        public static void LoadFilterWheel(int DeviceID, IFilterWheelV2 Device, string AlpacaName, string UniqueID)
+        public static void LoadFilterWheel(int DeviceID, IFilterWheelV3 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             filterWheelV2s.Remove(DeviceID);
@@ -94,7 +94,7 @@ namespace ASCOM.Alpaca
             AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "FilterWheel", DeviceID, UniqueID));
         }
 
-        public static void LoadFocuser(int DeviceID, IFocuserV3 Device, string AlpacaName, string UniqueID)
+        public static void LoadFocuser(int DeviceID, IFocuserV4 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             focuserV3s.Remove(DeviceID);
@@ -105,7 +105,7 @@ namespace ASCOM.Alpaca
             AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "Focuser", DeviceID, UniqueID));
         }
 
-        public static void LoadObservingConditions(int DeviceID, IObservingConditions Device, string AlpacaName, string UniqueID)
+        public static void LoadObservingConditions(int DeviceID, IObservingConditionsV2 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             observingConditions.Remove(DeviceID);
@@ -116,7 +116,7 @@ namespace ASCOM.Alpaca
             AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "ObservingConditions", DeviceID, UniqueID));
         }
 
-        public static void LoadRotator(int DeviceID, IRotatorV3 Device, string AlpacaName, string UniqueID)
+        public static void LoadRotator(int DeviceID, IRotatorV4 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             rotatorV3s.Remove(DeviceID);
@@ -127,7 +127,7 @@ namespace ASCOM.Alpaca
             AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "Rotator", DeviceID, UniqueID));
         }
 
-        public static void LoadSafetyMonitor(int DeviceID, ISafetyMonitor Device, string AlpacaName, string UniqueID)
+        public static void LoadSafetyMonitor(int DeviceID, ISafetyMonitorV3 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             safetyMonitors.Remove(DeviceID);
@@ -138,7 +138,7 @@ namespace ASCOM.Alpaca
             AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "SafetyMonitor", DeviceID, UniqueID));
         }
 
-        public static void LoadSwitch(int DeviceID, ISwitchV2 Device, string AlpacaName, string UniqueID)
+        public static void LoadSwitch(int DeviceID, ISwitchV3 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             switchV2s.Remove(DeviceID);
@@ -149,7 +149,7 @@ namespace ASCOM.Alpaca
             AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "Switch", DeviceID, UniqueID));
         }
 
-        public static void LoadTelescope(int DeviceID, ITelescopeV3 Device, string AlpacaName, string UniqueID)
+        public static void LoadTelescope(int DeviceID, ITelescopeV4 Device, string AlpacaName, string UniqueID)
         {
             //Remove if the simulated instance already exists
             telescopeV3s.Remove(DeviceID);
@@ -168,7 +168,7 @@ namespace ASCOM.Alpaca
 
         //These methods allow access to specific devices for the API controllers and the device Blazor UI Pages
 
-        public static ICameraV3 GetCamera(uint DeviceID)
+        public static ICameraV4 GetCamera(uint DeviceID)
         {
             if (cameraV3s.ContainsKey((int)DeviceID))
             {
@@ -180,7 +180,7 @@ namespace ASCOM.Alpaca
             }
         }
 
-        public static ICoverCalibratorV1 GetCoverCalibrator(uint DeviceID)
+        public static ICoverCalibratorV2 GetCoverCalibrator(uint DeviceID)
         {
             if (coverCalibratorV1s.ContainsKey((int)DeviceID))
             {
@@ -192,7 +192,7 @@ namespace ASCOM.Alpaca
             }
         }
 
-        public static IDomeV2 GetDome(uint DeviceID)
+        public static IDomeV3 GetDome(uint DeviceID)
         {
             if (domeV2s.ContainsKey((int)DeviceID))
             {
@@ -204,7 +204,7 @@ namespace ASCOM.Alpaca
             }
         }
 
-        public static IFilterWheelV2 GetFilterWheel(uint DeviceID)
+        public static IFilterWheelV3 GetFilterWheel(uint DeviceID)
         {
             if (filterWheelV2s.ContainsKey((int)DeviceID))
             {
@@ -216,7 +216,7 @@ namespace ASCOM.Alpaca
             }
         }
 
-        public static IFocuserV3 GetFocuser(uint DeviceID)
+        public static IFocuserV4 GetFocuser(uint DeviceID)
         {
             if (focuserV3s.ContainsKey((int)DeviceID))
             {
@@ -228,7 +228,7 @@ namespace ASCOM.Alpaca
             }
         }
 
-        public static IObservingConditions GetObservingConditions(uint DeviceID)
+        public static IObservingConditionsV2 GetObservingConditions(uint DeviceID)
         {
             if (observingConditions.ContainsKey((int)DeviceID))
             {
@@ -240,7 +240,7 @@ namespace ASCOM.Alpaca
             }
         }
 
-        public static IRotatorV3 GetRotator(uint DeviceID)
+        public static IRotatorV4 GetRotator(uint DeviceID)
         {
             if (rotatorV3s.ContainsKey((int)DeviceID))
             {
@@ -252,7 +252,7 @@ namespace ASCOM.Alpaca
             }
         }
 
-        public static ISafetyMonitor GetSafetyMonitor(uint DeviceID)
+        public static ISafetyMonitorV3 GetSafetyMonitor(uint DeviceID)
         {
             if (safetyMonitors.ContainsKey((int)DeviceID))
             {
@@ -264,7 +264,7 @@ namespace ASCOM.Alpaca
             }
         }
 
-        public static ISwitchV2 GetSwitch(uint DeviceID)
+        public static ISwitchV3 GetSwitch(uint DeviceID)
         {
             if (switchV2s.ContainsKey((int)DeviceID))
             {
@@ -276,7 +276,7 @@ namespace ASCOM.Alpaca
             }
         }
 
-        public static ITelescopeV3 GetTelescope(uint DeviceID)
+        public static ITelescopeV4 GetTelescope(uint DeviceID)
         {
             if (telescopeV3s.ContainsKey((int)DeviceID))
             {

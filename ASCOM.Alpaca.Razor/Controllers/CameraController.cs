@@ -18,7 +18,7 @@ namespace ASCOM.Alpaca
     public class CameraController : AlpacaController
     {
         [NonAction]
-        public override IAscomDevice GetDevice(uint DeviceNumber)
+        public override IAscomDeviceV2 GetDevice(uint DeviceNumber)
         {
             return DeviceManager.GetCamera(DeviceNumber);
         }

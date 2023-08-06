@@ -16,7 +16,7 @@ namespace ASCOM.Alpaca
         public const string APIRoot = "api/v1/safetymonitor/";
 
         [NonAction]
-        public override IAscomDevice GetDevice(uint DeviceNumber)
+        public override IAscomDeviceV2 GetDevice(uint DeviceNumber)
         {
             return DeviceManager.GetSafetyMonitor(DeviceNumber);
         }

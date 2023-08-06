@@ -15,7 +15,7 @@ namespace ASCOM.Alpaca
     public class TelescopeController : AlpacaController
     {
         [NonAction]
-        public override IAscomDevice GetDevice(uint DeviceNumber)
+        public override IAscomDeviceV2 GetDevice(uint DeviceNumber)
         {
             return DeviceManager.GetTelescope(DeviceNumber);
         }

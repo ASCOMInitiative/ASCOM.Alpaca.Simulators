@@ -14,7 +14,7 @@ namespace ASCOM.Alpaca
     public class RotatorController : AlpacaController
     {
         [NonAction]
-        public override IAscomDevice GetDevice(uint DeviceNumber)
+        public override IAscomDeviceV2 GetDevice(uint DeviceNumber)
         {
             return DeviceManager.GetRotator(DeviceNumber);
         }

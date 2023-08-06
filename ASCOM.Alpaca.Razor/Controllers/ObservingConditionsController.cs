@@ -16,7 +16,7 @@ namespace ASCOM.Alpaca
         public const string APIRoot = "api/v1/observingconditions/";
 
         [NonAction]
-        public override IAscomDevice GetDevice(uint DeviceNumber)
+        public override IAscomDeviceV2 GetDevice(uint DeviceNumber)
         {
             return DeviceManager.GetObservingConditions(DeviceNumber);
         }
