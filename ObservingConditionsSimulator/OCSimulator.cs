@@ -451,7 +451,7 @@ namespace ASCOM.Simulators
 
         public static short InterfaceVersion()
         {
-            short interfaceVersion = 1;
+            short interfaceVersion = 2;
             LogMessage("InterfaceVersion", interfaceVersion.ToString());
             return interfaceVersion;
         }

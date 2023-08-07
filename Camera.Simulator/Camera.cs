@@ -42,10 +42,13 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.ColorSpaces.Conversion;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
@@ -58,10 +61,12 @@ namespace ASCOM.Simulators
     /// The ClassInterface/None attribute prevents an empty interface called
     /// _Camera from being created and used as the [default] interface
     /// </summary>
-    public class Camera : ICameraV3, IAlpacaDevice, ISimulation
+    public class Camera : ICameraV4, IAlpacaDevice, ISimulation
     {
         // Driver ID and descriptive string that shows in the Chooser
         private static string s_csDriverDescription = "Camera V3 simulator";
+
+        private bool connecting;
 
         // Value returned through the Name property
         private const string DEVICE_NAME="Alpaca Camera Simulator";
@@ -2490,6 +2495,111 @@ namespace ASCOM.Simulators
         }
 
         #endregion ICameraV3 members
+
+        #region ICameraV4 members
+
+        /// <summary>
+        /// Connect to the telescope asynchronously
+        /// </summary>
+        public void Connect()
+        {
+            // Test whether we are  behaving as ICameraV4 or later
+            CheckSupportedInThisInterfaceVersion("Connect", 4);
+
+            // Set the completion variable to the "process running" state
+            Connecting = true;
+
+            // Start a task that will flag the Connect operation as complete after a set time interval
+            Task.Run(() =>
+            {
+                // Simulate a long connection phase
+                Thread.Sleep(3000);
+
+                // Set the Connected state to true
+                Connected = true;
+
+                // Set the completion variable to the "process complete" state to show that the Connect operation has completed
+                Connecting = false;
+            });
+
+            // End of the Connect operation initiator
+        }
+
+        /// <summary>
+        /// Disconnect from the telescope asynchronously
+        /// </summary>
+        public void Disconnect()
+        {
+            // Test whether we are  behaving as ICameraV4 or later
+            CheckSupportedInThisInterfaceVersion("Disconnect", 4);
+
+            // Set the completion variable to the "process running" state
+            Connecting = true;
+
+            // Start a task that will flag the Disconnect operation as complete after a set time interval
+            Task.Run(() =>
+            {
+                // Simulate a long connection phase
+                Thread.Sleep(3000);
+
+                // Set the Connected state to true
+                Connected = false;
+
+                // Set the completion variable to the "process complete" state to show that the Disconnect operation has completed
+                Connecting = false;
+            });
+
+            // End of the Disconnect operation initiator
+        }
+
+        /// <summary>
+        /// Connect / Disconnect cokmpleti0n variable. Returns true when an operation is underway, otherwise false
+        /// </summary>
+        public bool Connecting
+        {
+            get
+            {
+                // Test whether we are  behaving as ICameraV4 or later
+                CheckSupportedInThisInterfaceVersion("Connecting", 4);
+
+                return connecting;
+            }
+
+            private set
+            {
+                connecting = value;
+            }
+        }
+
+        /// <summary>
+        /// Return the device's operational state in one call
+        /// </summary>
+        public IList<IStateValue> DeviceState
+        {
+            get
+            {
+                // Test whether we are  behaving as ICameraV4 or later
+                CheckSupportedInThisInterfaceVersion("DeviceState", 4);
+
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                // Add one entry for each operational state, if possible
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.CameraState), CameraState)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.CCDTemperature), CCDTemperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.CoolerPower), CoolerPower)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.HeatSinkTemperature), HeatSinkTemperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.ImageReady), ImageReady)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.IsPulseGuiding), IsPulseGuiding)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.PercentCompleted), PercentCompleted)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return deviceState;
+            }
+        }
+
+        #endregion
 
         #region Private
 

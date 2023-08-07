@@ -27,6 +27,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ASCOM.Simulators
 {
@@ -38,7 +40,7 @@ namespace ASCOM.Simulators
     // _Telescope from being created and used as the [default] interface
     //
 
-    public class Telescope : ITelescopeV3, IDisposable, IAlpacaDevice, ISimulation
+    public class Telescope : ITelescopeV4, IDisposable, IAlpacaDevice, ISimulation
     {
         //
         // Driver private data (rate collections)
@@ -48,6 +50,8 @@ namespace ASCOM.Simulators
         private TrackingRates m_TrackingRates;
         private TrackingRatesSimple m_TrackingRatesSimple;
         private long objectId;
+
+        private bool connecting;
 
         // Local copies of the guide rates are kept here because the TelescopeHardware GuideRateRightAscension and GuideRateDeclination values
         // can have their direction signs changed during PulseGuide operations.
@@ -128,7 +132,7 @@ namespace ASCOM.Simulators
         // PUBLIC COM INTERFACE ITelescope IMPLEMENTATION
         //
 
-        #region ITelescope Members
+        #region ITelescopeV3 Members
 
         public string Action(string ActionName, string ActionParameters)
         {
@@ -739,8 +743,8 @@ namespace ASCOM.Simulators
                 }
                 else
                 {
-                    SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: 3");
-                    return 3;
+                    SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: 4");
+                    return 4;
                 }
             }
         }
@@ -1331,6 +1335,130 @@ namespace ASCOM.Simulators
         }
 
         #endregion ITelescope Members
+
+        #region ITelescopeV4 members
+
+        /// <summary>
+        /// Connect to the telescope asynchronously
+        /// </summary>
+        public void Connect()
+        {
+            // This method is only valid in interface V4 and later
+            CheckCapability(InterfaceVersion >= 4, "Connect");
+
+            TelescopeHardware.TL.LogMessage(LogLevel.Debug,"Connect Operation", $"Starting Connect()...");
+
+            // Set the completion variable to the "process running" state
+            Connecting = true;
+
+            // Start a task that will flag the Connect operation as complete after a set time interval
+            Task.Run(() =>
+            {
+                // Simulate a long connection phase
+                Thread.Sleep(1000);
+
+                // Set the Connected state to true
+                Connected = true;
+
+                // Set the completion variable to the "process complete" state to show that the Connect operation has completed
+                Connecting = false;
+
+                TelescopeHardware.TL.LogMessage(LogLevel.Debug, "Connect Operation", $"Completed Connect()");
+            });
+
+            // End of the Connect operation initiator
+        }
+
+        /// <summary>
+        /// Disconnect from the telescope asynchronously
+        /// </summary>
+        public void Disconnect()
+        {
+            // This method is only valid in interface V4 and later
+            CheckCapability(InterfaceVersion >= 4, "Disconnect");
+
+            TelescopeHardware.TL.LogMessage(LogLevel.Debug, "Disconnect Operation", $"Starting Disconnect...");
+
+            // Set the completion variable to the "process running" state
+            Connecting = true;
+
+            // Start a task that will flag the Disconnect operation as complete after a set time interval
+            Task.Run(() =>
+            {
+                // Simulate a long connection phase
+                Thread.Sleep(1000);
+
+                // Set the Connected state to true
+                Connected = false;
+
+                // Set the completion variable to the "process complete" state to show that the Disconnect operation has completed
+                Connecting = false;
+
+                TelescopeHardware.TL.LogMessage(LogLevel.Debug, "Disconnect Operation", $"Completed Disconnect()");
+            });
+
+            // End of the Disconnect operation initiator
+        }
+
+        /// <summary>
+        /// Connect / Disconnect completion variable. Returns true when an operation is underway, otherwise false
+        /// </summary>
+        public bool Connecting
+        {
+            get
+            {
+                // This method is only valid in interface V4 and later
+                CheckCapability(InterfaceVersion >= 4, "Connecting", false);
+
+                return connecting;
+            }
+
+            private set
+            {
+                // This method is only valid in interface V4 and later
+                CheckCapability(InterfaceVersion >= 4, "Connecting", true);
+
+                connecting = value;
+            }
+        }
+
+        /// <summary>
+        /// Return the device's operational state in one call
+        /// </summary>
+        public IList<IStateValue> DeviceState
+        {
+            get
+            {
+                // This method is only valid in interface V4 and later
+                CheckCapability(InterfaceVersion >= 4, "DeviceState", false);
+
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue>deviceState = new List<IStateValue>();
+
+                // Add one entry for each operational state, if possible
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Altitude), Altitude)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.AtHome), AtHome)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.AtPark), AtPark)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Azimuth), Azimuth)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Declination), Declination)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.IsPulseGuiding), IsPulseGuiding)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.RightAscension), RightAscension)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.SideOfPier), SideOfPier)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.SiderealTime), SiderealTime)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Slewing), Slewing)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Tracking), Tracking)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.UTCDate), UTCDate)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return deviceState;
+            }
+        }
+
+        #endregion
+
+
+
 
         #region new pier side properties
 

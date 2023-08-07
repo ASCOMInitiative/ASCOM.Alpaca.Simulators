@@ -35,7 +35,7 @@ using System.Runtime.CompilerServices;
 
 namespace ASCOM.Simulators
 {
-    public class Dome : IDomeV2, IDisposable, IAlpacaDevice, ISimulation
+    public class Dome : IDomeV3, IDisposable, IAlpacaDevice, ISimulation
     {
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
@@ -76,6 +76,8 @@ namespace ASCOM.Simulators
 
             LogMessage("New", "New completed OK");
         }
+
+        #region IDomeV2 members
 
         public string DeviceName { get => Name; }
         public int DeviceNumber { get; private set; }
@@ -473,7 +475,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return 2;
+                return 3;
             }
         }
 
@@ -695,6 +697,52 @@ namespace ASCOM.Simulators
             check_Az(Azimuth);
             Hardware.HW_Sync(Azimuth);
         }
+
+        #endregion
+
+        #region IDomeV3 members
+
+        public void Connect()
+        {
+            Connected = true;
+        }
+
+        public void Disconnect()
+        {
+            Connected = false;
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Return the device's operational state in one call
+        /// </summary>
+        public IList<IStateValue> DeviceState
+        {
+            get
+            {
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                try { deviceState.Add(new StateValue(nameof(IDomeV3.Altitude), Altitude)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IDomeV3.AtHome), AtHome)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IDomeV3.AtPark), AtPark)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IDomeV3.Azimuth), Azimuth)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IDomeV3.ShutterStatus), ShutterStatus)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IDomeV3.Slewing), Slewing)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                return deviceState;
+            }
+        }
+
+        #endregion
 
         private void LogMessage(string message, string details)
         {

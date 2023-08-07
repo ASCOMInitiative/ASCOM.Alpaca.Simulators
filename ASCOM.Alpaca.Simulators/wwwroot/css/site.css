@@ -167,7 +167,7 @@ fieldset {
     background: #eee;
     border-radius: 5px;
     padding: 3px;
-    max-width: 600px;
+    width: 600px;
     margin-bottom: 10px;
 }
 
@@ -181,8 +181,24 @@ fieldset {
         max-width: 22ch;
     }
 
+.switch {
+    border: 3px solid #002157;
+    background: #eee;
+    border-radius: 5px;
+    padding: 3px;
+    width: 700px;
+    margin-bottom: 10px;
+}
+
 .switch-number {
-    max-width: 3.5em;
+    max-width: 3.1em;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: right;
+}
+.switch-title {
+    text-align: center;
 }
 
 .oc-number {

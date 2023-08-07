@@ -2,6 +2,7 @@ using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -11,7 +12,7 @@ namespace ASCOM.Simulators
     /// ASCOM CoverCalibrator Driver for Simulator.
     /// </summary>
 
-    public class CoverCalibratorSimulator : ICoverCalibratorV1, IAlpacaDevice, ISimulation
+    public class CoverCalibratorSimulator : ICoverCalibratorV2, IAlpacaDevice, ISimulation
     {
         // Private simulator constants
         private const string DRIVER_DESCRIPTION = "Alpaca CoverCalibrator Simulator"; // Driver description that displays in the ASCOM Chooser.
@@ -264,8 +265,8 @@ namespace ASCOM.Simulators
             // set by the driver wizard
             get
             {
-                LogVerbose("InterfaceVersion Get", "1");
-                return Convert.ToInt16("1");
+                LogVerbose("InterfaceVersion Get", "2");
+                return 2;
             }
         }
 
@@ -480,6 +481,66 @@ namespace ASCOM.Simulators
         }
 
         #endregion ICoverCalibrator Implementation
+
+        #region ICoverCalibratorV2 implementation
+
+        public void Connect()
+        {
+            Connected = true;
+        }
+
+        public void Disconnect()
+        {
+            Connected = false;
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Return the device's operational state in one call
+        /// </summary>
+        public IList<IStateValue> DeviceState
+        {
+            get
+            {
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.Brightness), Brightness)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CalibratorState), CalibratorState)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CalibratorReady), CalibratorReady)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CoverState), CoverState)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CoverMoving), CoverMoving)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                return deviceState;
+            }
+        }
+
+        public bool CalibratorReady
+        {
+            get
+            {
+                return CalibratorState == CalibratorStatus.NotReady;
+            }
+        }
+
+        public bool CoverMoving
+        {
+            get
+            {
+                return CoverState == CoverStatus.Moving;
+            }
+        }
+
+        #endregion
+
 
         #region Alpaca Information
 

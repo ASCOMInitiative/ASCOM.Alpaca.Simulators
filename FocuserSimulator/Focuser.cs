@@ -2,6 +2,7 @@
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -23,7 +24,7 @@ namespace ASCOM.Simulators
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
     ///
-    public class Focuser : IFocuserV3, IDisposable, IAlpacaDevice, ISimulation
+    public class Focuser : IFocuserV4, IDisposable, IAlpacaDevice, ISimulation
     {
         #region Constants
 
@@ -47,7 +48,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Driver interface version
         /// </summary>
-        private const short interfaceVersion = 3;
+        private const short interfaceVersion = 4;
 
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
@@ -536,6 +537,47 @@ namespace ASCOM.Simulators
         public double Temperature { get; internal set; }
 
         #endregion IFocuserV3 Members
+
+        #region IFocuserV4 members
+
+        public void Connect()
+        {
+            Connected = true;
+        }
+
+        public void Disconnect()
+        {
+            Connected = false;
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Return the device's operational state in one call
+        /// </summary>
+        public IList<IStateValue> DeviceState
+        {
+            get
+            {
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                try { deviceState.Add(new StateValue(nameof(IFocuserV4.IsMoving), IsMoving)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IFocuserV4.Position), Position)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IFocuserV4.Temperature), Temperature)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                return deviceState;
+            }
+        }
+
+        #endregion
 
         #region Private Members
 

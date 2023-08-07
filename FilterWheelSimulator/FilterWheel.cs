@@ -33,7 +33,7 @@ using System.Collections.Generic;
 
 namespace ASCOM.Simulators
 {
-    public class FilterWheel : IFilterWheelV2, IAlpacaDevice, ISimulation // Early-bind interface implemented by this driver
+    public class FilterWheel : IFilterWheelV3, IAlpacaDevice, ISimulation // Early-bind interface implemented by this driver
     {
         // ==========
 
@@ -92,6 +92,8 @@ namespace ASCOM.Simulators
         public int DeviceNumber { get; private set; }
         public string UniqueID { get; private set; }
 
+        #region IFilterWheelV2 members
+
         public void Dispose()
         {
         }
@@ -140,7 +142,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return 2;
+                return 3;
             }
         }
 
@@ -216,5 +218,47 @@ namespace ASCOM.Simulators
         public void SetupDialog()
         {
         }
+
+        #endregion
+
+        #region IFilterWheelV3 members
+
+        public void Connect()
+        {
+            Connected = true;
+        }
+
+        public void Disconnect()
+        {
+            Connected = false;
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Return the device's operational state in one call
+        /// </summary>
+        public IList<IStateValue> DeviceState
+        {
+            get
+            {
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                try { deviceState.Add(new StateValue(nameof(IFilterWheelV3.Position), Position)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                return deviceState;
+            }
+        }
+
+        #endregion
+
     }
 }

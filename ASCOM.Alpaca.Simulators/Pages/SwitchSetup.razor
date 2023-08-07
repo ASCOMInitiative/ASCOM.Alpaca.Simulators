@@ -11,11 +11,11 @@
             <p>The device must be disconnected in order to safely make changes.</p>
         </fieldset>
     }
-    <fieldset disabled="@Device.Connected">
+    <fieldset disabled="@Device.Connected" class="switch">
         <legend>Switch Settings</legend>
 
         <table style="width:100%">
-            <tr>
+            <tr class="switch-title">
                 <th>Id</th>
                 <th>Name</th>
                 <th>Description</th>
@@ -24,6 +24,8 @@
                 <th>Max</th>
                 <th>Step</th>
                 <th>Can Write</th>
+                <th>Can Async</th>
+                <th>Duration</th>
             </tr>
             @{
                 int i = 0;
@@ -32,13 +34,15 @@
                     int index = i;
                     <tr>
                         <th>@i</th>
-                        <th><input type="text" @bind="@Switches[index].Name" style="max-width:10ch"></th>
+                        <th><input type="text" @bind="@Switches[index].Name" style="max-width:11ch"></th>
                         <th><input type="text" @bind="@Switches[index].Description"></th>
                         <th><input type="number" @bind="@Switches[index].Value" min="@Switches[index].Minimum" max="@Switches[index].Maximum" class="switch-number"></th>
                         <th><input type="number" @bind="@Switches[index].Minimum" max="@Switches[index].Maximum" class="switch-number"></th>
                         <th><input type="number" @bind="@Switches[index].Maximum" min="@Switches[index].Minimum" class="switch-number"></th>
-                        <th><input type="number" @bind="@Switches[index].StepSize" class="switch-number"></th>
+                        <th><input type="number" min="0" @bind="@Switches[index].StepSize" max="@Switches[index].Maximum" class="switch-number"></th>
                         <th><input type="checkbox" @bind="@Switches[index].CanWrite" class="switch-number"></th>
+                        <th><input type="checkbox" @bind="@Switches[index].CanAsync" class="switch-number"></th>
+                        <th><input type="number" min="0" @bind="@Switches[index].Duration" class="switch-number"></th>
                     </tr>
 
                     i++;

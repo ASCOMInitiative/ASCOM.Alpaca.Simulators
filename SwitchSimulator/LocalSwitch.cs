@@ -2,6 +2,10 @@
 using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using System.Threading;
+using static System.Net.Mime.MediaTypeNames;
+using System.Diagnostics;
 
 namespace ASCOM.Simulators
 {
@@ -18,6 +22,26 @@ namespace ASCOM.Simulators
         public bool CanWrite { get; set; }
         public double Value { get; set; }
         public string Description { get; set; }
+
+        #region ISwitchV3 members
+
+        public bool CanAsync { get; set; } // True if this switch can operate asynchronously
+
+        public double Duration { get; set; } // Duration of the switch change
+
+        public bool StateChangeComplete { get; set; } = true; // True when an asynchronous operation completes
+
+        public Exception AsyncException { get; set; } = null; // Exception to return, if any, when the Connecting property is polled
+
+        public CancellationTokenSource CancellationTokenSource { get; set; } = new CancellationTokenSource(); // Cancellation token source to cancel an in-progress asynchronous operation. Null when no operation is in progress
+
+        public CancellationToken CancellationToken { get; set; } = CancellationToken.None; // Cancellation token to cancel an in-progress asynchronous operation. Null when no operation is in progress
+
+        public Task Task { get; set; } // Current task
+
+        #endregion
+
+
 
         #region constructors
 
@@ -87,6 +111,8 @@ namespace ASCOM.Simulators
             this.CanWrite = Convert.ToBoolean(profile.GetValue("CanWrite " + subKey, bool.FalseString), CultureInfo.InvariantCulture);
             this.Value = Convert.ToDouble(profile.GetValue("Value " + subKey, "0"), CultureInfo.InvariantCulture);
             this.Description = profile.GetValue("Description " + subKey, this.Name);
+            this.CanAsync = Convert.ToBoolean(profile.GetValue("CanAsync " + subKey, bool.FalseString), CultureInfo.InvariantCulture);
+            this.Duration = Convert.ToDouble(profile.GetValue("Duration " + subKey, "0"), CultureInfo.InvariantCulture);
         }
 
         ///// <summary>
@@ -128,6 +154,24 @@ namespace ASCOM.Simulators
             {
                 throw new ASCOM.InvalidValueException("Switch " + this.Name, value.ToString(), string.Format("{0} to {1}", Minimum, Maximum));
             }
+
+            // Wait for the switch change duration if necessary
+            if (Duration > 0.0)
+            {
+                // Assign variables
+                Stopwatch sw = Stopwatch.StartNew();
+
+                // Wait for any delay period, finishing early if cancelled
+                do
+                {
+                    Thread.Sleep(100);
+                } while ((sw.Elapsed.TotalSeconds < Duration) & !CancellationToken.IsCancellationRequested);
+
+                // Return if the operation was cancelled before completion
+                if (CancellationToken.IsCancellationRequested)
+                    return;
+            }
+
             // set the value to the closest switch step value.
             var val = Math.Round((value - Minimum) / StepSize);
             val = StepSize * val + Minimum;
@@ -150,6 +194,8 @@ namespace ASCOM.Simulators
             profile.WriteValue("StepSize " + subKey, this.StepSize.ToString(CultureInfo.InvariantCulture));
             profile.WriteValue("CanWrite " + subKey, this.CanWrite.ToString(CultureInfo.InvariantCulture));
             profile.WriteValue("Value " + subKey, this.Value.ToString(CultureInfo.InvariantCulture));
+            profile.WriteValue("CanAsync " + subKey, this.CanAsync.ToString(CultureInfo.InvariantCulture));
+            profile.WriteValue("Duration " + subKey, this.Duration.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>

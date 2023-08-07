@@ -21,6 +21,8 @@ namespace ASCOM.Alpaca
             return DeviceManager.GetSwitch(DeviceNumber);
         }
 
+        #region ISwitch V2 members
+
         /// <summary>
         /// The number of switch devices managed by this driver
         /// </summary>
@@ -319,5 +321,126 @@ namespace ASCOM.Alpaca
         {
             return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetSwitchValue(ID, Value), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
+
+        #endregion
+
+        #region ISwitchV3 members
+
+        /// <summary>
+        /// Flag indicating whether this switch can operate asynchronously.
+        /// </summary>
+        /// <returns>True if the switch can operate asynchronously.</returns>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Route("{DeviceNumber}/canasync")]
+        public ActionResult<BoolResponse> CanAsync(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)] short ID,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).CanAsync(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+
+        /// <summary>
+        /// Completion variable for asynchronous changes.
+        /// </summary>
+        /// <exception cref="OperationCancelledException">When an in-progress operation is cancelled by the <see cref="CancelAsync"/> method.</exception>
+        /// <returns>False while an asynchronous operation is underway and true when it has completed.</returns>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Route("{DeviceNumber}/statechangecomplete")]
+        public ActionResult<BoolResponse> StateChangeComplete(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][DefaultValue(0)] short ID,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).StateChangeComplete(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+
+        /// <summary>
+        /// Cancels an in-progress asynchronous operation.
+        /// </summary>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Route("{DeviceNumber}/cancelasync")]
+        public ActionResult<Response> CancelAsync(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short ID,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).CancelAsync(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+
+        /// <summary>
+        /// Set a boolean switch's state asynchronously
+        /// </summary>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="State">The required control state(True or False)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Route("{DeviceNumber}/setasync")]
+        public ActionResult<Response> SetAsync(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short ID,
+            [FromForm][Required][SwaggerSchema("The required control state(True or False)")] bool State, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetAsync(ID, State), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+
+        /// <summary>
+        /// Set a switch's value asynchronously
+        /// </summary>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Value ">The value to be set, between MinSwitchValue and MaxSwitchValue</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Route("{DeviceNumber}/setasyncvalue")]
+        public ActionResult<Response> SetAsyncValue(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short ID,
+            [Required][FromForm][SwaggerSchema("The value to be set, between MinSwitchValue and MaxSwitchValue")] double Value, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetAsyncValue(ID, Value), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+
+        #endregion
     }
 }

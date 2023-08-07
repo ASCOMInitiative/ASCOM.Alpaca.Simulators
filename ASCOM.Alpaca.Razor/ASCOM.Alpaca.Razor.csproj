@@ -16,10 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASCOM.Alpaca.Device" Version="1.0.109-rc.21" />
-    <PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.21" />
+    <PackageReference Include="ASCOM.Alpaca.Device" Version="1.0.109-rc.22" />
+    <PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.22" />
     <PackageReference Include="ASCOM.Exception.Library" Version="6.6.2-rc.3725" />
-    <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.21" />
+    <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.22" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />

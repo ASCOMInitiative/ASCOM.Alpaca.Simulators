@@ -2,6 +2,7 @@
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace ASCOM.Simulators
@@ -9,7 +10,7 @@ namespace ASCOM.Simulators
     /// <summary>
     /// ASCOM ObservingConditions Driver for Observing Conditions OCSimulator.
     /// </summary>
-    public class ObservingConditions : IObservingConditions, IAlpacaDevice, ISimulation
+    public class ObservingConditions : IObservingConditionsV2, IAlpacaDevice, ISimulation
     {
         #region Variables and Constants
 
@@ -153,7 +154,7 @@ namespace ASCOM.Simulators
 
         #endregion Common properties and methods.
 
-        #region ObservingConditions Implementation
+        #region IObservingConditionsV1 Implementation
 
         public double AveragePeriod
         {
@@ -242,6 +243,60 @@ namespace ASCOM.Simulators
         }
 
         #endregion ObservingConditions Implementation
+
+        #region IObservingConditionsV2 implementation
+
+        public void Connect()
+        {
+            Connected = true;
+        }
+
+        public void Disconnect()
+        {
+            Connected = false;
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Return the device's operational state in one call
+        /// </summary>
+        public IList<IStateValue> DeviceState
+        {
+            get
+            {
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.CloudCover), CloudCover)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.DewPoint), DewPoint)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Humidity), Humidity)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Pressure), Pressure)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.RainRate), RainRate)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyBrightness), SkyBrightness)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyQuality), SkyQuality)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyTemperature), SkyTemperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.StarFWHM), StarFWHM)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Temperature), Temperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindDirection), WindDirection)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindSpeed), WindSpeed)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindGust), WindGust)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                return deviceState;
+            }
+        }
+
+        #endregion
+
+
+
 
         #region ISimulation
 

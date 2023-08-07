@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.21" />
+    <PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.22" />
     <PackageReference Include="ASCOM.Exception.Library" Version="6.6.2-rc.3725" />
   </ItemGroup>
 

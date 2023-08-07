@@ -24,6 +24,7 @@ using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace ASCOM.Simulators
@@ -35,7 +36,7 @@ namespace ASCOM.Simulators
     // The ClassInterface/None addribute prevents an empty interface called
     // _Rotator from being created and used as the [default] interface
     //
-    public class Rotator : IRotatorV3, IAlpacaDevice, ISimulation
+    public class Rotator : IRotatorV4, IAlpacaDevice, ISimulation
     {
         /// <summary>
         /// Driver ID - ClassID and used in the profile
@@ -129,7 +130,7 @@ namespace ASCOM.Simulators
 
         #endregion IDeviceControl Members
 
-        #region IRotator Members
+        #region IRotatorV3 Members
 
         public bool Connected
         {
@@ -250,6 +251,47 @@ namespace ASCOM.Simulators
         }
 
         #endregion IRotator Members
+
+        #region IRotatorV4 members
+
+        public void Connect()
+        {
+            Connected = true;
+        }
+
+        public void Disconnect()
+        {
+            Connected = false;
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Return the device's operational state in one call
+        /// </summary>
+        public IList<IStateValue> DeviceState
+        {
+            get
+            {
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                try { deviceState.Add(new StateValue(nameof(IRotatorV4.IsMoving), IsMoving)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IRotatorV4.MechanicalPosition), MechanicalPosition)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IRotatorV4.Position), Position)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                return deviceState;
+            }
+        }
+
+        #endregion
 
         #region ISimulation
 
