@@ -2590,7 +2590,7 @@ namespace ASCOM.Simulators
                 try { deviceState.Add(new StateValue(nameof(ICameraV4.CoolerPower), CoolerPower)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(ICameraV4.HeatSinkTemperature), HeatSinkTemperature)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(ICameraV4.ImageReady), ImageReady)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ICameraV4.IsPulseGuiding), IsPulseGuiding)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.IsPulseGuiding), IsPulseGuiding)); } catch(Exception ex) { Log.log.Log(LogLevel.Debug,$"IsPulseGuiding exception - {ex.Message}\r\n{ex}");}
                 try { deviceState.Add(new StateValue(nameof(ICameraV4.PercentCompleted), PercentCompleted)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
