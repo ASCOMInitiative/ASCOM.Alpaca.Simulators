@@ -31,11 +31,11 @@ namespace ASCOM.Alpaca
 
             if (HttpContext.Request.HasFormContentType)
             {
-                foreach(var key in HttpContext.Request.Form.Keys)
+                foreach (var key in HttpContext.Request.Form.Keys)
                 {
                     var Validator = ValidAlpacaKeys.AlpacaFormValidators.FirstOrDefault(x => x.ExternalKeyFailsValidation(key), null);
 
-                    if(Validator != null)
+                    if (Validator != null)
                     {
                         Logging.LogWarning($"Incorrect capitalization on optional key {Validator.Key}, received {key}");
                         //We zero out optional keys
@@ -441,11 +441,20 @@ namespace ASCOM.Alpaca
                     }
                 }
 
+                IList<IStateValue> stateValues = Request.Invoke();
+
+                List<StateValue> response = new();
+
+                foreach (var stateValue in stateValues) 
+                {
+                    response.Add(new StateValue(stateValue.Name,stateValue.Value));
+                }
+
                 return Ok(new DeviceStateResponse()
                 {
                     ClientTransactionID = ClientTransactionID,
                     ServerTransactionID = TransactionID,
-                    Value = Request.Invoke()
+                    Value = response
                 });
             }
             catch (DeviceNotFoundException ex)

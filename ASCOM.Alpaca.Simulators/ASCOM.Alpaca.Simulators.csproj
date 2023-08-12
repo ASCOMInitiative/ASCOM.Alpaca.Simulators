@@ -18,10 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASCOM.Alpaca.Device" Version="1.0.109-rc.22" />
-    <PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.22" />
+    <PackageReference Include="ASCOM.Alpaca.Device" Version="1.0.109-rc.41" />
+    <PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.41" />
     <PackageReference Include="ASCOM.Exception.Library" Version="6.6.2-rc.3725" />
-    <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.22" />
+    <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.41" />
     <PackageReference Include="Blazored.Toast" Version="4.1.0" />
     <PackageReference Include="LetsMake.GithubUpdateChecker" Version="0.1.0-rc2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
