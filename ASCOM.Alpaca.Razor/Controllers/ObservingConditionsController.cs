@@ -434,7 +434,7 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/timesincelastupdate")]
         public ActionResult<DoubleResponse> TimeSinceLastUpdate(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            string SensorName,
+            [SwaggerSchema("Name of the sensor whose description is required")] string? SensorName = "", 
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
