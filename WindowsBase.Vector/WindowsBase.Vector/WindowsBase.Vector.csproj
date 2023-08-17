@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.41" />
-    <PackageReference Include="ASCOM.Exception.Library" Version="6.6.2-rc.3725" />
-    <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.41" />
+    <PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.46" />
+    <PackageReference Include="ASCOM.Exception.Library" Version="6.6.2-rc.3767" />
+    <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.46" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASCOM.Exception.Library" Version="6.6.2-rc.3725" />
+    <PackageReference Include="ASCOM.Exception.Library" Version="6.6.2-rc.3767" />
   </ItemGroup>
 
 </Project>
