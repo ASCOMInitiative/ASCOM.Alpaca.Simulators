@@ -1,74 +1,82 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <UserSecretsId>967c7185-69cc-4a35-bf4b-c3c1cb89f6a3</UserSecretsId>
-    <Authors>Daniel Van Noord</Authors>
-    <Description>A full set of ASCOM Simulators exposing the Alpaca Controller Interfaces</Description>
-    <ApplicationIcon>favicon.ico</ApplicationIcon>
-    <Copyright>2021-23 Daniel Van Noord</Copyright>
-    <AssemblyName>ascom.alpaca.simulators</AssemblyName>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<UserSecretsId>967c7185-69cc-4a35-bf4b-c3c1cb89f6a3</UserSecretsId>
+		<Authors>Daniel Van Noord</Authors>
+		<Description>A full set of ASCOM Simulators exposing the Alpaca Controller Interfaces</Description>
+		<ApplicationIcon>favicon.ico</ApplicationIcon>
+		<Copyright>2021-23 Daniel Van Noord</Copyright>
+		<AssemblyName>ascom.alpaca.simulators</AssemblyName>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Setup\**" />
-    <Content Remove="Setup\**" />
-    <EmbeddedResource Remove="Setup\**" />
-    <None Remove="Setup\**" />
-  </ItemGroup>
+	<Target Name="WriteInformationVersion" AfterTargets="CopyFilesToOutputDirectory">
+		<PropertyGroup>
+			<InfoVersion>$(InformationalVersion)</InfoVersion>
+		</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ASCOM.Alpaca.Device" Version="1.0.109-rc.46" />
-    <PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.46" />
-    <PackageReference Include="ASCOM.Exception.Library" Version="6.6.2-rc.3767" />
-    <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.46" />
-    <PackageReference Include="Blazored.Toast" Version="4.1.0" />
-    <PackageReference Include="LetsMake.GithubUpdateChecker" Version="0.1.0-rc2" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
-  </ItemGroup>
+		<WriteLinesToFile File="$(PublishDir)\..\InformationVersion.txt" Overwrite="true" Lines="$(InfoVersion)" />
+	</Target>
 
-  <ItemGroup>
-    <None Include="..\license.md" Link="license.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Setup\**" />
+		<Content Remove="Setup\**" />
+		<EmbeddedResource Remove="Setup\**" />
+		<None Remove="Setup\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ASCOM.Alpaca.Razor\ASCOM.Alpaca.Razor.csproj" />
-    <ProjectReference Include="..\Camera.Simulator\CameraSimulator.csproj" />
-    <ProjectReference Include="..\CoverCalibratorSimulator\CoverCalibratorSimulator.csproj" />
-    <ProjectReference Include="..\DomeSimulator\DomeSimulator.csproj" />
-    <ProjectReference Include="..\FilterWheelSimulator\FilterWheelSimulator.csproj" />
-    <ProjectReference Include="..\FocuserSimulator\FocuserSimulator.csproj" />
-    <ProjectReference Include="..\ObservingConditionsSimulator\ObservingConditionsSimulator.csproj" />
-    <ProjectReference Include="..\OmniSim.Tools\OmniSim.Tools.csproj" />
-    <ProjectReference Include="..\RotatorSimulator\RotatorSimulator.csproj" />
-    <ProjectReference Include="..\SafetyMonitorSimulator\SafetyMonitorSimulator.csproj" />
-    <ProjectReference Include="..\SwitchSimulator\SwitchSimulator.csproj" />
-    <ProjectReference Include="..\TelescopeSimulator\TelescopeSimulator.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ASCOM.Alpaca.Device" Version="1.0.109-rc.46" />
+		<PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.46" />
+		<PackageReference Include="ASCOM.Exception.Library" Version="6.6.2-rc.3767" />
+		<PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.46" />
+		<PackageReference Include="Blazored.Toast" Version="4.1.0" />
+		<PackageReference Include="LetsMake.GithubUpdateChecker" Version="0.1.0-rc2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
+	</ItemGroup>
 
-  <PropertyGroup>
-    <DefineConstants Condition=" '$(AppImage)' == 'true' ">$(DefineConstants);BUNDLED</DefineConstants>
-  </PropertyGroup>
+	<ItemGroup>
+		<None Include="..\license.md" Link="license.md">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-  <PropertyGroup>
-    <DocumentationFile>.\ascom.alpaca.simulators.xml</DocumentationFile>
-    <NoWarn>1701;1702;1591</NoWarn>
-  </PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ASCOM.Alpaca.Razor\ASCOM.Alpaca.Razor.csproj" />
+		<ProjectReference Include="..\Camera.Simulator\CameraSimulator.csproj" />
+		<ProjectReference Include="..\CoverCalibratorSimulator\CoverCalibratorSimulator.csproj" />
+		<ProjectReference Include="..\DomeSimulator\DomeSimulator.csproj" />
+		<ProjectReference Include="..\FilterWheelSimulator\FilterWheelSimulator.csproj" />
+		<ProjectReference Include="..\FocuserSimulator\FocuserSimulator.csproj" />
+		<ProjectReference Include="..\ObservingConditionsSimulator\ObservingConditionsSimulator.csproj" />
+		<ProjectReference Include="..\OmniSim.Tools\OmniSim.Tools.csproj" />
+		<ProjectReference Include="..\RotatorSimulator\RotatorSimulator.csproj" />
+		<ProjectReference Include="..\SafetyMonitorSimulator\SafetyMonitorSimulator.csproj" />
+		<ProjectReference Include="..\SwitchSimulator\SwitchSimulator.csproj" />
+		<ProjectReference Include="..\TelescopeSimulator\TelescopeSimulator.csproj" />
+	</ItemGroup>
 
-  <Target Name="_ResolveCopyLocalNuGetPkgXmls" AfterTargets="ResolveReferences">
-    <ItemGroup>
-      <!-- Copy XML files from all PackageReferences to output dir -->
-      <ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).xml')" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)'!='' and Exists('%(RootDir)%(Directory)%(Filename).xml')" />
-    </ItemGroup>
-  </Target>
+	<PropertyGroup>
+		<DefineConstants Condition=" '$(AppImage)' == 'true' ">$(DefineConstants);BUNDLED</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<DocumentationFile>.\ascom.alpaca.simulators.xml</DocumentationFile>
+		<NoWarn>1701;1702;1591</NoWarn>
+	</PropertyGroup>
+
+	<Target Name="_ResolveCopyLocalNuGetPkgXmls" AfterTargets="ResolveReferences">
+		<ItemGroup>
+			<!-- Copy XML files from all PackageReferences to output dir -->
+			<ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).xml')" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)'!='' and Exists('%(RootDir)%(Directory)%(Filename).xml')" />
+		</ItemGroup>
+	</Target>
 
 	<PropertyGroup>
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 		<ResourceLanguages>en</ResourceLanguages>
 	</PropertyGroup>
-  
+
 </Project>
