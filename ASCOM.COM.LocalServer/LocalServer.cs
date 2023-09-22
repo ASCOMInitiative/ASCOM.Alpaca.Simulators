@@ -354,7 +354,7 @@ namespace ASCOM.LocalServer
             List<Type> types = new List<Type>
             {
                 //This was the one that the driver started with
-                GenerateTypeWithAttributes("SafetyMonitor", new Guid("269F2A82-98B6-46EE-88F7-5A6C794E5D9A"), "ASCOM.AlpacaSimulator.SafetyMonitor", "ASCOM SafetyMonitor Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.SafetyMonitor), typeof(ISafetyMonitorV3)),
+                GenerateTypeWithAttributes("SafetyMonitor", new Guid("269F2A82-98B6-46EE-88F7-5A6C794E5D9A"), "ASCOM.AlpacaSimulator.SafetyMonitor", "ASCOM SafetyMonitor Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.SafetyMonitor), typeof(ASCOM.DeviceInterface.ISafetyMonitor)),
 
                 //Here are 2 more
                 //GenerateTypeWithAttributes("SafetyMonitor", new Guid("100B89DE-F271-4F10-9C7B-17F33B0A8E51"), "ASCOM.DynamicDemo2.SafetyMonitor", "ASCOM SafetyMonitor Driver 2 for DynamicDemo", typeof(DynamicDemo.SafetyMonitor.SafetyMonitor), typeof(ISafetyMonitor)),
@@ -589,6 +589,7 @@ namespace ASCOM.LocalServer
             processStartInfo.Arguments = argument;
             processStartInfo.WorkingDirectory = Environment.CurrentDirectory;
             processStartInfo.FileName = Application.ExecutablePath;
+            processStartInfo.UseShellExecute = true;
             processStartInfo.Verb = "runas";
             try
             {

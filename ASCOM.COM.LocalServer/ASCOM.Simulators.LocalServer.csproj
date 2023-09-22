@@ -16,4 +16,10 @@
     <ProjectReference Include="..\ASCOM.Alpaca.Simulators\ASCOM.Alpaca.Simulators.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="ASCOM.DeviceInterfaces">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\ASCOM\Platform 6 Developer Components\Components\Platform6\ASCOM.DeviceInterfaces.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

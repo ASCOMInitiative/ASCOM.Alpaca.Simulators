@@ -1,12 +1,19 @@
-﻿using ASCOM.Common.DeviceInterfaces;
+﻿using ASCOM.Common;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.LocalServer;
 using Newtonsoft.Json.Linq;
+using System.Collections;
 using System.Security.Policy;
 
 namespace ASCOM.Simulators.LocalServer.Drivers
 {
-    public abstract class BaseDriver : IAscomDeviceV2
+    public class BaseDriver : ReferenceCountedObjectBase, IDisposable
     {
-        internal virtual IAscomDeviceV2 DeviceV2 { get; }
+        internal Func<IAscomDeviceV2> GetDevice;
+
+        internal IAscomDeviceV2 DeviceV2 { get => GetDevice(); }
+
+        public ArrayList SupportedActions => new ArrayList(DeviceV2.SupportedActions.ToArray());
 
         public bool Connecting => DeviceV2.Connecting;
 
@@ -23,8 +30,6 @@ namespace ASCOM.Simulators.LocalServer.Drivers
         public short InterfaceVersion => DeviceV2.InterfaceVersion;
 
         public string Name => DeviceV2.Name;
-
-        public IList<string> SupportedActions => DeviceV2.SupportedActions;
 
         public string Action(string ActionName, string ActionParameters)
         {
@@ -59,6 +64,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
         public void Dispose()
         {
             DeviceV2.Dispose();
+        }
+
+        public void SetupDialog()
+        {
+
         }
     }
 }

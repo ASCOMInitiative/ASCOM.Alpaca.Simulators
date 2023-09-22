@@ -1,11 +1,21 @@
 ﻿using ASCOM.Common.DeviceInterfaces;
+using ASCOM.LocalServer;
+using System.Collections;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.Simulators.LocalServer.Drivers
 {
-    public class SafetyMonitor : BaseDriver, ISafetyMonitorV3
-    {
-        internal override ISafetyMonitorV3 DeviceV2 => ASCOM.Alpaca.DeviceManager.GetSafetyMonitor(0);
 
-        public bool IsSafe => DeviceV2.IsSafe;
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.None)]
+    public class SafetyMonitor : BaseDriver, ASCOM.DeviceInterface.ISafetyMonitor, IDisposable
+    {
+
+        public bool IsSafe => (base.DeviceV2 as ISafetyMonitorV3).IsSafe;
+
+        public SafetyMonitor()
+        {
+            base.GetDevice = () => ASCOM.Alpaca.DeviceManager.GetSafetyMonitor(0);
+        }
     }
 }
