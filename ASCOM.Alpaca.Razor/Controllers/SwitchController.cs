@@ -323,7 +323,7 @@ namespace ASCOM.Alpaca
         }
 
         #endregion
-
+#if ASCOM_7_PREVIEW
         #region ISwitchV3 members
 
         /// <summary>
@@ -442,5 +442,6 @@ namespace ASCOM.Alpaca
         }
 
         #endregion
+#endif
     }
 }

@@ -16,8 +16,10 @@ namespace ASCOM.Alpaca
     public abstract class AlpacaController : ProcessBaseController
     {
         public abstract IAscomDeviceV2 GetDevice(uint DeviceNumber);
-
+#if ASCOM_7_PREVIEW
         #region IAscomV2 Methods
+
+
 
         /// <summary>
         /// Connect to a device asynchronously
@@ -100,7 +102,7 @@ namespace ASCOM.Alpaca
         }
 
         #endregion
-
+#endif
         #region Common Methods
 
         /// <summary>
