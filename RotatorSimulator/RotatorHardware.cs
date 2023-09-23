@@ -41,7 +41,11 @@ namespace ASCOM.Simulators
         private static string _rotatorName = "Alpaca Rotator Simulator";
         private static string _description = "ASCOM Rotator Driver for RotatorSimulator";
         private static string _driverInfo = "ASCOM.Simulator.Rotator";
+#if ASCOM_7_PREVIEW
         private static short _interfaceVersion = 4;
+#else
+        private static short _interfaceVersion = 3;
+#endif
 
         //
         // Sync object

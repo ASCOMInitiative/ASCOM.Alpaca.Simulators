@@ -43,7 +43,11 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Driver interface version
         /// </summary>
+#if ASCOM_7_PREVIEW
         private const short interfaceVersion = 3;
+#else
+        private const short interfaceVersion = 2;
+#endif
 
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
@@ -61,7 +65,7 @@ namespace ASCOM.Simulators
         private ILogger Logger;
         private IProfile Profile;
 
-        #endregion Constants
+#endregion Constants
 
         #region ISafetyMonitor Public Members
 

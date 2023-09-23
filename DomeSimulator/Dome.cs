@@ -475,7 +475,11 @@ namespace ASCOM.Simulators
         {
             get
             {
+#if ASCOM_7_PREVIEW
                 return 3;
+#else
+                return 2;
+#endif
             }
         }
 
@@ -698,7 +702,7 @@ namespace ASCOM.Simulators
             Hardware.HW_Sync(Azimuth);
         }
 
-        #endregion
+#endregion
 
         #region IDomeV3 members
 

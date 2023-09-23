@@ -142,7 +142,11 @@ namespace ASCOM.Simulators
         {
             get
             {
+#if ASCOM_7_PREVIEW
                 return 3;
+#else
+                return 2;
+#endif
             }
         }
 
@@ -219,7 +223,7 @@ namespace ASCOM.Simulators
         {
         }
 
-        #endregion
+#endregion
 
         #region IFilterWheelV3 members
 

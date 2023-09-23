@@ -249,8 +249,13 @@ namespace ASCOM.Simulators
             // set by the driver wizard
             get
             {
+#if ASCOM_7_PREVIEW
                 LogMessage("InterfaceVersion Get", "3");
                 return 3;
+#else
+                LogMessage("InterfaceVersion Get", "2");
+                return 2;
+#endif
             }
         }
 
@@ -264,7 +269,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion Common properties and methods.
+#endregion Common properties and methods.
 
         #region ISwitchV2 Implementation
 

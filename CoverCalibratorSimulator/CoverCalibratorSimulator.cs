@@ -265,8 +265,13 @@ namespace ASCOM.Simulators
             // set by the driver wizard
             get
             {
+#if ASCOM_7_PREVIEW
                 LogVerbose("InterfaceVersion Get", "2");
                 return 2;
+#else
+                LogVerbose("InterfaceVersion Get", "1");
+                return 1;
+#endif
             }
         }
 
@@ -280,7 +285,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion Common properties and methods.
+#endregion Common properties and methods.
 
         #region ICoverCalibrator Implementation
 

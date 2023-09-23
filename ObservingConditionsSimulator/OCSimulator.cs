@@ -451,7 +451,13 @@ namespace ASCOM.Simulators
 
         public static short InterfaceVersion()
         {
+#if ASCOM_7_PREVIEW
             short interfaceVersion = 2;
+#else
+            short interfaceVersion = 1;
+#endif
+
+
             LogMessage("InterfaceVersion", interfaceVersion.ToString());
             return interfaceVersion;
         }

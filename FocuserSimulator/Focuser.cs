@@ -48,7 +48,12 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Driver interface version
         /// </summary>
+        /// 
+#if ASCOM_7_PREVIEW
         private const short interfaceVersion = 4;
+#else
+        private const short interfaceVersion = 3;
+#endif
 
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
@@ -66,7 +71,7 @@ namespace ASCOM.Simulators
         /// </summary>
         private readonly IProfile Profile;
 
-        #endregion Constants
+#endregion Constants
 
         internal ILogger TL;// Shared tracelogger between this instances classes
 

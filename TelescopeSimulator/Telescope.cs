@@ -743,8 +743,13 @@ namespace ASCOM.Simulators
                 }
                 else
                 {
+#if ASCOM_7_PREVIEW
                     SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: 4");
                     return 4;
+#else
+                    SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: 3");
+                    return 3;
+#endif
                 }
             }
         }
@@ -1334,7 +1339,7 @@ namespace ASCOM.Simulators
             SharedResources.TrafficEnd("(done)");
         }
 
-        #endregion ITelescope Members
+#endregion ITelescope Members
 
         #region ITelescopeV4 members
 
