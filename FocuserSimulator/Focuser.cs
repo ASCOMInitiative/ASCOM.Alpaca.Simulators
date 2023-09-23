@@ -168,10 +168,10 @@ namespace ASCOM.Simulators
         {
             if (disposing)
             {
-                try { LogMessage("Dispose", "Dispose called: " + disposing.ToString()); } catch { }
-                try { _moveTimer.Stop(); } catch { }
-                try { _moveTimer.Close(); } catch { }
-                try { _moveTimer.Dispose(); } catch { }
+                //try { LogMessage("Dispose", "Dispose called: " + disposing.ToString()); } catch { }
+                //try { _moveTimer.Stop(); } catch { }
+                //try { _moveTimer.Close(); } catch { }
+                //try { _moveTimer.Dispose(); } catch { }
             }
         }
 

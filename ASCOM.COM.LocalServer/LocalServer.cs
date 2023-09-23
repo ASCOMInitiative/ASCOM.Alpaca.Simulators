@@ -354,11 +354,8 @@ namespace ASCOM.LocalServer
             List<Type> types = new List<Type>
             {
                 //This was the one that the driver started with
+                GenerateTypeWithAttributes("Focuser", new Guid("A8904146-656B-4852-96CB-53C1229FF0E8"), "ASCOM.AlpacaSimulator.Focuser", "ASCOM Focuser Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.Focuser), typeof(ASCOM.DeviceInterface.IFocuserV3)),
                 GenerateTypeWithAttributes("SafetyMonitor", new Guid("269F2A82-98B6-46EE-88F7-5A6C794E5D9A"), "ASCOM.AlpacaSimulator.SafetyMonitor", "ASCOM SafetyMonitor Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.SafetyMonitor), typeof(ASCOM.DeviceInterface.ISafetyMonitor)),
-
-                //Here are 2 more
-                //GenerateTypeWithAttributes("SafetyMonitor", new Guid("100B89DE-F271-4F10-9C7B-17F33B0A8E51"), "ASCOM.DynamicDemo2.SafetyMonitor", "ASCOM SafetyMonitor Driver 2 for DynamicDemo", typeof(DynamicDemo.SafetyMonitor.SafetyMonitor), typeof(ISafetyMonitor)),
-                //GenerateTypeWithAttributes("SafetyMonitor", new Guid("4B6CF53F-47F7-4E0E-A24E-70AF299DCDC5"), "ASCOM.DynamicDemo3.SafetyMonitor", "ASCOM SafetyMonitor Driver 3 for DynamicDemo", typeof(DynamicDemo.SafetyMonitor.SafetyMonitor), typeof(ISafetyMonitor))
             };
 
             return types;
