@@ -354,6 +354,7 @@ namespace ASCOM.LocalServer
             List<Type> types = new List<Type>
             {
                 //This was the one that the driver started with
+                GenerateTypeWithAttributes("FilterWheel", new Guid("568961E4-0D98-4B9F-947E-B467C4AAC5FC"), "ASCOM.AlpacaSimulator.FilterWheel", "ASCOM FilterWheel Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.FilterWheel), typeof(ASCOM.DeviceInterface.IFilterWheelV2)),
                 GenerateTypeWithAttributes("Focuser", new Guid("A8904146-656B-4852-96CB-53C1229FF0E8"), "ASCOM.AlpacaSimulator.Focuser", "ASCOM Focuser Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.Focuser), typeof(ASCOM.DeviceInterface.IFocuserV3)),
                 GenerateTypeWithAttributes("SafetyMonitor", new Guid("269F2A82-98B6-46EE-88F7-5A6C794E5D9A"), "ASCOM.AlpacaSimulator.SafetyMonitor", "ASCOM SafetyMonitor Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.SafetyMonitor), typeof(ASCOM.DeviceInterface.ISafetyMonitor)),
             };
