@@ -1,5 +1,5 @@
 //
-// ASCOM.DynamicDemo.SafetyMonitor Local COM Server
+// OmniSim Local COM Server
 //
 // This is the core of a managed COM Local Server, capable of serving
 // multiple instances of multiple interfaces, within a single
@@ -51,7 +51,7 @@ namespace ASCOM.LocalServer
         private static int serverLockCount; // Keeps a lock count on this application.
         private static ArrayList driverTypes; // Served COM object types
         private static ArrayList classFactories; // Served COM object class factories
-        private static string localServerAppId = "{aad1c35c-2bf8-4cf9-b0f2-4e13b2595bb6}"; // Our AppId
+        private static string localServerAppId = "{65A0E7FF-EB31-479D-8AE2-A69AF7A46E5C}"; // Our AppId
         private static readonly Object lockObject = new object(); // Counter lock object
         private static TraceLogger TL; // TraceLogger for the local server (not the served driver, which has its own) - primarily to help debug local server issues
         private static Task GCTask; // The garbage collection task
@@ -80,7 +80,7 @@ namespace ASCOM.LocalServer
         public static void InitServer()
         {
             // Create a trace logger for the local server.
-            TL = new TraceLogger("DynamicDemo.LocalServer", false)
+            TL = new TraceLogger("OmniSim.LocalServer", false)
             {
                 Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
@@ -106,7 +106,7 @@ namespace ASCOM.LocalServer
             driversInUseCount = 0;
             serverLockCount = 0;
             mainThreadId = GetCurrentThreadId();
-            Thread.CurrentThread.Name = "DynamicDemo Local Server Thread";
+            Thread.CurrentThread.Name = "OmniSim Local Server Thread";
 
             // Register the class factories of the served objects
             TL.LogMessage("Main", $"Registering class factories");
@@ -199,7 +199,7 @@ namespace ASCOM.LocalServer
         static void Main(string[] args)
         {
             // Create a trace logger for the local server.
-            TL = new TraceLogger("DynamicDemo.LocalServer", false)
+            TL = new TraceLogger("OmniSim.LocalServer", false)
             {
                 Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
@@ -218,7 +218,7 @@ namespace ASCOM.LocalServer
             driversInUseCount = 0;
             serverLockCount = 0;
             mainThreadId = GetCurrentThreadId();
-            Thread.CurrentThread.Name = "DynamicDemo Local Server Thread";
+            Thread.CurrentThread.Name = "OmniSim Local Server Thread";
 
             // Register the class factories of the served objects
             TL.LogMessage("Main", $"Registering class factories");
@@ -736,8 +736,8 @@ namespace ASCOM.LocalServer
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                TL.LogMessage("IsAdministrator", $"The ASCOM.DynamicDemo.SafetyMonitor was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.");
-                NativeMethods.MessageBox(System.IntPtr.Zero, $"The ASCOM.DynamicDemo.SafetyMonitor was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.", "OmniSim COM", 0);
+                TL.LogMessage("IsAdministrator", $"The OmniSim was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.");
+                NativeMethods.MessageBox(System.IntPtr.Zero, $"The OmniSim was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.", "OmniSim COM", 0);
             }
             catch (Exception ex)
             {
