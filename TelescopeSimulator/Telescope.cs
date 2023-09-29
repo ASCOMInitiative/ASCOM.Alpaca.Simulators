@@ -1595,14 +1595,14 @@ namespace ASCOM.Simulators
         public void Dispose()
         {
             Connected = false;
-            m_AxisRates[0].Dispose();
+            /*m_AxisRates[0].Dispose();
             m_AxisRates[1].Dispose();
             m_AxisRates[2].Dispose();
             m_AxisRates = null;
             m_TrackingRates.Dispose();
             m_TrackingRates = null;
             m_TrackingRatesSimple.Dispose();
-            m_TrackingRatesSimple = null;
+            m_TrackingRatesSimple = null;*/
         }
 
         #endregion IDisposable Members
