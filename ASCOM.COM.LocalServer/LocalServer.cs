@@ -355,6 +355,7 @@ namespace ASCOM.LocalServer
             {
                 //This was the one that the driver started with
                 GenerateTypeWithAttributes("Dome", new Guid("1E074DDB-D020-4045-8DB0-CFBBA81A6172"), "ASCOM.AlpacaSimulator.Dome", "ASCOM Dome Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.Dome), typeof(ASCOM.DeviceInterface.IDomeV2)),
+                GenerateTypeWithAttributes("Camera", new Guid("DE992041-27FC-45CA-BC58-7507994973EA"), "ASCOM.AlpacaSimulator.Camera", "ASCOM Camera Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.Camera), typeof(ASCOM.DeviceInterface.ICameraV3)),
                 GenerateTypeWithAttributes("CoverCalibrator", new Guid("97A847F6-2522-4007-842A-AE2339B1D70D"), "ASCOM.AlpacaSimulator.CoverCalibrator", "ASCOM CoverCalibrator Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.CoverCalibrator), typeof(ASCOM.DeviceInterface.ICoverCalibratorV1)),
                 GenerateTypeWithAttributes("FilterWheel", new Guid("568961E4-0D98-4B9F-947E-B467C4AAC5FC"), "ASCOM.AlpacaSimulator.FilterWheel", "ASCOM FilterWheel Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.FilterWheel), typeof(ASCOM.DeviceInterface.IFilterWheelV2)),
                 GenerateTypeWithAttributes("Focuser", new Guid("A8904146-656B-4852-96CB-53C1229FF0E8"), "ASCOM.AlpacaSimulator.Focuser", "ASCOM Focuser Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.Focuser), typeof(ASCOM.DeviceInterface.IFocuserV3)),
