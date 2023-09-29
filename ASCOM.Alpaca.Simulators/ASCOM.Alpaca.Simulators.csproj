@@ -79,4 +79,15 @@
 		<ResourceLanguages>en</ResourceLanguages>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DefineConstants>$(DefineConstants);ASCOM_COM</DefineConstants>
+	</PropertyGroup>
+
+  <ItemGroup Condition="$(DefineConstants.Contains('ASCOM_COM'))">
+    <Reference Include="ASCOM.DeviceInterfaces">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\ASCOM\Platform 6 Developer Components\Components\Platform6\ASCOM.DeviceInterfaces.dll</HintPath>
+    </Reference>
+    <ProjectReference Include="..\ASCOM.COM.LocalServer\ASCOM.Simulators.LocalServer.csproj" />
+  </ItemGroup>
+
 </Project>

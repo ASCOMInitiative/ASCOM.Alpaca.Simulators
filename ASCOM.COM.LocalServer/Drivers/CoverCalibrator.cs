@@ -17,9 +17,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public int MaxBrightness => Device.MaxBrightness;
 
+        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+
         public CoverCalibrator()
         {
-            base.GetDevice = () => ASCOM.Alpaca.DeviceManager.GetCoverCalibrator(0);
+            base.GetDevice = DeviceAccess;
         }
 
         public void OpenCover()

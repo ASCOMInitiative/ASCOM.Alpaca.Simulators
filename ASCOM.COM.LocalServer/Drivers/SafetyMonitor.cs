@@ -13,9 +13,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public bool IsSafe => (base.DeviceV2 as ISafetyMonitorV3).IsSafe;
 
+        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+
         public SafetyMonitor()
         {
-            base.GetDevice = () => ASCOM.Alpaca.DeviceManager.GetSafetyMonitor(0);
+            base.GetDevice = DeviceAccess;
         }
     }
 }

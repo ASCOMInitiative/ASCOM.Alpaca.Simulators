@@ -87,6 +87,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
         public double ExposureResolution => Device.ExposureResolution;
 
         public bool FastReadout { get => Device.FastReadout; set => Device.FastReadout = value; }
+
         public short Gain { get => Device.Gain; set => Device.Gain = value; }
 
         public short GainMax => Device.GainMax;
@@ -115,9 +116,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public double SubExposureDuration { get => Device.SubExposureDuration; set => Device.SubExposureDuration = value; }
 
+        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+
         public Camera()
         {
-            base.GetDevice = () => ASCOM.Alpaca.DeviceManager.GetCamera(0);
+            base.GetDevice = DeviceAccess;
         }
 
         public void AbortExposure()

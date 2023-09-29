@@ -39,9 +39,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public bool Slewing => Device.Slewing;
 
+        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+
         public Dome()
         {
-            base.GetDevice = () => ASCOM.Alpaca.DeviceManager.GetDome(0);
+            base.GetDevice = DeviceAccess;
         }
 
         public void AbortSlew()

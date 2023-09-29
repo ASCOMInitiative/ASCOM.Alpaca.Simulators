@@ -22,9 +22,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public float MechanicalPosition => Device.MechanicalPosition;
 
+        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+
         public Rotator()
         {
-            base.GetDevice = () => ASCOM.Alpaca.DeviceManager.GetRotator(0);
+            base.GetDevice = DeviceAccess;
         }
 
         public void Halt()

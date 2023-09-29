@@ -8,9 +8,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
     {
         public ASCOM.Common.DeviceInterfaces.IFilterWheelV2 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.IFilterWheelV2);
 
+        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+
         public FilterWheel()
         {
-            base.GetDevice = () => ASCOM.Alpaca.DeviceManager.GetFilterWheel(0);
+            base.GetDevice = DeviceAccess;
         }
 
         public int[] FocusOffsets => Device.FocusOffsets;

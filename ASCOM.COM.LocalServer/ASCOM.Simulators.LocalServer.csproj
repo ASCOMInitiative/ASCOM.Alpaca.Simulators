@@ -1,18 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ASCOM.Com.Components" Version="1.0.109-rc.46" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ASCOM.Alpaca.Simulators\ASCOM.Alpaca.Simulators.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -93,9 +93,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public DateTime UTCDate { get => Device.UTCDate; set => Device.UTCDate = value; }
 
+        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+
         public Telescope()
         {
-            base.GetDevice = () => ASCOM.Alpaca.DeviceManager.GetTelescope(0);
+            base.GetDevice = DeviceAccess;
         }
 
         public void AbortSlew()

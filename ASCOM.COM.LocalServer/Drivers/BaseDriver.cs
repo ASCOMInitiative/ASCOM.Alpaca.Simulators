@@ -1,7 +1,6 @@
 ﻿using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.LocalServer;
-using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Security.Policy;
 

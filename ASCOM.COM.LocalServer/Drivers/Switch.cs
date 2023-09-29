@@ -10,9 +10,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public short MaxSwitch => Device.MaxSwitch;
 
+        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+
         public Switch()
         {
-            base.GetDevice = () => ASCOM.Alpaca.DeviceManager.GetSwitch(0);
+            base.GetDevice = DeviceAccess;
         }
 
         public string GetSwitchName(short id)

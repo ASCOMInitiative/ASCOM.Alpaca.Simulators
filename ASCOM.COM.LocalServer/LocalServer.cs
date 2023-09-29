@@ -15,6 +15,7 @@
 using ASCOM;
 using ASCOM.Com;
 using ASCOM.Common;
+using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
 using ASCOM.Simulators.LocalServer;
@@ -62,18 +63,133 @@ namespace ASCOM.LocalServer
         {
             get
             {
-                if (Assembly.GetExecutingAssembly().Location.EndsWith(".dll"))
+                var proc = Process.GetCurrentProcess().MainModule.FileName;
+                if (proc.EndsWith(".dll"))
                 {
-                    return Assembly.GetExecutingAssembly().Location.Remove(Assembly.GetExecutingAssembly().Location.Length - 4) + ".exe";
+                    return proc.Remove(proc.Length - 4) + ".exe";
                 }
                 else
                 {
-                    return Assembly.GetExecutingAssembly().Location;
+                    return proc;
                 }
             }
         }
 
         #region Local Server entry point (main)
+
+        public static void InitServer()
+        {
+            // Create a trace logger for the local server.
+            TL = new TraceLogger("DynamicDemo.LocalServer", false)
+            {
+                Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
+            };
+            TL.LogMessage("Main", $"Server started");
+
+            // Load driver COM assemblies and get types, ending the program if something goes wrong.
+            TL.LogMessage("Main", $"Loading drivers");
+            if (!PopulateListOfAscomDrivers()) return;
+
+            // Process command line arguments e.g. to Register/Unregister drivers, ending the program if required.
+            TL.LogMessage("Main", $"Processing command-line arguments");
+            //if (!ProcessArguments(args)) return;
+
+
+
+            // Start the message loop to serialize incoming calls to the served driver COM objects.
+        }
+
+        public static void StartServer()
+        {
+            // Initialize variables.
+            TL.LogMessage("Main", $"Initialising variables");
+            driversInUseCount = 0;
+            serverLockCount = 0;
+            mainThreadId = GetCurrentThreadId();
+            Thread.CurrentThread.Name = "DynamicDemo Local Server Thread";
+
+            // Register the class factories of the served objects
+            TL.LogMessage("Main", $"Registering class factories");
+            RegisterClassFactories();
+
+            // Start the garbage collection thread.
+            TL.LogMessage("Main", $"Starting garbage collection");
+            StartGarbageCollection(10000);
+            TL.LogMessage("Main", $"Garbage collector thread started");
+        }
+
+        public static void Shutdown()
+        {
+            // Revoke the class factories immediately without waiting until the thread has stopped
+            TL.LogMessage("Main", $"Revoking class factories");
+            RevokeClassFactories();
+            TL.LogMessage("Main", $"Class factories revoked");
+
+            // No new connections are now possible and the local server is irretrievably shutting down, so release resources in the Hardware classes
+            try
+            {
+                // Get all types in the local server assembly
+                Type[] types = Assembly.GetExecutingAssembly().GetTypes();
+
+                // Iterate over the types looking for hardware classes that need to be disposed
+                foreach (Type type in types)
+                {
+                    try
+                    {
+                        TL.LogMessage("Main", $"Hardware disposal - Found type: {type.Name}");
+
+                        // Get the HardwareClassAttribute attribute if present on this type
+                        object[] attrbutes = type.GetCustomAttributes(typeof(HardwareClassAttribute), false);
+
+                        // Check to see if this type has the HardwareClass attribute, which indicates that this is a hardware class.
+                        if (attrbutes.Length > 0) // There is a HardwareClass attribute so call its Dispose() method
+                        {
+                            TL.LogMessage("Main", $"  {type.Name} is a hardware class");
+
+                            // Only process static classes that don't have instances here.
+                            if (type.IsAbstract & type.IsSealed) // This type is a static class
+                            {
+                                // Lookup the method
+                                MethodInfo disposeMethod = type.GetMethod("Dispose");
+
+                                // If the method is found call it
+                                if (disposeMethod != null) // a public Dispose() method was found
+                                {
+                                    TL.LogMessage("Main", $"  Calling method {disposeMethod.Name} in static class {type.Name}...");
+
+                                    // Now call Dispose()
+                                    disposeMethod.Invoke(null, null);
+                                    TL.LogMessage("Main", $"  {disposeMethod.Name} method called OK.");
+                                }
+                                else // No public Dispose method was found
+                                {
+                                    TL.LogMessage("Main", $"  The {disposeMethod.Name} method does not contain a public Dispose() method.");
+                                }
+                            }
+                            else
+                            {
+                                TL.LogMessage("Main", $"  Ignoring type {type.Name} because it is not static.");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        TL.LogMessage("Main", $"Exception (inner) when disposing of hardware class.\r\n{ex}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessage("Main", $"Exception (outer) when disposing of hardware class.\r\n{ex}");
+            }
+
+            // Now stop the Garbage Collector thread.
+            TL.LogMessage("Main", $"Stopping garbage collector");
+            StopGarbageCollection();
+
+            TL.LogMessage("Main", $"Local server closing");
+            TL.Dispose();
+        }
 
         /// <summary>
         /// Main server entry point
@@ -117,7 +233,7 @@ namespace ASCOM.LocalServer
             try
             {
                 TL.LogMessage("Main", $"Starting main form");
-                ASCOM.Alpaca.Simulators.Program.Main(args);
+                //ASCOM.Alpaca.Simulators.Program.Main(args);
                 TL.LogMessage("Main", $"Main form has ended");
             }
             finally
@@ -433,7 +549,7 @@ namespace ASCOM.LocalServer
             // If we reach here, we're running elevated
 
             // Initialise variables
-            Assembly executingAssembly = Assembly.GetExecutingAssembly();
+            Assembly executingAssembly = Assembly.GetEntryAssembly();
             Attribute assemblyTitleAttribute = Attribute.GetCustomAttribute(executingAssembly, typeof(AssemblyTitleAttribute));
             string assemblyTitle = ((AssemblyTitleAttribute)assemblyTitleAttribute).Title;
             assemblyTitleAttribute = Attribute.GetCustomAttribute(executingAssembly, typeof(AssemblyDescriptionAttribute));
@@ -533,7 +649,7 @@ namespace ASCOM.LocalServer
         /// <summary>
         /// Unregister drivers contained in this local server. (Must run as administrator.)
         /// </summary>
-        private static void UnregisterObjects()
+        public static void UnregisterObjects()
         {
             // Request administrator privilege if we don't already have it
             if (!IsAdministrator)
@@ -572,16 +688,15 @@ namespace ASCOM.LocalServer
                 // Unregistering often occurs during version upgrades and, if the code below is enabled, will result in loss of all device configuration during the upgrade.
                 // For this reason, enabling this capability is not recommended.
 
-                //try
-                //{
-                //    TL.LogMessage("UnregisterObjects", $"Deleting ASCOM Profile registration for {driverType.Name} ({progId})");
-                //    using (var profile = new Profile())
-                //    {
-                //        profile.DeviceType = driverType.Name;
-                //        profile.Unregister(progId);
-                //    }
-                //}
-                //catch (Exception) { }
+                try
+                {
+                    TL.LogMessage("UnregisterObjects", $"Deleting ASCOM Profile registration for {driverType.Name} ({progId})");
+                   using (var profile = new Profile())
+                    {
+                        Profile.UnRegister(Devices.StringToDeviceType(driverType.Name), progId);
+                    }
+                }
+                catch (Exception) { }
             }
         }
 
@@ -607,7 +722,7 @@ namespace ASCOM.LocalServer
         /// <param name="argument">Argument to pass to ourselves</param>
         private static void ElevateSelf(string argument)
         {
-            var assem = Assembly.GetExecutingAssembly();
+            var assem = Assembly.GetEntryAssembly();
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
             processStartInfo.Arguments = argument;
             processStartInfo.WorkingDirectory = Environment.CurrentDirectory;
@@ -691,7 +806,7 @@ namespace ASCOM.LocalServer
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        private static bool ProcessArguments(string[] args)
+        public static bool ProcessArguments(string[] args)
         {
             bool returnStatus = true;
 
@@ -724,10 +839,62 @@ namespace ASCOM.LocalServer
                         break;
 
                     default:
-                        TL.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
+                        //TL.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
 
-                        NativeMethods.MessageBox(System.IntPtr.Zero, "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "OmniSim COM", 0);
+                        //NativeMethods.MessageBox(System.IntPtr.Zero, "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "OmniSim COM", 0);
                         break;
+                }
+            }
+            else
+            {
+                startedByCOM = false;
+                TL.LogMessage("ProcessArguments", $"No arguments supplied");
+            }
+
+            return returnStatus;
+        }
+
+
+        public static bool ProcessAllArguments(string[] args)
+        {
+            bool returnStatus = true;
+
+            if (args.Length > 0)
+            {
+                foreach (var arg in args)
+                {
+                    switch (args[0].ToLower())
+                    {
+                        case "-embedding":
+                            TL.LogMessage("ProcessArguments", $"Started by COM: {args[0]}");
+                            startedByCOM = true; // Indicate COM started us and continue
+                            returnStatus = true; // Continue on return
+                            break;
+
+                        case "-register":
+                        case @"/register":
+                        case "-regserver": // Emulate VB6
+                        case @"/regserver":
+                            TL.LogMessage("ProcessArguments", $"Registering drivers: {args[0]}");
+                            RegisterObjects(); // Register each served object
+                            returnStatus = false; // Terminate on return
+                            break;
+
+                        case "-unregister":
+                        case @"/unregister":
+                        case "-unregserver": // Emulate VB6
+                        case @"/unregserver":
+                            TL.LogMessage("ProcessArguments", $"Unregistering drivers: {args[0]}");
+                            UnregisterObjects(); //Unregister each served object
+                            returnStatus = false; // Terminate on return
+                            break;
+
+                        default:
+                            //TL.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
+
+                            //NativeMethods.MessageBox(System.IntPtr.Zero, "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "OmniSim COM", 0);
+                            break;
+                    }
                 }
             }
             else

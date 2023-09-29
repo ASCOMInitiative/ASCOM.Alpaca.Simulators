@@ -36,9 +36,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public double WindSpeed => Device.WindSpeed;
 
+        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+
         public ObservingConditions()
         {
-            base.GetDevice = () => ASCOM.Alpaca.DeviceManager.GetObservingConditions(0);
+            base.GetDevice = DeviceAccess;
         }
 
         public double TimeSinceLastUpdate(string PropertyName)

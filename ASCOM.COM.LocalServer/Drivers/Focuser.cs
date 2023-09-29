@@ -9,9 +9,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
     {
         public IFocuserV3 Device => (base.DeviceV2 as IFocuserV3);
 
+        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+
         public Focuser()
         {
-            base.GetDevice = () => ASCOM.Alpaca.DeviceManager.GetFocuser(0);
+            base.GetDevice = DeviceAccess;
         }
 
         public bool Absolute => Device.Absolute;
