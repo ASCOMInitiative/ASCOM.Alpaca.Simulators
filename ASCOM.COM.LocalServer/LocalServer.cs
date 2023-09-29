@@ -27,6 +27,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
@@ -56,6 +57,21 @@ namespace ASCOM.LocalServer
         private static CancellationTokenSource GCTokenSource; // Token source used to end periodic garbage collection.
 
         #endregion
+
+        private static string ExeLocation
+        {
+            get
+            {
+                if (Assembly.GetExecutingAssembly().Location.EndsWith(".dll"))
+                {
+                    return Assembly.GetExecutingAssembly().Location.Remove(Assembly.GetExecutingAssembly().Location.Length - 4) + ".exe";
+                }
+                else
+                {
+                    return Assembly.GetExecutingAssembly().Location;
+                }
+            }
+        }
 
         #region Local Server entry point (main)
 
@@ -438,7 +454,7 @@ namespace ASCOM.LocalServer
                 }
 
                 // Set HKCR\APPID\exename.ext
-                using (RegistryKey exeNameKey = Registry.ClassesRoot.CreateSubKey($"APPID\\{Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)}"))
+                using (RegistryKey exeNameKey = Registry.ClassesRoot.CreateSubKey($"APPID\\{ExeLocation.Substring(ExeLocation.LastIndexOf('\\') + 1)}"))
                 {
                     exeNameKey.SetValue("AppID", localServerAppId);
                 }
@@ -481,7 +497,7 @@ namespace ASCOM.LocalServer
 
                         using (RegistryKey localServer32Key = clsIdKey.CreateSubKey("LocalServer32"))
                         {
-                            localServer32Key.SetValue(null, Application.ExecutablePath);
+                            localServer32Key.SetValue(null, ExeLocation);
                         }
                     }
 
@@ -530,7 +546,7 @@ namespace ASCOM.LocalServer
 
             // Delete the Local Server's DCOM/AppID information
             Registry.ClassesRoot.DeleteSubKey($"APPID\\{localServerAppId}", false);
-            Registry.ClassesRoot.DeleteSubKey($"APPID\\{Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)}", false);
+            Registry.ClassesRoot.DeleteSubKey($"APPID\\{ExeLocation.Substring(ExeLocation.LastIndexOf('\\') + 1)}", false);
 
             // Delete each driver's COM registration
             foreach (Type driverType in driverTypes)
@@ -591,10 +607,11 @@ namespace ASCOM.LocalServer
         /// <param name="argument">Argument to pass to ourselves</param>
         private static void ElevateSelf(string argument)
         {
+            var assem = Assembly.GetExecutingAssembly();
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
             processStartInfo.Arguments = argument;
             processStartInfo.WorkingDirectory = Environment.CurrentDirectory;
-            processStartInfo.FileName = Application.ExecutablePath;
+            processStartInfo.FileName = ExeLocation;
             processStartInfo.UseShellExecute = true;
             processStartInfo.Verb = "runas";
             try
