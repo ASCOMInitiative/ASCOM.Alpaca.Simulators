@@ -377,13 +377,13 @@ namespace ASCOM.Simulators
         public void Dispose()
         {
             Log.LogMessage("Dispose", "Releasing memory and components");
-            if (exposureTimer != null) exposureTimer.Dispose();
+            /*if (exposureTimer != null) exposureTimer.Dispose();
             if (coolerTimer != null) coolerTimer.Dispose();
             imageArray = null;
             imageArrayVariant = null;
             imageArrayColour = null;
             imageArrayVariantColour = null;
-            imageData = null;
+            imageData = null;*/
             GC.Collect();
         }
 
