@@ -17,6 +17,7 @@ using ASCOM.Com;
 using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
+using ASCOM.Simulators.LocalServer;
 using ASCOM.Tools;
 using Microsoft.Win32;
 using System;
@@ -330,7 +331,7 @@ namespace ASCOM.LocalServer
             catch (Exception e)
             {
                 TL.LogMessage("PopulateListOfAscomDrivers", $"Exception: {e}");
-                MessageBox.Show($"Failed to load served COM class assembly from within this local server - {e.Message}", "Rotator Simulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                NativeMethods.MessageBox(System.IntPtr.Zero, $"Failed to load served COM class assembly from within this local server - {e.Message}", "OmniSim COM", 0);
                 return false;
             }
 
@@ -446,7 +447,7 @@ namespace ASCOM.LocalServer
             catch (Exception ex)
             {
                 TL.LogMessage("RegisterObjects", $"Setting AppID exception: {ex}");
-                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.DynamicDemo.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                NativeMethods.MessageBox(System.IntPtr.Zero, "Error while registering the server:\n" + ex.ToString(), "OmniSim COM", 0);
                 return;
             }
 
@@ -504,7 +505,7 @@ namespace ASCOM.LocalServer
                 catch (Exception ex)
                 {
                     TL.LogMessage("RegisterObjects", $"Driver registration exception: {ex}");
-                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.DynamicDemo.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    NativeMethods.MessageBox(System.IntPtr.Zero, "Error while registering the server:\n" + ex.ToString(), "OmniSim COM", 0);
                     bFail = true;
                 }
 
@@ -603,13 +604,13 @@ namespace ASCOM.LocalServer
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                TL.LogMessage("IsAdministrator", $"The ASCOM.DynamicDemo.SafetyMonitor was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
-                MessageBox.Show("The ASCOM.DynamicDemo.SafetyMonitor was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "ASCOM.DynamicDemo.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Warning));
+                TL.LogMessage("IsAdministrator", $"The ASCOM.DynamicDemo.SafetyMonitor was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.");
+                NativeMethods.MessageBox(System.IntPtr.Zero, $"The ASCOM.DynamicDemo.SafetyMonitor was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.", "OmniSim COM", 0);
             }
             catch (Exception ex)
             {
                 TL.LogMessage("IsAdministrator", $"Exception: {ex}");
-                MessageBox.Show(ex.ToString(), "ASCOM.DynamicDemo.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                NativeMethods.MessageBox(System.IntPtr.Zero, ex.ToString(), "OmniSim COM", 0);
             }
             return;
         }
@@ -637,7 +638,7 @@ namespace ASCOM.LocalServer
                 if (!factory.RegisterClassObject())
                 {
                     TL.LogMessage("RegisterClassFactories", $"  Failed to register class factory for " + driverType.Name);
-                    MessageBox.Show("Failed to register class factory for " + driverType.Name, "ASCOM.DynamicDemo.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    NativeMethods.MessageBox(System.IntPtr.Zero, "Failed to register class factory for " + driverType.Name, "OmniSim COM", 0);
                     return false;
                 }
                 TL.LogMessage("RegisterClassFactories", $"  Registered class factory OK for: {driverType.Name}");
@@ -707,7 +708,8 @@ namespace ASCOM.LocalServer
 
                     default:
                         TL.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
-                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "ASCOM.DynamicDemo.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                        NativeMethods.MessageBox(System.IntPtr.Zero, "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "OmniSim COM", 0);
                         break;
                 }
             }
