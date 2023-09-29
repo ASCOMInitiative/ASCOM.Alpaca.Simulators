@@ -363,6 +363,7 @@ namespace ASCOM.LocalServer
                 GenerateTypeWithAttributes("Rotator", new Guid("23B464ED-B86A-4276-AB2C-69FF65DF9477"), "ASCOM.AlpacaSimulator.Rotator", "ASCOM Rotator Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.Rotator), typeof(ASCOM.DeviceInterface.IRotatorV3)),
                 GenerateTypeWithAttributes("SafetyMonitor", new Guid("269F2A82-98B6-46EE-88F7-5A6C794E5D9A"), "ASCOM.AlpacaSimulator.SafetyMonitor", "ASCOM SafetyMonitor Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.SafetyMonitor), typeof(ASCOM.DeviceInterface.ISafetyMonitor)),
                 GenerateTypeWithAttributes("Switch", new Guid("D0EFCD2B-00D6-42B6-9F16-795CF09FBEE8"), "ASCOM.AlpacaSimulator.Switch", "ASCOM Switch Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.Switch), typeof(ASCOM.DeviceInterface.ISwitchV2)),
+                GenerateTypeWithAttributes("Telescope", new Guid("124D5B35-2435-43C5-BB02-1AF3EDFA6DBE"), "ASCOM.AlpacaSimulator.Telescope", "ASCOM Telescope Driver for Alpaca Demo", typeof(ASCOM.Simulators.LocalServer.Drivers.Telescope), typeof(ASCOM.DeviceInterface.ITelescopeV3)),
             };
 
             return types;
