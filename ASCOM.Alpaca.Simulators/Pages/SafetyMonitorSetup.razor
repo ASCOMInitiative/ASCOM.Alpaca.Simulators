@@ -2,6 +2,7 @@
 
 @inject IToastService toastService
 @inject NavigationManager uriHelper;
+@using System.Timers;
 
 <body>
     <fieldset>
@@ -39,6 +40,8 @@
     [Parameter]
     public int InstanceID { get; set; }
 
+    Timer timer = new Timer(100);
+
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
     /// </summary>
@@ -47,6 +50,44 @@
         get
         {
             return DeviceManager.GetSafetyMonitor((uint)InstanceID) as ASCOM.Simulators.SafetyMonitor;
+        }
+    }
+
+    public void Dispose()
+    {
+        timer.Elapsed -= OnPageRefresh;
+        timer.Stop();
+    }
+
+    protected override void OnInitialized()
+    {
+        timer.Elapsed += OnPageRefresh;
+        timer.AutoReset = true;
+        timer.Enabled = true;
+        base.OnInitialized();
+    }
+
+    private void OnPageRefresh(Object source, ElapsedEventArgs e)
+    {
+        try
+        {
+            // Note that the following line is necessary because otherwise
+            // Blazor would not recognize the state change and not refresh the UI
+            InvokeAsync(() =>
+            {
+                try
+                {
+                    StateHasChanged();
+                }
+                catch
+                {
+
+                }
+            });
+        }
+        catch
+        {
+
         }
     }
 
