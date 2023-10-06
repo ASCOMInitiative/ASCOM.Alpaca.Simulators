@@ -8,7 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASCOM.Com.Components" Version="1.0.109-rc.46" />
+    <PackageReference Include="ASCOM.Com.Components" Version="1.0.110" />
+    <PackageReference Include="ASCOM.Tools" Version="1.0.110" />
   </ItemGroup>
 
   <ItemGroup>

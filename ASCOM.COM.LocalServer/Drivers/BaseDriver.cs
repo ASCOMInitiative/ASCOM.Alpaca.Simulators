@@ -8,15 +8,34 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 {
     public class BaseDriver : ReferenceCountedObjectBase, IDisposable
     {
+#if ASCOM_7_PREVIEW
         internal Func<IAscomDeviceV2> GetDevice;
+#else
+        internal Func<IAscomDevice> GetDevice;
 
+#endif
+
+#if ASCOM_7_PREVIEW
         internal IAscomDeviceV2 DeviceV2 { get => GetDevice(); }
-
-        public ArrayList SupportedActions => new ArrayList(DeviceV2.SupportedActions.ToArray());
 
         public bool Connecting => DeviceV2.Connecting;
 
         public IList<IStateValue> DeviceState => DeviceV2.DeviceState;
+
+        public void Connect()
+        {
+            DeviceV2.Connect();
+        }
+
+        public void Disconnect()
+        {
+            DeviceV2.Disconnect();
+        }
+#else
+        internal IAscomDevice DeviceV2 { get => GetDevice(); }
+#endif
+
+        public ArrayList SupportedActions => new ArrayList(DeviceV2.SupportedActions.ToArray());
 
         public bool Connected { get => DeviceV2.Connected; set => DeviceV2.Connected = value; }
 
@@ -48,16 +67,6 @@ namespace ASCOM.Simulators.LocalServer.Drivers
         public string CommandString(string Command, bool Raw = false)
         {
             return DeviceV2.CommandString(Command, Raw);
-        }
-
-        public void Connect()
-        {
-            DeviceV2.Connect();
-        }
-
-        public void Disconnect()
-        {
-            DeviceV2.Disconnect();
         }
 
         public void Dispose()

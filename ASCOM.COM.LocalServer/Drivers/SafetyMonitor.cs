@@ -11,9 +11,13 @@ namespace ASCOM.Simulators.LocalServer.Drivers
     public class SafetyMonitor : BaseDriver, ASCOM.DeviceInterface.ISafetyMonitor, IDisposable
     {
 
-        public bool IsSafe => (base.DeviceV2 as ISafetyMonitorV3).IsSafe;
+        public bool IsSafe => (base.DeviceV2 as ISafetyMonitor).IsSafe;
 
+#if ASCOM_7_PREVIEW
         public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+#else
+        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDevice> DeviceAccess;
+#endif
 
         public SafetyMonitor()
         {

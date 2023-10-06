@@ -19,7 +19,12 @@ namespace ASCOM.Simulators
     /// ASCOM SafetyMonitor Driver for a SafetyMonitor.
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
+
+#if ASCOM_7_PREVIEW
     public class SafetyMonitor : ISafetyMonitorV3, IDisposable, IAlpacaDevice, ISimulation
+#else
+    public class SafetyMonitor : ISafetyMonitor, IDisposable, IAlpacaDevice, ISimulation
+#endif
     {
         #region Constants
 
@@ -242,8 +247,8 @@ namespace ASCOM.Simulators
 
         #endregion ISafetyMonitor Public Members
 
-        #region ISafetyMonitorV3 members
-
+#region ISafetyMonitorV3 members
+#if ASCOM_7_PREVIEW
         public void Connect()
         {
             Connected = true;
@@ -273,8 +278,8 @@ namespace ASCOM.Simulators
                 return deviceState;
             }
         }
-
-        #endregion
+#endif
+#endregion
 
         #region SafetyMonitor Private Members
 

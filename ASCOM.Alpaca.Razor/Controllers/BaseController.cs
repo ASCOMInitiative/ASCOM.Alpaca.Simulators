@@ -426,6 +426,7 @@ namespace ASCOM.Alpaca
             }
         }
 
+#if ASCOM_7_PREVIEW
         [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult<DeviceStateResponse> ProcessRequest(Func<IList<IStateValue>> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
@@ -466,6 +467,8 @@ namespace ASCOM.Alpaca
                 return Ok(ResponseHelpers.ExceptionResponseBuilder<IntListResponse>(ex, ClientTransactionID, TransactionID));
             }
         }
+
+#endif
 
         /// <summary>
         /// Log out an API request to the ASCOM Standard Logger Instance. This logs at a level of Verbose.

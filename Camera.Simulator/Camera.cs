@@ -61,7 +61,13 @@ namespace ASCOM.Simulators
     /// The ClassInterface/None attribute prevents an empty interface called
     /// _Camera from being created and used as the [default] interface
     /// </summary>
+
+#if ASCOM_7_PREVIEW
     public class Camera : ICameraV4, IAlpacaDevice, ISimulation
+
+#else
+    public class Camera : ICameraV3, IAlpacaDevice, ISimulation
+#endif
     {
         // Driver ID and descriptive string that shows in the Chooser
         private static string s_csDriverDescription = "Camera V3 simulator";
@@ -2496,7 +2502,9 @@ namespace ASCOM.Simulators
 
         #endregion ICameraV3 members
 
-        #region ICameraV4 members
+#region ICameraV4 members
+
+#if ASCOM_7_PREVIEW
 
         /// <summary>
         /// Connect to the telescope asynchronously
@@ -2598,8 +2606,9 @@ namespace ASCOM.Simulators
                 return deviceState;
             }
         }
+#endif
 
-        #endregion
+#endregion
 
         #region Private
 

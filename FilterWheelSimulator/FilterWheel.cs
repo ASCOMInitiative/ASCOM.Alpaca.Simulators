@@ -33,7 +33,11 @@ using System.Collections.Generic;
 
 namespace ASCOM.Simulators
 {
+#if ASCOM_7_PREVIEW
     public class FilterWheel : IFilterWheelV3, IAlpacaDevice, ISimulation // Early-bind interface implemented by this driver
+#else
+    public class FilterWheel : IFilterWheelV2, IAlpacaDevice, ISimulation // Early-bind interface implemented by this driver
+#endif
     {
         // ==========
 
@@ -225,7 +229,8 @@ namespace ASCOM.Simulators
 
 #endregion
 
-        #region IFilterWheelV3 members
+#region IFilterWheelV3 members
+#if ASCOM_7_PREVIEW
 
         public void Connect()
         {
@@ -261,8 +266,8 @@ namespace ASCOM.Simulators
                 return deviceState;
             }
         }
-
-        #endregion
+#endif
+#endregion
 
     }
 }

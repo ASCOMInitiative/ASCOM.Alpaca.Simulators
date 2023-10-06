@@ -116,7 +116,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public double SubExposureDuration { get => Device.SubExposureDuration; set => Device.SubExposureDuration = value; }
 
+#if ASCOM_7_PREVIEW
         public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+#else
+        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDevice> DeviceAccess;
+#endif
 
         public Camera()
         {

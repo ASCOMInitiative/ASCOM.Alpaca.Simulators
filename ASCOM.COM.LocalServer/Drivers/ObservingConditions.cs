@@ -6,7 +6,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
     [ClassInterface(ClassInterfaceType.None)]
     public class ObservingConditions : BaseDriver, ASCOM.DeviceInterface.IObservingConditions, IDisposable
     {
-        public ASCOM.Common.DeviceInterfaces.IObservingConditionsV2 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.IObservingConditionsV2);
+        public ASCOM.Common.DeviceInterfaces.IObservingConditions Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.IObservingConditions);
 
         public double AveragePeriod { get => Device.AveragePeriod; set => Device.AveragePeriod = value; }
 
@@ -36,7 +36,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public double WindSpeed => Device.WindSpeed;
 
+#if ASCOM_7_PREVIEW
         public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+#else
+        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDevice> DeviceAccess;
+#endif
 
         public ObservingConditions()
         {

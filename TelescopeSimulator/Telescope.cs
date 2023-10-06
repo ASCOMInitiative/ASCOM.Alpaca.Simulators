@@ -39,8 +39,11 @@ namespace ASCOM.Simulators
     // The ClassInterface/None attribute prevents an empty interface called
     // _Telescope from being created and used as the [default] interface
     //
-
+#if ASCOM_7_PREVIEW
     public class Telescope : ITelescopeV4, IDisposable, IAlpacaDevice, ISimulation
+#else
+    public class Telescope : ITelescopeV3, IDisposable, IAlpacaDevice, ISimulation
+#endif
     {
         //
         // Driver private data (rate collections)
@@ -1340,7 +1343,7 @@ namespace ASCOM.Simulators
         }
 
 #endregion ITelescope Members
-
+#if ASCOM_7_PREVIEW
         #region ITelescopeV4 members
 
         /// <summary>
@@ -1461,7 +1464,7 @@ namespace ASCOM.Simulators
         }
 
         #endregion
-
+#endif
 
 
 
