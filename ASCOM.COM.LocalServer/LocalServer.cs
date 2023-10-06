@@ -59,6 +59,22 @@ namespace ASCOM.LocalServer
 
         #endregion
 
+        public static bool ASCOM_Installed
+        {
+            get
+            {
+                try
+                {
+                    return PlatformUtilities.MajorVersion >= 6 && PlatformUtilities.MinorVersion >= 6 && PlatformUtilities.IsMinimumRequiredVersion(6,6,0,0);
+                }
+                catch
+                {
+
+                }
+                return false;
+            }
+        }
+
         private static string ExeLocation
         {
             get
