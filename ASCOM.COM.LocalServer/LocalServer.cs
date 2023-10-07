@@ -555,6 +555,13 @@ namespace ASCOM.LocalServer
         /// </remarks>
         private static void RegisterObjects()
         {
+            if (!ASCOM_Installed)
+            {
+                TL.LogMessage("No ASCOM Found", $"Cannot register because the ASCOM Platform was not found.");
+                NativeMethods.MessageBox(System.IntPtr.Zero, "Cannot register because the ASCOM Platform was not found", "No ASCOM Found", 0);
+                return;
+            }
+
             // Request administrator privilege if we don't already have it
             if (!IsAdministrator)
             {
