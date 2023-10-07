@@ -65,7 +65,7 @@ namespace ASCOM.LocalServer
             {
                 try
                 {
-                    return PlatformUtilities.MajorVersion >= 6 && PlatformUtilities.MinorVersion >= 6 && PlatformUtilities.IsMinimumRequiredVersion(6,6,0,0);
+                    return PlatformUtilities.IsPlatformInstalled();
                 }
                 catch
                 {
