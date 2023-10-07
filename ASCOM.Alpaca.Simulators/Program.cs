@@ -49,6 +49,25 @@ namespace ASCOM.Alpaca.Simulators
                 Console.WriteLine($"http://localhost:{ServerSettings.ServerPort}");
             }
 
+#if ASCOM_COM
+            ASCOM.LocalServer.Server.InitServer();
+            ASCOM.Simulators.LocalServer.Drivers.Camera.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetCamera(0);
+            ASCOM.Simulators.LocalServer.Drivers.CoverCalibrator.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetCoverCalibrator(0);
+            ASCOM.Simulators.LocalServer.Drivers.Dome.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetDome(0);
+            ASCOM.Simulators.LocalServer.Drivers.FilterWheel.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetFilterWheel(0);
+            ASCOM.Simulators.LocalServer.Drivers.Focuser.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetFocuser(0);
+            ASCOM.Simulators.LocalServer.Drivers.ObservingConditions.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetObservingConditions(0);
+            ASCOM.Simulators.LocalServer.Drivers.Rotator.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetRotator(0);
+            ASCOM.Simulators.LocalServer.Drivers.SafetyMonitor.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetSafetyMonitor(0);
+            ASCOM.Simulators.LocalServer.Drivers.Switch.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetSwitch(0);
+            ASCOM.Simulators.LocalServer.Drivers.Telescope.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetTelescope(0);
+
+            if (!ASCOM.LocalServer.Server.ProcessAllArguments(args))
+            {
+                return;
+            }
+#endif
+
             try
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -97,22 +116,6 @@ namespace ASCOM.Alpaca.Simulators
             DriverManager.LoadTelescope(0);
 
 #if ASCOM_COM
-            ASCOM.LocalServer.Server.InitServer();
-            ASCOM.Simulators.LocalServer.Drivers.Camera.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetCamera(0);
-            ASCOM.Simulators.LocalServer.Drivers.CoverCalibrator.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetCoverCalibrator(0);
-            ASCOM.Simulators.LocalServer.Drivers.Dome.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetDome(0);
-            ASCOM.Simulators.LocalServer.Drivers.FilterWheel.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetFilterWheel(0);
-            ASCOM.Simulators.LocalServer.Drivers.Focuser.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetFocuser(0);
-            ASCOM.Simulators.LocalServer.Drivers.ObservingConditions.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetObservingConditions(0);
-            ASCOM.Simulators.LocalServer.Drivers.Rotator.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetRotator(0);
-            ASCOM.Simulators.LocalServer.Drivers.SafetyMonitor.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetSafetyMonitor(0);
-            ASCOM.Simulators.LocalServer.Drivers.Switch.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetSwitch(0);
-            ASCOM.Simulators.LocalServer.Drivers.Telescope.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetTelescope(0);
-
-            if (!ASCOM.LocalServer.Server.ProcessAllArguments(args))
-            {
-                return;
-            }
             ASCOM.LocalServer.Server.StartServer();
 #endif
 
