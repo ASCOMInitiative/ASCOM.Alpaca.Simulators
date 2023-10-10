@@ -12,37 +12,22 @@
 // Modified by Chris Rowland and Peter Simpson to allow use with multiple devices of the same type March 2011
 //
 //
-using ASCOM;
 using ASCOM.Com;
 using ASCOM.Common;
-using ASCOM.Common.Alpaca;
-using ASCOM.Common.DeviceInterfaces;
-using ASCOM.Common.Interfaces;
 using ASCOM.Simulators.LocalServer;
 using ASCOM.Tools;
 using Microsoft.Win32;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace ASCOM.LocalServer
 {
     public class Server
     {
-
         #region Variables
 
         private static uint mainThreadId; // Stores the main thread's thread id.
@@ -57,7 +42,7 @@ namespace ASCOM.LocalServer
         private static Task GCTask; // The garbage collection task
         private static CancellationTokenSource GCTokenSource; // Token source used to end periodic garbage collection.
 
-        #endregion
+        #endregion Variables
 
         public static bool ASCOM_Installed
         {
@@ -69,9 +54,23 @@ namespace ASCOM.LocalServer
                 }
                 catch
                 {
-
                 }
                 return false;
+            }
+        }
+
+        public static bool IsRegistered
+        {
+            get
+            {
+                try
+                {
+                    return Profile.IsRegistered(DeviceTypes.Camera, "ASCOM.OmniSim.Camera");
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
@@ -109,8 +108,6 @@ namespace ASCOM.LocalServer
             // Process command line arguments e.g. to Register/Unregister drivers, ending the program if required.
             TL.LogMessage("Main", $"Processing command-line arguments");
             //if (!ProcessArguments(args)) return;
-
-
 
             // Start the message loop to serialize incoming calls to the served driver COM objects.
         }
@@ -212,7 +209,7 @@ namespace ASCOM.LocalServer
         /// </summary>
         /// <param name="args">Command line parameters</param>
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             // Create a trace logger for the local server.
             TL = new TraceLogger("OmniSim.LocalServer", false)
@@ -324,15 +321,14 @@ namespace ASCOM.LocalServer
 
             TL.LogMessage("Main", $"Local server closing");
             TL.Dispose();
-
         }
 
-        #endregion
+        #endregion Local Server entry point (main)
 
         #region Server Lock, Object Counting, and AutoQuit on COM start-up
 
         /// <summary>
-        /// Returns the total number of objects alive currently. 
+        /// Returns the total number of objects alive currently.
         /// </summary>
         public static int ObjectCount
         {
@@ -346,7 +342,7 @@ namespace ASCOM.LocalServer
         }
 
         /// <summary>
-        /// Performs a thread-safe incrementation of the object count. 
+        /// Performs a thread-safe incrementation of the object count.
         /// </summary>
         /// <returns></returns>
         public static int IncrementObjectCount()
@@ -384,7 +380,7 @@ namespace ASCOM.LocalServer
         }
 
         /// <summary>
-        /// Performs a thread-safe incrementation of the server lock count. 
+        /// Performs a thread-safe incrementation of the server lock count.
         /// </summary>
         /// <returns></returns>
         public static int IncrementServerLockCount()
@@ -431,7 +427,7 @@ namespace ASCOM.LocalServer
             }
         }
 
-        #endregion
+        #endregion Server Lock, Object Counting, and AutoQuit on COM start-up
 
         #region Dynamic Driver Assembly Loader
 
@@ -447,7 +443,7 @@ namespace ASCOM.LocalServer
             try
             {
                 // Get the types contained within the local server assembly
-                Assembly so = Assembly.GetExecutingAssembly(); // Get the local server assembly 
+                Assembly so = Assembly.GetExecutingAssembly(); // Get the local server assembly
                 Type[] types = so.GetTypes(); // Get the types in the assembly
 
                 //Add any Pre-Configured dynamic types
@@ -498,7 +494,7 @@ namespace ASCOM.LocalServer
              * 4. The second instance closes
              * 5. Call PopulateListOfAscomDrivers again in the original instance after registration is complete. It will find the added drivers and load them into memory
              * 6. Clients can now use those drivers and can still access any drivers they were using as the parent instance never closed.
-             * 
+             *
              */
             List<Type> types = new List<Type>
             {
@@ -517,7 +513,6 @@ namespace ASCOM.LocalServer
 
             return types;
         }
-
 
         internal static Type GenerateTypeWithAttributes(string DeviceType, Guid DriverGuid, string ProgID, string ServedName, Type driverType, Type interfaceType)
         {
@@ -541,7 +536,7 @@ namespace ASCOM.LocalServer
             return tb.CreateType();
         }
 
-        #endregion
+        #endregion Dynamic Driver Assembly Loader
 
         #region COM Registration and Unregistration
 
@@ -550,10 +545,10 @@ namespace ASCOM.LocalServer
         /// </summary>
         /// <remarks>
         /// Do everything to register this for COM. Never use REGASM on this exe assembly! It would create InProcServer32 entries which would prevent proper activation!
-        /// Using the list of COM object types generated during dynamic assembly loading, this method registers each driver for COM and registers it for ASCOM. 
+        /// Using the list of COM object types generated during dynamic assembly loading, this method registers each driver for COM and registers it for ASCOM.
         /// It also adds DCOM info for the local server itself, so it can be activated via an outbound connection from TheSky.
         /// </remarks>
-        private static void RegisterObjects()
+        public static void RegisterObjects()
         {
             if (!ASCOM_Installed)
             {
@@ -714,7 +709,7 @@ namespace ASCOM.LocalServer
                 try
                 {
                     TL.LogMessage("UnregisterObjects", $"Deleting ASCOM Profile registration for {driverType.Name} ({progId})");
-                   using (var profile = new Profile())
+                    using (var profile = new Profile())
                     {
                         Profile.UnRegister(Devices.StringToDeviceType(driverType.Name), progId);
                     }
@@ -770,7 +765,7 @@ namespace ASCOM.LocalServer
             return;
         }
 
-        #endregion
+        #endregion COM Registration and Unregistration
 
         #region Class Factory Support
 
@@ -820,7 +815,7 @@ namespace ASCOM.LocalServer
             }
         }
 
-        #endregion
+        #endregion Class Factory Support
 
         #region Command line argument processing
 
@@ -877,7 +872,6 @@ namespace ASCOM.LocalServer
             return returnStatus;
         }
 
-
         public static bool ProcessAllArguments(string[] args)
         {
             bool returnStatus = true;
@@ -929,7 +923,7 @@ namespace ASCOM.LocalServer
             return returnStatus;
         }
 
-        #endregion
+        #endregion Command line argument processing
 
         #region Garbage collection support
 
@@ -943,13 +937,12 @@ namespace ASCOM.LocalServer
             TL.LogMessage("StartGarbageCollection", $"Creating garbage collector with interval: {interval} seconds");
             GarbageCollection garbageCollector = new GarbageCollection(interval);
 
-            // Create a cancellation token and start the garbage collection task 
+            // Create a cancellation token and start the garbage collection task
             TL.LogMessage("StartGarbageCollection", $"Starting garbage collector thread");
             GCTokenSource = new CancellationTokenSource();
             GCTask = Task.Factory.StartNew(() => garbageCollector.GCWatch(GCTokenSource.Token), GCTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
             TL.LogMessage("StartGarbageCollection", $"Garbage collector thread started OK");
         }
-
 
         /// <summary>
         /// Stop the garbage collection task by sending it the cancellation token and wait for the task to complete
@@ -969,18 +962,18 @@ namespace ASCOM.LocalServer
             GCTokenSource = null;
         }
 
-        #endregion
+        #endregion Garbage collection support
 
         #region kernel32.dll and user32.dll functions
 
         // Post a Windows Message to a specific thread (identified by its thread id). Used to post a WM_QUIT message to the main thread in order to terminate this application.)
         [DllImport("user32.dll")]
-        static extern bool PostThreadMessage(uint idThread, uint Msg, UIntPtr wParam, IntPtr lParam);
+        private static extern bool PostThreadMessage(uint idThread, uint Msg, UIntPtr wParam, IntPtr lParam);
 
         // Obtain the thread id of the calling thread allowing us to post the WM_QUIT message to the main thread.
         [DllImport("kernel32.dll")]
-        static extern uint GetCurrentThreadId();
+        private static extern uint GetCurrentThreadId();
 
-        #endregion
+        #endregion kernel32.dll and user32.dll functions
     }
 }

@@ -23,6 +23,17 @@
         @if (ASCOM_Support && ASCOM_Installed)
         {
             <p>This build has ASCOM COM Driver Support and the Platform is detected</p>
+
+            @if (ASCOM_Registered)
+            {
+                <p>A Simulator Driver is registered</p>
+            }
+            else
+            {
+                <p>A Simulator Driver is not registered</p>
+            }
+            <input type="button" value="Register COM Drivers" @onclick="RegisterCOMDrivers" />
+            <input type="button" value="Unregister COM Drivers" @onclick="UnregisterCOMDrivers" />
         }
         else if (ASCOM_Support)
         {
@@ -118,6 +129,46 @@
             return false;
 #endif
         }
+    }
+
+    bool ASCOM_Registered
+    {
+        get
+        {
+#if ASCOM_COM
+    return ASCOM.LocalServer.Server.IsRegistered;
+#else
+            return false;
+#endif
+        }
+    }
+
+    void RegisterCOMDrivers()
+    {
+        #if ASCOM_COM
+        try
+        {
+        ASCOM.LocalServer.Server.RegisterObjects();
+        }
+        catch
+        {
+            
+        }
+        #endif
+    }
+
+    void UnregisterCOMDrivers()
+    {
+#if ASCOM_COM
+    try
+    {
+    ASCOM.LocalServer.Server.UnregisterObjects();
+    }
+    catch
+    {
+
+    }
+#endif
     }
 
     void RestartCamera()
