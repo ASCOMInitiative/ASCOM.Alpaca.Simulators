@@ -43,6 +43,13 @@
     }
 </fieldset>
 
+<fieldset>
+    <legend>Simulator Control</legend>
+
+    <label for="camera_restart">Camera</label>
+    <input id="camera_restart" type="button" value="Restart Simulation" @onclick="RestartCamera"/>
+</fieldset>
+
 @code
 {
     bool ASCOM_Support
@@ -63,8 +70,13 @@
 #if ASCOM_COM
     return ASCOM.LocalServer.Server.ASCOM_Installed;
 #else
-        return false;
+            return false;
 #endif
         }
+    }
+
+    void RestartCamera()
+    {
+        DriverManager.LoadCamera(0);
     }
 }
