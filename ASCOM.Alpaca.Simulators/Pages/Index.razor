@@ -48,6 +48,51 @@
 
     <label for="camera_restart">Camera</label>
     <input id="camera_restart" type="button" value="Restart Simulation" @onclick="RestartCamera"/>
+
+    <br />
+
+    <label for="covercalibrator_restart">CoverCalibrator</label>
+    <input id="covercalibrator_restart" type="button" value="Restart Simulation" @onclick="RestartCoverCalibrator" />
+
+    <br />
+
+    <label for="dome_restart">Dome</label>
+    <input id="dome_restart" type="button" value="Restart Simulation" @onclick="RestartDome" />
+
+    <br />
+
+    <label for="filterwheel_restart">FilterWheel</label>
+    <input id="filterwheel_restart" type="button" value="Restart Simulation" @onclick="RestartFilterWheel" />
+
+    <br />
+
+    <label for="focuser_restart">Focuser</label>
+    <input id="focuser_restart" type="button" value="Restart Simulation" @onclick="RestartFocuser" />
+
+    <br />
+
+    <label for="observingconditions_restart">ObservingConditions</label>
+    <input id="observingconditions_restart" type="button" value="Restart Simulation" @onclick="RestartObservingConditions" />
+
+    <br />
+
+    <label for="rotator_restart">Rotator</label>
+    <input id="rotator_restart" type="button" value="Restart Simulation" @onclick="RestartRotator" />
+
+    <br />
+
+    <label for="safetymonitor_restart">SafetyMonitor</label>
+    <input id="safetymonitor_restart" type="button" value="Restart Simulation" @onclick="RestartSafetyMonitor" />
+
+    <br />
+
+    <label for="switch_restart">Switch</label>
+    <input id="switch_restart" type="button" value="Restart Simulation" @onclick="RestartSwitch" />
+
+    <br />
+
+    <label for="telescope_restart">Telescope</label>
+    <input id="telescope_restart" type="button" value="Restart Simulation" @onclick="RestartTelescope" />
 </fieldset>
 
 @code
@@ -79,4 +124,50 @@
     {
         DriverManager.LoadCamera(0);
     }
+
+    void RestartCoverCalibrator()
+    {
+        DriverManager.LoadCoverCalibrator(0);
+    }
+
+    void RestartDome()
+    {
+        DriverManager.LoadDome(0);
+    }
+
+    void RestartFilterWheel()
+    {
+        DriverManager.LoadFilterWheel(0);
+    }
+
+    void RestartFocuser()
+    {
+        DriverManager.LoadFocuser(0);
+    }
+
+    void RestartObservingConditions()
+    {
+        DriverManager.LoadObservingConditions(0);
+    }
+
+    void RestartRotator()
+    {
+        DriverManager.LoadRotator(0);
+    }
+
+    void RestartSafetyMonitor()
+    {
+        DriverManager.LoadSafetyMonitor(0);
+    }
+
+    void RestartSwitch()
+    {
+        DriverManager.LoadSwitch(0);
+    }
+
+    void RestartTelescope()
+    {
+        DriverManager.LoadTelescope(0);
+    }
+
 }
