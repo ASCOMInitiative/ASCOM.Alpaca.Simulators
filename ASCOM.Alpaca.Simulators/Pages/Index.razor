@@ -4,21 +4,23 @@
 <fieldset>
     <legend>ASCOM Alpaca Simulators</legend>
     <p>Welcome to the ASCOM Alpaca Simulator, a full set of simulators for testing and developing Alpaca Applications.</p>
+    
+    <p>Version - @ServerSettings.ServerVersion</p>
+
+    <p>@RuntimeInformation.OSDescription</p>
+    
     <p>Server Transactions: @DeviceManager.RawTransactionID</p>
 
     <a href="/swagger" target="_blank">View Swagger docs and interactive queries</a>
     <p>Please note that the Alpaca API documentation on the ASCOM website is the canonical version. There are several issues with this auto generated version that will be resolved in future versions. This is currently provided only for testing the simulators.</p>
 </fieldset>
 
-
 <fieldset>
-    <legend>OS Status</legend>
-
-    <p>@RuntimeInformation.OSDescription</p>
+    <legend>ASCOM Status</legend>
 
     @if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     {
-        
+
 
         @if (ASCOM_Support && ASCOM_Installed)
         {
@@ -26,11 +28,11 @@
 
             @if (ASCOM_Registered)
             {
-                <p>A Simulator Driver is registered</p>
+                <p>A Simulator Driver is registered. You can Reregister if a driver is missing or Unregister the drivers.</p>
             }
             else
             {
-                <p>A Simulator Driver is not registered</p>
+                <p>A Simulator Driver is not registered. You can Register the drivers for COM Access.</p>
             }
             <input type="button" value="Register COM Drivers" @onclick="RegisterCOMDrivers" />
             <input type="button" value="Unregister COM Drivers" @onclick="UnregisterCOMDrivers" />
@@ -43,14 +45,6 @@
         {
             <p>This build does not have ASCOM COM Driver Support.</p>
         }
-    }
-    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-    {
-
-    }
-    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-    {
-
     }
 </fieldset>
 
