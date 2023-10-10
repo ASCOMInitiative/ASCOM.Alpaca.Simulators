@@ -4,22 +4,23 @@
 <fieldset>
     <legend>ASCOM Alpaca Simulators</legend>
     <p>Welcome to the ASCOM Alpaca Simulator, a full set of simulators for testing and developing Alpaca Applications.</p>
-    
+
     <p>Version - @ServerSettings.ServerVersion</p>
 
     <p>@RuntimeInformation.OSDescription</p>
-    
+
     <p>Server Transactions: @DeviceManager.RawTransactionID</p>
 
     <a href="/swagger" target="_blank">View Swagger docs and interactive queries</a>
     <p>Please note that the Alpaca API documentation on the ASCOM website is the canonical version. There are several issues with this auto generated version that will be resolved in future versions. This is currently provided only for testing the simulators.</p>
 </fieldset>
 
-<fieldset>
-    <legend>ASCOM Status</legend>
+@if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+{
+    <fieldset>
+        <legend>ASCOM Status</legend>
 
-    @if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-    {
+
 
 
         @if (ASCOM_Support && ASCOM_Installed)
@@ -45,14 +46,15 @@
         {
             <p>This build does not have ASCOM COM Driver Support.</p>
         }
-    }
-</fieldset>
+
+    </fieldset>
+}
 
 <fieldset>
     <legend>Simulator Control</legend>
 
     <label for="camera_restart">Camera</label>
-    <input id="camera_restart" type="button" value="Restart Simulation" @onclick="RestartCamera"/>
+    <input id="camera_restart" type="button" value="Restart Simulation" @onclick="RestartCamera" />
 
     <br />
 
@@ -116,7 +118,8 @@
 
     bool ASCOM_Installed
     {
-        get{
+        get
+        {
 #if ASCOM_COM
     return ASCOM.LocalServer.Server.ASCOM_Installed;
 #else
@@ -139,16 +142,16 @@
 
     void RegisterCOMDrivers()
     {
-        #if ASCOM_COM
-        try
-        {
-        ASCOM.LocalServer.Server.RegisterObjects();
-        }
-        catch
-        {
-            
-        }
-        #endif
+#if ASCOM_COM
+    try
+    {
+    ASCOM.LocalServer.Server.RegisterObjects();
+    }
+    catch
+    {
+
+    }
+#endif
     }
 
     void UnregisterCOMDrivers()
