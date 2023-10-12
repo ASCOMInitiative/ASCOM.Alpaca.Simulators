@@ -76,7 +76,13 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public void SetupDialog()
         {
-
+            try
+            {
+                NativeMethods.MessageBox(System.IntPtr.Zero, $"The Device Simulator can be configured through the Alpaca Web UI", "Setup Dialog", 0);
+            }
+            catch
+            { 
+            }
         }
     }
 }
