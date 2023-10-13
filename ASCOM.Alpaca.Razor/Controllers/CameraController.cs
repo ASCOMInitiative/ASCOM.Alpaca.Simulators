@@ -17,11 +17,17 @@ namespace ASCOM.Alpaca
     [Route("api/v1/camera/")]
     public class CameraController : AlpacaController
     {
+
         [NonAction]
+#if ASCOM_7_PREVIEW
         public override IAscomDeviceV2 GetDevice(uint DeviceNumber)
+#else
+        public override IAscomDevice GetDevice(uint DeviceNumber)
+#endif
         {
             return DeviceManager.GetCamera(DeviceNumber);
         }
+
 
         /// <summary>
         /// Returns the X offset of the Bayer matrix.

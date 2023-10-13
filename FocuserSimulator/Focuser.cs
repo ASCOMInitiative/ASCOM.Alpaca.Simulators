@@ -23,8 +23,11 @@ namespace ASCOM.Simulators
     /// ASCOM Focuser Driver for a Focuser.
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
-    ///
+#if ASCOM_7_PREVIEW
     public class Focuser : IFocuserV4, IDisposable, IAlpacaDevice, ISimulation
+#else
+    public class Focuser : IFocuserV3, IDisposable, IAlpacaDevice, ISimulation
+#endif
     {
         #region Constants
 
@@ -48,7 +51,12 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Driver interface version
         /// </summary>
+        /// 
+#if ASCOM_7_PREVIEW
         private const short interfaceVersion = 4;
+#else
+        private const short interfaceVersion = 3;
+#endif
 
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
@@ -66,7 +74,7 @@ namespace ASCOM.Simulators
         /// </summary>
         private readonly IProfile Profile;
 
-        #endregion Constants
+#endregion Constants
 
         internal ILogger TL;// Shared tracelogger between this instances classes
 
@@ -168,10 +176,10 @@ namespace ASCOM.Simulators
         {
             if (disposing)
             {
-                try { LogMessage("Dispose", "Dispose called: " + disposing.ToString()); } catch { }
-                try { _moveTimer.Stop(); } catch { }
-                try { _moveTimer.Close(); } catch { }
-                try { _moveTimer.Dispose(); } catch { }
+                //try { LogMessage("Dispose", "Dispose called: " + disposing.ToString()); } catch { }
+                //try { _moveTimer.Stop(); } catch { }
+                //try { _moveTimer.Close(); } catch { }
+                //try { _moveTimer.Dispose(); } catch { }
             }
         }
 
@@ -538,7 +546,8 @@ namespace ASCOM.Simulators
 
         #endregion IFocuserV3 Members
 
-        #region IFocuserV4 members
+#region IFocuserV4 members
+#if ASCOM_7_PREVIEW
 
         public void Connect()
         {
@@ -576,8 +585,8 @@ namespace ASCOM.Simulators
                 return deviceState;
             }
         }
-
-        #endregion
+#endif
+#endregion
 
         #region Private Members
 

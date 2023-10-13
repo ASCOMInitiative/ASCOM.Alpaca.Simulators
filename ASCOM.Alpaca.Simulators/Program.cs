@@ -20,6 +20,7 @@ namespace ASCOM.Alpaca.Simulators
         public static void Main(string[] args)
         {
             WriteAndLog($"{ServerSettings.ServerName} version {ServerSettings.ServerVersion}");
+            WriteAndLog($"Running on: {RuntimeInformation.OSDescription}.");
 
             //Reset all stored settings if requested
             if (args?.Any(str => str.Contains("--reset")) ?? false)
@@ -33,6 +34,8 @@ namespace ASCOM.Alpaca.Simulators
                 return;
             }
 
+
+
             //Turn off Authentication. Once off the user can change the password and re-enable authentication
             if (args?.Any(str => str.Contains("--reset-auth")) ?? false)
             {
@@ -45,6 +48,25 @@ namespace ASCOM.Alpaca.Simulators
             {
                 Console.WriteLine($"http://localhost:{ServerSettings.ServerPort}");
             }
+
+#if ASCOM_COM
+            ASCOM.LocalServer.Server.InitServer();
+            ASCOM.Simulators.LocalServer.Drivers.Camera.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetCamera(0);
+            ASCOM.Simulators.LocalServer.Drivers.CoverCalibrator.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetCoverCalibrator(0);
+            ASCOM.Simulators.LocalServer.Drivers.Dome.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetDome(0);
+            ASCOM.Simulators.LocalServer.Drivers.FilterWheel.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetFilterWheel(0);
+            ASCOM.Simulators.LocalServer.Drivers.Focuser.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetFocuser(0);
+            ASCOM.Simulators.LocalServer.Drivers.ObservingConditions.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetObservingConditions(0);
+            ASCOM.Simulators.LocalServer.Drivers.Rotator.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetRotator(0);
+            ASCOM.Simulators.LocalServer.Drivers.SafetyMonitor.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetSafetyMonitor(0);
+            ASCOM.Simulators.LocalServer.Drivers.Switch.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetSwitch(0);
+            ASCOM.Simulators.LocalServer.Drivers.Telescope.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetTelescope(0);
+
+            if (!ASCOM.LocalServer.Server.ProcessAllArguments(args))
+            {
+                return;
+            }
+#endif
 
             try
             {
@@ -92,6 +114,10 @@ namespace ASCOM.Alpaca.Simulators
             DriverManager.LoadSafetyMonitor(0);
             DriverManager.LoadSwitch(0);
             DriverManager.LoadTelescope(0);
+
+#if ASCOM_COM
+            ASCOM.LocalServer.Server.StartServer();
+#endif
 
             //Add the --urls argument for IHostBuilder
             if (!args?.Any(str => str.Contains("--urls")) ?? true)
@@ -179,7 +205,11 @@ namespace ASCOM.Alpaca.Simulators
                 {
                     webBuilder.UseStartup<Startup>()
 #if BUNDLED
-                    .UseContentRoot(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location))
+                    .UseContentRoot(System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName))
+#endif
+
+#if ASCOM_COM
+                    .UseContentRoot(System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName))
 #endif
                     .UseKestrel().ConfigureKestrel(options =>
                     {

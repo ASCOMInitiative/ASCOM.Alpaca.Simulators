@@ -39,8 +39,11 @@ namespace ASCOM.Simulators
     // The ClassInterface/None attribute prevents an empty interface called
     // _Telescope from being created and used as the [default] interface
     //
-
+#if ASCOM_7_PREVIEW
     public class Telescope : ITelescopeV4, IDisposable, IAlpacaDevice, ISimulation
+#else
+    public class Telescope : ITelescopeV3, IDisposable, IAlpacaDevice, ISimulation
+#endif
     {
         //
         // Driver private data (rate collections)
@@ -743,8 +746,13 @@ namespace ASCOM.Simulators
                 }
                 else
                 {
+#if ASCOM_7_PREVIEW
                     SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: 4");
                     return 4;
+#else
+                    SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: 3");
+                    return 3;
+#endif
                 }
             }
         }
@@ -1334,8 +1342,8 @@ namespace ASCOM.Simulators
             SharedResources.TrafficEnd("(done)");
         }
 
-        #endregion ITelescope Members
-
+#endregion ITelescope Members
+#if ASCOM_7_PREVIEW
         #region ITelescopeV4 members
 
         /// <summary>
@@ -1456,7 +1464,7 @@ namespace ASCOM.Simulators
         }
 
         #endregion
-
+#endif
 
 
 
@@ -1590,14 +1598,14 @@ namespace ASCOM.Simulators
         public void Dispose()
         {
             Connected = false;
-            m_AxisRates[0].Dispose();
+            /*m_AxisRates[0].Dispose();
             m_AxisRates[1].Dispose();
             m_AxisRates[2].Dispose();
             m_AxisRates = null;
             m_TrackingRates.Dispose();
             m_TrackingRates = null;
             m_TrackingRatesSimple.Dispose();
-            m_TrackingRatesSimple = null;
+            m_TrackingRatesSimple = null;*/
         }
 
         #endregion IDisposable Members

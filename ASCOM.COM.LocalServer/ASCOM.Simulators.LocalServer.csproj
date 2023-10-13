@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ASCOM.Com.Components" Version="1.0.110" />
+    <PackageReference Include="ASCOM.Tools" Version="1.0.110" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ASCOM.DeviceInterfaces">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\ASCOM\Platform 6 Developer Components\Components\Platform6\ASCOM.DeviceInterfaces.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -10,7 +10,11 @@ namespace ASCOM.Simulators
     /// <summary>
     /// ASCOM ObservingConditions Driver for Observing Conditions OCSimulator.
     /// </summary>
+#if ASCOM_7_PREVIEW
     public class ObservingConditions : IObservingConditionsV2, IAlpacaDevice, ISimulation
+#else
+    public class ObservingConditions : IObservingConditions, IAlpacaDevice, ISimulation
+#endif
     {
         #region Variables and Constants
 
@@ -244,7 +248,9 @@ namespace ASCOM.Simulators
 
         #endregion ObservingConditions Implementation
 
-        #region IObservingConditionsV2 implementation
+#region IObservingConditionsV2 implementation
+
+#if ASCOM_7_PREVIEW
 
         public void Connect()
         {
@@ -292,8 +298,8 @@ namespace ASCOM.Simulators
                 return deviceState;
             }
         }
-
-        #endregion
+#endif
+#endregion
 
 
 

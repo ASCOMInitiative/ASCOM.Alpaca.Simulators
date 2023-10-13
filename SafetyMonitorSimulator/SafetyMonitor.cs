@@ -19,7 +19,12 @@ namespace ASCOM.Simulators
     /// ASCOM SafetyMonitor Driver for a SafetyMonitor.
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
+
+#if ASCOM_7_PREVIEW
     public class SafetyMonitor : ISafetyMonitorV3, IDisposable, IAlpacaDevice, ISimulation
+#else
+    public class SafetyMonitor : ISafetyMonitor, IDisposable, IAlpacaDevice, ISimulation
+#endif
     {
         #region Constants
 
@@ -43,7 +48,11 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Driver interface version
         /// </summary>
+#if ASCOM_7_PREVIEW
         private const short interfaceVersion = 3;
+#else
+        private const short interfaceVersion = 2;
+#endif
 
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
@@ -61,7 +70,7 @@ namespace ASCOM.Simulators
         private ILogger Logger;
         private IProfile Profile;
 
-        #endregion Constants
+#endregion Constants
 
         #region ISafetyMonitor Public Members
 
@@ -238,8 +247,8 @@ namespace ASCOM.Simulators
 
         #endregion ISafetyMonitor Public Members
 
-        #region ISafetyMonitorV3 members
-
+#region ISafetyMonitorV3 members
+#if ASCOM_7_PREVIEW
         public void Connect()
         {
             Connected = true;
@@ -269,8 +278,8 @@ namespace ASCOM.Simulators
                 return deviceState;
             }
         }
-
-        #endregion
+#endif
+#endregion
 
         #region SafetyMonitor Private Members
 

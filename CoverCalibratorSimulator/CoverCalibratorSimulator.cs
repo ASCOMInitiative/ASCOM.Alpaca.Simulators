@@ -11,8 +11,11 @@ namespace ASCOM.Simulators
     /// <summary>
     /// ASCOM CoverCalibrator Driver for Simulator.
     /// </summary>
-
+#if ASCOM_7_PREVIEW
     public class CoverCalibratorSimulator : ICoverCalibratorV2, IAlpacaDevice, ISimulation
+#else
+    public class CoverCalibratorSimulator : ICoverCalibratorV1, IAlpacaDevice, ISimulation
+#endif
     {
         // Private simulator constants
         private const string DRIVER_DESCRIPTION = "Alpaca CoverCalibrator Simulator"; // Driver description that displays in the ASCOM Chooser.
@@ -265,8 +268,13 @@ namespace ASCOM.Simulators
             // set by the driver wizard
             get
             {
+#if ASCOM_7_PREVIEW
                 LogVerbose("InterfaceVersion Get", "2");
                 return 2;
+#else
+                LogVerbose("InterfaceVersion Get", "1");
+                return 1;
+#endif
             }
         }
 
@@ -280,7 +288,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion Common properties and methods.
+#endregion Common properties and methods.
 
         #region ICoverCalibrator Implementation
 
@@ -482,8 +490,8 @@ namespace ASCOM.Simulators
 
         #endregion ICoverCalibrator Implementation
 
-        #region ICoverCalibratorV2 implementation
-
+#region ICoverCalibratorV2 implementation
+#if ASCOM_7_PREVIEW
         public void Connect()
         {
             Connected = true;
@@ -538,8 +546,8 @@ namespace ASCOM.Simulators
                 return CoverState == CoverStatus.Moving;
             }
         }
-
-        #endregion
+#endif
+#endregion
 
 
         #region Alpaca Information

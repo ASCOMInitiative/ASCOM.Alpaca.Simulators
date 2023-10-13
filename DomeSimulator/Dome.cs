@@ -35,7 +35,11 @@ using System.Runtime.CompilerServices;
 
 namespace ASCOM.Simulators
 {
+#if ASCOM_7_PREVIEW
     public class Dome : IDomeV3, IDisposable, IAlpacaDevice, ISimulation
+#else
+    public class Dome : IDomeV2, IDisposable, IAlpacaDevice, ISimulation
+#endif
     {
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
@@ -475,7 +479,11 @@ namespace ASCOM.Simulators
         {
             get
             {
+#if ASCOM_7_PREVIEW
                 return 3;
+#else
+                return 2;
+#endif
             }
         }
 
@@ -698,9 +706,10 @@ namespace ASCOM.Simulators
             Hardware.HW_Sync(Azimuth);
         }
 
-        #endregion
+#endregion
 
-        #region IDomeV3 members
+#region IDomeV3 members
+#if ASCOM_7_PREVIEW
 
         public void Connect()
         {
@@ -741,8 +750,8 @@ namespace ASCOM.Simulators
                 return deviceState;
             }
         }
-
-        #endregion
+#endif
+#endregion
 
         private void LogMessage(string message, string details)
         {

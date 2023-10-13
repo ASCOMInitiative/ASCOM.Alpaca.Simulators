@@ -36,7 +36,11 @@ namespace ASCOM.Simulators
     // The ClassInterface/None addribute prevents an empty interface called
     // _Rotator from being created and used as the [default] interface
     //
+#if ASCOM_7_PREVIEW
     public class Rotator : IRotatorV4, IAlpacaDevice, ISimulation
+#else
+    public class Rotator : IRotatorV3, IAlpacaDevice, ISimulation
+#endif
     {
         /// <summary>
         /// Driver ID - ClassID and used in the profile
@@ -252,7 +256,8 @@ namespace ASCOM.Simulators
 
         #endregion IRotator Members
 
-        #region IRotatorV4 members
+#region IRotatorV4 members
+#if ASCOM_7_PREVIEW
 
         public void Connect()
         {
@@ -290,8 +295,8 @@ namespace ASCOM.Simulators
                 return deviceState;
             }
         }
-
-        #endregion
+#endif
+#endregion
 
         #region ISimulation
 

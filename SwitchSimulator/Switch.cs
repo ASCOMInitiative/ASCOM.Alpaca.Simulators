@@ -42,7 +42,11 @@ namespace ASCOM.Simulators
     /// <summary>
     /// ASCOM Switch Driver for Simulator.
     /// </summary>
+#if ASCOM_7_PREVIEW
     public class Switch : ISwitchV3, IDisposable, IAlpacaDevice, ISimulation
+#else
+    public class Switch : ISwitchV2, IDisposable, IAlpacaDevice, ISimulation
+#endif
     {
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
@@ -249,8 +253,13 @@ namespace ASCOM.Simulators
             // set by the driver wizard
             get
             {
+#if ASCOM_7_PREVIEW
                 LogMessage("InterfaceVersion Get", "3");
                 return 3;
+#else
+                LogMessage("InterfaceVersion Get", "2");
+                return 2;
+#endif
             }
         }
 
@@ -264,7 +273,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        #endregion Common properties and methods.
+#endregion Common properties and methods.
 
         #region ISwitchV2 Implementation
 
@@ -571,7 +580,7 @@ namespace ASCOM.Simulators
         #endregion Private properties and methods
 
         #region ISwitchV3 implementation
-
+#if ASCOM_7_PREVIEW
         public void Connect()
         {
             Connected = true;
@@ -751,6 +760,10 @@ namespace ASCOM.Simulators
             }
         }
 
+
+#endif
+        #endregion
+
         private void LogMessage(string source, string details)
         {
             lock (loggerLockObject)
@@ -758,8 +771,6 @@ namespace ASCOM.Simulators
                 tl?.LogDebug(source + " - " + details);
             }
         }
-
-        #endregion
 
     }
 }
