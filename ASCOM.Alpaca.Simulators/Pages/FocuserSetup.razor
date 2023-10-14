@@ -14,7 +14,7 @@
     <fieldset disabled="@Device.Connected">
         <legend>Focuser Settings</legend>
 
-        <label for="maxPosition"> Maximum Pos (steps):</label>
+        <label for="maxPosition"> Maximum Position (steps):</label>
         <input type="number" id="maxPosition" name="maxPosition" min="0" @bind="maxPosition">
         <br>
 
@@ -316,13 +316,13 @@
         {
             if(MinimumTemperature >= MaxTemperature)
             {
-                toastService.ShowWarning("The minimum temperature must be less then the maximum.");
+                toastService.ShowWarning("The minimum temperature must be less than the maximum.");
                 return;
             }
 
             if(maxPosition <= 0)
             {
-                toastService.ShowWarning("The maximum position must be greater then 0.");
+                toastService.ShowWarning("The maximum position must be greater than 0.");
                 return;
             }
 
@@ -334,13 +334,13 @@
 
             if (stepSize <= 0)
             {
-                toastService.ShowWarning("The step size must be greater then 0.");
+                toastService.ShowWarning("The step size must be greater than 0.");
                 return;
             }
 
             if (settleTime <= 0)
             {
-                toastService.ShowWarning("The settle time must be greater then 0.");
+                toastService.ShowWarning("The settle time must be greater than 0.");
                 return;
             }
 

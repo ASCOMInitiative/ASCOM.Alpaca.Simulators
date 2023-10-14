@@ -342,43 +342,43 @@
         {
             if (ShutterSlewRate <= 0)
             {
-                toastService.ShowWarning("The Shutter Slew Rate must be greater then 0.");
+                toastService.ShowWarning("The Shutter Slew Rate must be greater than 0.");
                 return;
             }
 
             if (ShutterOpenCloseTime <= 0)
             {
-                toastService.ShowWarning("The Shutter Open Close Time must be greater then 0.");
+                toastService.ShowWarning("The Shutter Open Close Time must be greater than 0.");
                 return;
             }
 
             if (ShutterMaximumAltitude <= ShutterMinimumAltitude)
             {
-                toastService.ShowWarning("The Maximum Altitude must be greater then the Minimum.");
+                toastService.ShowWarning("The Maximum Altitude must be greater than the Minimum.");
                 return;
             }
 
             if (AzimuthSlewRate <= 0)
             {
-                toastService.ShowWarning("The Azimuth Slew Rate must be greater then 0.");
+                toastService.ShowWarning("The Azimuth Slew Rate must be greater than 0.");
                 return;
             }
 
             if (AzimuthStepSize <= 0)
             {
-                toastService.ShowWarning("The Azimuth Step Size must be greater then 0.");
+                toastService.ShowWarning("The Azimuth Step Size must be greater than 0.");
                 return;
             }
 
             if (AzimuthPark < 0 || AzimuthPark > 360)
             {
-                toastService.ShowWarning("The Azimuth Park postion must be between 0 and 360.");
+                toastService.ShowWarning("The Azimuth Park position must be between 0 and 360.");
                 return;
             }
 
             if (AzimuthHome < 0 || AzimuthHome > 360)
             {
-                toastService.ShowWarning("The Azimuth Home postion must be between 0 and 360.");
+                toastService.ShowWarning("The Azimuth Home position must be between 0 and 360.");
                 return;
             }
 

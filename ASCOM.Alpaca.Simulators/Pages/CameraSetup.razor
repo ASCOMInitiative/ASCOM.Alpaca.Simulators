@@ -549,13 +549,13 @@
         {
             if (PixelWidth <= 0)
             {
-                toastService.ShowWarning("The Pixel Width must be greater then 0.");
+                toastService.ShowWarning("The Pixel Width must be greater than 0.");
                 return;
             }
 
             if (PixelHeight <= 0)
             {
-                toastService.ShowWarning("The Pixel Height must be greater then 0.");
+                toastService.ShowWarning("The Pixel Height must be greater than 0.");
                 return;
             }
 
@@ -609,7 +609,7 @@
 
             if (GainMin < 0 || GainMin > 32767 || GainMin > GainMax)
             {
-                toastService.ShowWarning("The Gain Min must be between 0 and 32767 and less then Gain Max.");
+                toastService.ShowWarning("The Gain Min must be between 0 and 32767 and less than Gain Max.");
                 return;
             }
 
@@ -621,25 +621,25 @@
 
             if (MinExposure <= 0 || MinExposure > 3600 || MinExposure > MaxExposure)
             {
-                toastService.ShowWarning("The Min Exposure must be between 1 and 3600 and be less the the Max Exposure.");
+                toastService.ShowWarning("The Min Exposure must be between 1 and 3600 and be less than the Max Exposure.");
                 return;
             }
 
             if (MaxExposure <= 0 || MaxExposure > 3600 || MinExposure > MaxExposure)
             {
-                toastService.ShowWarning("The Min Exposure must be between 1 and 3600 and be more the the Min Exposure.");
+                toastService.ShowWarning("The Min Exposure must be between 1 and 3600 and be more than the Min Exposure.");
                 return;
             }
 
             if (OffsetMin < 0 || OffsetMin > OffsetMax)
             {
-                toastService.ShowWarning("The Offset Min must be greater then 0 and less then the Offset Max.");
+                toastService.ShowWarning("The Offset Min must be greater than 0 and less than the Offset Max.");
                 return;
             }
 
             if (OffsetMax < 0 || OffsetMin > OffsetMax)
             {
-                toastService.ShowWarning("The Offset Min must be greater then 0 and greater then the Offset Min.");
+                toastService.ShowWarning("The Offset Min must be greater than 0 and greater than the Offset Min.");
                 return;
             }
 
