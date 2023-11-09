@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -9,13 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="ASCOM.Com.Components" Version="1.0.110" />
+    <PackageReference Include="ASCOM.DeviceInterfaces" Version="7.0.0-rc.1" />
     <PackageReference Include="ASCOM.Tools" Version="1.0.110" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="ASCOM.DeviceInterfaces">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\ASCOM\Platform 6 Developer Components\Components\Platform6\ASCOM.DeviceInterfaces.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
