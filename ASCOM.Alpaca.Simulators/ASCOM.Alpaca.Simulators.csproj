@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
 		<UserSecretsId>967c7185-69cc-4a35-bf4b-c3c1cb89f6a3</UserSecretsId>
 		<Authors>Daniel Van Noord</Authors>
 		<Description>A full set of ASCOM Simulators exposing the Alpaca Controller Interfaces</Description>
