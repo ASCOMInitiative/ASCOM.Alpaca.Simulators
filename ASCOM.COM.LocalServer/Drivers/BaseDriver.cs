@@ -20,7 +20,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public bool Connecting => DeviceV2.Connecting;
 
-        public IList<IStateValue> DeviceState => DeviceV2.DeviceState;
+        public IList<IStateValue> DeviceState => (IList<IStateValue>)DeviceV2.DeviceState;
 
         public void Connect()
         {
