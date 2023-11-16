@@ -18,7 +18,7 @@
   <ItemGroup>
     <PackageReference Include="ASCOM.Alpaca.Device" Version="1.0.110" />
     <PackageReference Include="ASCOM.Common.Components" Version="1.0.110" />
-    <PackageReference Include="ASCOM.Exception.Library" Version="6.6.2-rc.3767" />
+    <PackageReference Include="ASCOM.Exception.Library" Version="7.0.0-rc.2" />
     <PackageReference Include="ASCOM.Tools" Version="1.0.110" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
