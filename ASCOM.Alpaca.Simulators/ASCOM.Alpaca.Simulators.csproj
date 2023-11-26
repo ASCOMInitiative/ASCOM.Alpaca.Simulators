@@ -9,6 +9,7 @@
 		<ApplicationIcon>favicon.ico</ApplicationIcon>
 		<Copyright>2021-23 Daniel Van Noord</Copyright>
 		<AssemblyName>ascom.alpaca.simulators</AssemblyName>
+		<Platforms>AnyCPU;x86</Platforms>
 	</PropertyGroup>
 
 	<Target Name="WriteInformationVersion" AfterTargets="CopyFilesToOutputDirectory">

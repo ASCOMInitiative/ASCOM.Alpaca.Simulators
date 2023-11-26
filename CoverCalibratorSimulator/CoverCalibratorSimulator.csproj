@@ -5,6 +5,7 @@
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>LocalServer.snk</AssemblyOriginatorKeyFile>
     <RootNamespace>ASCOMSimulators</RootNamespace>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
