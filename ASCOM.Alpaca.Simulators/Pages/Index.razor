@@ -5,7 +5,7 @@
     <legend>ASCOM Alpaca Simulators</legend>
     <p>Welcome to the ASCOM Alpaca Simulator, a full set of simulators for testing and developing Alpaca Applications.</p>
 
-    <p>Version - @ServerSettings.ServerVersion</p>
+    <p>Version - @ServerSettings.ServerVersion @(Environment.Is64BitProcess?"64bit":"32bit")</p>
 
     <p>@RuntimeInformation.OSDescription</p>
 
