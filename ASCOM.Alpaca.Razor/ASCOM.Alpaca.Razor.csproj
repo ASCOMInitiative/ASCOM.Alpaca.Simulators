@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -20,7 +20,6 @@
     <PackageReference Include="ASCOM.Common.Components" Version="1.0.111-rc.39" />
     <PackageReference Include="ASCOM.Exception.Library" Version="7.0.0-rc.2" />
     <PackageReference Include="ASCOM.Tools" Version="1.0.111-rc.39" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
   </ItemGroup>

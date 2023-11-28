@@ -1,4 +1,6 @@
-﻿using ASCOM.Common.Alpaca;
+﻿using ASCOM.Alpaca.Razor;
+using ASCOM.Alpaca.Razor.Responses;
+using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Helpers;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +10,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Mime;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ASCOM.Alpaca
@@ -903,11 +906,11 @@ namespace ASCOM.Alpaca
 
                 if (DeviceManager.GetCamera(DeviceNumber).ImageArray is int[,])
                 {
-                    rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new IntArray2DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as int[,]));
+                    rawresponse = System.Text.Json.JsonSerializer.Serialize(new JaggedArray2DResponse<int>(ClientTransactionID, TransactionID, To2DJArray<int>(DeviceManager.GetCamera(DeviceNumber).ImageArray as int[,])));
                 }
                 else if (DeviceManager.GetCamera(DeviceNumber).ImageArray is int[,,])
                 {
-                    rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new IntArray3DResponse(ClientTransactionID, TransactionID, DeviceManager.GetCamera(DeviceNumber).ImageArray as int[,,]));
+                    rawresponse = System.Text.Json.JsonSerializer.Serialize(new JaggedArray3DResponse<int>(ClientTransactionID, TransactionID, To3DJArray<int>(DeviceManager.GetCamera(DeviceNumber).ImageArray as int[,,])));
                 }
                 else
                 {
@@ -1079,11 +1082,11 @@ namespace ASCOM.Alpaca
                 {
                     if (raw_data.Rank == 2)
                     {
-                        rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new IntArray2DResponse(ClientTransactionID, TransactionID, To2DArray<int>(raw_data)));
+                        rawresponse = System.Text.Json.JsonSerializer.Serialize(new JaggedArray2DResponse<int>(ClientTransactionID, TransactionID, To2DJArray<int>(raw_data)));
                     }
                     else if (raw_data.Rank == 3)
                     {
-                        rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new IntArray3DResponse(ClientTransactionID, TransactionID, To3DArray<int>(raw_data)));
+                        rawresponse = System.Text.Json.JsonSerializer.Serialize(new JaggedArray3DResponse<int>(ClientTransactionID, TransactionID, To3DJArray<int>(raw_data)));
                     }
                     else
                     {
@@ -1094,11 +1097,11 @@ namespace ASCOM.Alpaca
                 {
                     if (raw_data.Rank == 2)
                     {
-                        rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new ShortArray2DResponse(ClientTransactionID, TransactionID, To2DArray<short>(raw_data)));
+                        rawresponse = System.Text.Json.JsonSerializer.Serialize(new JaggedArray2DResponse<short>(ClientTransactionID, TransactionID, To2DJArray<short>(raw_data)));
                     }
                     else if (raw_data.Rank == 3)
                     {
-                        rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new ShortArray3DResponse(ClientTransactionID, TransactionID, To3DArray<short>(raw_data)));
+                        rawresponse = System.Text.Json.JsonSerializer.Serialize(new JaggedArray3DResponse<short>(ClientTransactionID, TransactionID, To3DJArray<short>(raw_data)));
                     }
                     else
                     {
@@ -1109,11 +1112,11 @@ namespace ASCOM.Alpaca
                 {
                     if (raw_data.Rank == 2)
                     {
-                        rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new DoubleArray2DResponse(ClientTransactionID, TransactionID, To2DArray<double>(raw_data)));
+                        rawresponse = System.Text.Json.JsonSerializer.Serialize(new JaggedArray2DResponse<double>(ClientTransactionID, TransactionID, To2DJArray<double>(raw_data)));
                     }
                     else if (raw_data.Rank == 3)
                     {
-                        rawresponse = Newtonsoft.Json.JsonConvert.SerializeObject(new DoubleArray3DResponse(ClientTransactionID, TransactionID, To3DArray<double>(raw_data)));
+                        rawresponse = System.Text.Json.JsonSerializer.Serialize(new JaggedArray3DResponse<double>(ClientTransactionID, TransactionID, To3DJArray<double>(raw_data)));
                     }
                     else
                     {
@@ -1160,6 +1163,78 @@ namespace ASCOM.Alpaca
                     for (int k = 0; k < raw.GetLength(2); ++k)
                     {
                         result[i, j, k] = (T)raw.GetValue(i, j, k);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static T[][] To2DJArray<T>(T[,] raw)
+        {
+            T[][] result = new T[raw.GetLength(0)][];
+
+            for (int i = 0; i < raw.GetLength(0); ++i)
+            {
+                result[i] = new T[raw.GetLength(1)];
+                for (int j = 0; j < raw.GetLength(1); j++)
+                {
+                    result[i][j] = raw[i, j];
+                }
+            }
+
+            return result;
+        }
+
+        private static T[][] To2DJArray<T>(Array raw)
+        {
+            T[][] result = new T[raw.GetLength(0)][];
+
+            for (int i = 0; i < raw.GetLength(0); ++i)
+            {
+                result[i] = new T[raw.GetLength(1)];
+                for (int j = 0; j < raw.GetLength(1); j++)
+                {
+                    result[i][j] = (T)raw.GetValue(i, j);
+                }
+            }
+
+            return result;
+        }
+
+        private static T[][][] To3DJArray<T>(Array raw)
+        {
+            T[][][] result = new T[raw.GetLength(0)][][];
+
+            for (int i = 0; i < raw.GetLength(0); ++i)
+            {
+                result[i] = new T[raw.GetLength(1)][];
+                for (int j = 0; j < raw.GetLength(1); ++j)
+                {
+                    result[i][j] = new T[raw.GetLength(2)];
+                    for (int k = 0; k < raw.GetLength(2); ++k)
+                    {
+                        result[i][j][k] = (T)raw.GetValue(i, j, k);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static T[][][] To3DJArray<T>(int[,,] raw)
+        {
+            T[][][] result = new T[raw.GetLength(0)][][];
+
+            for (int i = 0; i < raw.GetLength(0); ++i)
+            {
+                result[i] = new T[raw.GetLength(1)][];
+                for (int j = 0; j < raw.GetLength(1); ++j)
+                {
+                    result[i][j] = new T[raw.GetLength(2)];
+                    for (int k = 0; k < raw.GetLength(2); ++k)
+                    {
+                        result[i][j][k] = (T)raw.GetValue(i, j, k);
                     }
                 }
             }
