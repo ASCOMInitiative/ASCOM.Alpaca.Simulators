@@ -9,12 +9,8 @@ namespace ASCOM.Simulators.LocalServer.Drivers
         public ASCOM.Common.DeviceInterfaces.ISwitchV2 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.ISwitchV2);
 
         public short MaxSwitch => Device.MaxSwitch;
-
-#if ASCOM_7_PREVIEW
+        
         public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
-#else
-        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDevice> DeviceAccess;
-#endif
 
         public Switch()
         {

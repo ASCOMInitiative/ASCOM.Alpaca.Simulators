@@ -35,11 +35,7 @@ using System.Runtime.CompilerServices;
 
 namespace ASCOM.Simulators
 {
-#if ASCOM_7_PREVIEW
     public class Dome : IDomeV3, IDisposable, IAlpacaDevice, ISimulation
-#else
-    public class Dome : IDomeV2, IDisposable, IAlpacaDevice, ISimulation
-#endif
     {
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
@@ -479,11 +475,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-#if ASCOM_7_PREVIEW
                 return 3;
-#else
-                return 2;
-#endif
             }
         }
 
@@ -709,8 +701,6 @@ namespace ASCOM.Simulators
 #endregion
 
 #region IDomeV3 members
-#if ASCOM_7_PREVIEW
-
         public void Connect()
         {
             Connected = true;
@@ -732,12 +722,12 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Return the device's operational state in one call
         /// </summary>
-        public IList<IStateValue> DeviceState
+        public List<StateValue> DeviceState
         {
             get
             {
                 // Create an array list to hold the IStateValue entries
-                List<IStateValue> deviceState = new List<IStateValue>();
+                List<StateValue> deviceState = new List<StateValue>();
 
                 try { deviceState.Add(new StateValue(nameof(IDomeV3.Altitude), Altitude)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(IDomeV3.AtHome), AtHome)); } catch { }
@@ -750,7 +740,6 @@ namespace ASCOM.Simulators
                 return deviceState;
             }
         }
-#endif
 #endregion
 
         private void LogMessage(string message, string details)

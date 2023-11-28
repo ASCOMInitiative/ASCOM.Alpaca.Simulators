@@ -10,11 +10,7 @@ namespace ASCOM.Simulators
     /// <summary>
     /// ASCOM ObservingConditions Driver for Observing Conditions OCSimulator.
     /// </summary>
-#if ASCOM_7_PREVIEW
     public class ObservingConditions : IObservingConditionsV2, IAlpacaDevice, ISimulation
-#else
-    public class ObservingConditions : IObservingConditions, IAlpacaDevice, ISimulation
-#endif
     {
         #region Variables and Constants
 
@@ -250,8 +246,6 @@ namespace ASCOM.Simulators
 
 #region IObservingConditionsV2 implementation
 
-#if ASCOM_7_PREVIEW
-
         public void Connect()
         {
             Connected = true;
@@ -273,12 +267,12 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Return the device's operational state in one call
         /// </summary>
-        public IList<IStateValue> DeviceState
+        public List<StateValue> DeviceState
         {
             get
             {
                 // Create an array list to hold the IStateValue entries
-                List<IStateValue> deviceState = new List<IStateValue>();
+                List<StateValue> deviceState = new List<StateValue>();
 
                 try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.CloudCover), CloudCover)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.DewPoint), DewPoint)); } catch { }
@@ -298,7 +292,6 @@ namespace ASCOM.Simulators
                 return deviceState;
             }
         }
-#endif
 #endregion
 
 

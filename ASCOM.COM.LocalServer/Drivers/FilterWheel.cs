@@ -8,11 +8,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
     {
         public ASCOM.Common.DeviceInterfaces.IFilterWheelV2 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.IFilterWheelV2);
 
-#if ASCOM_7_PREVIEW
         public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
-#else
-        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDevice> DeviceAccess;
-#endif
 
         public FilterWheel()
         {

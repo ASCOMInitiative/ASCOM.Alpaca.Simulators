@@ -38,7 +38,7 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static void LoadObservingConditions(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.ObservingConditions(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.ObservingConditions, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.ObservingConditions(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.ObservingCondition, (uint)DeviceID));
             DeviceManager.LoadObservingConditions(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
@@ -71,7 +71,7 @@ namespace ASCOM.Alpaca.Simulators
         /// </summary>
         internal static void Reset()
         {
-            foreach (var dev in DeviceManager.cameraV3s.Values)
+            foreach (var dev in DeviceManager.Cameras.Values)
             {
                 try
                 {
@@ -83,7 +83,7 @@ namespace ASCOM.Alpaca.Simulators
                 }
             }
 
-            foreach (var dev in DeviceManager.coverCalibratorV1s.Values)
+            foreach (var dev in DeviceManager.CoverCalibrators.Values)
             {
                 try
                 {
@@ -95,7 +95,7 @@ namespace ASCOM.Alpaca.Simulators
                 }
             }
 
-            foreach (var dev in DeviceManager.domeV2s.Values)
+            foreach (var dev in DeviceManager.Domes.Values)
             {
                 try
                 {
@@ -107,7 +107,7 @@ namespace ASCOM.Alpaca.Simulators
                 }
             }
 
-            foreach (var dev in DeviceManager.filterWheelV2s.Values)
+            foreach (var dev in DeviceManager.FilterWheels.Values)
             {
                 try
                 {
@@ -119,7 +119,7 @@ namespace ASCOM.Alpaca.Simulators
                 }
             }
 
-            foreach (var dev in DeviceManager.focuserV3s.Values)
+            foreach (var dev in DeviceManager.Focusers.Values)
             {
                 try
                 {
@@ -131,7 +131,7 @@ namespace ASCOM.Alpaca.Simulators
                 }
             }
 
-            foreach (var dev in DeviceManager.observingConditions.Values)
+            foreach (var dev in DeviceManager.ObservingConditions.Values)
             {
                 try
                 {
@@ -152,7 +152,7 @@ namespace ASCOM.Alpaca.Simulators
                 Logging.LogError($"Failed to reset Rotator settings with error: {ex.Message}");
             }
 
-            foreach (var dev in DeviceManager.safetyMonitors.Values)
+            foreach (var dev in DeviceManager.SafetyMonitors.Values)
             {
                 try
                 {
@@ -164,7 +164,7 @@ namespace ASCOM.Alpaca.Simulators
                 }
             }
 
-            foreach (var dev in DeviceManager.switchV2s.Values)
+            foreach (var dev in DeviceManager.Switches.Values)
             {
                 try
                 {

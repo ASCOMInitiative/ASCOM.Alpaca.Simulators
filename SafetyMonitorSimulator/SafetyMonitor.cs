@@ -20,11 +20,7 @@ namespace ASCOM.Simulators
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
 
-#if ASCOM_7_PREVIEW
     public class SafetyMonitor : ISafetyMonitorV3, IDisposable, IAlpacaDevice, ISimulation
-#else
-    public class SafetyMonitor : ISafetyMonitor, IDisposable, IAlpacaDevice, ISimulation
-#endif
     {
         #region Constants
 
@@ -48,11 +44,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Driver interface version
         /// </summary>
-#if ASCOM_7_PREVIEW
         private const short interfaceVersion = 3;
-#else
-        private const short interfaceVersion = 2;
-#endif
 
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
@@ -248,7 +240,6 @@ namespace ASCOM.Simulators
         #endregion ISafetyMonitor Public Members
 
 #region ISafetyMonitorV3 members
-#if ASCOM_7_PREVIEW
         public void Connect()
         {
             Connected = true;
@@ -267,18 +258,17 @@ namespace ASCOM.Simulators
             }
         }
 
-        public IList<IStateValue> DeviceState
+        public List<StateValue> DeviceState
         {
             get
             {
-                List<IStateValue> deviceState = new List<IStateValue>();
+                List<StateValue> deviceState = new List<StateValue>();
                 try { deviceState.Add(new StateValue(nameof(ISafetyMonitorV3.IsSafe), IsSafe)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
                 return deviceState;
             }
         }
-#endif
 #endregion
 
         #region SafetyMonitor Private Members

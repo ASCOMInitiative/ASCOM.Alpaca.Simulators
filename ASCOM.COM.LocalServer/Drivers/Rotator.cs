@@ -21,12 +21,8 @@ namespace ASCOM.Simulators.LocalServer.Drivers
         public float TargetPosition => Device.TargetPosition;
 
         public float MechanicalPosition => Device.MechanicalPosition;
-
-#if ASCOM_7_PREVIEW
+        
         public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
-#else
-        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDevice> DeviceAccess;
-#endif
 
         public Rotator()
         {

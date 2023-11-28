@@ -14,11 +14,7 @@ namespace ASCOM.Alpaca
     public class FocuserController : AlpacaController
     {
         [NonAction]
-#if ASCOM_7_PREVIEW
         public override IAscomDeviceV2 GetDevice(uint DeviceNumber)
-#else
-        public override IAscomDevice GetDevice(uint DeviceNumber)
-#endif
         {
             return DeviceManager.GetFocuser(DeviceNumber);
         }

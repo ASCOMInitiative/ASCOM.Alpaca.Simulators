@@ -125,6 +125,38 @@ namespace ASCOM.Alpaca
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
+        public ActionResult<DeviceStateResponse> ProcessRequest(Func<List<StateValue>> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
+        {
+            try
+            {
+                LogAPICall(HttpContext.Connection.RemoteIpAddress, HttpContext.Request.Path.ToString(), ClientID, ClientTransactionID, TransactionID, Payload);
+
+                if (DeviceManager.Configuration.RunInStrictAlpacaMode)
+                {
+                    if (BadRequestAlpacaProtocol(out BadRequestObjectResult result, ref ClientID, ref ClientTransactionID))
+                    {
+                        return result;
+                    }
+                }
+
+                return Ok(new DeviceStateResponse()
+                {
+                    ClientTransactionID = ClientTransactionID,
+                    ServerTransactionID = TransactionID,
+                    Value = Request.Invoke()
+                });
+            }
+            catch (DeviceNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseHelpers.ExceptionResponseBuilder<DoubleResponse>(ex, ClientTransactionID, TransactionID));
+            }
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult<DriveRatesResponse> ProcessRequest(Func<ITrackingRates> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
             try
@@ -426,7 +458,6 @@ namespace ASCOM.Alpaca
             }
         }
 
-#if ASCOM_7_PREVIEW
         [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult<DeviceStateResponse> ProcessRequest(Func<IList<IStateValue>> Request, uint TransactionID, uint ClientID = 0, uint ClientTransactionID = 0, string Payload = "")
         {
@@ -467,8 +498,6 @@ namespace ASCOM.Alpaca
                 return Ok(ResponseHelpers.ExceptionResponseBuilder<IntListResponse>(ex, ClientTransactionID, TransactionID));
             }
         }
-
-#endif
 
         /// <summary>
         /// Log out an API request to the ASCOM Standard Logger Instance. This logs at a level of Verbose.

@@ -36,11 +36,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public double WindSpeed => Device.WindSpeed;
 
-#if ASCOM_7_PREVIEW
         public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
-#else
-        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDevice> DeviceAccess;
-#endif
 
         public ObservingConditions()
         {

@@ -8,14 +8,8 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 {
     public class BaseDriver : ReferenceCountedObjectBase, IDisposable
     {
-#if ASCOM_7_PREVIEW
         internal Func<IAscomDeviceV2> GetDevice;
-#else
-        internal Func<IAscomDevice> GetDevice;
 
-#endif
-
-#if ASCOM_7_PREVIEW
         internal IAscomDeviceV2 DeviceV2 { get => GetDevice(); }
 
         public bool Connecting => DeviceV2.Connecting;
@@ -31,9 +25,6 @@ namespace ASCOM.Simulators.LocalServer.Drivers
         {
             DeviceV2.Disconnect();
         }
-#else
-        internal IAscomDevice DeviceV2 { get => GetDevice(); }
-#endif
 
         public ArrayList SupportedActions => new ArrayList(DeviceV2.SupportedActions.ToArray());
 

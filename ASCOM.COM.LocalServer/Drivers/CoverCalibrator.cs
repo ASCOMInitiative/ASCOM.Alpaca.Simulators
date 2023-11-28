@@ -17,11 +17,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public int MaxBrightness => Device.MaxBrightness;
 
-#if ASCOM_7_PREVIEW
         public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
-#else
-        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDevice> DeviceAccess;
-#endif
 
         public CoverCalibrator()
         {

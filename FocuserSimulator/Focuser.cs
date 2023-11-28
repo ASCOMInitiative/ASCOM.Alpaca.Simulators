@@ -23,11 +23,7 @@ namespace ASCOM.Simulators
     /// ASCOM Focuser Driver for a Focuser.
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
-#if ASCOM_7_PREVIEW
     public class Focuser : IFocuserV4, IDisposable, IAlpacaDevice, ISimulation
-#else
-    public class Focuser : IFocuserV3, IDisposable, IAlpacaDevice, ISimulation
-#endif
     {
         #region Constants
 
@@ -52,11 +48,7 @@ namespace ASCOM.Simulators
         /// Driver interface version
         /// </summary>
         /// 
-#if ASCOM_7_PREVIEW
         private const short interfaceVersion = 4;
-#else
-        private const short interfaceVersion = 3;
-#endif
 
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
@@ -547,8 +539,6 @@ namespace ASCOM.Simulators
         #endregion IFocuserV3 Members
 
 #region IFocuserV4 members
-#if ASCOM_7_PREVIEW
-
         public void Connect()
         {
             Connected = true;
@@ -570,12 +560,12 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Return the device's operational state in one call
         /// </summary>
-        public IList<IStateValue> DeviceState
+        public List<StateValue> DeviceState
         {
             get
             {
                 // Create an array list to hold the IStateValue entries
-                List<IStateValue> deviceState = new List<IStateValue>();
+                List<StateValue> deviceState = new List<StateValue>();
 
                 try { deviceState.Add(new StateValue(nameof(IFocuserV4.IsMoving), IsMoving)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(IFocuserV4.Position), Position)); } catch { }
@@ -585,7 +575,6 @@ namespace ASCOM.Simulators
                 return deviceState;
             }
         }
-#endif
 #endregion
 
         #region Private Members

@@ -451,12 +451,7 @@ namespace ASCOM.Simulators
 
         public static short InterfaceVersion()
         {
-#if ASCOM_7_PREVIEW
             short interfaceVersion = 2;
-#else
-            short interfaceVersion = 1;
-#endif
-
 
             LogMessage("InterfaceVersion", interfaceVersion.ToString());
             return interfaceVersion;
@@ -1012,21 +1007,21 @@ namespace ASCOM.Simulators
 
         /// <summary>
 
-        ///Calculate the dew point (°Celsius) given the ambient temperature (°Celsius) and relative humidity (%)
+        ///Calculate the dew point (ï¿½Celsius) given the ambient temperature (ï¿½Celsius) and relative humidity (%)
 
         ///</summary>
 
         ///<param name="RelativeHumidity">Relative humidity expressed in percent (0.0 .. 100.0)</param>
 
-        ///<param name="AmbientTemperature">Ambient temperature (°Celsius)</param>
+        ///<param name="AmbientTemperature">Ambient temperature (ï¿½Celsius)</param>
 
-        ///<returns>Dew point (°Celsius)</returns>
+        ///<returns>Dew point (ï¿½Celsius)</returns>
 
         ///<exception cref="InvalidValueException">When relative humidity &lt; 0.0% or &gt; 100.0%></exception>
 
         ///<exception cref="InvalidValueException">When ambient temperature &lt; absolute zero or &gt; 100.0C></exception>
 
-        /// <remarks>'Calculation uses Vaisala formula for water vapour saturation pressure and is accurate to 0.083% over -20C - +50°C
+        /// <remarks>'Calculation uses Vaisala formula for water vapour saturation pressure and is accurate to 0.083% over -20C - +50ï¿½C
 
         ///<para>http://www.vaisala.com/Vaisala%20Documents/Application%20notes/Humidity_Conversion_Formulas_B210973EN-F.pdf </para>
 
@@ -1051,7 +1046,7 @@ namespace ASCOM.Simulators
 
             Pws = A * Math.Pow(10.0, m * AmbientTemperature / (AmbientTemperature + Tn)); // Calculate water vapor saturation pressure, Pws, from Vaisala formula (6) - In hPa
             Pw = Pws * RelativeHumidity / 100.0; // Calculate measured vapor pressure, Pw
-            Td = Tn / ((m / Math.Log10(Pw / A)) - 1.0); // Finally, calculate dew-point in °C
+            Td = Tn / ((m / Math.Log10(Pw / A)) - 1.0); // Finally, calculate dew-point in ï¿½C
 
             LogMessage("Humidity2DewPoint", "DewPoint: " + Td + ", Given Relative Humidity: " + RelativeHumidity + ", Given Ambient temperaure: " + AmbientTemperature + ", Pws: " + Pws + ", Pw: " + Pw);
 

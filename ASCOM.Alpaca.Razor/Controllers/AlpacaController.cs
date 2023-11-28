@@ -15,12 +15,7 @@ namespace ASCOM.Alpaca
     /// </summary>
     public abstract class AlpacaController : ProcessBaseController
     {
-#if ASCOM_7_PREVIEW
         public abstract IAscomDeviceV2 GetDevice(uint DeviceNumber);
-#else
-        public abstract IAscomDevice GetDevice(uint DeviceNumber);
-#endif
-#if ASCOM_7_PREVIEW
         #region IAscomV2 Methods
 
 
@@ -106,7 +101,7 @@ namespace ASCOM.Alpaca
         }
 
         #endregion
-#endif
+
         #region Common Methods
 
         /// <summary>
