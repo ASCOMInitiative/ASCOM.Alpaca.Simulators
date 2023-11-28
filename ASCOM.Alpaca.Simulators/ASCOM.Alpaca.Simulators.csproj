@@ -81,8 +81,16 @@
 		<ResourceLanguages>en</ResourceLanguages>
 	</PropertyGroup>
 
-  <ItemGroup Condition="$(DefineConstants.Contains('ASCOM_COM'))">
-    <ProjectReference Include="..\ASCOM.COM.LocalServer\ASCOM.Simulators.LocalServer.csproj" />
-  </ItemGroup>
+	<PropertyGroup Condition="$(DefineConstants.Contains('ASCOM_COM'))">
+		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+	</PropertyGroup>
+
+	<ItemGroup Condition="$(DefineConstants.Contains('ASCOM_COM'))">
+		<TrimmerRootAssembly Include="ASCOM.Simulators.LocalServer" />
+		<TrimmerRootAssembly Include="System.Private.CoreLib" />
+		<TrimmerRootAssembly Include="System.Runtime.InteropServices" />
+		<TrimmerRootAssembly Include="System.Runtime" />
+		<ProjectReference Include="..\ASCOM.COM.LocalServer\ASCOM.Simulators.LocalServer.csproj" />
+	</ItemGroup>
 
 </Project>
