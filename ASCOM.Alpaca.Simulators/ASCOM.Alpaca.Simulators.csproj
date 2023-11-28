@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
 		<UserSecretsId>967c7185-69cc-4a35-bf4b-c3c1cb89f6a3</UserSecretsId>
 		<Authors>Daniel Van Noord</Authors>
@@ -9,6 +9,8 @@
 		<ApplicationIcon>favicon.ico</ApplicationIcon>
 		<Copyright>2021-23 Daniel Van Noord</Copyright>
 		<AssemblyName>ascom.alpaca.simulators</AssemblyName>
+		<TrimMode>partial</TrimMode>
+		<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
 	</PropertyGroup>
 
 	<Target Name="WriteInformationVersion" AfterTargets="CopyFilesToOutputDirectory">
@@ -24,6 +26,9 @@
 		<Content Remove="Setup\**" />
 		<EmbeddedResource Remove="Setup\**" />
 		<None Remove="Setup\**" />
+		<TrimmerRootAssembly Include="Microsoft.AspNetCore.Mvc.Core" />
+		<TrimmerRootAssembly Include="Microsoft.AspNetCore.Mvc.Razor" />
+		<TrimmerRootAssembly Include="Microsoft.AspNetCore.Mvc" />
 	</ItemGroup>
 
 	<ItemGroup>

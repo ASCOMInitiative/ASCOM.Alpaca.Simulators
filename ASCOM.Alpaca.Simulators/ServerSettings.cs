@@ -13,6 +13,11 @@ namespace ASCOM.Alpaca.Simulators
         internal const string ServerName = "ASCOM Alpaca Simulators";
         internal const string Manufacturer = "ASCOM Initiative";
 
+        static ServerSettings()
+        {
+            ASCOM.Tools.XMLProfile.SettingsPair pair = new XMLProfile.SettingsPair();
+        }
+
         internal static string ServerVersion
         {
             get
