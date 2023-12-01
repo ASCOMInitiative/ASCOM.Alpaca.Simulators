@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app 
 
 # copy NuGet config
@@ -11,6 +11,8 @@ COPY license.md .
 # copy csproj and restore as distinct layers
 COPY *.sln .
 COPY ASCOM.Alpaca.Simulators/*.csproj ./ASCOM.Alpaca.Simulators/
+COPY ASCOM.Alpaca.Razor/*.csproj ./ASCOM.Alpaca.Razor/
+COPY ASCOM.COM.LocalServer/*.csproj ./ASCOM.COM.LocalServer/
 COPY Camera.Simulator/*.csproj ./Camera.Simulator/
 COPY CoverCalibratorSimulator/*.csproj ./CoverCalibratorSimulator/
 COPY DomeSimulator/*.csproj ./DomeSimulator/ 
@@ -36,7 +38,7 @@ WORKDIR /app/ASCOM.Alpaca.Simulators
 RUN dotnet publish -c Release -o out 
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app 
 
 COPY --from=build /app/ASCOM.Alpaca.Simulators/out ./
