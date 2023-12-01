@@ -28,6 +28,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
                 foreach(StateValue value in DeviceV2.DeviceState)
                 {
                     DeviceInterface.StateValue stateValue=new DeviceInterface.StateValue(value.Name,value.Value);
+                    returnValue.Add(stateValue);
                 }
 
                 return returnValue;

@@ -4,9 +4,9 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Rotator : BaseDriver, ASCOM.DeviceInterface.IRotatorV3, IDisposable
+    public class Rotator : BaseDriver, ASCOM.DeviceInterface.IRotatorV4, IDisposable
     {
-        public ASCOM.Common.DeviceInterfaces.IRotatorV3 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.IRotatorV3);
+        public ASCOM.Common.DeviceInterfaces.IRotatorV4 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.IRotatorV4);
 
         public bool CanReverse => Device.CanReverse;
 

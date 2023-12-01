@@ -5,9 +5,9 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Dome : BaseDriver, ASCOM.DeviceInterface.IDomeV2, IDisposable
+    public class Dome : BaseDriver, ASCOM.DeviceInterface.IDomeV3, IDisposable
     {
-        public ASCOM.Common.DeviceInterfaces.IDomeV2 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.IDomeV2);
+        public ASCOM.Common.DeviceInterfaces.IDomeV3 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.IDomeV3);
 
         public double Altitude => Device.Altitude;
 

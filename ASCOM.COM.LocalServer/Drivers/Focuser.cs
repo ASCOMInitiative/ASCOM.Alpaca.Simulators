@@ -5,9 +5,9 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Focuser : BaseDriver, ASCOM.DeviceInterface.IFocuserV3, IDisposable
+    public class Focuser : BaseDriver, ASCOM.DeviceInterface.IFocuserV4, IDisposable
     {
-        public IFocuserV3 Device => (base.DeviceV2 as IFocuserV3);
+        public IFocuserV4 Device => (base.DeviceV2 as IFocuserV4);
 
         public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
 

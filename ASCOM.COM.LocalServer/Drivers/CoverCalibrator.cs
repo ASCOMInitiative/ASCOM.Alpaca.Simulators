@@ -5,9 +5,9 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
-    public class CoverCalibrator : BaseDriver, ASCOM.DeviceInterface.ICoverCalibratorV1, IDisposable
+    public class CoverCalibrator : BaseDriver, ASCOM.DeviceInterface.ICoverCalibratorV2, IDisposable
     {
-        public ASCOM.Common.DeviceInterfaces.ICoverCalibratorV1 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.ICoverCalibratorV1);
+        public ASCOM.Common.DeviceInterfaces.ICoverCalibratorV2 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.ICoverCalibratorV2);
 
         public CoverStatus CoverState => (CoverStatus)Device.CoverState;
 
@@ -47,6 +47,20 @@ namespace ASCOM.Simulators.LocalServer.Drivers
         public void CalibratorOff()
         {
             Device.CalibratorOff();
+        }
+        public bool CalibratorReady
+        {
+            get
+            {
+                return Device.CalibratorReady;
+            }
+        }
+        public bool CoverMoving
+        {
+            get
+            {
+                return Device.CoverMoving;
+            }
         }
     }
 }
