@@ -14,7 +14,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public bool Connecting => DeviceV2.Connecting;
 
-        public ArrayList DeviceState
+        public IEnumerable DeviceState
         {
             get
             {
