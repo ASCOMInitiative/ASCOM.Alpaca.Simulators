@@ -22,7 +22,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
                 // The following code converts the OmniSim / ASCOM Library version of StateValue into the COM visible Windows version for return to COM clients by the OmniSim local server.
 
                 // Create an empty return list in case the device does not return any state values
-                ArrayList returnValue = new ArrayList();
+               ASCOM.DeviceInterface.ComArrayList returnValue = new ASCOM.DeviceInterface.ComArrayList();
 
                 // Iterate over the simulator's list of ASCOM.Common.DeviceInterfaces.StateValue response instances, convert each to an ASCOM.DeviceInterface.StateValue instance and add it to the response ArrayList
                 foreach(StateValue value in DeviceV2.DeviceState)
