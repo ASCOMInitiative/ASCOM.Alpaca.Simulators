@@ -194,6 +194,15 @@ namespace ASCOM.Simulators.LocalServer.Drivers
         {
             Device.Unpark();
         }
+
+        public ComTest GetComTest()
+        {
+            ComTest retVal = new ComTest();
+            retVal.Add("OmniSim Telescope", "OmniSim test value!");
+            return retVal;
+        }
+
+
     }
 
     public class AxisRate : IAxisRates
