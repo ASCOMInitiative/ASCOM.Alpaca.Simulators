@@ -14,7 +14,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public bool Connecting => DeviceV2.Connecting;
 
-        public ArrayList DeviceState
+        public DeviceInterface.IStateValueCollection DeviceState
         {
             get
             {
@@ -22,16 +22,17 @@ namespace ASCOM.Simulators.LocalServer.Drivers
                 // The following code converts the OmniSim / ASCOM Library version of StateValue into the COM visible Windows version for return to COM clients by the OmniSim local server.
 
                 // Create an empty return list in case the device does not return any state values
-               ASCOM.DeviceInterface.ComArrayList returnValue = new ASCOM.DeviceInterface.ComArrayList();
+               DeviceInterface.IStateValueCollection returnValue = new DeviceInterface.StateValueCollection();
 
                 // Iterate over the simulator's list of ASCOM.Common.DeviceInterfaces.StateValue response instances, convert each to an ASCOM.DeviceInterface.StateValue instance and add it to the response ArrayList
+                List<DeviceInterface.IStateValue> stateValues = new List<DeviceInterface.IStateValue>();
                 foreach(StateValue value in DeviceV2.DeviceState)
                 {
                     DeviceInterface.StateValue stateValue=new DeviceInterface.StateValue(value.Name,value.Value);
-                    returnValue.Add(stateValue);
+                    stateValues.Add(stateValue);
                 }
 
-                return returnValue;
+                return new DeviceInterface.StateValueCollection(stateValues);
             }
         }
 
