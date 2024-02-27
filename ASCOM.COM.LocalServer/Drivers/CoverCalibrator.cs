@@ -52,7 +52,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
         {
             get
             {
-                return Device.CalibratorReady;
+                return Device.CalibratorChanging;
             }
         }
         public bool CoverMoving
