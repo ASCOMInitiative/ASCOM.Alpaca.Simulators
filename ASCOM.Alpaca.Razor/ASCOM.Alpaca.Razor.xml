@@ -1410,12 +1410,40 @@
             <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
             <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         </member>
+        <member name="M:ASCOM.Alpaca.CoverCalibrator.CalibratorChanging(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            True while the calibrator brightness is not stable.
+            </summary>
+            <remarks>
+            <para>True if the calibrator is stabilising after being set to a new brightness, otherwise False.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
         <member name="M:ASCOM.Alpaca.CoverCalibrator.CalibratorState(System.UInt32,System.UInt32,System.UInt32)">
             <summary>
             Returns the state of the calibration device
             </summary>
             <remarks>
             <para>Returns the state of the calibration device, if present, otherwise returns "NotPresent". The calibrator state mode is specified as an integer value from the CalibratorStatus Enum.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.CoverCalibrator.CoverMoving(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            True while the cover is moving.
+            </summary>
+            <remarks>
+            <para>True while the cover is moving to its new position after an OpenCover or CloseCover command.</para>
             </remarks>
             <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
             <param name="ClientID">Client's unique ID.</param>

@@ -43,6 +43,29 @@ namespace ASCOM.Alpaca
         }
 
         /// <summary>
+        /// True while the calibrator brightness is not stable.
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the calibrator is stabilising after being set to a new brightness, otherwise False.</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Route("{DeviceNumber}/calibratorchanging")]
+        public ActionResult<BoolResponse> CalibratorChanging(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => DeviceManager.GetCoverCalibrator(DeviceNumber).CalibratorChanging, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+
+        /// <summary>
         /// Returns the state of the calibration device
         /// </summary>
         /// <remarks>
@@ -63,6 +86,29 @@ namespace ASCOM.Alpaca
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
             return ProcessRequest(() => (int)DeviceManager.GetCoverCalibrator(DeviceNumber).CalibratorState, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+
+        /// <summary>
+        /// True while the cover is moving.
+        /// </summary>
+        /// <remarks>
+        /// <para>True while the cover is moving to its new position after an OpenCover or CloseCover command.</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Route("{DeviceNumber}/covermoving")]
+        public ActionResult<BoolResponse> CoverMoving(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => DeviceManager.GetCoverCalibrator(DeviceNumber).CoverMoving, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>

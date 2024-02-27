@@ -512,7 +512,7 @@ namespace ASCOM.Simulators
 
                 try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.Brightness), Brightness)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CalibratorState), CalibratorState)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CalibratorReady), CalibratorReady)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CalibratorChanging), CalibratorChanging)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CoverState), CoverState)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CoverMoving), CoverMoving)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
@@ -521,7 +521,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        public bool CalibratorReady
+        public bool CalibratorChanging
         {
             get
             {
