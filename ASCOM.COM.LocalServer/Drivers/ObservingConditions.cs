@@ -4,9 +4,9 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
-    public class ObservingConditions : BaseDriver, ASCOM.DeviceInterface.IObservingConditions, IDisposable
+    public class ObservingConditions : BaseDriver, ASCOM.DeviceInterface.IObservingConditionsV2, IDisposable
     {
-        public ASCOM.Common.DeviceInterfaces.IObservingConditions Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.IObservingConditions);
+        public ASCOM.Common.DeviceInterfaces.IObservingConditionsV2 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.IObservingConditionsV2);
 
         public double AveragePeriod { get => Device.AveragePeriod; set => Device.AveragePeriod = value; }
 

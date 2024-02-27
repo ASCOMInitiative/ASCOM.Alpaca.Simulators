@@ -6,9 +6,9 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Camera : BaseDriver, ASCOM.DeviceInterface.ICameraV3, IDisposable
+    public class Camera : BaseDriver, ASCOM.DeviceInterface.ICameraV4, IDisposable
     {
-        public ASCOM.Common.DeviceInterfaces.ICameraV3 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.ICameraV3);
+        public ASCOM.Common.DeviceInterfaces.ICameraV4 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.ICameraV4);
 
         public short BinX { get => Device.BinX; set => Device.BinX = value; }
         public short BinY { get => Device.BinY; set => Device.BinY = value; }

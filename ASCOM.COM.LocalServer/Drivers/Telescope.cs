@@ -6,9 +6,9 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Telescope : BaseDriver, ASCOM.DeviceInterface.ITelescopeV3, IDisposable
+    public class Telescope : BaseDriver, ASCOM.DeviceInterface.ITelescopeV4, IDisposable
     {
-        public ASCOM.Common.DeviceInterfaces.ITelescopeV3 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.ITelescopeV3);
+        public ASCOM.Common.DeviceInterfaces.ITelescopeV4 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.ITelescopeV4);
 
         public AlignmentModes AlignmentMode => (AlignmentModes) Device.AlignmentMode;
 
