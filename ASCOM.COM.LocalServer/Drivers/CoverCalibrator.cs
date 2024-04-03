@@ -48,7 +48,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
         {
             Device.CalibratorOff();
         }
-        public bool CalibratorReady
+        public bool CalibratorChanging
         {
             get
             {
