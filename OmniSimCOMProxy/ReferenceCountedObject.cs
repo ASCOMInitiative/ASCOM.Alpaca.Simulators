@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace OmniSim.LocalServer
+namespace ASCOM.LocalServer
 {
     /// <summary>
     /// Class to keep track of COM object instanciations and destructions

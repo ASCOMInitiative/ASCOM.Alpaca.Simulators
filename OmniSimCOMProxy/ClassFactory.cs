@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 
-namespace OmniSim.LocalServer
+namespace ASCOM.LocalServer
 {
     #region C# Definition of IClassFactory
 

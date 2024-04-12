@@ -1,7 +1,7 @@
 ﻿using ASCOM.Common.DeviceInterfaces;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.Simulators.LocalServer.Drivers
+namespace OmniSim.LocalServer.Drivers
 {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]

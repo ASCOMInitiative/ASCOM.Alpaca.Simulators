@@ -1,5 +1,5 @@
 //
-// OmniSim Local COM Server
+// ASCOM.ASCOMOmniSim.Camera Local COM Server
 //
 // This is the core of a managed COM Local Server, capable of serving
 // multiple instances of multiple interfaces, within a single
@@ -12,207 +12,60 @@
 // Modified by Chris Rowland and Peter Simpson to allow use with multiple devices of the same type March 2011
 //
 //
+using ASCOM;
 using ASCOM.Com;
 using ASCOM.Common;
 using ASCOM.Tools;
 using Microsoft.Win32;
-using OmniSim.LocalServer.Drivers;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace OmniSim.LocalServer
+namespace ASCOM.LocalServer
 {
-    public class Server
+    public static class Server
     {
+
         #region Variables
 
         private static uint mainThreadId; // Stores the main thread's thread id.
         private static bool startedByCOM; // True if server started by COM (-embedding)
+        private static FrmMain localServerMainForm = null; // Reference to our main form.
         private static int driversInUseCount; // Keeps a count on the total number of objects alive.
         private static int serverLockCount; // Keeps a lock count on this application.
         private static ArrayList driverTypes; // Served COM object types
         private static ArrayList classFactories; // Served COM object class factories
-        private static string localServerAppId = "{65A0E7FF-EB31-479D-8AE2-A69AF7A46E5C}"; // Our AppId
+        private static string localServerAppId = "{9d407166-55b9-4fb3-805c-ee022921ba4d}"; // Our AppId
         private static readonly Object lockObject = new object(); // Counter lock object
         private static TraceLogger TL; // TraceLogger for the local server (not the served driver, which has its own) - primarily to help debug local server issues
         private static Task GCTask; // The garbage collection task
         private static CancellationTokenSource GCTokenSource; // Token source used to end periodic garbage collection.
 
-        #endregion Variables
-
-        public static bool ASCOM_Installed
-        {
-            get
-            {
-                try
-                {
-                    return PlatformUtilities.IsPlatformInstalled();
-                }
-                catch
-                {
-                }
-                return false;
-            }
-        }
-
-        public static bool IsRegistered
-        {
-            get
-            {
-                try
-                {
-                    return Profile.IsRegistered(DeviceTypes.Camera, "ASCOM.OmniSim.Camera");
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
-
-        private static string ExeLocation
-        {
-            get
-            {
-                var proc = Process.GetCurrentProcess().MainModule.FileName;
-                if (proc.EndsWith(".dll"))
-                {
-                    return proc.Remove(proc.Length - 4) + ".exe";
-                }
-                else
-                {
-                    return proc;
-                }
-            }
-        }
+        #endregion
 
         #region Local Server entry point (main)
-
-        public static void InitServer()
-        {
-            // Create a trace logger for the local server.
-            TL = new TraceLogger("OmniSim.LocalServer", false)
-            {
-                Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
-            };
-            TL.LogMessage("Main", $"Server started");
-
-            // Load driver COM assemblies and get types, ending the program if something goes wrong.
-            TL.LogMessage("Main", $"Loading drivers");
-            if (!PopulateListOfAscomDrivers()) return;
-
-            // Process command line arguments e.g. to Register/Unregister drivers, ending the program if required.
-            TL.LogMessage("Main", $"Processing command-line arguments");
-            //if (!ProcessArguments(args)) return;
-
-            // Start the message loop to serialize incoming calls to the served driver COM objects.
-        }
-
-        public static void StartServer()
-        {
-            // Initialize variables.
-            TL.LogMessage("Main", $"Initialising variables");
-            driversInUseCount = 0;
-            serverLockCount = 0;
-            mainThreadId = GetCurrentThreadId();
-            Thread.CurrentThread.Name = "OmniSim Local Server Thread";
-
-            // Register the class factories of the served objects
-            TL.LogMessage("Main", $"Registering class factories");
-            RegisterClassFactories();
-
-            // Start the garbage collection thread.
-            TL.LogMessage("Main", $"Starting garbage collection");
-            StartGarbageCollection(10000);
-            TL.LogMessage("Main", $"Garbage collector thread started");
-        }
-
-        public static void Shutdown()
-        {
-            // Revoke the class factories immediately without waiting until the thread has stopped
-            TL.LogMessage("Main", $"Revoking class factories");
-            RevokeClassFactories();
-            TL.LogMessage("Main", $"Class factories revoked");
-
-            // No new connections are now possible and the local server is irretrievably shutting down, so release resources in the Hardware classes
-            try
-            {
-                // Get all types in the local server assembly
-                Type[] types = Assembly.GetExecutingAssembly().GetTypes();
-
-                // Iterate over the types looking for hardware classes that need to be disposed
-                foreach (Type type in types)
-                {
-                    try
-                    {
-                        TL.LogMessage("Main", $"Hardware disposal - Found type: {type.Name}");
-
-                        // Get the HardwareClassAttribute attribute if present on this type
-                        object[] attrbutes = type.GetCustomAttributes(typeof(ASCOM.HardwareClassAttribute), false);
-
-                        // Check to see if this type has the HardwareClass attribute, which indicates that this is a hardware class.
-                        if (attrbutes.Length > 0) // There is a HardwareClass attribute so call its Dispose() method
-                        {
-                            TL.LogMessage("Main", $"  {type.Name} is a hardware class");
-
-                            // Only process static classes that don't have instances here.
-                            if (type.IsAbstract & type.IsSealed) // This type is a static class
-                            {
-                                // Lookup the method
-                                MethodInfo disposeMethod = type.GetMethod("Dispose");
-
-                                // If the method is found call it
-                                if (disposeMethod != null) // a public Dispose() method was found
-                                {
-                                    TL.LogMessage("Main", $"  Calling method {disposeMethod.Name} in static class {type.Name}...");
-
-                                    // Now call Dispose()
-                                    disposeMethod.Invoke(null, null);
-                                    TL.LogMessage("Main", $"  {disposeMethod.Name} method called OK.");
-                                }
-                                else // No public Dispose method was found
-                                {
-                                    TL.LogMessage("Main", $"  The {disposeMethod.Name} method does not contain a public Dispose() method.");
-                                }
-                            }
-                            else
-                            {
-                                TL.LogMessage("Main", $"  Ignoring type {type.Name} because it is not static.");
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        TL.LogMessage("Main", $"Exception (inner) when disposing of hardware class.\r\n{ex}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                TL.LogMessage("Main", $"Exception (outer) when disposing of hardware class.\r\n{ex}");
-            }
-
-            // Now stop the Garbage Collector thread.
-            TL.LogMessage("Main", $"Stopping garbage collector");
-            StopGarbageCollection();
-
-            TL.LogMessage("Main", $"Local server closing");
-            TL.Dispose();
-        }
 
         /// <summary>
         /// Main server entry point
         /// </summary>
         /// <param name="args">Command line parameters</param>
         [STAThread]
-        private static void Main(string[] args)
+        static void Main(string[] args)
         {
             // Create a trace logger for the local server.
-            TL = new TraceLogger("OmniSim.LocalServer", false)
+            TL = new TraceLogger("ASCOMOmniSim.LocalServer", string.Empty, "OmniSim",true)
             {
                 Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
@@ -231,7 +84,14 @@ namespace OmniSim.LocalServer
             driversInUseCount = 0;
             serverLockCount = 0;
             mainThreadId = GetCurrentThreadId();
-            Thread.CurrentThread.Name = "OmniSim Local Server Thread";
+            Thread.CurrentThread.Name = "ASCOMOmniSim Local Server Thread";
+
+            // Create and configure the local server host form that runs the Windows message loop required to support driver operation
+            TL.LogMessage("Main", $"Creating host form");
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            localServerMainForm = new FrmMain();
+            if (startedByCOM) localServerMainForm.WindowState = FormWindowState.Minimized;
 
             // Register the class factories of the served objects
             TL.LogMessage("Main", $"Registering class factories");
@@ -246,7 +106,7 @@ namespace OmniSim.LocalServer
             try
             {
                 TL.LogMessage("Main", $"Starting main form");
-                //ASCOM.Alpaca.Simulators.Program.Main(args);
+                Application.Run(localServerMainForm);
                 TL.LogMessage("Main", $"Main form has ended");
             }
             finally
@@ -270,7 +130,7 @@ namespace OmniSim.LocalServer
                             TL.LogMessage("Main", $"Hardware disposal - Found type: {type.Name}");
 
                             // Get the HardwareClassAttribute attribute if present on this type
-                            object[] attrbutes = type.GetCustomAttributes(typeof(ASCOM.HardwareClassAttribute), false);
+                            object[] attrbutes = type.GetCustomAttributes(typeof(HardwareClassAttribute), false);
 
                             // Check to see if this type has the HardwareClass attribute, which indicates that this is a hardware class.
                             if (attrbutes.Length > 0) // There is a HardwareClass attribute so call its Dispose() method
@@ -321,14 +181,15 @@ namespace OmniSim.LocalServer
 
             TL.LogMessage("Main", $"Local server closing");
             TL.Dispose();
+
         }
 
-        #endregion Local Server entry point (main)
+        #endregion
 
         #region Server Lock, Object Counting, and AutoQuit on COM start-up
 
         /// <summary>
-        /// Returns the total number of objects alive currently.
+        /// Returns the total number of objects alive currently. 
         /// </summary>
         public static int ObjectCount
         {
@@ -342,7 +203,7 @@ namespace OmniSim.LocalServer
         }
 
         /// <summary>
-        /// Performs a thread-safe incrementation of the object count.
+        /// Performs a thread-safe incrementation of the object count. 
         /// </summary>
         /// <returns></returns>
         public static int IncrementObjectCount()
@@ -380,7 +241,7 @@ namespace OmniSim.LocalServer
         }
 
         /// <summary>
-        /// Performs a thread-safe incrementation of the server lock count.
+        /// Performs a thread-safe incrementation of the server lock count. 
         /// </summary>
         /// <returns></returns>
         public static int IncrementServerLockCount()
@@ -427,7 +288,7 @@ namespace OmniSim.LocalServer
             }
         }
 
-        #endregion Server Lock, Object Counting, and AutoQuit on COM start-up
+        #endregion
 
         #region Dynamic Driver Assembly Loader
 
@@ -443,11 +304,7 @@ namespace OmniSim.LocalServer
             try
             {
                 // Get the types contained within the local server assembly
-                Assembly so = Assembly.GetExecutingAssembly(); // Get the local server assembly
-                Type[] types = so.GetTypes(); // Get the types in the assembly
-
-                //Add any Pre-Configured dynamic types
-                types = types.Concat(GetDynamicTypes()).ToArray();
+                Type[] types = GetDynamicTypes().ToArray();
 
                 // Iterate over the types identifying those which are drivers
                 foreach (Type type in types)
@@ -455,7 +312,7 @@ namespace OmniSim.LocalServer
                     TL.LogMessage("PopulateListOfAscomDrivers", $"Found type: {type.Name}");
 
                     // Check to see if this type has the ServedClassName attribute, which indicates that this is a driver class.
-                    object[] attrbutes = type.GetCustomAttributes(typeof(ASCOM.ServedClassNameAttribute), false);
+                    object[] attrbutes = type.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
                     if (attrbutes.Length > 0) // There is a ServedClassName attribute on this class so it is a driver
                     {
                         TL.LogMessage("PopulateListOfAscomDrivers", $"  {type.Name} is a driver assembly");
@@ -475,14 +332,13 @@ namespace OmniSim.LocalServer
             catch (Exception e)
             {
                 TL.LogMessage("PopulateListOfAscomDrivers", $"Exception: {e}");
-                NativeMethods.MessageBox(System.IntPtr.Zero, $"Failed to load served COM class assembly from within this local server - {e.Message}", "OmniSim COM", 0);
+                System.Windows.Forms.MessageBox.Show($"Failed to load served COM class assembly from within this local server - {e.Message}", "OmniSim COM", 0);
                 return false;
             }
 
             return true;
         }
 
-        //Returns a list of the dynamically generated driver types.
         internal static IEnumerable<Type> GetDynamicTypes()
         {
             //I'm just going to hard code 3 here. You can store a count and dynamically generate as many as you want.
@@ -499,16 +355,8 @@ namespace OmniSim.LocalServer
             List<Type> types = new List<Type>
             {
                 //This was the one that the driver started with
-                GenerateTypeWithAttributes("Dome", new Guid("52B2507C-E66E-414B-AAA5-2EC5CCC684A4"), "OmniSim.Dome", "OmniSim Dome", typeof(Dome), typeof(ASCOM.DeviceInterface.IDomeV3)),
-                GenerateTypeWithAttributes("Camera", new Guid("6E2EFD13-8299-4A6D-BB10-CDFFD08559A5"), "OmniSim.Camera", "OmniSim Camera", typeof(Camera), typeof(ASCOM.DeviceInterface.ICameraV4)),
-                GenerateTypeWithAttributes("CoverCalibrator", new Guid("A47C706A-6EE8-41C6-8B6F-E6C12A43D88B"), "OmniSim.CoverCalibrator", "OmniSim CoverCalibrator", typeof(CoverCalibrator), typeof(ASCOM.DeviceInterface.ICoverCalibratorV2)),
-                GenerateTypeWithAttributes("FilterWheel", new Guid("07A74BEE-46E7-4FBD-AFFA-1E0216312161"), "OmniSim.FilterWheel", "OmniSim FilterWheel", typeof(FilterWheel), typeof(ASCOM.DeviceInterface.IFilterWheelV3)),
-                GenerateTypeWithAttributes("Focuser", new Guid("91F0A57C-0952-4D97-B068-7A7A509C7114"), "OmniSim.Focuser", "OmniSim Focuser", typeof(Drivers.Focuser), typeof(ASCOM.DeviceInterface.IFocuserV4)),
-                GenerateTypeWithAttributes("ObservingConditions", new Guid("52E1E4A4-5BD0-4C11-8858-8A1A81ADD60F"), "OmniSim.ObservingConditions", "ASCOM OmniSim ObservingConditions", typeof(Drivers.ObservingConditions), typeof(ASCOM.DeviceInterface.IObservingConditionsV2)),
-                GenerateTypeWithAttributes("Rotator", new Guid("94866A20-FAEF-4B25-83ED-463BC24FC1E5"), "OmniSim.Rotator", "OmniSim Rotator", typeof(Drivers.Rotator), typeof(ASCOM.DeviceInterface.IRotatorV4)),
-                GenerateTypeWithAttributes("SafetyMonitor", new Guid("87D1B0C7-FD7B-465E-9B40-ACA41B4FF8C3"), "OmniSim.SafetyMonitor", "OmniSim SafetyMonitor", typeof(Drivers.SafetyMonitor), typeof(ASCOM.DeviceInterface.ISafetyMonitorV3)),
-                GenerateTypeWithAttributes("Switch", new Guid("576B52DB-F5E1-4576-A60A-D04DC1411203"), "OmniSim.Switch", "OmniSim Switch", typeof(Drivers.Switch), typeof(ASCOM.DeviceInterface.ISwitchV3)),
-                GenerateTypeWithAttributes("Telescope", new Guid("0422929D-396C-42F1-BCE9-89E17276D700"), "OmniSim.Telescope", "OmniSim Telescope", typeof(Drivers.Telescope), typeof(ASCOM.DeviceInterface.ITelescopeV4)),
+                GenerateTypeWithAttributes("Dome", new Guid("1E074DDB-D020-4045-8DB0-CFBBA81A6172"), "ASCOM.OmniSim.Dome", "ASCOM OmniSim Dome", typeof(ASCOM.Simulators.LocalServer.Drivers.Dome), typeof(ASCOM.DeviceInterface.IDomeV3)),
+                GenerateTypeWithAttributes("Camera", new Guid("DE992041-27FC-45CA-BC58-7507994973EA"), "ASCOM.OmniSim.Camera", "ASCOM OmniSim Camera", typeof(ASCOM.Simulators.LocalServer.Drivers.Camera), typeof(ASCOM.DeviceInterface.ICameraV4)),
             };
 
             return types;
@@ -527,7 +375,7 @@ namespace OmniSim.LocalServer
             tb.SetCustomAttribute(new CustomAttributeBuilder(typeof(GuidAttribute).GetConstructor(BindingFlags.Instance | BindingFlags.Public,
             null, new[] { typeof(string) }, null), new object[] { DriverGuid.ToString() }));
 
-            tb.SetCustomAttribute(new CustomAttributeBuilder(typeof(ASCOM.ServedClassNameAttribute).GetConstructor(BindingFlags.Instance | BindingFlags.Public,
+            tb.SetCustomAttribute(new CustomAttributeBuilder(typeof(ServedClassNameAttribute).GetConstructor(BindingFlags.Instance | BindingFlags.Public,
             null, new[] { typeof(string) }, null), new object[] { ServedName }));
 
             tb.SetCustomAttribute(new CustomAttributeBuilder(typeof(ClassInterfaceAttribute).GetConstructor(BindingFlags.Instance | BindingFlags.Public,
@@ -536,7 +384,7 @@ namespace OmniSim.LocalServer
             return tb.CreateType();
         }
 
-        #endregion Dynamic Driver Assembly Loader
+        #endregion
 
         #region COM Registration and Unregistration
 
@@ -545,18 +393,11 @@ namespace OmniSim.LocalServer
         /// </summary>
         /// <remarks>
         /// Do everything to register this for COM. Never use REGASM on this exe assembly! It would create InProcServer32 entries which would prevent proper activation!
-        /// Using the list of COM object types generated during dynamic assembly loading, this method registers each driver for COM and registers it for ASCOM.
+        /// Using the list of COM object types generated during dynamic assembly loading, this method registers each driver for COM and registers it for ASCOM. 
         /// It also adds DCOM info for the local server itself, so it can be activated via an outbound connection from TheSky.
         /// </remarks>
-        public static void RegisterObjects()
+        private static void RegisterObjects()
         {
-            if (!ASCOM_Installed)
-            {
-                TL.LogMessage("No ASCOM Found", $"Cannot register because the ASCOM Platform was not found.");
-                NativeMethods.MessageBox(System.IntPtr.Zero, "Cannot register because the ASCOM Platform was not found", "No ASCOM Found", 0);
-                return;
-            }
-
             // Request administrator privilege if we don't already have it
             if (!IsAdministrator)
             {
@@ -567,11 +408,11 @@ namespace OmniSim.LocalServer
             // If we reach here, we're running elevated
 
             // Initialise variables
-            Assembly executingAssembly = Assembly.GetEntryAssembly();
+            Assembly executingAssembly = Assembly.GetExecutingAssembly();
             Attribute assemblyTitleAttribute = Attribute.GetCustomAttribute(executingAssembly, typeof(AssemblyTitleAttribute));
             string assemblyTitle = ((AssemblyTitleAttribute)assemblyTitleAttribute).Title;
             assemblyTitleAttribute = Attribute.GetCustomAttribute(executingAssembly, typeof(AssemblyDescriptionAttribute));
-            string assemblyDescription = ((AssemblyDescriptionAttribute)assemblyTitleAttribute)?.Description ?? "ASCOM Local Server for Simulators and Alpaca";
+            string assemblyDescription = ((AssemblyDescriptionAttribute)assemblyTitleAttribute).Description;
 
             // Set the local server's DCOM/AppID information
             try
@@ -588,7 +429,7 @@ namespace OmniSim.LocalServer
                 }
 
                 // Set HKCR\APPID\exename.ext
-                using (RegistryKey exeNameKey = Registry.ClassesRoot.CreateSubKey($"APPID\\{ExeLocation.Substring(ExeLocation.LastIndexOf('\\') + 1)}"))
+                using (RegistryKey exeNameKey = Registry.ClassesRoot.CreateSubKey($"APPID\\{Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)}"))
                 {
                     exeNameKey.SetValue("AppID", localServerAppId);
                 }
@@ -597,7 +438,7 @@ namespace OmniSim.LocalServer
             catch (Exception ex)
             {
                 TL.LogMessage("RegisterObjects", $"Setting AppID exception: {ex}");
-                NativeMethods.MessageBox(System.IntPtr.Zero, "Error while registering the server:\n" + ex.ToString(), "OmniSim COM", 0);
+                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.ASCOMOmniSim.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
 
@@ -631,7 +472,7 @@ namespace OmniSim.LocalServer
 
                         using (RegistryKey localServer32Key = clsIdKey.CreateSubKey("LocalServer32"))
                         {
-                            localServer32Key.SetValue(null, ExeLocation);
+                            localServer32Key.SetValue(null, Application.ExecutablePath);
                         }
                     }
 
@@ -646,27 +487,28 @@ namespace OmniSim.LocalServer
                     }
 
                     // Pull the display name from the ServedClassName attribute.
-                    assemblyTitleAttribute = Attribute.GetCustomAttribute(driverType, typeof(ASCOM.ServedClassNameAttribute));
-                    string chooserName = ((ASCOM.ServedClassNameAttribute)assemblyTitleAttribute).DisplayName ?? "MultiServer";
+                    assemblyTitleAttribute = Attribute.GetCustomAttribute(driverType, typeof(ServedClassNameAttribute));
+                    string chooserName = ((ServedClassNameAttribute)assemblyTitleAttribute).DisplayName ?? "MultiServer";
+                    TL.LogMessage("RegisterObjects", $"Registering {chooserName} ({driverType.Name}) in Profile");
+
+                    Profile.Register(Devices.StringToDeviceType(deviceType), progId, chooserName);
                 }
                 catch (Exception ex)
                 {
                     TL.LogMessage("RegisterObjects", $"Driver registration exception: {ex}");
-                    NativeMethods.MessageBox(System.IntPtr.Zero, "Error while registering the server:\n" + ex.ToString(), "OmniSim COM", 0);
+                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.ASCOMOmniSim.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     bFail = true;
                 }
 
                 // Stop processing drivers if something has gone wrong
                 if (bFail) break;
             }
-
-            //ElevateCONProxy("/register");
         }
 
         /// <summary>
         /// Unregister drivers contained in this local server. (Must run as administrator.)
         /// </summary>
-        public static void UnregisterObjects()
+        private static void UnregisterObjects()
         {
             // Request administrator privilege if we don't already have it
             if (!IsAdministrator)
@@ -679,7 +521,7 @@ namespace OmniSim.LocalServer
 
             // Delete the Local Server's DCOM/AppID information
             Registry.ClassesRoot.DeleteSubKey($"APPID\\{localServerAppId}", false);
-            Registry.ClassesRoot.DeleteSubKey($"APPID\\{ExeLocation.Substring(ExeLocation.LastIndexOf('\\') + 1)}", false);
+            Registry.ClassesRoot.DeleteSubKey($"APPID\\{Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)}", false);
 
             // Delete each driver's COM registration
             foreach (Type driverType in driverTypes)
@@ -700,9 +542,22 @@ namespace OmniSim.LocalServer
                 Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}\\LocalServer32", false);
                 Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}\\Programmable", false);
                 Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}", false);
-            }
 
-            ElevateCONProxy("/unregister");
+                // Uncomment the following lines to remove ASCOM Profile information when unregistering.
+                // Unregistering often occurs during version upgrades and, if the code below is enabled, will result in loss of all device configuration during the upgrade.
+                // For this reason, enabling this capability is not recommended.
+
+                //try
+                //{
+                //    TL.LogMessage("UnregisterObjects", $"Deleting ASCOM Profile registration for {driverType.Name} ({progId})");
+                //    using (var profile = new Profile())
+                //    {
+                //        profile.DeviceType = driverType.Name;
+                //        profile.Unregister(progId);
+                //    }
+                //}
+                //catch (Exception) { }
+            }
         }
 
         /// <summary>
@@ -727,12 +582,10 @@ namespace OmniSim.LocalServer
         /// <param name="argument">Argument to pass to ourselves</param>
         private static void ElevateSelf(string argument)
         {
-            var assem = Assembly.GetEntryAssembly();
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
             processStartInfo.Arguments = argument;
             processStartInfo.WorkingDirectory = Environment.CurrentDirectory;
-            processStartInfo.FileName = ExeLocation;
-            processStartInfo.UseShellExecute = true;
+            processStartInfo.FileName = Application.ExecutablePath;
             processStartInfo.Verb = "runas";
             try
             {
@@ -741,49 +594,18 @@ namespace OmniSim.LocalServer
             }
             catch (System.ComponentModel.Win32Exception e)
             {
-                TL.LogMessage("IsAdministrator", $"The OmniSim was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.");
-                NativeMethods.MessageBox(System.IntPtr.Zero, $"The OmniSim was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.", "OmniSim COM", 0);
+                TL.LogMessage("IsAdministrator", $"{e.Message} The ASCOM.ASCOMOmniSim.Camera was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
+                MessageBox.Show("The ASCOM.ASCOMOmniSim.Camera was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "ASCOM.ASCOMOmniSim.Camera", MessageBoxButtons.OK, MessageBoxIcon.Warning));
             }
             catch (Exception ex)
             {
                 TL.LogMessage("IsAdministrator", $"Exception: {ex}");
-                NativeMethods.MessageBox(System.IntPtr.Zero, ex.ToString(), "OmniSim COM", 0);
+                MessageBox.Show(ex.ToString(), "ASCOM.ASCOMOmniSim.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
             return;
         }
 
-        /// <summary>
-        /// Elevate privileges by re-running ourselves with elevation dialogue
-        /// </summary>
-        /// <param name="argument">Argument to pass to ourselves</param>
-        private static void ElevateCONProxy(string argument)
-        {
-            var assem = new Process();
-            ProcessStartInfo processStartInfo = new ProcessStartInfo();
-            processStartInfo.FileName= Path.Combine(Path.GetDirectoryName(ExeLocation),"OmniSim.COMProxy.exe");
-            processStartInfo.Arguments = argument;
-            processStartInfo.WorkingDirectory = Environment.CurrentDirectory;
-            processStartInfo.UseShellExecute = true;
-            processStartInfo.Verb = "runas";
-            try
-            {
-                TL.LogMessage("IsAdministrator", $"Starting elevated process");
-                Process.Start(processStartInfo);
-            }
-            catch (System.ComponentModel.Win32Exception e)
-            {
-                TL.LogMessage("IsAdministrator", $"{e.Message} The OmniSim Proxy was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.");
-                NativeMethods.MessageBox(System.IntPtr.Zero, $"{e.Message} The OmniSim was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.", "OmniSim COM", 0);
-            }
-            catch (Exception ex)
-            {
-                TL.LogMessage("IsAdministrator", $"Exception: {ex}");
-                NativeMethods.MessageBox(System.IntPtr.Zero, ex.ToString(), "OmniSim COM", 0);
-            }
-            return;
-        }
-
-        #endregion COM Registration and Unregistration
+        #endregion
 
         #region Class Factory Support
 
@@ -806,7 +628,7 @@ namespace OmniSim.LocalServer
                 if (!factory.RegisterClassObject())
                 {
                     TL.LogMessage("RegisterClassFactories", $"  Failed to register class factory for " + driverType.Name);
-                    NativeMethods.MessageBox(System.IntPtr.Zero, "Failed to register class factory for " + driverType.Name, "OmniSim COM", 0);
+                    MessageBox.Show("Failed to register class factory for " + driverType.Name, "ASCOM.ASCOMOmniSim.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return false;
                 }
                 TL.LogMessage("RegisterClassFactories", $"  Registered class factory OK for: {driverType.Name}");
@@ -833,7 +655,7 @@ namespace OmniSim.LocalServer
             }
         }
 
-        #endregion Class Factory Support
+        #endregion
 
         #region Command line argument processing
 
@@ -842,7 +664,7 @@ namespace OmniSim.LocalServer
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static bool ProcessArguments(string[] args)
+        private static bool ProcessArguments(string[] args)
         {
             bool returnStatus = true;
 
@@ -875,9 +697,8 @@ namespace OmniSim.LocalServer
                         break;
 
                     default:
-                        //TL.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
-
-                        //NativeMethods.MessageBox(System.IntPtr.Zero, "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "OmniSim COM", 0);
+                        TL.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
+                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "ASCOM.ASCOMOmniSim.Camera", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         break;
                 }
             }
@@ -890,58 +711,7 @@ namespace OmniSim.LocalServer
             return returnStatus;
         }
 
-        public static bool ProcessAllArguments(string[] args)
-        {
-            bool returnStatus = true;
-
-            if (args.Length > 0)
-            {
-                foreach (var arg in args)
-                {
-                    switch (args[0].ToLower())
-                    {
-                        case "-embedding":
-                            TL.LogMessage("ProcessArguments", $"Started by COM: {args[0]}");
-                            startedByCOM = true; // Indicate COM started us and continue
-                            returnStatus = true; // Continue on return
-                            break;
-
-                        case "-register":
-                        case @"/register":
-                        case "-regserver": // Emulate VB6
-                        case @"/regserver":
-                            TL.LogMessage("ProcessArguments", $"Registering drivers: {args[0]}");
-                            RegisterObjects(); // Register each served object
-                            returnStatus = false; // Terminate on return
-                            break;
-
-                        case "-unregister":
-                        case @"/unregister":
-                        case "-unregserver": // Emulate VB6
-                        case @"/unregserver":
-                            TL.LogMessage("ProcessArguments", $"Unregistering drivers: {args[0]}");
-                            UnregisterObjects(); //Unregister each served object
-                            returnStatus = false; // Terminate on return
-                            break;
-
-                        default:
-                            //TL.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
-
-                            //NativeMethods.MessageBox(System.IntPtr.Zero, "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "OmniSim COM", 0);
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                startedByCOM = false;
-                TL.LogMessage("ProcessArguments", $"No arguments supplied");
-            }
-
-            return returnStatus;
-        }
-
-        #endregion Command line argument processing
+        #endregion
 
         #region Garbage collection support
 
@@ -955,12 +725,13 @@ namespace OmniSim.LocalServer
             TL.LogMessage("StartGarbageCollection", $"Creating garbage collector with interval: {interval} seconds");
             GarbageCollection garbageCollector = new GarbageCollection(interval);
 
-            // Create a cancellation token and start the garbage collection task
+            // Create a cancellation token and start the garbage collection task 
             TL.LogMessage("StartGarbageCollection", $"Starting garbage collector thread");
             GCTokenSource = new CancellationTokenSource();
             GCTask = Task.Factory.StartNew(() => garbageCollector.GCWatch(GCTokenSource.Token), GCTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
             TL.LogMessage("StartGarbageCollection", $"Garbage collector thread started OK");
         }
+
 
         /// <summary>
         /// Stop the garbage collection task by sending it the cancellation token and wait for the task to complete
@@ -980,18 +751,18 @@ namespace OmniSim.LocalServer
             GCTokenSource = null;
         }
 
-        #endregion Garbage collection support
+        #endregion
 
         #region kernel32.dll and user32.dll functions
 
         // Post a Windows Message to a specific thread (identified by its thread id). Used to post a WM_QUIT message to the main thread in order to terminate this application.)
         [DllImport("user32.dll")]
-        private static extern bool PostThreadMessage(uint idThread, uint Msg, UIntPtr wParam, IntPtr lParam);
+        static extern bool PostThreadMessage(uint idThread, uint Msg, UIntPtr wParam, IntPtr lParam);
 
         // Obtain the thread id of the calling thread allowing us to post the WM_QUIT message to the main thread.
         [DllImport("kernel32.dll")]
-        private static extern uint GetCurrentThreadId();
+        static extern uint GetCurrentThreadId();
 
-        #endregion kernel32.dll and user32.dll functions
+        #endregion
     }
 }

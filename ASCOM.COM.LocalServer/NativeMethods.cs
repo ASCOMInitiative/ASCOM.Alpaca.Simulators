@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace ASCOM.Simulators.LocalServer
+namespace OmniSim.LocalServer
 {
     internal static class NativeMethods
     {

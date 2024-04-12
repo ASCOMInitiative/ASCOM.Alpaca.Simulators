@@ -1,14 +1,17 @@
 ﻿using ASCOM.DeviceInterface;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace OmniSim.LocalServer.Drivers
+namespace ASCOM.Simulators.LocalServer.Drivers
 {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     public class Dome : BaseDriver, ASCOM.DeviceInterface.IDomeV3, IDisposable
     {
-        public ASCOM.Common.DeviceInterfaces.IDomeV3 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.IDomeV3);
-
         public double Altitude => Device.Altitude;
 
         public bool AtHome => Device.AtHome;
@@ -35,16 +38,9 @@ namespace OmniSim.LocalServer.Drivers
 
         public ShutterState ShutterStatus => (ShutterState)Device.ShutterStatus;
 
-        public bool Slaved { get => Device.Slaved; set => Device.Slaved = value; }
+        public bool Slaved { get => Device.CanSlave; set => Device.Slaved = value; }
 
         public bool Slewing => Device.Slewing;
-
-        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
-
-        public Dome()
-        {
-            base.GetDevice = DeviceAccess;
-        }
 
         public void AbortSlew()
         {
@@ -89,6 +85,13 @@ namespace OmniSim.LocalServer.Drivers
         public void SyncToAzimuth(double Azimuth)
         {
             Device.SyncToAzimuth(Azimuth);
+        }
+
+        ASCOM.Common.DeviceInterfaces.IDomeV3 Device = new ASCOM.Com.DriverAccess.Dome("OmniSim.Dome");
+
+        public Dome()
+        {
+            base.GetDevice = () => (ASCOM.Common.DeviceInterfaces.IAscomDeviceV2)Device;
         }
     }
 }

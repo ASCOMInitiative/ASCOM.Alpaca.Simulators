@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace OmniSim.LocalServer
+namespace ASCOM.LocalServer
 {
     /// <summary>
     /// Summary description for GarbageCollection.

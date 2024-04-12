@@ -1,15 +1,15 @@
-﻿using ASCOM.DeviceInterface;
+using ASCOM.DeviceInterface;
+using System;
 using System.Collections;
+using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace OmniSim.LocalServer.Drivers
+namespace ASCOM.Simulators.LocalServer.Drivers
 {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     public class Camera : BaseDriver, ASCOM.DeviceInterface.ICameraV4, IDisposable
     {
-        public ASCOM.Common.DeviceInterfaces.ICameraV4 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.ICameraV4);
-
         public short BinX { get => Device.BinX; set => Device.BinX = value; }
         public short BinY { get => Device.BinY; set => Device.BinY = value; }
 
@@ -104,7 +104,7 @@ namespace OmniSim.LocalServer.Drivers
 
         public string SensorName => Device.SensorName;
 
-        public SensorType SensorType => (SensorType) Device.SensorType;
+        public SensorType SensorType => (SensorType)Device.SensorType;
 
         public int Offset { get => Device.Offset; set => Device.Offset = value; }
 
@@ -116,11 +116,13 @@ namespace OmniSim.LocalServer.Drivers
 
         public double SubExposureDuration { get => Device.SubExposureDuration; set => Device.SubExposureDuration = value; }
 
-        public static Func<ASCOM.Common.DeviceInterfaces.IAscomDeviceV2> DeviceAccess;
+        IStateValueCollection ICameraV4.DeviceState => throw new System.NotImplementedException();
+
+        ASCOM.Common.DeviceInterfaces.ICameraV3 Device = new ASCOM.Com.DriverAccess.Camera("OmniSim.Camera");
 
         public Camera()
         {
-            base.GetDevice = DeviceAccess;
+            base.GetDevice = () => (ASCOM.Common.DeviceInterfaces.IAscomDeviceV2) Device;
         }
 
         public void AbortExposure()

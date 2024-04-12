@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.Simulators.LocalServer.Drivers
+namespace OmniSim.LocalServer.Drivers
 {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
@@ -87,7 +87,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
         public double TargetDeclination { get => Device.TargetDeclination; set => Device.TargetDeclination = value; }
         public double TargetRightAscension { get => Device.TargetRightAscension; set => Device.TargetRightAscension = value; }
         public bool Tracking { get => Device.Tracking; set => Device.Tracking = value; }
-        public DriveRates TrackingRate { get => (DriveRates) Device.TrackingRate; set => Device.TrackingRate = (Common.DeviceInterfaces.DriveRate)value; }
+        public DriveRates TrackingRate { get => (DriveRates) Device.TrackingRate; set => Device.TrackingRate = (ASCOM.Common.DeviceInterfaces.DriveRate)value; }
 
         public ITrackingRates TrackingRates => new TrackingRates(Device.TrackingRates);
 
@@ -107,12 +107,12 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public IAxisRates AxisRates(TelescopeAxes Axis)
         {
-            return new AxisRate(Device.AxisRates((Common.DeviceInterfaces.TelescopeAxis)Axis));
+            return new AxisRate(Device.AxisRates((ASCOM.Common.DeviceInterfaces.TelescopeAxis)Axis));
         }
 
         public bool CanMoveAxis(TelescopeAxes Axis)
         {
-            return Device.CanMoveAxis((Common.DeviceInterfaces.TelescopeAxis)Axis);
+            return Device.CanMoveAxis((ASCOM.Common.DeviceInterfaces.TelescopeAxis)Axis);
         }
 
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
@@ -127,7 +127,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
-            Device.MoveAxis((Common.DeviceInterfaces.TelescopeAxis)Axis, Rate);
+            Device.MoveAxis((ASCOM.Common.DeviceInterfaces.TelescopeAxis)Axis, Rate);
         }
 
         public void Park()
@@ -137,7 +137,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
-            Device.PulseGuide((Common.DeviceInterfaces.GuideDirection) Direction, Duration);
+            Device.PulseGuide((ASCOM.Common.DeviceInterfaces.GuideDirection) Direction, Duration);
         }
 
         public void SetPark()

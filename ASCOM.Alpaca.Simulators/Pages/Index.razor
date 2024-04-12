@@ -121,7 +121,7 @@
         get
         {
 #if ASCOM_COM
-    return ASCOM.LocalServer.Server.ASCOM_Installed;
+    return OmniSim.LocalServer.Server.ASCOM_Installed;
 #else
             return false;
 #endif
@@ -133,7 +133,7 @@
         get
         {
 #if ASCOM_COM
-    return ASCOM.LocalServer.Server.IsRegistered;
+    return OmniSim.LocalServer.Server.IsRegistered;
 #else
             return false;
 #endif
@@ -145,7 +145,7 @@
 #if ASCOM_COM
     try
     {
-    ASCOM.LocalServer.Server.RegisterObjects();
+    OmniSim.LocalServer.Server.RegisterObjects();
     }
     catch
     {
@@ -159,7 +159,7 @@
 #if ASCOM_COM
     try
     {
-    ASCOM.LocalServer.Server.UnregisterObjects();
+    OmniSim.LocalServer.Server.UnregisterObjects();
     }
     catch
     {

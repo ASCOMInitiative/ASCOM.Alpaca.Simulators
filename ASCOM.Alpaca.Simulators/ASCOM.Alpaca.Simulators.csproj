@@ -88,12 +88,17 @@
 		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DefineConstants>$(DefineConstants);ASCOM_COM</DefineConstants>
+	</PropertyGroup>
+
 	<ItemGroup Condition="$(DefineConstants.Contains('ASCOM_COM'))">
 		<TrimmerRootAssembly Include="ASCOM.Simulators.LocalServer" />
 		<TrimmerRootAssembly Include="System.Private.CoreLib" />
 		<TrimmerRootAssembly Include="System.Runtime.InteropServices" />
 		<TrimmerRootAssembly Include="System.Runtime" />
-		<ProjectReference Include="..\ASCOM.COM.LocalServer\ASCOM.Simulators.LocalServer.csproj" />
+		<ProjectReference Include="..\ASCOM.COM.LocalServer\OmniSim.LocalServer.csproj" />
+    <ProjectReference Include="..\OmniSimCOMProxy\OmniSim.COMProxy.csproj" />
 	</ItemGroup>
 
 </Project>
