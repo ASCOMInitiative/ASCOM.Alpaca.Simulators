@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="ASCOM.Com.Components" Version="2.0.0-rc.13" />
-    <PackageReference Include="ASCOM.DeviceInterfaces" Version="7.0.0-rc.16" />
+    <PackageReference Include="ASCOM.DeviceInterfaces" Version="7.0.0-rc.22" />
     <PackageReference Include="ASCOM.Tools" Version="2.0.0-rc.13" />
   </ItemGroup>
 
