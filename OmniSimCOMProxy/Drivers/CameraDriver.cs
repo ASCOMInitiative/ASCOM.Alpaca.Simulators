@@ -116,13 +116,11 @@ namespace ASCOM.Simulators.LocalServer.Drivers
 
         public double SubExposureDuration { get => Device.SubExposureDuration; set => Device.SubExposureDuration = value; }
 
-        IStateValueCollection ICameraV4.DeviceState => throw new System.NotImplementedException();
-
-        ASCOM.Common.DeviceInterfaces.ICameraV3 Device = new ASCOM.Com.DriverAccess.Camera("OmniSim.Camera");
+        ASCOM.Common.DeviceInterfaces.ICameraV4 Device = new ASCOM.Com.DriverAccess.Camera("OmniSim.Camera");
 
         public Camera()
         {
-            base.GetDevice = () => (ASCOM.Common.DeviceInterfaces.IAscomDeviceV2) Device;
+            base.GetDevice = () => Device;
         }
 
         public void AbortExposure()
