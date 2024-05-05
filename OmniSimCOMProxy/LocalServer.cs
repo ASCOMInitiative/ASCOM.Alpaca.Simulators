@@ -358,6 +358,13 @@ namespace ASCOM.LocalServer
                 GenerateTypeWithAttributes("Dome", new Guid("1E074DDB-D020-4045-8DB0-CFBBA81A6172"), "ASCOM.OmniSim.Dome", "ASCOM OmniSim Dome", typeof(ASCOM.Simulators.LocalServer.Drivers.Dome), typeof(ASCOM.DeviceInterface.IDomeV3)),
                 GenerateTypeWithAttributes("Camera", new Guid("DE992041-27FC-45CA-BC58-7507994973EA"), "ASCOM.OmniSim.Camera", "ASCOM OmniSim Camera", typeof(ASCOM.Simulators.LocalServer.Drivers.Camera), typeof(ASCOM.DeviceInterface.ICameraV4)),
                 GenerateTypeWithAttributes("CoverCalibrator", new Guid("97A847F6-2522-4007-842A-AE2339B1D70D"), "ASCOM.OmniSim.CoverCalibrator", "ASCOM OmniSim CoverCalibrator", typeof(ASCOM.Simulators.LocalServer.Drivers.CoverCalibrator), typeof(ASCOM.DeviceInterface.ICoverCalibratorV2)),
+                GenerateTypeWithAttributes("FilterWheel", new Guid("568961E4-0D98-4B9F-947E-B467C4AAC5FC"), "ASCOM.OmniSim.FilterWheel", "ASCOM OmniSim FilterWheel", typeof(ASCOM.Simulators.LocalServer.Drivers.FilterWheel), typeof(ASCOM.DeviceInterface.IFilterWheelV3)),
+                //GenerateTypeWithAttributes("Focuser", new Guid("A8904146-656B-4852-96CB-53C1229FF0E8"), "ASCOM.OmniSim.Focuser", "ASCOM OmniSim Focuser", typeof(ASCOM.Simulators.LocalServer.Drivers.Focuser), typeof(ASCOM.DeviceInterface.IFocuserV4)),
+                //GenerateTypeWithAttributes("ObservingConditions", new Guid("38620AE3-E175-4153-8871-85EE1023C5AD"), "ASCOM.OmniSim.ObservingConditions", "ASCOM OmniSim ObservingConditions", typeof(ASCOM.Simulators.LocalServer.Drivers.ObservingConditions), typeof(ASCOM.DeviceInterface.IObservingConditionsV2)),
+                //GenerateTypeWithAttributes("Rotator", new Guid("23B464ED-B86A-4276-AB2C-69FF65DF9477"), "ASCOM.OmniSim.Rotator", "ASCOM OmniSim Rotator", typeof(ASCOM.Simulators.LocalServer.Drivers.Rotator), typeof(ASCOM.DeviceInterface.IRotatorV4)),
+                //GenerateTypeWithAttributes("SafetyMonitor", new Guid("269F2A82-98B6-46EE-88F7-5A6C794E5D9A"), "ASCOM.OmniSim.SafetyMonitor", "ASCOM OmniSim SafetyMonitor", typeof(ASCOM.Simulators.LocalServer.Drivers.SafetyMonitor), typeof(ASCOM.DeviceInterface.ISafetyMonitorV3)),
+                //GenerateTypeWithAttributes("Switch", new Guid("D0EFCD2B-00D6-42B6-9F16-795CF09FBEE8"), "ASCOM.OmniSim.Switch", "ASCOM OmniSim Switch", typeof(ASCOM.Simulators.LocalServer.Drivers.Switch), typeof(ASCOM.DeviceInterface.ISwitchV3)),
+                //GenerateTypeWithAttributes("Telescope", new Guid("124D5B35-2435-43C5-BB02-1AF3EDFA6DBE"), "ASCOM.OmniSim.Telescope", "ASCOM OmniSim Telescope", typeof(ASCOM.Simulators.LocalServer.Drivers.Telescope), typeof(ASCOM.DeviceInterface.ITelescopeV4)),
             };
 
             return types;
