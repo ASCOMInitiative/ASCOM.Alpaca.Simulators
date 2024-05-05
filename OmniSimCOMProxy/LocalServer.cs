@@ -357,6 +357,7 @@ namespace ASCOM.LocalServer
                 //This was the one that the driver started with
                 GenerateTypeWithAttributes("Dome", new Guid("1E074DDB-D020-4045-8DB0-CFBBA81A6172"), "ASCOM.OmniSim.Dome", "ASCOM OmniSim Dome", typeof(ASCOM.Simulators.LocalServer.Drivers.Dome), typeof(ASCOM.DeviceInterface.IDomeV3)),
                 GenerateTypeWithAttributes("Camera", new Guid("DE992041-27FC-45CA-BC58-7507994973EA"), "ASCOM.OmniSim.Camera", "ASCOM OmniSim Camera", typeof(ASCOM.Simulators.LocalServer.Drivers.Camera), typeof(ASCOM.DeviceInterface.ICameraV4)),
+                GenerateTypeWithAttributes("CoverCalibrator", new Guid("97A847F6-2522-4007-842A-AE2339B1D70D"), "ASCOM.OmniSim.CoverCalibrator", "ASCOM OmniSim CoverCalibrator", typeof(ASCOM.Simulators.LocalServer.Drivers.CoverCalibrator), typeof(ASCOM.DeviceInterface.ICoverCalibratorV2)),
             };
 
             return types;
