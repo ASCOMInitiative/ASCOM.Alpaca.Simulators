@@ -98,7 +98,6 @@
 		<TrimmerRootAssembly Include="System.Runtime.InteropServices" />
 		<TrimmerRootAssembly Include="System.Runtime" />
 		<ProjectReference Include="..\ASCOM.COM.LocalServer\OmniSim.LocalServer.csproj" />
-    <ProjectReference Include="..\OmniSimCOMProxy\OmniSim.COMProxy.csproj" />
 	</ItemGroup>
 
 </Project>
