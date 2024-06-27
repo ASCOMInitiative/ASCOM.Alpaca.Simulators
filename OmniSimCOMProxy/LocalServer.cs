@@ -555,16 +555,16 @@ namespace ASCOM.LocalServer
                 // Unregistering often occurs during version upgrades and, if the code below is enabled, will result in loss of all device configuration during the upgrade.
                 // For this reason, enabling this capability is not recommended.
 
-                //try
-                //{
-                //    TL.LogMessage("UnregisterObjects", $"Deleting ASCOM Profile registration for {driverType.Name} ({progId})");
-                //    using (var profile = new Profile())
-                //    {
-                //        profile.DeviceType = driverType.Name;
-                //        profile.Unregister(progId);
-                //    }
-                //}
-                //catch (Exception) { }
+                try
+                {
+                    TL.LogMessage("UnregisterObjects", $"Deleting ASCOM Profile registration for {driverType.Name} ({progId})");
+                    using (var profile = new Profile())
+                    {
+                        profile.DeviceType = driverType.Name;
+                        profile.Unregister(progId);
+                    }
+                }
+                catch (Exception) { }
             }
         }
 
