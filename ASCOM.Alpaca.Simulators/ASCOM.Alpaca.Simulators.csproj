@@ -100,4 +100,10 @@
 		<ProjectReference Include="..\ASCOM.COM.LocalServer\OmniSim.LocalServer.csproj" />
 	</ItemGroup>
 
+	<ItemGroup Condition="$(DefineConstants.Contains('ASCOM_COM'))">
+	  <None Update="COM\OmniSim.COMProxy.exe">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

@@ -492,3 +492,4 @@ MigrationBackup/
 Help/Help
 
 ASCOM.Alpaca.Simulators/Setup/Builds/*
+ASCOM.Alpaca.Simulators/COM/*
