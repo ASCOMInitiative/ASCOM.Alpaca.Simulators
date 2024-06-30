@@ -15,6 +15,7 @@
 using ASCOM;
 using ASCOM.Com;
 using ASCOM.Common;
+using ASCOM.Common.Alpaca;
 using ASCOM.Tools;
 using Microsoft.Win32;
 using System;
@@ -560,8 +561,7 @@ namespace ASCOM.LocalServer
                     TL.LogMessage("UnregisterObjects", $"Deleting ASCOM Profile registration for {driverType.Name} ({progId})");
                     using (var profile = new Profile())
                     {
-                        profile.DeviceType = driverType.Name;
-                        profile.Unregister(progId);
+						Profile.UnRegister(Devices.StringToDeviceType(driverType.Name),progId);
                     }
                 }
                 catch (Exception) { }
