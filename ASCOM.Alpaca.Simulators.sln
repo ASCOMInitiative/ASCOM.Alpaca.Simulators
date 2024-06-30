@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASCOM.Alpaca.Simulators", "ASCOM.Alpaca.Simulators\ASCOM.Alpaca.Simulators.csproj", "{C0478E23-99F8-4763-A6A6-B65876E0CAEE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C708E487-E3A9-4073-A545-294B88674225} = {C708E487-E3A9-4073-A545-294B88674225}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoverCalibratorSimulator", "CoverCalibratorSimulator\CoverCalibratorSimulator.csproj", "{33906153-2AE2-4B20-8347-7746784F5E7C}"
 EndProject
@@ -33,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASCOM.Alpaca.Razor", "ASCOM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniSim.LocalServer", "ASCOM.COM.LocalServer\OmniSim.LocalServer.csproj", "{0BE7622B-1104-4352-B0B2-7B3E788ACFB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmniSim.COMProxy", "OmniSimCOMProxy\OmniSim.COMProxy.csproj", "{C708E487-E3A9-4073-A545-294B88674225}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniSim.COMProxy", "OmniSimCOMProxy\OmniSim.COMProxy.csproj", "{C708E487-E3A9-4073-A545-294B88674225}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
