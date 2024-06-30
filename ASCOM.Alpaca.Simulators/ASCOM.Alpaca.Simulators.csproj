@@ -100,10 +100,8 @@
 		<ProjectReference Include="..\ASCOM.COM.LocalServer\OmniSim.LocalServer.csproj" />
 	</ItemGroup>
 
-	<ItemGroup Condition="$(DefineConstants.Contains('ASCOM_COM'))">
-	  <None Update="COM\OmniSim.COMProxy.exe">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
+  <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+    <Copy SourceFiles="..\OmniSimCOMProxy\bin\$(Configuration)\net48\OmniSim.COMProxy.exe" DestinationFolder="$(OutDir)\COM" />
+  </Target>
 
 </Project>
