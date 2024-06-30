@@ -660,7 +660,7 @@ namespace OmniSim.LocalServer
                 if (bFail) break;
             }
 
-            //ElevateCONProxy("/register");
+            ElevateCOMProxy("/register");
         }
 
         /// <summary>
@@ -702,7 +702,7 @@ namespace OmniSim.LocalServer
                 Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}", false);
             }
 
-            ElevateCONProxy("/unregister");
+            ElevateCOMProxy("/unregister");
         }
 
         /// <summary>
@@ -756,11 +756,11 @@ namespace OmniSim.LocalServer
         /// Elevate privileges by re-running ourselves with elevation dialogue
         /// </summary>
         /// <param name="argument">Argument to pass to ourselves</param>
-        private static void ElevateCONProxy(string argument)
+        private static void ElevateCOMProxy(string argument)
         {
             var assem = new Process();
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
-            processStartInfo.FileName= Path.Combine(Path.GetDirectoryName(ExeLocation),"OmniSim.COMProxy.exe");
+            processStartInfo.FileName= Path.Combine(Path.GetDirectoryName(ExeLocation),"COM","OmniSim.COMProxy.exe");
             processStartInfo.Arguments = argument;
             processStartInfo.WorkingDirectory = Environment.CurrentDirectory;
             processStartInfo.UseShellExecute = true;
