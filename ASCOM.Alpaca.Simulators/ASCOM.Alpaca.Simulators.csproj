@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -100,7 +100,7 @@
 		<ProjectReference Include="..\ASCOM.COM.LocalServer\OmniSim.LocalServer.csproj" />
 	</ItemGroup>
 
-  <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+  <Target Name="CopyCustomContent" AfterTargets="AfterBuild" Condition="$(DefineConstants.Contains('ASCOM_COM'))">
     <Copy SourceFiles="..\OmniSimCOMProxy\bin\$(Configuration)\net48\OmniSim.COMProxy.exe" DestinationFolder="$(OutDir)\COM" />
   </Target>
 
