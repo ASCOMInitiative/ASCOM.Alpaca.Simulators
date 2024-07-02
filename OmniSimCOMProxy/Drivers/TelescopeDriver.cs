@@ -12,7 +12,7 @@ namespace ASCOM.Simulators.LocalServer.Drivers
     [ClassInterface(ClassInterfaceType.None)]
     public class Telescope : BaseDriver, ASCOM.DeviceInterface.ITelescopeV4, IDisposable
     {
-        ASCOM.Common.DeviceInterfaces.ITelescopeV3 Device = new ASCOM.Com.DriverAccess.Telescope("OmniSim.Telescope");
+        ASCOM.Common.DeviceInterfaces.ITelescopeV4 Device = new ASCOM.Com.DriverAccess.Telescope("OmniSim.Telescope");
 
         public Telescope()
         {
