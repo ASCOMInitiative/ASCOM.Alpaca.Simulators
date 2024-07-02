@@ -727,7 +727,7 @@ namespace ASCOM.Simulators
                             // In addition, the sense of required rate corrections is inverted when in the southern hemisphere compared to the northern hemisphere
                             if (SouthernHemisphere) // Southern hemisphere
                             {
-                                change.Y += (SideOfPier == PointingState.Normal? -rateRaDecOffsetInternal.Y : +rateRaDecOffsetInternal.Y) * timeInSecondsSinceLastUpdate; // Add or subtract declination rate depending on pointing state
+                                change.Y += (SideOfPier == PointingState.Normal ? -rateRaDecOffsetInternal.Y : +rateRaDecOffsetInternal.Y) * timeInSecondsSinceLastUpdate; // Add or subtract declination rate depending on pointing state
                             }
                             else // Northern hemisphere
                             {
@@ -1413,8 +1413,15 @@ namespace ASCOM.Simulators
             get { return rateRaDecOffsetExternal.Y; }
             set
             {
-                rateRaDecOffsetExternal.Y = value; // Save the provided rate to be returned through the Get property
-                rateRaDecOffsetInternal.Y = value * ARCSECONDS_TO_DEGREES; // Save the rate in the internal units that the simulator uses
+                // Setting DeclinationRate is only valid when tracking at sidereal rate. At other tracking rates the set must be rejected.
+                if (!(TrackingRate == DriveRate.Sidereal)) // We are not tracking at sidereal rate
+                    throw new InvalidOperationException($"DeclinationRate can only be set when tracking at sidereal rate. The current tracking rate is: {TrackingRate}.");
+
+                // Save the provided rate to be returned through the Get property
+                rateRaDecOffsetExternal.Y = value;
+
+                // Save the rate in the internal units that the simulator uses
+                rateRaDecOffsetInternal.Y = value * ARCSECONDS_TO_DEGREES;
             }
         }
 
@@ -1513,6 +1520,10 @@ namespace ASCOM.Simulators
             get { return rateRaDecOffsetExternal.X; }
             set
             {
+                // Setting RightAscensionRate is only valid when tracking at sidereal rate. At other tracking rates the set must be rejected.
+                if (!(TrackingRate == DriveRate.Sidereal)) // We are not tracking at sidereal rate
+                    throw new InvalidOperationException($"RightAscensionRate can only be set when tracking at sidereal rate. The current tracking rate is: {TrackingRate}.");
+
                 // Save the provided rate (seconds of RA per sidereal second) to be returned through the Get property
                 rateRaDecOffsetExternal.X = value;
 
