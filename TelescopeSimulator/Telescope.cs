@@ -90,7 +90,7 @@ namespace ASCOM.Simulators
                 // Initialise the guide rates from the Telescope hardware default values
                 currentGuideRateRightAscension = TelescopeHardware.GuideRateRightAscension;
                 currentGuideRateDeclination = TelescopeHardware.GuideRateDeclination;
-                
+
                 // get a unique instance id
                 objectId = TelescopeHardware.GetId();
 
@@ -386,8 +386,8 @@ namespace ASCOM.Simulators
         {
             get
             {
-                if(AlignmentMode == AlignmentMode.GermanPolar) 
-                { 
+                if (AlignmentMode == AlignmentMode.GermanPolar)
+                {
                     SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "CanSetPointingState: ");
                     CheckVersionOne("CanSetPointingState");
                     SharedResources.TrafficEnd(TelescopeHardware.CanSetPointingState.ToString());
@@ -1222,7 +1222,7 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetDeclination: ");
-                CheckCapability(TelescopeHardware.CanSlew, "TargetDeclination", false);
+                CheckCapability(TelescopeHardware.CanSlew | TelescopeHardware.CanSlewAsync, "TargetDeclination", false);
                 CheckRange(TelescopeHardware.TargetDeclination, -90, 90, "TargetDeclination");
                 SharedResources.TrafficEnd(Utilities.DegreesToDMS(TelescopeHardware.TargetDeclination));
                 return TelescopeHardware.TargetDeclination;
@@ -1230,7 +1230,7 @@ namespace ASCOM.Simulators
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetDeclination:-> ");
-                CheckCapability(TelescopeHardware.CanSlew, "TargetDeclination", true);
+                CheckCapability(TelescopeHardware.CanSlew | TelescopeHardware.CanSlewAsync, "TargetDeclination", true);
                 CheckRange(value, -90, 90, "TargetDeclination");
                 SharedResources.TrafficEnd(Utilities.DegreesToDMS(value));
                 TelescopeHardware.TargetDeclination = value;
@@ -1242,7 +1242,7 @@ namespace ASCOM.Simulators
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetRightAscension: ");
-                CheckCapability(TelescopeHardware.CanSlew, "TargetRightAscension", false);
+                CheckCapability(TelescopeHardware.CanSlew | TelescopeHardware.CanSlewAsync, "TargetRightAscension", false);
                 CheckRange(TelescopeHardware.TargetRightAscension, 0, 24, "TargetRightAscension");
                 SharedResources.TrafficEnd(Utilities.HoursToHMS(TelescopeHardware.TargetRightAscension));
                 return TelescopeHardware.TargetRightAscension;
@@ -1250,7 +1250,7 @@ namespace ASCOM.Simulators
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetRightAscension:-> ");
-                CheckCapability(TelescopeHardware.CanSlew, "TargetRightAscension", true);
+                CheckCapability(TelescopeHardware.CanSlew | TelescopeHardware.CanSlewAsync, "TargetRightAscension", true);
                 CheckRange(value, 0, 24, "TargetRightAscension");
 
                 SharedResources.TrafficEnd(Utilities.HoursToHMS(value));
@@ -1333,7 +1333,7 @@ namespace ASCOM.Simulators
             SharedResources.TrafficEnd("(done)");
         }
 
-#endregion ITelescope Members
+        #endregion ITelescope Members
         #region ITelescopeV4 members
 
         /// <summary>
@@ -1344,7 +1344,7 @@ namespace ASCOM.Simulators
             // This method is only valid in interface V4 and later
             CheckCapability(InterfaceVersion >= 4, "Connect");
 
-            TelescopeHardware.TL.LogMessage(LogLevel.Debug,"Connect Operation", $"Starting Connect()...");
+            TelescopeHardware.TL.LogMessage(LogLevel.Debug, "Connect Operation", $"Starting Connect()...");
 
             // Set the completion variable to the "process running" state
             Connecting = true;
@@ -1431,7 +1431,7 @@ namespace ASCOM.Simulators
                 CheckCapability(InterfaceVersion >= 4, "DeviceState", false);
 
                 // Create an array list to hold the IStateValue entries
-                List<StateValue>deviceState = new List<StateValue>();
+                List<StateValue> deviceState = new List<StateValue>();
 
                 // Add one entry for each operational state, if possible
                 try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Altitude), Altitude)); } catch { }
