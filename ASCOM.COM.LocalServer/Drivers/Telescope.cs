@@ -1,6 +1,7 @@
 ﻿using ASCOM.DeviceInterface;
 using System.Collections;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 
 namespace OmniSim.LocalServer.Drivers
 {
@@ -10,7 +11,34 @@ namespace OmniSim.LocalServer.Drivers
     {
         public ASCOM.Common.DeviceInterfaces.ITelescopeV4 Device => (base.DeviceV2 as ASCOM.Common.DeviceInterfaces.ITelescopeV4);
 
-        public AlignmentModes AlignmentMode => (AlignmentModes) Device.AlignmentMode;
+        /// <summary>
+        /// Replace the base class Action function with a version that supports AxisRates
+        /// </summary>
+        /// <param name="actionName"></param>
+        /// <param name="actionParameters"></param>
+        /// <returns></returns>
+        /// <exception cref="ASCOM.InvalidOperationException"></exception>
+        public new string Action(string actionName, string actionParameters)
+        {
+            ASCOM.Common.DeviceInterfaces.TelescopeAxis axis = Enum.Parse<ASCOM.Common.DeviceInterfaces.TelescopeAxis>(actionParameters);
+
+            if (actionName.ToUpperInvariant() == "AXISRATES")
+            {
+                List<Rate> rateList = new List<Rate>();
+                foreach (ASCOM.Common.DeviceInterfaces.IRate rate in Device.AxisRates(axis))
+                {
+                    rateList.Add(new Rate(rate.Minimum, rate.Maximum));
+                }
+                AxisRateTransfer rateTransfer = new AxisRateTransfer();
+                rateTransfer.AxisRates = rateList;
+
+                return JsonSerializer.Serialize(rateTransfer);
+            }
+
+            throw new ASCOM.InvalidOperationException($"Unsupported action: {actionName}");
+        }
+
+        public AlignmentModes AlignmentMode => (AlignmentModes)Device.AlignmentMode;
 
         public double Altitude => Device.Altitude;
 
@@ -73,7 +101,7 @@ namespace OmniSim.LocalServer.Drivers
         public double RightAscension => Device.RightAscension;
 
         public double RightAscensionRate { get => Device.RightAscensionRate; set => Device.RightAscensionRate = value; }
-        public PierSide SideOfPier { get => (PierSide)Device.SideOfPier; set => Device.SideOfPier = (ASCOM.Common.DeviceInterfaces.PointingState) value; }
+        public PierSide SideOfPier { get => (PierSide)Device.SideOfPier; set => Device.SideOfPier = (ASCOM.Common.DeviceInterfaces.PointingState)value; }
 
         public double SiderealTime => Device.SiderealTime;
 
@@ -87,7 +115,7 @@ namespace OmniSim.LocalServer.Drivers
         public double TargetDeclination { get => Device.TargetDeclination; set => Device.TargetDeclination = value; }
         public double TargetRightAscension { get => Device.TargetRightAscension; set => Device.TargetRightAscension = value; }
         public bool Tracking { get => Device.Tracking; set => Device.Tracking = value; }
-        public DriveRates TrackingRate { get => (DriveRates) Device.TrackingRate; set => Device.TrackingRate = (ASCOM.Common.DeviceInterfaces.DriveRate)value; }
+        public DriveRates TrackingRate { get => (DriveRates)Device.TrackingRate; set => Device.TrackingRate = (ASCOM.Common.DeviceInterfaces.DriveRate)value; }
 
         public ITrackingRates TrackingRates => new TrackingRates(Device.TrackingRates);
 
@@ -117,7 +145,7 @@ namespace OmniSim.LocalServer.Drivers
 
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
-            return (PierSide) Device.DestinationSideOfPier(RightAscension, Declination);
+            return (PierSide)Device.DestinationSideOfPier(RightAscension, Declination);
         }
 
         public void FindHome()
@@ -137,7 +165,7 @@ namespace OmniSim.LocalServer.Drivers
 
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
-            Device.PulseGuide((ASCOM.Common.DeviceInterfaces.GuideDirection) Direction, Duration);
+            Device.PulseGuide((ASCOM.Common.DeviceInterfaces.GuideDirection)Direction, Duration);
         }
 
         public void SetPark()
@@ -204,7 +232,7 @@ namespace OmniSim.LocalServer.Drivers
 
         public int Count => _rates.Count;
 
-        public AxisRate(ASCOM.Common.DeviceInterfaces.IAxisRates rates) 
+        public AxisRate(ASCOM.Common.DeviceInterfaces.IAxisRates rates)
         {
             _rates = rates;
         }
@@ -224,14 +252,14 @@ namespace OmniSim.LocalServer.Drivers
         public double Maximum { get; set; }
         public double Minimum { get; set; }
 
-        public Rate(double Min, double Max) 
-        { 
+        public Rate(double Min, double Max)
+        {
             Maximum = Max; Minimum = Min;
         }
 
         public void Dispose()
         {
-            
+
         }
     }
 
@@ -239,7 +267,7 @@ namespace OmniSim.LocalServer.Drivers
     {
         ASCOM.Common.DeviceInterfaces.ITrackingRates _driveRates = null;
 
-        public DriveRates this[int index] => (DriveRates) _driveRates[index];
+        public DriveRates this[int index] => (DriveRates)_driveRates[index];
 
         public int Count => _driveRates.Count;
 
@@ -256,5 +284,11 @@ namespace OmniSim.LocalServer.Drivers
         {
             return _driveRates.GetEnumerator();
         }
+    }
+
+    class AxisRateTransfer
+    {
+        public AxisRateTransfer() { }
+        public List<Rate> AxisRates { get; set; } = new List<Rate>();
     }
 }
