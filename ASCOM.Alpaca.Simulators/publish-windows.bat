@@ -1,2 +1,2 @@
-dotnet publish -c Release -r win-x64 --self-contained true -o ./bin/ascom.alpaca.simulators.windows-x64
-dotnet publish -c Release -r win-x86 --self-contained true -o ./bin/ascom.alpaca.simulators.windows-x86
+dotnet publish -c Release -r win-x64 --self-contained true /p:DefineConstants=ASCOM_COM -o ./bin/ascom.alpaca.simulators.windows-x64
+dotnet publish -c Release -r win-x86 --self-contained true /p:DefineConstants=ASCOM_COM -o ./bin/ascom.alpaca.simulators.windows-x86

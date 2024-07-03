@@ -1,6 +1,6 @@
-wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/runtime-aarch64"
-wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/runtime-armhf"
-wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/runtime-x86_64"
+wget "https://github.com/AppImage/type2-runtime/releases/download/continuous/runtime-aarch64"
+wget "https://github.com/AppImage/type2-runtime/releases/download/continuous/runtime-armhf"
+wget "https://github.com/AppImage/type2-runtime/releases/download/continuous/runtime-x86_64"
 
 cd ..
 
