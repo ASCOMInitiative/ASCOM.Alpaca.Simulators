@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 //
 // TODO - Add your authorship information here
-[assembly: AssemblyDescription("ASCOM Local Server Camera driver for ASCOMOmniSim")]
+[assembly: AssemblyDescription("ASCOM Local Server driver for ASCOMOmniSim")]
 [assembly: AssemblyCopyright("Copyright © 2023 The ASCOM Initiative")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

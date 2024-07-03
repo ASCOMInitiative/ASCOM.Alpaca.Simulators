@@ -66,7 +66,7 @@ namespace ASCOM.LocalServer
         static void Main(string[] args)
         {
             // Create a trace logger for the local server.
-            TL = new TraceLogger("ASCOMOmniSim.LocalServer", string.Empty, "OmniSim",true)
+            TL = new TraceLogger("OmniSim.LocalServer",false)
             {
                 Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
@@ -420,8 +420,8 @@ namespace ASCOM.LocalServer
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
             Attribute assemblyTitleAttribute = Attribute.GetCustomAttribute(executingAssembly, typeof(AssemblyTitleAttribute));
             string assemblyTitle = ((AssemblyTitleAttribute)assemblyTitleAttribute).Title;
-            assemblyTitleAttribute = Attribute.GetCustomAttribute(executingAssembly, typeof(AssemblyDescriptionAttribute));
-            string assemblyDescription = ((AssemblyDescriptionAttribute)assemblyTitleAttribute).Description;
+            Attribute assemblyDescriptionAttribute = Attribute.GetCustomAttribute(executingAssembly, typeof(AssemblyDescriptionAttribute));
+            string assemblyDescription = ((AssemblyDescriptionAttribute)assemblyDescriptionAttribute).Description;
 
             // Set the local server's DCOM/AppID information
             try
@@ -462,7 +462,12 @@ namespace ASCOM.LocalServer
                     string clsId = Marshal.GenerateGuidForType(driverType).ToString("B");
                     string progId = Marshal.GenerateProgIdForType(driverType);
                     string deviceType = driverType.Name; // Generate device type from the Class name
-                    TL.LogMessage("RegisterObjects", $"Assembly title: {assemblyTitle}, ASsembly description: {assemblyDescription}, CLSID: {clsId}, ProgID: {progId}, Device type: {deviceType}");
+
+                    // Pull the display name from the ServedClassName attribute.
+                    Attribute servedClassName = Attribute.GetCustomAttribute(driverType, typeof(ServedClassNameAttribute));
+                    string chooserName = ((ServedClassNameAttribute)servedClassName).DisplayName ?? "MultiServer";
+                    
+                    TL.LogMessage("RegisterObjects", $"Assembly title: {assemblyTitle}, Chooser description: {chooserName}, CLSID: {clsId}, ProgID: {progId}, Device type: {deviceType}");
 
                     using (RegistryKey clsIdKey = Registry.ClassesRoot.CreateSubKey($"CLSID\\{clsId}"))
                     {
@@ -495,9 +500,6 @@ namespace ASCOM.LocalServer
                         }
                     }
 
-                    // Pull the display name from the ServedClassName attribute.
-                    assemblyTitleAttribute = Attribute.GetCustomAttribute(driverType, typeof(ServedClassNameAttribute));
-                    string chooserName = ((ServedClassNameAttribute)assemblyTitleAttribute).DisplayName ?? "MultiServer";
                     TL.LogMessage("RegisterObjects", $"Registering {chooserName} ({driverType.Name}) in Profile");
 
                     Profile.Register(Devices.StringToDeviceType(deviceType), progId, chooserName);
