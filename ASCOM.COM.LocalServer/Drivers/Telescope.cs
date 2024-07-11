@@ -80,7 +80,7 @@ namespace OmniSim.LocalServer.Drivers
 
         public bool CanSync => Device.CanSync;
 
-        public bool CanSyncAltAz => Device.CanSlewAltAz;
+        public bool CanSyncAltAz => Device.CanSyncAltAz;
 
         public bool CanUnpark => Device.CanUnpark;
 
