@@ -1284,11 +1284,22 @@ namespace ASCOM.Simulators
             }
             set
             {
-                SharedResources.TrafficStart(SharedResources.MessageType.Other, "TrackingRate: -> ");
-                CheckVersionOne("TrackingRate");
-                if ((value < DriveRate.Sidereal) || (value > DriveRate.King)) throw new InvalidValueException("TrackingRate", value.ToString(), "0 (DriveSidereal) to 3 (DriveKing)");
-                TelescopeHardware.TrackingRate = value;
-                SharedResources.TrafficEnd(value.ToString() + "(done)");
+                // Adapt behaviour to whether or not the tracking rate can be set
+                if (TelescopeHardware.CanTrackingRates) // Tracking rate can be set
+                {
+                    SharedResources.TrafficStart(SharedResources.MessageType.Other, "TrackingRate: -> ");
+                    CheckVersionOne("TrackingRate");
+
+                    if ((value < DriveRate.Sidereal) || (value > DriveRate.King))
+                        throw new InvalidValueException("TrackingRate", value.ToString(), "0 (DriveSidereal) to 3 (DriveKing)");
+
+                    TelescopeHardware.TrackingRate = value;
+                    SharedResources.TrafficEnd(value.ToString() + "(done)");
+                }
+                else // Tracking rate cannot be set so throw a not implemented exception
+                {
+                    throw new PropertyNotImplementedException("TrackingRate", true);
+                }
             }
         }
 
