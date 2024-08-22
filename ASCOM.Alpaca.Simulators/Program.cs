@@ -18,7 +18,15 @@ namespace ASCOM.Alpaca.Simulators
     {
         public static void Main(string[] args)
         {
-            WriteAndLog($"{ServerSettings.ServerName} version {ServerSettings.ServerVersion}");
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			{
+                if (ServerSettings.ShowConsole)
+                {
+                    ShowConsole();
+                }
+			}
+
+			WriteAndLog($"{ServerSettings.ServerName} version {ServerSettings.ServerVersion}");
             WriteAndLog($"Running on: {RuntimeInformation.OSDescription}.");
 
             //Reset all stored settings if requested
@@ -169,6 +177,10 @@ namespace ASCOM.Alpaca.Simulators
                 Console.WriteLine("A fatal error has occurred and the OmniSim is shutting down.");
                 Console.WriteLine(ex.Message);
             }
+            finally
+            {
+                HideConsole();
+			}
         }
 
         /// <summary>
@@ -265,6 +277,32 @@ namespace ASCOM.Alpaca.Simulators
         {
             Console.WriteLine(message);
             Logging.LogInformation(message);
+        }
+
+        internal static void ShowConsole()
+        {
+            try
+            {
+                WindowsNative.AllocConsole();
+                //WindowsNative.SendMessage(Process.GetCurrentProcess().MainWindowHandle, WindowsNative.WM_SYSCOMMAND, WindowsNative.SC_MINIMIZE, 0);
+                WindowsNative.AttachConsole(Environment.ProcessId);
+            }
+            catch (Exception ex)
+            {
+                Logging.LogError(ex.Message);
+            }
+        }
+
+        internal static void HideConsole()
+        {
+            try
+            {
+                WindowsNative.FreeConsole();
+            }
+            catch (Exception ex)
+            {
+                Logging.LogError(ex.Message);
+            }
         }
     }
 }

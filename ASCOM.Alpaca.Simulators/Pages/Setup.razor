@@ -49,6 +49,14 @@
         </div>
 
         <div class="grid-item-right">
+            <span>Show Console:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox" @bind="ShowConsole">
+            <span> (may require restart)</span>
+        </div>
+
+        <div class="grid-item-right">
             <span>Require Strict API Compliance:</span>
         </div>
         <div class="grid-item-left">
@@ -323,6 +331,12 @@
         set;
     } = ServerSettings.AutoStartBrowser;
 
+    bool ShowConsole
+    {
+        get;
+        set;
+    } = ServerSettings.ShowConsole;
+
     bool EnableShutdown
     {
         get;
@@ -473,6 +487,20 @@
             ServerSettings.Location = Location;
 
             ServerSettings.AutoStartBrowser = StartBrowser;
+
+            if (ServerSettings.ShowConsole != ShowConsole)
+            {
+                ServerSettings.ShowConsole = ShowConsole;
+
+                if (ShowConsole)
+                {
+                    Program.ShowConsole();
+                }
+                else
+                {
+                    Program.HideConsole();
+                }
+            }
 
             ServerSettings.RunInStrictAlpacaMode = StrictAPIMode;
 
