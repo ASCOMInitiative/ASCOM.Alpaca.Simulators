@@ -270,3 +270,19 @@ fieldset {
         display: block;
     }
 }
+
+.button-transparent {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    color: #d7d7d7;
+}
+
+    .button-transparent:disabled,
+    .button-transparent[disabled] {
+        background-color: transparent;
+        color: #666666;
+    }

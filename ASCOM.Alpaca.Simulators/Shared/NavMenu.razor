@@ -75,6 +75,10 @@
                 <span class="oi oi-question-mark" aria-hidden="true"></span> About
             </NavLink>
         </li>
+        <li class="nav-item px-3">
+            <input type="checkbox" @bind="EnableShutdown">
+            <button @onclick="Shutdown" disabled="@AllowShutdown" class="button-transparent" title="Check to unlock"> <span class="oi oi-power-standby" aria-hidden="true"></span>Shutdown</button>
+        </li>
     </ul>
 </div>
 
@@ -82,6 +86,29 @@
     private bool collapseNavMenu = true;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    bool EnableShutdown
+    {
+        get;
+        set;
+    } = false;
+
+    bool AllowShutdown
+    {
+        get => !EnableShutdown;
+    }
+
+    void Shutdown()
+    {
+        try
+        {
+            Startup.Lifetime.StopApplication();
+        }
+        catch (Exception ex)
+        {
+            
+        }
+    }
 
     private void ToggleNavMenu()
     {
