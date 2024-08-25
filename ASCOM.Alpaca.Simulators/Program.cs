@@ -284,7 +284,10 @@ namespace ASCOM.Alpaca.Simulators
             try
             {
                 WindowsNative.AllocConsole();
-                //WindowsNative.SendMessage(Process.GetCurrentProcess().MainWindowHandle, WindowsNative.WM_SYSCOMMAND, WindowsNative.SC_MINIMIZE, 0);
+                if (ServerSettings.MinimizeConsole)
+                {
+                    WindowsNative.SendMessage(Process.GetCurrentProcess().MainWindowHandle, WindowsNative.WM_SYSCOMMAND, WindowsNative.SC_MINIMIZE, 0);
+                }
                 WindowsNative.AttachConsole(Environment.ProcessId);
             }
             catch (Exception ex)

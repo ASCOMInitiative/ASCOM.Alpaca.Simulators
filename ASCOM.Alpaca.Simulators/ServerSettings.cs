@@ -167,7 +167,23 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-		internal static bool ShowConsole
+        internal static bool MinimizeConsole
+        {
+            get
+            {
+                if (bool.TryParse(Profile.GetValue("MinimizeConsole", false.ToString()), out bool result))
+                {
+                    return result;
+                }
+                return true;
+            }
+            set
+            {
+                Profile.WriteValue("MinimizeConsole", value.ToString());
+            }
+        }
+
+        internal static bool ShowConsole
 		{
 			get
 			{

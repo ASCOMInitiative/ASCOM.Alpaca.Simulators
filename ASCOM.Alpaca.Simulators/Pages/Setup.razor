@@ -49,6 +49,13 @@
         </div>
 
         <div class="grid-item-right">
+            <span>Start with Console Minimized:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="checkbox" @bind="MinimizeConsole">
+        </div>
+
+        <div class="grid-item-right">
             <span>Show Console:</span>
         </div>
         <div class="grid-item-left">
@@ -331,6 +338,12 @@
         set;
     } = ServerSettings.AutoStartBrowser;
 
+    bool MinimizeConsole
+    {
+        get;
+        set;
+    } = ServerSettings.MinimizeConsole;
+
     bool ShowConsole
     {
         get;
@@ -487,6 +500,8 @@
             ServerSettings.Location = Location;
 
             ServerSettings.AutoStartBrowser = StartBrowser;
+
+            ServerSettings.MinimizeConsole = MinimizeConsole;
 
             if (ServerSettings.ShowConsole != ShowConsole)
             {
