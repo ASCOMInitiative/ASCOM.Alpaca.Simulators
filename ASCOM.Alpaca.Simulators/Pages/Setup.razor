@@ -3,7 +3,7 @@
 @inject IToastService toastService
 @inject NavigationManager NavManager
 
-@using ASCOM.Common.Interfaces 
+@using ASCOM.Common.Interfaces
 @using LetsMake
 
 <fieldset>
@@ -49,18 +49,19 @@
         </div>
 
         <div class="grid-item-right">
-            <span>Start with Console Minimized:</span>
+            <span>Console display:</span>
         </div>
         <div class="grid-item-left">
-            <input type="checkbox" @bind="MinimizeConsole">
-        </div>
-
-        <div class="grid-item-right">
-            <span>Show Console:</span>
-        </div>
-        <div class="grid-item-left">
-            <input type="checkbox" @bind="ShowConsole">
-            <span> (may require restart)</span>
+            <select @bind="ConsoleDisplay" disabled="@(OperatingSystem.IsWindows()?false:true)">
+                <option value="@ConsoleDisplayOption.StartNormally">Visible console</option>
+                @* Only show the minimized console on Windows OS *@
+                @if (OperatingSystem.IsWindows()) // This is a Windows OS
+                {
+                    <option value="@ConsoleDisplayOption.StartMinimized">Minimized console</option>
+                }
+                <option value="@ConsoleDisplayOption.NoConsole">No console</option>
+            </select>
+            <span>@(OperatingSystem.IsWindows()?"may require restart to take effect":" Windows only")</span>
         </div>
 
         <div class="grid-item-right">
@@ -225,10 +226,10 @@
             <input type="checkbox" @bind="LogToConsole">
         </div>
 
-                <div class="grid-item-right">
+        <div class="grid-item-right">
         </div>
         <div class="grid-item-right">
-                    <button @onclick="SaveLogSettings" style="min-width:12ch; vertical-align:middle;">Save</button>
+            <button @onclick="SaveLogSettings" style="min-width:12ch; vertical-align:middle;">Save</button>
         </div>
 
     </div>
@@ -337,6 +338,12 @@
         get;
         set;
     } = ServerSettings.AutoStartBrowser;
+
+    ConsoleDisplayOption ConsoleDisplay
+    {
+        get;
+        set;
+    } = ServerSettings.ConsoleDisplay;
 
     bool MinimizeConsole
     {
@@ -503,11 +510,9 @@
 
             ServerSettings.MinimizeConsole = MinimizeConsole;
 
-            if (ServerSettings.ShowConsole != ShowConsole)
+            if (ServerSettings.ConsoleDisplay != ConsoleDisplay)
             {
-                ServerSettings.ShowConsole = ShowConsole;
-
-                if (ShowConsole)
+                if ((ConsoleDisplay == ConsoleDisplayOption.StartNormally) | (ConsoleDisplay == ConsoleDisplayOption.StartMinimized))
                 {
                     Program.ShowConsole();
                 }
@@ -515,6 +520,7 @@
                 {
                     Program.HideConsole();
                 }
+                ServerSettings.ConsoleDisplay = ConsoleDisplay;
             }
 
             ServerSettings.RunInStrictAlpacaMode = StrictAPIMode;
@@ -556,7 +562,7 @@
             ServerSettings.LogToConsole = LogToConsole;
             DisplaySuccess("Logging Settings Saved");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             DisplayError(ex.Message);
         }
@@ -625,7 +631,7 @@
         {
             bool SettingsChanged = false;
 
-            if(ServerSettings.UseSSL != UseSSL)
+            if (ServerSettings.UseSSL != UseSSL)
             {
                 SettingsChanged = true;
             }

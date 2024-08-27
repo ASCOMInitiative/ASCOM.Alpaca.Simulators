@@ -4,6 +4,26 @@
         <name>ascom.alpaca.simulators</name>
     </assembly>
     <members>
+        <member name="T:ASCOM.Alpaca.Simulators.ConsoleDisplayOption">
+            <summary>
+            Supported log levels for ILogger devices
+            </summary>
+        </member>
+        <member name="F:ASCOM.Alpaca.Simulators.ConsoleDisplayOption.StartNormally">
+            <summary>
+            Start the console as an application window that is visible on screen.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Alpaca.Simulators.ConsoleDisplayOption.StartMinimized">
+            <summary>
+            Start the console as an application window minimized to the task bar..
+            </summary>
+        </member>
+        <member name="F:ASCOM.Alpaca.Simulators.ConsoleDisplayOption.NoConsole">
+            <summary>
+            No visible console window.
+            </summary>
+        </member>
         <member name="T:ASCOM.Alpaca.Simulators.SimulatorController">
             <summary>
             OmniSim only, not part of Alpaca

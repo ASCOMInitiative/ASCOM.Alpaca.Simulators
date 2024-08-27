@@ -370,6 +370,22 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        internal static ConsoleDisplayOption ConsoleDisplay
+        {
+            get
+            {
+                if (Enum.TryParse(Profile.GetValue("ConsoleDisplay", LogLevel.Information.ToString()), out ConsoleDisplayOption result))
+                {
+                    return result;
+                }
+                return ConsoleDisplayOption.StartNormally;
+            }
+            set
+            {
+                Profile.WriteValue("ConsoleDisplay", value.ToString());
+            }
+        }
+
         internal static bool LogToConsole
         {
             get

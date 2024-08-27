@@ -18,15 +18,16 @@ namespace ASCOM.Alpaca.Simulators
     {
         public static void Main(string[] args)
         {
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-			{
-                if (ServerSettings.ShowConsole)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                // Start a console if it is displayed normally or minimized (Windows only)
+                if (ServerSettings.ConsoleDisplay != ConsoleDisplayOption.NoConsole)
                 {
                     ShowConsole();
                 }
-			}
+            }
 
-			WriteAndLog($"{ServerSettings.ServerName} version {ServerSettings.ServerVersion}");
+            WriteAndLog($"{ServerSettings.ServerName} version {ServerSettings.ServerVersion}");
             WriteAndLog($"Running on: {RuntimeInformation.OSDescription}.");
 
             //Reset all stored settings if requested
@@ -40,8 +41,6 @@ namespace ASCOM.Alpaca.Simulators
                 WriteAndLog("Settings reset, shutting down");
                 return;
             }
-
-
 
             //Turn off Authentication. Once off the user can change the password and re-enable authentication
             if (args?.Any(str => str.Contains("--reset-auth")) ?? false)
@@ -180,7 +179,7 @@ namespace ASCOM.Alpaca.Simulators
             finally
             {
                 HideConsole();
-			}
+            }
         }
 
         /// <summary>
@@ -281,30 +280,38 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static void ShowConsole()
         {
-            try
+            // Protect these Windows specific calls from running on non Windows OS and failing
+            if (OperatingSystem.IsWindows())
             {
-                WindowsNative.AllocConsole();
-                if (ServerSettings.MinimizeConsole)
+                try
                 {
-                    WindowsNative.SendMessage(Process.GetCurrentProcess().MainWindowHandle, WindowsNative.WM_SYSCOMMAND, WindowsNative.SC_MINIMIZE, 0);
+                    WindowsNative.AllocConsole();
+                    if (ServerSettings.ConsoleDisplay == ConsoleDisplayOption.StartMinimized)
+                    {
+                        WindowsNative.SendMessage(Process.GetCurrentProcess().MainWindowHandle, WindowsNative.WM_SYSCOMMAND, WindowsNative.SC_MINIMIZE, 0);
+                    }
+                    WindowsNative.AttachConsole(Environment.ProcessId);
                 }
-                WindowsNative.AttachConsole(Environment.ProcessId);
-            }
-            catch (Exception ex)
-            {
-                Logging.LogError(ex.Message);
+                catch (Exception ex)
+                {
+                    Logging.LogError(ex.Message);
+                }
             }
         }
 
         internal static void HideConsole()
         {
-            try
+            // Protect these Windows specific calls from running on non Windows OS and failing
+            if (OperatingSystem.IsWindows())
             {
-                WindowsNative.FreeConsole();
-            }
-            catch (Exception ex)
-            {
-                Logging.LogError(ex.Message);
+                try
+                {
+                    WindowsNative.FreeConsole();
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogError(ex.Message);
+                }
             }
         }
     }
