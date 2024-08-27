@@ -1,0 +1,1 @@
+dotnet publish -c Release -r linux-x64 --self-contained true /p:PublishReadyToRun=true /p:PublishReadyToRunShowWarnings=true -o ./bin/ascom.alpaca.simulators.linux-x64
