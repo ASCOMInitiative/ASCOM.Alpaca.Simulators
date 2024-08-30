@@ -42,6 +42,14 @@ namespace ASCOM.Alpaca.Simulators
                 return;
             }
 
+            if (args?.Any(str => str.Contains("--set-no-browser")) ?? false)
+            {
+                WriteAndLog("Turning off auto start browser");
+                ServerSettings.AutoStartBrowser = false;
+                WriteAndLog("Auto start browser is off");
+                return;
+            }
+
             //Turn off Authentication. Once off the user can change the password and re-enable authentication
             if (args?.Any(str => str.Contains("--reset-auth")) ?? false)
             {
