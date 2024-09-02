@@ -513,5 +513,48 @@
             </summary>
             <param name="message">The message to write out</param>
         </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Program.ShowConsole(ASCOM.Alpaca.Simulators.ConsoleDisplayOption)">
+            <summary>
+            Shows, minimises or hides the console window (Windows only)
+            </summary>
+            <param name="newConsoleState">The required console window state</param>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Program.ConsoleWindowsState(System.IntPtr)">
+            <summary>
+            Return the <see cref="T:ASCOM.Alpaca.Simulators.ConsoleDisplayOption"/> state of the window with the supplied handle
+            </summary>
+            <param name="hWnd">Windows handle of the window to check.</param>
+            <returns>A <see cref="T:ASCOM.Alpaca.Simulators.ConsoleDisplayOption"/> value describing the current window state.</returns>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.WindowsNative.FindWindow(System.String,System.String)">
+            <summary>
+            Return the Windows handle of the windows with the supplied title
+            </summary>
+            <param name="lpClassName">Class name of the windows or null</param>
+            <param name="lpWindowName">Title of the window or null</param>
+            <returns>Windows handle (hWnd) of the window if found or zero if not found</returns>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.WindowsNative.ShowWindow(System.IntPtr,System.Int32)">
+            <summary>
+            Change the visibility state of the window with the given handle
+            </summary>
+            <param name="hWnd">Windows handle (hWnd) of the window</param>
+            <param name="swOption">Desired WindowsNative.SW_XXX window state</param>
+            <returns>1 if successful, 0 if failed</returns>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.WindowsNative.IsWindowVisible(System.IntPtr)">
+            <summary>
+            Determine whether a window is hidden or visible in some fashion
+            </summary>
+            <param name="hWnd">Windows handle (hWnd) of the window</param>
+            <returns>True if the window is visible in some way (minimised, maximised or normal window) or false if it is hidden.</returns>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.WindowsNative.IsIconic(System.IntPtr)">
+            <summary>
+            Determine whether a window is minimised
+            </summary>
+            <param name="hWnd">Windows handle (hWnd) of the window</param>
+            <returns>True if the window is minimised or false if it is not.</returns>
+        </member>
     </members>
 </doc>

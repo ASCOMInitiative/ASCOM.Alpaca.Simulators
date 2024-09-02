@@ -18,14 +18,8 @@ namespace ASCOM.Alpaca.Simulators
     {
         public static void Main(string[] args)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                // Start a console if it is displayed normally or minimized (Windows only)
-                if (ServerSettings.ConsoleDisplay != ConsoleDisplayOption.NoConsole)
-                {
-                    ShowConsole();
-                }
-            }
+            // Set console visibility (Windows only)
+            ShowConsole(ServerSettings.ConsoleDisplay);
 
             WriteAndLog($"{ServerSettings.ServerName} version {ServerSettings.ServerVersion}");
             WriteAndLog($"Running on: {RuntimeInformation.OSDescription}.");
@@ -186,7 +180,6 @@ namespace ASCOM.Alpaca.Simulators
             }
             finally
             {
-                HideConsole();
             }
         }
 
@@ -286,19 +279,53 @@ namespace ASCOM.Alpaca.Simulators
             Logging.LogInformation(message);
         }
 
-        internal static void ShowConsole()
+        /// <summary>
+        /// Shows, minimises or hides the console window (Windows only)
+        /// </summary>
+        /// <param name="newConsoleState">The required console window state</param>
+        internal static void ShowConsole(ConsoleDisplayOption newConsoleState)
         {
-            // Protect these Windows specific calls from running on non Windows OS and failing
+            // Protect these Windows specific calls from running on non Windows OS
             if (OperatingSystem.IsWindows())
             {
                 try
                 {
-                    WindowsNative.AllocConsole();
-                    if (ServerSettings.ConsoleDisplay == ConsoleDisplayOption.StartMinimized)
+                    // Get the console window title
+                    string consoleTitle = Console.Title;
+
+                    // Get the Windows handle for the console window
+                    IntPtr consolhWnd = WindowsNative.FindWindow(null, consoleTitle);
+                    Logging.Log.LogDebug($"ShowConsole - Console title: {consoleTitle}, Console hWnd: {consolhWnd}.");
+
+                    // Get the current console display state
+                    ConsoleDisplayOption currentConsoleState = ConsoleWindowsState(consolhWnd);
+
+                    if (newConsoleState != currentConsoleState)
                     {
-                        WindowsNative.SendMessage(Process.GetCurrentProcess().MainWindowHandle, WindowsNative.WM_SYSCOMMAND, WindowsNative.SC_MINIMIZE, 0);
+                        // Call the WIndows API ShowWindow method with the appropriate window state parameter
+                        switch (newConsoleState)
+                        {
+                            case ConsoleDisplayOption.StartNormally: // Console window visible on desktop
+
+                                Logging.LogInformation($"Displaying console window.");
+                                WindowsNative.ShowWindow(consolhWnd, WindowsNative.SW_RESTORE);
+                                break;
+
+                            case ConsoleDisplayOption.StartMinimized: // Console window minimised to task bar
+                                Logging.LogInformation($"Minimising console window.");
+                                WindowsNative.ShowWindow(consolhWnd, WindowsNative.SW_MINIMIZE);
+                                break;
+
+                            case ConsoleDisplayOption.NoConsole: // Console window hidden
+                                Logging.LogInformation($"Hiding console window.");
+                                WindowsNative.ShowWindow(consolhWnd, WindowsNative.SW_HIDE);
+                                break;
+
+                            default: // An unknown window state
+                                Logging.LogError($"ShowConsole - Unable to set the requested {newConsoleState} window state because it is unknown. No action taken.");
+                                break;
+                        }
                     }
-                    WindowsNative.AttachConsole(Environment.ProcessId);
                 }
                 catch (Exception ex)
                 {
@@ -307,20 +334,24 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static void HideConsole()
+        /// <summary>
+        /// Return the <see cref="ConsoleDisplayOption"/> state of the window with the supplied handle
+        /// </summary>
+        /// <param name="hWnd">Windows handle of the window to check.</param>
+        /// <returns>A <see cref="ConsoleDisplayOption"/> value describing the current window state.</returns>
+        private static ConsoleDisplayOption ConsoleWindowsState(IntPtr hWnd)
         {
-            // Protect these Windows specific calls from running on non Windows OS and failing
-            if (OperatingSystem.IsWindows())
-            {
-                try
-                {
-                    WindowsNative.FreeConsole();
-                }
-                catch (Exception ex)
-                {
-                    Logging.LogError(ex.Message);
-                }
-            }
+            // First check whether the window is hidden or visible in some way
+            if (!WindowsNative.IsWindowVisible(hWnd)) // Window is hidden
+                return ConsoleDisplayOption.NoConsole;
+
+            
+            // Second check whether the window is minimised
+            if (WindowsNative.IsIconic(hWnd)) // Window is minimised
+                return ConsoleDisplayOption.StartMinimized;
+
+            // The window is not hidden or minimized so the console must be visible on the desktop either as a normal window or maximised
+            return ConsoleDisplayOption.StartNormally;
         }
     }
 }

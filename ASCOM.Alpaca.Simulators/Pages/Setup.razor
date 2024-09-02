@@ -58,10 +58,10 @@
                 @if (OperatingSystem.IsWindows()) // This is a Windows OS
                 {
                     <option value="@ConsoleDisplayOption.StartMinimized">Minimized console</option>
+                    <option value="@ConsoleDisplayOption.NoConsole">No console</option>
                 }
-                <option value="@ConsoleDisplayOption.NoConsole">No console</option>
             </select>
-            <span>@(OperatingSystem.IsWindows()?"may require restart to take effect":" Windows only")</span>
+            <span>@(OperatingSystem.IsWindows() ? "" : " Windows only")</span>
         </div>
 
         <div class="grid-item-right">
@@ -345,18 +345,6 @@
         set;
     } = ServerSettings.ConsoleDisplay;
 
-    bool MinimizeConsole
-    {
-        get;
-        set;
-    } = ServerSettings.MinimizeConsole;
-
-    bool ShowConsole
-    {
-        get;
-        set;
-    } = ServerSettings.ShowConsole;
-
     bool EnableShutdown
     {
         get;
@@ -508,18 +496,9 @@
 
             ServerSettings.AutoStartBrowser = StartBrowser;
 
-            ServerSettings.MinimizeConsole = MinimizeConsole;
-
             if (ServerSettings.ConsoleDisplay != ConsoleDisplay)
             {
-                if ((ConsoleDisplay == ConsoleDisplayOption.StartNormally) | (ConsoleDisplay == ConsoleDisplayOption.StartMinimized))
-                {
-                    Program.ShowConsole();
-                }
-                else
-                {
-                    Program.HideConsole();
-                }
+                Program.ShowConsole(ConsoleDisplay);
                 ServerSettings.ConsoleDisplay = ConsoleDisplay;
             }
 
