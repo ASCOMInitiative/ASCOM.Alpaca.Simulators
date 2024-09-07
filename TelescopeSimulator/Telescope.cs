@@ -673,10 +673,11 @@ namespace ASCOM.Simulators
 
             TelescopeHardware.FindHome();
 
-            while (TelescopeHardware.SlewState == SlewType.SlewHome || TelescopeHardware.SlewState == SlewType.SlewSettle)
-            {
-                System.Threading.Thread.Sleep(1);
-            }
+            // Commented out because in ITelescopeV4 FindHome is asynchronous
+            //while (TelescopeHardware.SlewState == SlewType.SlewHome || TelescopeHardware.SlewState == SlewType.SlewSettle)
+            //{
+            //    System.Threading.Thread.Sleep(1);
+            //}
 
             SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "(done)");
         }
