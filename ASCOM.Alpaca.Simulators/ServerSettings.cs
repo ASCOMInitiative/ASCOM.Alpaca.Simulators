@@ -155,11 +155,11 @@ namespace ASCOM.Alpaca.Simulators
         {
             get
             {
-                if (bool.TryParse(Profile.GetValue("AutoStartBrowser", true.ToString()), out bool result))
+                if (bool.TryParse(Profile.GetValue("AutoStartBrowser", false.ToString()), out bool result))
                 {
                     return result;
                 }
-                return true;
+                return false;
             }
             set
             {
@@ -342,11 +342,11 @@ namespace ASCOM.Alpaca.Simulators
         {
             get
             {
-                if (Enum.TryParse(Profile.GetValue("ConsoleDisplay", LogLevel.Information.ToString()), out ConsoleDisplayOption result))
+                if (Enum.TryParse(Profile.GetValue("ConsoleDisplay", ConsoleDisplayOption.StartMinimized.ToString()), out ConsoleDisplayOption result))
                 {
                     return result;
                 }
-                return ConsoleDisplayOption.StartNormally;
+                return ConsoleDisplayOption.StartMinimized;
             }
             set
             {
