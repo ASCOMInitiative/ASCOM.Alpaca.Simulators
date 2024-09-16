@@ -1268,7 +1268,10 @@ namespace ASCOM.Simulators
             }
             set
             {
-                CheckParked("Tracking");
+                // Throw a parked exception when Tracking is set True and AtPark is True
+                if (value & TelescopeHardware.AtPark)
+                    CheckParked("Tracking");
+
                 SharedResources.TrafficLine(SharedResources.MessageType.Polls, "Tracking:-> " + value.ToString());
                 TelescopeHardware.Tracking = value;
             }
