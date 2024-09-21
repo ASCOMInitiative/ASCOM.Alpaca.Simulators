@@ -426,7 +426,9 @@ namespace ASCOM.Alpaca
             }
             catch (Exception ex)
             {
-                return Ok(ResponseHelpers.ExceptionResponseBuilder<StringResponse>(ex, ClientTransactionID, TransactionID));
+                StringResponse response = ResponseHelpers.ExceptionResponseBuilder<StringResponse>(ex, ClientTransactionID, TransactionID);
+                response.Value= string.Empty;
+                return Ok(response);
             }
         }
 
