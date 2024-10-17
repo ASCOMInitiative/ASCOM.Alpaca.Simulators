@@ -89,7 +89,8 @@ namespace ASCOM.Simulators.LocalServer.Drivers
         {
             try
             {
-                System.Windows.Forms.MessageBox.Show($"The Device Simulator can be configured through the Alpaca Web UI. This will block until dismissed allowing changes while the client is waiting.", "Setup Dialog", 0);
+                System.Windows.Forms.MessageBox.Show($"The Device Simulator is configured through the Alpaca Web UI by starting a browser and navigating to: http://localhost:32323\r\n\r\n" +
+                    $"Press the OK button when you have finished making changes through the Web UI.", "Setup Dialog", 0);
             }
             catch
             {
