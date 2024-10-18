@@ -38,8 +38,6 @@
                         <th><input type="range" min="@Device.MinSwitchValue(i)" max="@Device.MaxSwitchValue(i)" step="@Device.SwitchStep(i)" value="@Device.GetSwitchValue(i)" @onchange="@((ChangeEventArgs __e) => SetValue(index, Convert.ToDouble(__e.Value)))" style="min-width:40ch"></th>
                         <th>@Device.GetSwitchValue(i)</th>
                     </tr>
-
-                    i++;
                 }
             }
         </table>
