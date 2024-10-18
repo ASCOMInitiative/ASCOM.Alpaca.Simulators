@@ -3,530 +3,533 @@
 @inject IToastService toastService
 @inject NavigationManager uriHelper;
 @using System.Timers;
-@using ASCOM.Common.DeviceInterfaces; 
+@using ASCOM.Common.DeviceInterfaces;
 
 <body>
-    <fieldset>
-        <legend>Dome</legend>
-        <div class="grid-container-two">
-            <div class="grid-item-left">
-                <svg width="30" height="30">
-                    <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
-                </svg>
-                <button @onclick="Connect">@ConnectText</button>
-            </div>
-            <div class="grid-item-right">
-                <button @onclick="Setup">Setup</button>
-            </div>
-        </div>
-        <div class="grid-container-two">
+	<fieldset>
+		<legend>Dome</legend>
+		<div class="grid-container-two">
+			<div class="grid-item-left">
+				<svg width="30" height="30">
+					<circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
+				</svg>
+				<button @onclick="Connect">@ConnectText</button>
+			</div>
+			<div class="grid-item-right">
+				<button @onclick="Setup">Setup</button>
+			</div>
+		</div>
+		<div class="grid-container-two">
 
-            <div class="grid-item-right">
-                Shutter:
-            </div>
-            <div class="grid-item-left">
-                @Shutter
-            </div>
+			<div class="grid-item-right">
+				Shutter:
+			</div>
+			<div class="grid-item-left">
+				@Shutter
+			</div>
 
-            <div class="grid-item-right">
-                Dome AZ:
-            </div>
-            <div class="grid-item-left">
-                @DomeAz
-            </div>
-        </div>
-        <div class="centered">
-            <label style="color:@SlewColor">@SlewText</label>&nbsp;
-            <label style="color:@HomeColor">@HomeText</label>&nbsp;
-            <label style="color:@ParkColor">@ParkText</label>
-        </div>
-        <div class="centered">
-            <button @onclick="@GoToAz" class="button-margin">GoTo</button>
-            <input type="number" min="0" max="360" step=".1" @bind="@NewAz" class="button-margin"/>
-            <button @onclick="@SyncAz" class="button-margin">Sync</button>
-        </div>
-        <div class="centered">
-            <button @onclick="@Open" class="button-margin">Open</button>
-            <button @onclick="@SlewAltUp" class="oi oi-arrow-top button-margin" aria-hidden="true" ></button>
-            <button @onclick="@Close"class="button-margin">Close</button>
-        </div>
-        <div class="centered">
-            <button @onclick="@Clockwise" class="button-margin">&#8635;</button>
-            <button @onclick="@Halt" class="oi oi-media-stop button-margin" aria-hidden="true"></button>
-            <button @onclick="@CounterClockwise" class="button-margin">&#8634;</button>
-        </div>
+			<div class="grid-item-right">
+				Dome AZ:
+			</div>
+			<div class="grid-item-left">
+				@DomeAz
+			</div>
+		</div>
+		<div class="centered">
+			<label style="color:@SlewColor">@SlewText</label>&nbsp;
+			<label style="color:@HomeColor">@HomeText</label>&nbsp;
+			<label style="color:@ParkColor">@ParkText</label>
+		</div>
+		<div class="centered">
+			<button @onclick="@GoToAz" class="button-margin">GoTo</button>
+			<input type="number" min="0" max="360" step=".1" @bind="@NewAz" class="button-margin"/>
+			<button @onclick="@SyncAz" class="button-margin">Sync</button>
+		</div>
+		<div class="centered">
+			<button @onclick="@Open" class="button-margin">Open</button>
+			<button @onclick="@SlewAltUp" class="oi oi-arrow-top button-margin" aria-hidden="true" ></button>
+			<button @onclick="@Close"class="button-margin">Close</button>
+		</div>
+		<div class="centered">
+			<button @onclick="@Clockwise" class="button-margin">&#8635;</button>
+			<button @onclick="@Halt" class="oi oi-media-stop button-margin" aria-hidden="true"></button>
+			<button @onclick="@CounterClockwise" class="button-margin">&#8634;</button>
+		</div>
 
-        <div class="centered">
-            <button @onclick="@StepClockwise" class="button-margin">Step</button>
-            <button @onclick="@SlewAltDown" class="oi oi-arrow-bottom button-margin" aria-hidden="true"></button>
-            <button @onclick="@StepCounterClockwise" class="button-margin">Step</button>
-        </div>
-        <div class="centered">
-            <button @onclick="@Park" class="button-margin" style="min-width: 4em">Park</button>
-            &nbsp;
-            <button @onclick="@Home" class="button-margin" style="min-width: 4em">Home</button>
-        </div>
-    </fieldset>
+		<div class="centered">
+			<button @onclick="@StepClockwise" class="button-margin">Step</button>
+			<button @onclick="@SlewAltDown" class="oi oi-arrow-bottom button-margin" aria-hidden="true"></button>
+			<button @onclick="@StepCounterClockwise" class="button-margin">Step</button>
+		</div>
+		<div class="centered">
+			<button @onclick="@Park" class="button-margin" style="min-width: 4em">Park</button>
+			&nbsp;
+			<button @onclick="@Home" class="button-margin" style="min-width: 4em">Home</button>
+		</div>
+	</fieldset>
 </body>
 
 @code {
-    [Parameter]
-    public int InstanceID { get; set; }
+	[Parameter]
+	public int InstanceID { get; set; }
 
-    /// <summary>
-    /// This access the device type not the interface to allow the device specific settings to be accessed.
-    /// </summary>
-    private ASCOM.Simulators.Dome Device
-    {
-        get
-        {
-            return DeviceManager.GetDome((uint)InstanceID) as ASCOM.Simulators.Dome;
-        }
-    }
+	/// <summary>
+	/// This access the device type not the interface to allow the device specific settings to be accessed.
+	/// </summary>
+	private ASCOM.Simulators.Dome Device
+	{
+		get
+		{
+			return DeviceManager.GetDome((uint)InstanceID) as ASCOM.Simulators.Dome;
+		}
+	}
 
-    Timer timer = new Timer(100);
+	Timer timer = new Timer(100);
 
-    public void Dispose()
-    {
-        timer.Elapsed -= OnPageRefresh;
-        timer.Stop();
-    }
+	public void Dispose()
+	{
+		timer.Elapsed -= OnPageRefresh;
+		timer.Stop();
+	}
 
-    protected override void OnInitialized()
-    {
-        timer.Elapsed += OnPageRefresh;
-        timer.AutoReset = true;
-        timer.Enabled = true;
-        base.OnInitialized();
-    }
+	protected override void OnInitialized()
+	{
+		timer.Elapsed += OnPageRefresh;
+		timer.AutoReset = true;
+		timer.Enabled = true;
+		base.OnInitialized();
+	}
 
-    private void OnPageRefresh(Object source, ElapsedEventArgs e)
-    {
-        try
-        {
-            // Note that the following line is necessary because otherwise
-            // Blazor would not recognize the state change and not refresh the UI
-            InvokeAsync(() =>
-            {
-                try
-                {
-                    StateHasChanged();
-                }
-                catch
-                {
+	private void OnPageRefresh(Object source, ElapsedEventArgs e)
+	{
+		try
+		{
+			// Note that the following line is necessary because otherwise
+			// Blazor would not recognize the state change and not refresh the UI
+			InvokeAsync(() =>
+			{
+				try
+				{
+					StateHasChanged();
+				}
+				catch
+				{
 
-                }
-            });
-        }
-        catch
-        {
+				}
+			});
+		}
+		catch
+		{
 
-        }
-    }
+		}
+	}
 
-    #region Control
+	#region Control
 
-    public bool Connected
-    {
-        get
-        {
-            return Device.Connected;
-        }
-    }
+	public bool Connected
+	{
+		get
+		{
+			return Device.Connected;
+		}
+	}
 
-    public string ConnectionColor
-    {
-        get
-        {
-            if (Connected)
-            {
-                return "red";
-            }
-            return "gray";
-        }
-    }
+	public string ConnectionColor
+	{
+		get
+		{
+			if (Connected)
+			{
+				return "red";
+			}
+			return "gray";
+		}
+	}
 
-    public string ConnectText
-    {
-        get
-        {
-            if (Device.Connected)
-            {
-                return "Disconnect";
-            }
-            return "Connect";
-        }
-    }
+	public string ConnectText
+	{
+		get
+		{
+			if (Device.Connected)
+			{
+				return "Disconnect";
+			}
+			return "Connect";
+		}
+	}
 
-    public void Connect()
-    {
-        Device.Connected = !Device.Connected;
-    }
+	public void Connect()
+	{
+		Device.Connected = !Device.Connected;
+	}
 
-    string Shutter
-    {
-        get
-        {
-            if (Connected)
-            {
-                if (Device.CanSetShutter && Device.Altitude != -100000.0)
-                {
-                    switch (Device.ShutterStatus)
-                    {
-                        case ShutterState.Open:
-                            if (Device.CanSetAltitude)
-                            {
-                                return Device.Altitude.ToString("0.0");
-                            }
-                            else
-                            {
-                                return "Open";
-                            }
-                        case ShutterState.Closed:
-                            return "Closed";
-                        case ShutterState.Closing:
-                            return "Closing";
-                        case ShutterState.Error:
-                            return "Error";
-                        case ShutterState.Opening:
-                            return "Opening";
+	string Shutter
+	{
+		get
+		{
+			const string NAN = "----";
 
-                    }
-                }
-            }
-            return "----";
-        }
-    }
+			if (!Connected)
+				return NAN;
+			if (!Device.CanSetShutter)
+				return NAN;
+			if (Device.CanSetAltitude && Device.Altitude == -100000.0)
+				return NAN;
 
-    public string DomeAz
-    {
-        get
-        {
-            if (Connected)
-            {
-                if (Device.Azimuth != -100000.0)
-                {
-                    return Device.Azimuth.ToString("000.0");
-                }
+			switch (Device.ShutterStatus)
+			{
+				case ShutterState.Open:
+					if (Device.CanSetAltitude)
+					{
+						return Device.Altitude.ToString("0.0");
+					}
+					else
+					{
+						return "Open";
+					}
+				case ShutterState.Closed:
+					return "Closed";
+				case ShutterState.Closing:
+					return "Closing";
+				case ShutterState.Error:
+					return "Error";
+				case ShutterState.Opening:
+					return "Opening";
+				default:
+					return "ERROR";
+			}
+		}
+	}
 
-            }
+	public string DomeAz
+	{
+		get
+		{
+			if (Connected)
+			{
+				if (Device.CanSetAzimuth && Device.Azimuth != -100000.0)
+				{
+					return Device.Azimuth.ToString("000.0");
+				}
 
-            return "---.-";
-        }
-    }
+			}
 
-    public string SlewText
-    {
-        get
-        {
-            if (Connected)
-            {
-                if (Device.Slewing)
-                {
-                    return "Slewing";
-                }
-                return "Stationary";
-            }
-            return "--------";
-        }
-    }
+			return "---.-";
+		}
+	}
 
-    public string SlewColor
-    {
-        get
-        {
-            if (Connected)
-            {
-                if (Device.Slewing)
-                {
-                    return "Green";
-                }
-            }
-            return "Red";
-        }
-    }
+	public string SlewText
+	{
+		get
+		{
+			if (Connected)
+			{
+				if (Device.Slewing)
+				{
+					return "Slewing";
+				}
+				return "Stationary";
+			}
+			return "--------";
+		}
+	}
 
-    public string HomeText
-    {
-        get
-        {
-            if (Connected)
-            {
-                if (Device.AtHome)
-                {
-                    return "At Home";
-                }
-                return "Away from Home";
-            }
-            return "--------";
-        }
-    }
+	public string SlewColor
+	{
+		get
+		{
+			if (Connected)
+			{
+				if (Device.Slewing)
+				{
+					return "Green";
+				}
+			}
+			return "Red";
+		}
+	}
 
-    public string HomeColor
-    {
-        get
-        {
-            if (Connected)
-            {
-                if (Device.AtHome)
-                {
-                    return "Red";
-                }
-                return "Green";
-            }
-            return "Red";
-        }
-    }
+	public string HomeText
+	{
+		get
+		{
+			if (Connected)
+			{
+				if (Device.AtHome)
+				{
+					return "At Home";
+				}
+				return "Away from Home";
+			}
+			return "--------";
+		}
+	}
 
-    public string ParkText
-    {
-        get
-        {
-            if (Connected)
-            {
-                if (Device.AtPark)
-                {
-                    return "Parked";
-                }
-                return "Unparked";
-            }
-            return "--------";
-        }
-    }
+	public string HomeColor
+	{
+		get
+		{
+			if (Connected)
+			{
+				if (Device.AtHome)
+				{
+					return "Red";
+				}
+				return "Green";
+			}
+			return "Red";
+		}
+	}
 
-    public string ParkColor
-    {
-        get
-        {
-            if (Connected)
-            {
-                if (Device.AtPark)
-                {
-                    return "Red";
-                }
-                return "Green";
-            }
-            return "Red";
-        }
-    }
+	public string ParkText
+	{
+		get
+		{
+			if (Connected)
+			{
+				if (Device.AtPark)
+				{
+					return "Parked";
+				}
+				return "Unparked";
+			}
+			return "--------";
+		}
+	}
 
-    double NewAz
-    {
-        get;
-        set;
-    } = 0;
+	public string ParkColor
+	{
+		get
+		{
+			if (Connected)
+			{
+				if (Device.AtPark)
+				{
+					return "Red";
+				}
+				return "Green";
+			}
+			return "Red";
+		}
+	}
 
-    void GoToAz()
-    {
-        try
-        {
-            if (Device.Connected)
-            {
-                Device.SlewToAzimuth(NewAz);
-            }
-        }
-        catch(Exception ex)
-        {
-            DisplayError(ex.Message);
-        }
-    }
+	double NewAz
+	{
+		get;
+		set;
+	} = 0;
 
-    void SyncAz()
-    {
-        try
-        {
-            if (Device.Connected)
-            {
-                Device.SyncToAzimuth(NewAz);
-            }
-        }
-        catch (Exception ex)
-        {
-            DisplayError(ex.Message);
-        }
-    }
+	void GoToAz()
+	{
+		try
+		{
+			if (Device.Connected)
+			{
+				Device.SlewToAzimuth(NewAz);
+			}
+		}
+		catch(Exception ex)
+		{
+			DisplayError(ex.Message);
+		}
+	}
 
-    void Open()
-    {
-        try
-        {
-            if (Device.Connected)
-            {
-                Device.OpenShutter();
-            }
-        }
-        catch (Exception ex)
-        {
-            DisplayError(ex.Message);
-        }
-    }
+	void SyncAz()
+	{
+		try
+		{
+			if (Device.Connected)
+			{
+				Device.SyncToAzimuth(NewAz);
+			}
+		}
+		catch (Exception ex)
+		{
+			DisplayError(ex.Message);
+		}
+	}
 
-    void Close()
-    {
-        try
-        {
-            if (Device.Connected)
-            {
-                Device.CloseShutter();
-            }
-        }
-        catch (Exception ex)
-        {
-            DisplayError(ex.Message);
-        }
-    }
+	void Open()
+	{
+		try
+		{
+			if (Device.Connected)
+			{
+				Device.OpenShutter();
+			}
+		}
+		catch (Exception ex)
+		{
+			DisplayError(ex.Message);
+		}
+	}
 
-    void Halt()
-    {
-        try
-        {
-            if (Device.Connected)
-            {
-                Device.AbortSlew();
-            }
-        }
-        catch (Exception ex)
-        {
-            DisplayError(ex.Message);
-        }
-    }
+	void Close()
+	{
+		try
+		{
+			if (Device.Connected)
+			{
+				Device.CloseShutter();
+			}
+		}
+		catch (Exception ex)
+		{
+			DisplayError(ex.Message);
+		}
+	}
 
-    void SlewAltUp()
-    {
-        try
-        {
-            if (Device.Connected)
-            {
-                if (Device.ShutterStatus == ShutterState.Open) {
-                    ASCOM.Simulators.Hardware.HW_MoveShutter(ASCOM.Simulators.Hardware.g_dMaxAlt);
-                }
-            }
-        }
+	void Halt()
+	{
+		try
+		{
+			if (Device.Connected)
+			{
+				Device.AbortSlew();
+			}
+		}
+		catch (Exception ex)
+		{
+			DisplayError(ex.Message);
+		}
+	}
 
-        catch (Exception ex)
-        {
-            DisplayError(ex.Message);
-        }
-    }
+	void SlewAltUp()
+	{
+		try
+		{
+			if (Device.Connected)
+			{
+				if (Device.ShutterStatus == ShutterState.Open) {
+					ASCOM.Simulators.Hardware.HW_MoveShutter(ASCOM.Simulators.Hardware.g_dMaxAlt);
+				}
+			}
+		}
 
-    void SlewAltDown()
-    {
-        try
-        {
-            if (Device.Connected)
-            {
-                if (Device.ShutterStatus == ShutterState.Open)
-                {
-                    ASCOM.Simulators.Hardware.HW_MoveShutter(ASCOM.Simulators.Hardware.g_dMinAlt);
-                }
-            }
-        }
+		catch (Exception ex)
+		{
+			DisplayError(ex.Message);
+		}
+	}
 
-        catch (Exception ex)
-        {
-            DisplayError(ex.Message);
-        }
-    }
+	void SlewAltDown()
+	{
+		try
+		{
+			if (Device.Connected)
+			{
+				if (Device.ShutterStatus == ShutterState.Open)
+				{
+					ASCOM.Simulators.Hardware.HW_MoveShutter(ASCOM.Simulators.Hardware.g_dMinAlt);
+				}
+			}
+		}
 
-    void Clockwise()
-    {
-        try
-        {
-            if (Device.Connected)
-            {
-                ASCOM.Simulators.Hardware.HW_Run(true);
-            }
-        }
-        catch (Exception ex)
-        {
-            DisplayError(ex.Message);
-        }
-    }
+		catch (Exception ex)
+		{
+			DisplayError(ex.Message);
+		}
+	}
 
-    void CounterClockwise()
-    {
-        try
-        {
-            if (Device.Connected)
-            {
-                ASCOM.Simulators.Hardware.HW_Run(false);
-            }
-        }
-        catch (Exception ex)
-        {
-            DisplayError(ex.Message);
-        }
-    }
+	void Clockwise()
+	{
+		try
+		{
+			if (Device.Connected)
+			{
+				ASCOM.Simulators.Hardware.HW_Run(true);
+			}
+		}
+		catch (Exception ex)
+		{
+			DisplayError(ex.Message);
+		}
+	}
 
-    void StepClockwise()
-    {
-        try
-        {
-            if (Device.Connected)
-            {
-                Device.SlewToAzimuth(ASCOM.Simulators.Hardware.AzScale(Device.Azimuth + ASCOM.Simulators.Hardware.g_dStepSize));
-            }
-        }
-        catch (Exception ex)
-        {
-            DisplayError(ex.Message);
-        }
-    }
+	void CounterClockwise()
+	{
+		try
+		{
+			if (Device.Connected)
+			{
+				ASCOM.Simulators.Hardware.HW_Run(false);
+			}
+		}
+		catch (Exception ex)
+		{
+			DisplayError(ex.Message);
+		}
+	}
 
-    void StepCounterClockwise()
-    {
-        try
-        {
-            if (Device.Connected)
-            {
-                Device.SlewToAzimuth(ASCOM.Simulators.Hardware.AzScale(Device.Azimuth - ASCOM.Simulators.Hardware.g_dStepSize));
-            }
-        }
-        catch (Exception ex)
-        {
-            DisplayError(ex.Message);
-        }
-    }
+	void StepClockwise()
+	{
+		try
+		{
+			if (Device.Connected)
+			{
+				Device.SlewToAzimuth(ASCOM.Simulators.Hardware.AzScale(Device.Azimuth + ASCOM.Simulators.Hardware.g_dStepSize));
+			}
+		}
+		catch (Exception ex)
+		{
+			DisplayError(ex.Message);
+		}
+	}
 
-    void Park()
-    {
-        try
-        {
-            if (Device.Connected)
-            {
-                Device.Park();
-            }
-        }
-        catch (Exception ex)
-        {
-            DisplayError(ex.Message);
-        }
-    }
+	void StepCounterClockwise()
+	{
+		try
+		{
+			if (Device.Connected)
+			{
+				Device.SlewToAzimuth(ASCOM.Simulators.Hardware.AzScale(Device.Azimuth - ASCOM.Simulators.Hardware.g_dStepSize));
+			}
+		}
+		catch (Exception ex)
+		{
+			DisplayError(ex.Message);
+		}
+	}
 
-    void Home()
-    {
-        try
-        {
-            if (Device.Connected)
-            {
-                Device.FindHome();
-            }
-        }
-        catch (Exception ex)
-        {
-            DisplayError(ex.Message);
-        }
-    }
+	void Park()
+	{
+		try
+		{
+			if (Device.Connected)
+			{
+				Device.Park();
+			}
+		}
+		catch (Exception ex)
+		{
+			DisplayError(ex.Message);
+		}
+	}
 
-    #endregion
+	void Home()
+	{
+		try
+		{
+			if (Device.Connected)
+			{
+				Device.FindHome();
+			}
+		}
+		catch (Exception ex)
+		{
+			DisplayError(ex.Message);
+		}
+	}
 
-    public void Setup()
-    {
-        uriHelper.NavigateTo($"/setup/v1/dome/{InstanceID}/setup");
-    }
+	#endregion
 
-    public void DisplayError(string error)
-    {
-        toastService.ShowError(error);
-    }
+	public void Setup()
+	{
+		uriHelper.NavigateTo($"/setup/v1/dome/{InstanceID}/setup");
+	}
+
+	public void DisplayError(string error)
+	{
+		toastService.ShowError(error);
+	}
 }
