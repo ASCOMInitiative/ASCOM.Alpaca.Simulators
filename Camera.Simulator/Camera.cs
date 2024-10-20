@@ -38,6 +38,7 @@
 using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
+using CameraSimulator;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.ColorSpaces.Conversion;
 using SixLabors.ImageSharp.PixelFormats;
@@ -70,7 +71,7 @@ namespace ASCOM.Simulators
         private bool connecting;
 
         // Value returned through the Name property
-        private const string DEVICE_NAME="Alpaca Camera Simulator";
+        private const string DEVICE_NAME = "Alpaca Camera Simulator";
 
         #region Profile string constants
 
@@ -119,6 +120,7 @@ namespace ASCOM.Simulators
         private const string STR_HasSubExposure = "HasSubExposure";
         private const string STR_SubExposureInterval = "SubExposureInterval";
         private const string STR_UseCustomImage = "UseCustomImage";
+        private const string STR_ImageSource = "ImageSource";
 
         // Cooler configuration strings
         private const string STR_CoolerAmbientTemperature = "CoolerAmbientTemperature";
@@ -287,6 +289,7 @@ namespace ASCOM.Simulators
 
         // simulation
         internal string imagePath;
+        internal ImageSource imageSource;
 
         internal bool applyNoise;
         private float[,,] imageData;    // room for a 3 plane colour image
@@ -304,6 +307,8 @@ namespace ASCOM.Simulators
 
         private System.Timers.Timer exposureTimer;
         private System.Timers.Timer coolerTimer;
+
+        IImageService imageService;
 
         // supported actions
         // should really use constants for the action names,
@@ -328,6 +333,12 @@ namespace ASCOM.Simulators
             None = 0,
             Offsets = 1,
             OffsetMinMax = 2
+        }
+
+        internal enum ImageSource
+        {
+            File,
+            Hipps2Fits,
         }
 
         #endregion Enums
@@ -1027,8 +1038,6 @@ namespace ASCOM.Simulators
                 Log.LogMessage("Connected", "set {0}", value);
                 if (value & !connected) // We are connecting and are not already connected
                 {
-                    ReadImageFile();
-
                     // Restore valid settings if necessary
                     imageReady = false;
                     //  Bin X test
@@ -1848,6 +1857,10 @@ namespace ASCOM.Simulators
                 }
             }
 
+            CreateImageService();
+            ConfigureImageService();
+            imageService.StartRequest();
+
             if (exposureTimer == null)
             {
                 exposureTimer = new System.Timers.Timer();
@@ -1862,15 +1875,82 @@ namespace ASCOM.Simulators
             Log.LogMessage("StartExposure", "Completed");
         }
 
+        private void CreateImageService()
+        {
+            switch (imageSource)
+            {
+                case ImageSource.File:
+                    if (!(imageService is ImageServiceFile))
+                        imageService = new ImageServiceFile(imagePath);
+                    break;
+                case ImageSource.Hipps2Fits:
+                    if (!(imageService is ImageServiceH2F))
+                        imageService = new ImageServiceH2F();
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
+
+        }
+
+        private void ConfigureImageService()
+        {
+            var telescope = Alpaca.DeviceManager.GetTelescope(0);
+            var rotator = Alpaca.DeviceManager.GetRotator(0);
+            if (telescope != null && telescope.Connected)
+            {
+                imageService.RightAscension = telescope.RightAscension;
+                imageService.Declination = telescope.Declination;
+            }
+            else
+            {
+                imageService.RightAscension = 0;
+                imageService.Declination = 0;
+            }
+            imageService.Width = this.CameraXSize;
+            imageService.Height = this.CameraYSize;
+            imageService.Fov = Fov(CameraXSize, pixelSizeX, telescope.FocalLength);
+            if (rotator != null && rotator.Connected)
+            {
+                imageService.RotationAngle = (360.0 - rotator.Position) % 360.0;
+            }
+            else
+            {
+                imageService.RotationAngle = 0;
+            }
+            Log.log.LogDebug($"Camera - CameraXSize={CameraXSize}, pixelSizeX={pixelSizeX}, FocalLength={telescope.FocalLength}, Width={imageService.Width}, Height={imageService.Height}, Fov={imageService.Fov}");
+        }
+
+        /// <summary>
+        /// Calculate the field ov view in degree
+        /// </summary>
+        /// <param name="sensorPixel">Pixel number</param>
+        /// <param name="pixelSize">Pixel size in micron</param>
+        /// <param name="focalLenght">Focal lenght in meter</param>
+        /// <returns></returns>
+        private double Fov(int sensorPixel, double pixelSize, double focalLenght)
+        {
+            var sensorSize = sensorPixel * pixelSize * 0.001; // size in mm
+            double fov = 2 * Math.Atan(sensorSize / (2 * focalLenght * 1000)) * (180 / Math.PI);
+            return fov;
+        }
+
         private void exposureTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             exposureTimer.Enabled = false;
             lastExposureDuration = (DateTime.Now - exposureStartTime).TotalSeconds;
             cameraState = CameraState.Download;
-            FillImageArray();
-            imageReady = true;
-            cameraState = CameraState.Idle;
-            Log.LogMessage("ExposureTimer_Elapsed", "done");
+            Log.log.LogDebug("CameraState=Download");
+
+            imageService.DataReadyTask.ContinueWith(task =>
+            {
+                ReadImageFile(imageService.GetImage());
+                FillImageArray();
+                imageReady = true;
+                cameraState = CameraState.Idle;
+                Log.log.LogDebug("CameraState=Idle");
+                Log.LogMessage("ExposureTimer_Elapsed", "done");
+            });
         }
 
         /// <summary>
@@ -2497,7 +2577,7 @@ namespace ASCOM.Simulators
 
         #endregion ICameraV3 members
 
-#region ICameraV4 members
+        #region ICameraV4 members
 
         /// <summary>
         /// Connect to the telescope asynchronously
@@ -2591,7 +2671,7 @@ namespace ASCOM.Simulators
                 try { deviceState.Add(new StateValue(nameof(ICameraV4.CoolerPower), CoolerPower)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(ICameraV4.HeatSinkTemperature), HeatSinkTemperature)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(ICameraV4.ImageReady), ImageReady)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ICameraV4.IsPulseGuiding), IsPulseGuiding)); } catch(Exception ex) { Log.log.Log(LogLevel.Debug,$"IsPulseGuiding exception - {ex.Message}\r\n{ex}");}
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.IsPulseGuiding), IsPulseGuiding)); } catch (Exception ex) { Log.log.Log(LogLevel.Debug, $"IsPulseGuiding exception - {ex.Message}\r\n{ex}"); }
                 try { deviceState.Add(new StateValue(nameof(ICameraV4.PercentCompleted), PercentCompleted)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
@@ -2600,7 +2680,7 @@ namespace ASCOM.Simulators
             }
         }
 
-#endregion
+        #endregion
 
         #region Private
 
@@ -2660,6 +2740,7 @@ namespace ASCOM.Simulators
             {
                 imagePath = Path.Combine(fullPath, @"m42-800x600.jpg");
             }
+            imageSource = (ImageSource)Convert.ToInt16(Profile.GetValue(STR_ImageSource, "0"), CultureInfo.InvariantCulture);
 
             applyNoise = Convert.ToBoolean(Profile.GetValue(STR_ApplyNoise, "false"), CultureInfo.InvariantCulture);
 
@@ -2775,6 +2856,8 @@ namespace ASCOM.Simulators
             Profile.WriteValue(STR_MinExposure, exposureMin.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue(STR_ExposureResolution, exposureResolution.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue(STR_ImagePath, imagePath);
+            Profile.WriteValue(STR_ImageSource, ((int)imageSource).ToString(CultureInfo.InvariantCulture));
+
             Profile.WriteValue(STR_ApplyNoise, applyNoise.ToString(CultureInfo.InvariantCulture));
 
             Profile.WriteValue(STR_CanPulseGuide, canPulseGuide.ToString(CultureInfo.InvariantCulture));
@@ -3049,7 +3132,7 @@ namespace ASCOM.Simulators
         /// processing into the ImageArray.  The size of the image must be the same as the
         /// full frame image data.
         /// </summary>
-        private void ReadImageFile()
+        private void ReadImageFile(Image<Rgba32> image = null)
         {
             // Create or reuse the image data array
             if (sensorType == SensorType.Monochrome)
@@ -3063,7 +3146,7 @@ namespace ASCOM.Simulators
 
             try
             {
-                bmp = Image.Load<Rgba32>(imagePath);
+                bmp = image;
 
                 // x0 = bayerOffsetX;
                 // x1 = (bayerOffsetX + 1) & 1;
