@@ -3150,60 +3150,96 @@ namespace ASCOM.Simulators
 
         private void RGGBData(int x, int y)
         {
-            var px = bmp[x / 2, y / 2];
-            imageData[x + x0, y + y0, 0] = px.R;      // red
-            imageData[x + x1, y + y0, 0] = px.G;      // green
-            imageData[x + x0, y + y1, 0] = px.G;      // green
-            imageData[x + x1, y + y1, 0] = px.B;      // blue
+            var px00 = bmp[x + 0, y + 0];
+            var px10 = bmp[x + 1, y + 0];
+            var px01 = bmp[x + 0, y + 1];
+            var px11 = bmp[x + 1, y + 1];
+
+            imageData[x + x0, y + y0, 0] = px00.R;      // red
+            imageData[x + x1, y + y0, 0] = px10.G;      // green
+            imageData[x + x0, y + y1, 0] = px01.G;      // green
+            imageData[x + x1, y + y1, 0] = px11.B;      // blue
         }
 
         private void CMYGData(int x, int y)
         {
-            var px = bmp[x / 2, y / 2];
-            imageData[x + x0, y + y0, 0] = (px.R + px.G) / 2;       // yellow
-            imageData[x + x1, y + y0, 0] = (px.G + px.B) / 2;       // cyan
-            imageData[x + x0, y + y1, 0] = px.G;                    // green
-            imageData[x + x1, y + y1, 0] = (px.R + px.B) / 2;       // magenta
+            var px00 = bmp[x + 0, y + 0];
+            var px10 = bmp[x + 1, y + 0];
+            var px01 = bmp[x + 0, y + 1];
+            var px11 = bmp[x + 1, y + 1];
+
+            imageData[x + x0, y + y0, 0] = (px00.R + px00.G) / 2;       // yellow
+            imageData[x + x1, y + y0, 0] = (px10.G + px10.B) / 2;       // cyan
+            imageData[x + x0, y + y1, 0] = px01.G;                      // green
+            imageData[x + x1, y + y1, 0] = (px11.R + px11.B) / 2;       // magenta
         }
 
         private void CMYG2Data(int x, int y)
         {
-            var px = bmp[x / 2, y / 2];
-            imageData[x + x0, y + y0, 0] = (px.G);
-            imageData[x + x1, y + y0, 0] = (px.B + px.R) / 2;      // magenta
-            imageData[x + x0, y + y1, 0] = (px.G + px.B) / 2;      // cyan
-            imageData[x + x1, y + y1, 0] = (px.R + px.G) / 2;      // yellow
-            px = bmp[x / 2, (y / 2) + 1];
-            imageData[x + x0, y + y2, 0] = (px.B + px.R) / 2;      // magenta
-            imageData[x + x1, y + y2, 0] = (px.G);
-            imageData[x + x0, y + y3, 0] = (px.G + px.B) / 2;      // cyan
-            imageData[x + x1, y + y3, 0] = (px.R + px.G) / 2;      // yellow
+            var px00 = bmp[x + 0, y + 0];
+            var px10 = bmp[x + 1, y + 0];
+            var px01 = bmp[x + 0, y + 1];
+            var px11 = bmp[x + 1, y + 1];
+
+            var px02 = bmp[x + 0, y + 0];
+            var px12 = bmp[x + 1, y + 0];
+            var px03 = bmp[x + 0, y + 1];
+            var px13 = bmp[x + 1, y + 1];
+
+            imageData[x + x0, y + y0, 0] = (px00.G);                   // green
+            imageData[x + x1, y + y0, 0] = (px10.B + px10.R) / 2;      // magenta
+            imageData[x + x0, y + y1, 0] = (px01.G + px01.B) / 2;      // cyan
+            imageData[x + x1, y + y1, 0] = (px11.R + px11.G) / 2;      // yellow
+
+            imageData[x + x0, y + y2, 0] = (px02.B + px02.R) / 2;      // magenta
+            imageData[x + x1, y + y2, 0] = (px12.G);                   // green
+            imageData[x + x0, y + y3, 0] = (px03.G + px03.B) / 2;      // cyan
+            imageData[x + x1, y + y3, 0] = (px13.R + px13.G) / 2;      // yellow
         }
 
         private void LRGBData(int x, int y)
         {
             ColorSpaceConverter converter = new ColorSpaceConverter();
 
-            var px = bmp[x / 2, y / 2];
-            imageData[x + x0, y + y0, 0] = converter.ToHsl(px).L * 255;
-            imageData[x + x1, y + y0, 0] = (px.R);
-            imageData[x + x0, y + y1, 0] = (px.R);
-            imageData[x + x1, y + y1, 0] = converter.ToHsl(px).L * 255;
-            px = bmp[(x / 2) + 1, y / 2];
-            imageData[x + x2, y + y0, 0] = converter.ToHsl(px).L * 255;
-            imageData[x + x3, y + y0, 0] = (px.G);
-            imageData[x + x2, y + y1, 0] = (px.G);
-            imageData[x + x3, y + y1, 0] = converter.ToHsl(px).L * 255;
-            px = bmp[x / 2, (y / 2) + 1];
-            imageData[x + x0, y + y2, 0] = converter.ToHsl(px).L * 255;
-            imageData[x + x1, y + y2, 0] = (px.G);
-            imageData[x + x0, y + y3, 0] = (px.G);
-            imageData[x + x1, y + y3, 0] = converter.ToHsl(px).L * 255;
-            px = bmp[(x / 2) + 1, (y / 2) + 1];
-            imageData[x + x2, y + y2, 0] = converter.ToHsl(px).L * 255;
-            imageData[x + x3, y + y2, 0] = (px.B);
-            imageData[x + x2, y + y3, 0] = (px.B);
-            imageData[x + x3, y + y3, 0] = converter.ToHsl(px).L * 255;
+            var px00 = bmp[x + 0, y + 0];
+            var px10 = bmp[x + 1, y + 0];
+            var px20 = bmp[x + 0, y + 0];
+            var px30 = bmp[x + 1, y + 0];
+
+            var px01 = bmp[x + 0, y + 1];
+            var px11 = bmp[x + 1, y + 1];
+            var px21 = bmp[x + 0, y + 1];
+            var px31 = bmp[x + 1, y + 1];
+
+            var px02 = bmp[x + 0, y + 1];
+            var px12 = bmp[x + 1, y + 1];
+            var px22 = bmp[x + 0, y + 1];
+            var px32 = bmp[x + 1, y + 1];
+
+            var px03 = bmp[x + 0, y + 1];
+            var px13 = bmp[x + 1, y + 1];
+            var px23 = bmp[x + 0, y + 1];
+            var px33 = bmp[x + 1, y + 1];
+
+            imageData[x + x0, y + y0, 0] = converter.ToHsl(px00).L * 255;
+            imageData[x + x1, y + y0, 0] = (px10.R);
+            imageData[x + x0, y + y1, 0] = (px01.R);
+            imageData[x + x1, y + y1, 0] = converter.ToHsl(px11).L * 255;
+
+            imageData[x + x2, y + y0, 0] = converter.ToHsl(px20).L * 255;
+            imageData[x + x3, y + y0, 0] = (px30.G);
+            imageData[x + x2, y + y1, 0] = (px21.G);
+            imageData[x + x3, y + y1, 0] = converter.ToHsl(px31).L * 255;
+
+            imageData[x + x0, y + y2, 0] = converter.ToHsl(px02).L * 255;
+            imageData[x + x1, y + y2, 0] = (px12.G);
+            imageData[x + x0, y + y3, 0] = (px03.G);
+            imageData[x + x1, y + y3, 0] = converter.ToHsl(px13).L * 255;
+
+            imageData[x + x2, y + y2, 0] = converter.ToHsl(px22).L * 255;
+            imageData[x + x3, y + y2, 0] = (px32.B);
+            imageData[x + x2, y + y3, 0] = (px23.B);
+            imageData[x + x3, y + y3, 0] = converter.ToHsl(px33).L * 255;
         }
 
         private void ColorData(int x, int y)
