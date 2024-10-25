@@ -50,8 +50,22 @@
                         }
 
                         <th>@dev.Value.Unit</th>
-                        <th><input type="checkbox" @bind="@dev.Value.Override"></th>
-                        <th><input type="range" min="@dev.Value.SimFromValue" max="@dev.Value.SimToValue" step=".1" @bind="@dev.Value.OverrideValue" style="min-width:30ch"></th>
+                        <th>
+                            @if (dev.Key != "DewPoint")
+                            {
+                                <input type="checkbox" @bind="@dev.Value.Override">
+                            }
+                        </th>
+                        @if (dev.Key == "DewPoint")
+                        {
+                            <th>Calculated from Temp. & Humidity</th>
+                        }
+                        else
+                        {
+                            <th>
+                                <input type="range" min="@dev.Value.SimFromValue" max="@dev.Value.SimToValue" step=".1" @bind="@dev.Value.OverrideValue" style="min-width:30ch">
+                            </th>
+                        }
                     }
                     else
                     {

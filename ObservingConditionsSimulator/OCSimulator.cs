@@ -187,14 +187,15 @@ namespace ASCOM.Simulators
             {PROPERTY_SKYTEMPERATURE, 50.0},
             {PROPERTY_TEMPERATURE, 50.0},
             {PROPERTY_WINDDIRECTION, 360.0},
-            {PROPERTY_WINDGUST, 100.0},
-            {PROPERTY_WINDSPEED, 100.0}
+            {PROPERTY_WINDGUST, 50.0},
+            {PROPERTY_WINDSPEED, 50.0}
         };
 
         public static Dictionary<string, string> UnitString = new Dictionary<string, string>()
         {
             {PROPERTY_CLOUDCOVER, "Percent"},
-            {PROPERTY_HUMIDITY, "Percent"},
+			{PROPERTY_DEWPOINT, "Celsius"},
+			{PROPERTY_HUMIDITY, "Percent"},
             {PROPERTY_PRESSURE, "hPa"},
             {PROPERTY_RAINRATE, "mm/hr"},
             {PROPERTY_SKYBRIGHTNESS, "Lux"},
@@ -203,8 +204,8 @@ namespace ASCOM.Simulators
             {PROPERTY_SKYTEMPERATURE, "Celsius"},
             {PROPERTY_TEMPERATURE, "Celsius"},
             {PROPERTY_WINDDIRECTION, "Degrees"},
-            {PROPERTY_WINDGUST, "mph"},
-            {PROPERTY_WINDSPEED, "mph"}
+            {PROPERTY_WINDGUST, "m/s"},
+            {PROPERTY_WINDSPEED, "m/s"}
         };
 
         #endregion Public variables and constants
@@ -519,7 +520,7 @@ namespace ASCOM.Simulators
 
         public static double DewPoint()
         {
-            double dewPoint = GetSensorValue(PROPERTY_DEWPOINT); ;
+            double dewPoint = GetSensorValue(PROPERTY_DEWPOINT);
             LogMessage("DewPoint", dewPoint.ToString());
             return dewPoint;
         }
@@ -757,7 +758,21 @@ namespace ASCOM.Simulators
                 if ((Property == PROPERTY_HUMIDITY) || (Property == PROPERTY_TEMPERATURE))
                 {
                     Sensors[PROPERTY_DEWPOINT].TimeOfLastUpdate = mostRecentUpdateTime;
-                    Sensors[PROPERTY_DEWPOINT].SimCurrentValue = Humidity2DewPoint(Sensors[PROPERTY_HUMIDITY].SimCurrentValue, Sensors[PROPERTY_TEMPERATURE].SimCurrentValue); // Set the new simulator dewpoint value
+                    var _humidity = Sensors[PROPERTY_HUMIDITY].SimCurrentValue;
+                    var _temperature = Sensors[PROPERTY_TEMPERATURE].SimCurrentValue;
+
+                    //Use the Override value if it is in use
+                    if (Sensors[PROPERTY_HUMIDITY].Override)
+                    {
+                        _humidity = Sensors[PROPERTY_HUMIDITY].OverrideValue;
+                    }
+
+                    if (Sensors[PROPERTY_TEMPERATURE].Override)
+                    {
+                        _temperature = Sensors[PROPERTY_TEMPERATURE].OverrideValue;
+                    }
+
+                    Sensors[PROPERTY_DEWPOINT].SimCurrentValue = Humidity2DewPoint(_humidity, _temperature); // Set the new simulator dewpoint value
                 }
             }
         }
