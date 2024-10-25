@@ -520,7 +520,7 @@ namespace ASCOM.Simulators
 
         public static double DewPoint()
         {
-            double dewPoint = GetSensorValue(PROPERTY_DEWPOINT); ;
+            double dewPoint = GetSensorValue(PROPERTY_DEWPOINT);
             LogMessage("DewPoint", dewPoint.ToString());
             return dewPoint;
         }
@@ -758,7 +758,21 @@ namespace ASCOM.Simulators
                 if ((Property == PROPERTY_HUMIDITY) || (Property == PROPERTY_TEMPERATURE))
                 {
                     Sensors[PROPERTY_DEWPOINT].TimeOfLastUpdate = mostRecentUpdateTime;
-                    Sensors[PROPERTY_DEWPOINT].SimCurrentValue = Humidity2DewPoint(Sensors[PROPERTY_HUMIDITY].SimCurrentValue, Sensors[PROPERTY_TEMPERATURE].SimCurrentValue); // Set the new simulator dewpoint value
+                    var _humidity = Sensors[PROPERTY_HUMIDITY].SimCurrentValue;
+                    var _temperature = Sensors[PROPERTY_TEMPERATURE].SimCurrentValue;
+
+                    //Use the Override value if it is in use
+                    if (Sensors[PROPERTY_HUMIDITY].Override)
+                    {
+                        _humidity = Sensors[PROPERTY_HUMIDITY].OverrideValue;
+                    }
+
+                    if (Sensors[PROPERTY_TEMPERATURE].Override)
+                    {
+                        _temperature = Sensors[PROPERTY_TEMPERATURE].OverrideValue;
+                    }
+
+                    Sensors[PROPERTY_DEWPOINT].SimCurrentValue = Humidity2DewPoint(_humidity, _temperature); // Set the new simulator dewpoint value
                 }
             }
         }
