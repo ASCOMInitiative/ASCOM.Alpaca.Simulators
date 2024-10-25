@@ -187,8 +187,8 @@ namespace ASCOM.Simulators
             {PROPERTY_SKYTEMPERATURE, 50.0},
             {PROPERTY_TEMPERATURE, 50.0},
             {PROPERTY_WINDDIRECTION, 360.0},
-            {PROPERTY_WINDGUST, 100.0},
-            {PROPERTY_WINDSPEED, 100.0}
+            {PROPERTY_WINDGUST, 50.0},
+            {PROPERTY_WINDSPEED, 50.0}
         };
 
         public static Dictionary<string, string> UnitString = new Dictionary<string, string>()
@@ -204,8 +204,8 @@ namespace ASCOM.Simulators
             {PROPERTY_SKYTEMPERATURE, "Celsius"},
             {PROPERTY_TEMPERATURE, "Celsius"},
             {PROPERTY_WINDDIRECTION, "Degrees"},
-            {PROPERTY_WINDGUST, "mph"},
-            {PROPERTY_WINDSPEED, "mph"}
+            {PROPERTY_WINDGUST, "m/s"},
+            {PROPERTY_WINDSPEED, "m/s"}
         };
 
         #endregion Public variables and constants
