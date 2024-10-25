@@ -194,7 +194,8 @@ namespace ASCOM.Simulators
         public static Dictionary<string, string> UnitString = new Dictionary<string, string>()
         {
             {PROPERTY_CLOUDCOVER, "Percent"},
-            {PROPERTY_HUMIDITY, "Percent"},
+			{PROPERTY_DEWPOINT, "Celsius"},
+			{PROPERTY_HUMIDITY, "Percent"},
             {PROPERTY_PRESSURE, "hPa"},
             {PROPERTY_RAINRATE, "mm/hr"},
             {PROPERTY_SKYBRIGHTNESS, "Lux"},
