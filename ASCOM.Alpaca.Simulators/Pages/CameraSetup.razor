@@ -196,7 +196,14 @@
 
     <fieldset disabled="@Device.Connected">
         <legend>Simulated Image</legend>
-        <p>Coming Soon!</p>
+
+        <label for="ImageSource">Image Source</label>
+        <select id="ImageSource" @bind="ImageSource">
+            <option value="File">File</option>
+            <option value="Hipps2Fits">Online Service</option>
+        </select>
+        <br>
+        <p>Online Service make use of <a href="https://alasky.u-strasbg.fr/hips-image-services/hips2fits" target="_blank">hips2fits</a> a service provided by CDS.</p>
     </fieldset>
 
     <fieldset disabled="@Device.Connected">
@@ -305,6 +312,8 @@
         CanPulseGuide = Device.canPulseGuide;
 
         CanImageBytes = ServerSettings.AllowImageBytesDownload;
+
+        ImageSource = Device.imageSource;
 
         base.OnInitialized();
     }
@@ -521,6 +530,12 @@
         set;
     }
 
+    ASCOM.Simulators.Camera.ImageSource ImageSource
+    {
+        get;
+        set;
+    }
+
     #endregion
 
     public void Reset()
@@ -717,6 +732,8 @@
             Device.offsetMax = OffsetMax;
 
             Device.canPulseGuide = CanPulseGuide;
+
+            Device.imageSource = ImageSource;
 
             Device.SaveToProfile();
 

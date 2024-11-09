@@ -5,12 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ASCOM.AstrometryTools" Version="2.0.5" />
     <PackageReference Include="ASCOM.Common.Components" Version="2.0.5" />
     <PackageReference Include="ASCOM.Exception.Library" Version="7.0.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ASCOM.Alpaca.Razor\ASCOM.Alpaca.Razor.csproj" />
     <ProjectReference Include="..\OmniSim.Tools\OmniSim.Tools.csproj" />
   </ItemGroup>
 
