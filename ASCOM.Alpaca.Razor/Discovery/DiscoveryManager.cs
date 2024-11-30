@@ -1,3 +1,5 @@
+// Ignore Spelling: ipv
+
 using ASCOM.Alpaca.Discovery;
 using ASCOM.Common.Interfaces;
 using System;
@@ -6,9 +8,11 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Runtime.Versioning;
 
 namespace ASCOM.Alpaca
 {
+    [UnsupportedOSPlatform("browser")]
     public static class DiscoveryManager
     {
         public static Responder DiscoveryResponder

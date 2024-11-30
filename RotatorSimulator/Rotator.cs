@@ -76,7 +76,7 @@ namespace ASCOM.Simulators
             catch (Exception ex)
             {
                 logger.LogError(ex.Message.ToString());
-                throw ex;
+                throw;
             }
         }
 
