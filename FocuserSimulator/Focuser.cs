@@ -156,7 +156,7 @@ namespace ASCOM.Simulators
             catch (Exception ex)
             {
                 TL.LogError(ex.Message.ToString());
-                throw ex;
+                throw;
             }
         }
 

@@ -17,11 +17,6 @@ namespace OmniSim.LocalServer
 
         public void GCWatch(CancellationToken token)
         {
-            if (token == null)
-            {
-                throw new ArgumentException("GCWatch was called with a null cancellation token!");
-            }
-
             bool taskCancelled = false;
 
             while (!taskCancelled)

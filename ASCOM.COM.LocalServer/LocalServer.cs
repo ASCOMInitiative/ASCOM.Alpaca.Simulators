@@ -22,10 +22,12 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Security.Principal;
 
 namespace OmniSim.LocalServer
 {
+    [SupportedOSPlatform("windows")]
     public class Server
     {
         #region Variables
@@ -739,7 +741,7 @@ namespace OmniSim.LocalServer
                 TL.LogMessage("IsAdministrator", $"Starting elevated process");
                 Process.Start(processStartInfo);
             }
-            catch (System.ComponentModel.Win32Exception e)
+            catch (System.ComponentModel.Win32Exception)
             {
                 TL.LogMessage("IsAdministrator", $"The OmniSim was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.");
                 NativeMethods.MessageBox(System.IntPtr.Zero, $"The OmniSim was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.", "OmniSim COM", 0);

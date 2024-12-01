@@ -1,6 +1,9 @@
+// Ignore Spelling: IID prog
+
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace OmniSim.LocalServer
 {
@@ -24,6 +27,7 @@ namespace OmniSim.LocalServer
     /// <summary>
     /// Universal ClassFactory. Given a type as a parameter of the constructor, it implements IClassFactory for any interface that the class implements. Magic!!!
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public class ClassFactory : IClassFactory
     {
 

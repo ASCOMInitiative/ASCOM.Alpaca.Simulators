@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿// Ignore Spelling: Behavoir
+
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +11,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ASCOM.Alpaca.Razor
 {
+    [UnsupportedOSPlatform("browser")]
     public static class StartupHelpers
     {
         public static void ConfigureSwagger(IServiceCollection services, string host_xml_file)
