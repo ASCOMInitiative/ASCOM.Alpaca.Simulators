@@ -24,7 +24,7 @@ jobs:
         npx wait-on http://localhost:32323/
       working-directory: ASCOM.Alpaca.Simulators
     # Execute those sequentially to avoid blowing up number of job combinations even further.
-    - name: Run protocol test
-      run: ~/conformu/conformu alpacaprotocol http://localhost:32323/api/v1/${{ matrix.device }}/0
     - name: Run conformance test
       run: ~/conformu/conformu conformance http://localhost:32323/api/v1/${{ matrix.device }}/0
+    - name: Run protocol test
+      run: ~/conformu/conformu alpacaprotocol http://localhost:32323/api/v1/${{ matrix.device }}/0
