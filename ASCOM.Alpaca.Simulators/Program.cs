@@ -27,13 +27,37 @@ namespace ASCOM.Alpaca.Simulators
             //Reset all stored settings if requested
             if (args?.Any(str => str.Contains("--reset")) ?? false)
             {
-                WriteAndLog("Reseting stored settings");
-                WriteAndLog("Reseting Server settings");
-                ServerSettings.Reset();
-                WriteAndLog("Reseting Device settings");
-                DriverManager.Reset();
-                WriteAndLog("Settings reset, shutting down");
-                return;
+                try
+                {
+                    //Load configuration
+                    DeviceManager.LoadConfiguration(new AlpacaConfiguration());
+
+                    //Load devices
+                    DriverManager.LoadCamera(0);
+                    DriverManager.LoadCoverCalibrator(0);
+                    DriverManager.LoadDome(0);
+                    DriverManager.LoadFilterWheel(0);
+                    DriverManager.LoadFocuser(0);
+                    DriverManager.LoadObservingConditions(0);
+                    DriverManager.LoadRotator(0);
+                    DriverManager.LoadSafetyMonitor(0);
+                    DriverManager.LoadSwitch(0);
+                    DriverManager.LoadTelescope(0);
+
+                    WriteAndLog("Reseting stored settings");
+                    WriteAndLog("Reseting Server settings");
+                    ServerSettings.Reset();
+                    WriteAndLog("Reseting Device settings");
+                    DriverManager.Reset();
+                    WriteAndLog("Settings reset, shutting down");
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    WriteAndLog(ex.Message);
+                    Logging.LogError(ex.Message);
+                    return;
+                }
             }
 
             if (args?.Any(str => str.Contains("--set-no-browser")) ?? false)
