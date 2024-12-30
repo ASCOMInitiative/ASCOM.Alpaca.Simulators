@@ -115,20 +115,21 @@
     {
 
         NumberOfFilters = Device.Names.Count();
-        TimeDelay = ASCOM.Simulators.FilterWheelHardware.Interval / 1000;
-        ImplementsFilterNames = ASCOM.Simulators.FilterWheelHardware.ImplementsNames;
-        ImplementsFocusOffsets = ASCOM.Simulators.FilterWheelHardware.ImplementsOffsets;
-        PreemptMoves = ASCOM.Simulators.FilterWheelHardware.PreemptMoves;
+        TimeDelay = Device.FilterWheelHardware.FilterChangeTimeInterval.Value / 1000;
+        ImplementsFilterNames = Device.FilterWheelHardware.ImplementsNames.Value;
+        ImplementsFocusOffsets = Device.FilterWheelHardware.ImplementsOffsets.Value;
+        PreemptMoves = Device.FilterWheelHardware.PreemptMoves.Value;
 
         for (int i = 0; i < 8; i++)
         {
-            FilterNames[i] = ASCOM.Simulators.FilterWheelHardware.FullFilterNames[i];
-            FilterOffsets[i] = ASCOM.Simulators.FilterWheelHardware.FullFocusOffsets[i];
-            FilterColor[i] = $"rgb({ASCOM.Simulators.FilterWheelHardware.FullFilterColours[i].R},{ASCOM.Simulators.FilterWheelHardware.FullFilterColours[i].G},{ASCOM.Simulators.FilterWheelHardware.FullFilterColours[i].B})";
+            FilterNames[i] = Device.FilterWheelHardware.AllFilterNames[i];
+            FilterOffsets[i] = Device.FilterWheelHardware.AllFocusOffsets[i];
+            FilterColor[i] = $"rgb({Device.FilterWheelHardware.AllFilterColours[i].R},{Device.FilterWheelHardware.AllFilterColours[i].G},{Device.FilterWheelHardware.AllFilterColours[i].B})";
 
         }
 
         base.OnInitialized();
+
     }
 
     #region Connection
@@ -235,7 +236,7 @@
         try
         {
             Device.ResetSettings();
-            ASCOM.Simulators.FilterWheelHardware.Initialize();
+            //ASCOM.Simulators.FilterWheelHardware.Initialize();
 
             toastService.ShowSuccess("Settings Reset");
 
@@ -254,7 +255,15 @@
     {
         try
         {
-            ASCOM.Simulators.FilterWheelHardware.SaveSettings(NumberOfFilters, TimeDelay, FilterNames, FilterOffsets, ASCOM.Simulators.FilterWheelHardware.FullFilterColours, ImplementsFilterNames, ImplementsFocusOffsets, PreemptMoves);
+            Device.FilterWheelHardware.Slots.Value = NumberOfFilters;
+            Device.FilterWheelHardware.FilterChangeTimeInterval.Value = (int)TimeDelay * 1000;
+            Device.FilterWheelHardware.AllFilterNames = FilterNames;
+            Device.FilterWheelHardware.AllFocusOffsets = FilterOffsets;
+            Device.FilterWheelHardware.ImplementsNames.Value = ImplementsFilterNames;
+            Device.FilterWheelHardware.ImplementsOffsets.Value = ImplementsFocusOffsets;
+            Device.FilterWheelHardware.PreemptMoves.Value = PreemptMoves;
+
+            Device.FilterWheelHardware.SaveSettings();
 
             toastService.ShowSuccess("Settings Saved");
         }

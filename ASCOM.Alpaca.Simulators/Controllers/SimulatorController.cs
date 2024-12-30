@@ -162,8 +162,8 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                FilterWheelAccess(DeviceNumber).ResetSettings();
-                ASCOM.Simulators.FilterWheelHardware.Initialize();
+                //FilterWheelAccess(DeviceNumber).ResetSettings();
+                //ASCOM.Simulators.FilterWheelHardware.Initialize();
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting FilterWheel {DeviceNumber} to default settings.");
         }
