@@ -33,95 +33,40 @@ using System.Collections.Generic;
 
 namespace ASCOM.Simulators
 {
-    public class FilterWheel : IFilterWheelV3, IAlpacaDevice, ISimulation // Early-bind interface implemented by this driver
+    public class FilterWheel : OmniSim.BaseDriver.Driver, IFilterWheelV3, IAlpacaDevice, ISimulation // Early-bind interface implemented by this driver
     {
-        // ==========
-
-        private const string MSG_NOT_CONNECTED = "The filter wheel is not connected";
-
-        private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
-
         //
         // Constructor - Must be public for COM registration!
         //
-        public FilterWheel(int deviceNumber, ILogger logger, IProfile profile)
+
+        public FilterWheelHardware FilterWheelHardware
         {
-            logger.LogInformation($"FilterWheel {deviceNumber} - Starting initialization");
-            FilterWheelHardware.Logger = logger;
+            get;
+            private set;
+        }
+
+        public FilterWheel(int deviceNumber, ILogger logger, IProfile profile) : base(deviceNumber, logger, profile)
+        {
             DeviceNumber = deviceNumber;
 
-            FilterWheelHardware.g_Profile = profile;
+            logger.LogInformation($"FilterWheel {deviceNumber} - Starting initialization");
+
+            FilterWheelHardware = new FilterWheelHardware(logger, profile);
 
             FilterWheelHardware.Initialize();
-
-            //This should be replaced by the next bit of code but is semi-unique as a default.
-            UniqueID = Name + deviceNumber.ToString();
-            //Create a Unique ID if it does not exist
-            try
-            {
-                if (!profile.ContainsKey(UNIQUE_ID_PROFILE_NAME))
-                {
-                    var uniqueid = Guid.NewGuid().ToString();
-                    profile.WriteValue(UNIQUE_ID_PROFILE_NAME, uniqueid);
-                }
-                UniqueID = profile.GetValue(UNIQUE_ID_PROFILE_NAME);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError($"FilterWheel {deviceNumber} - {ex.Message}");
-            }
-
-            logger.LogInformation($"FilterWheel {deviceNumber} - UUID of {UniqueID}");
         }
-
-        #region ISimulation
-
-        public void ResetSettings()
-        {
-            FilterWheelHardware.g_Profile.Clear();
-        }
-
-        public string GetXMLProfile()
-        {
-            return FilterWheelHardware.g_Profile.GetProfile();
-        }
-
-        #endregion ISimulation
-
-        public string DeviceName { get => Name; }
-        public int DeviceNumber { get; private set; }
-        public string UniqueID { get; private set; }
 
         #region IFilterWheelV2 members
 
-        public void Dispose()
-        {
-        }
-
-        //
-        // PUBLIC COM INTERFACE IFilterWheel IMPLEMENTATION
-        //
-        public bool Connected
+        public override string Description
         {
             get
             {
-                return FilterWheelHardware.Connected;
-            }
-            set
-            {
-                FilterWheelHardware.Connected = value;
+                return "A simulator for the ASCOM FilterWheel API usable with Alpaca and COM";
             }
         }
 
-        public string Description
-        {
-            get
-            {
-                return "Simulator description";
-            }
-        }
-
-        public string DriverInfo
+        public override string DriverInfo
         {
             get
             {
@@ -129,16 +74,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        public string DriverVersion
-        {
-            get
-            {
-                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                return $"{version.Major}.{version.Minor}";
-            }
-        }
-
-        public short InterfaceVersion
+        public override short InterfaceVersion
         {
             get
             {
@@ -146,45 +82,12 @@ namespace ASCOM.Simulators
             }
         }
 
-        public string Name
+        public override string Name
         {
             get
             {
                 return "Alpaca Filter Wheel Simulator";
             }
-        }
-
-        public string Action(string ActionName, string ActionParameters)
-        {
-            throw new ASCOM.MethodNotImplementedException("Action is not implemented in this driver");
-        }
-
-        public IList<string> SupportedActions
-        {
-            get
-            {
-                return new List<string>();
-            }
-        }
-
-        public string CommandString(string Cmd, bool Raw = false)
-        {
-            if (Cmd == "CommandString")
-                return "FWCommandString";
-            else
-                return "Bad command: " + Cmd;
-        }
-
-        public bool CommandBool(string Cmd, bool Raw = false)
-        {
-            if (Cmd == "CommandBool")
-                return true;
-            else
-                return false;
-        }
-
-        public void CommandBlind(string Cmd, bool Raw = false)
-        {
         }
 
         public short Position
@@ -219,32 +122,14 @@ namespace ASCOM.Simulators
         {
         }
 
-#endregion
+        #endregion IFilterWheelV2 members
 
-#region IFilterWheelV3 members
-
-        public void Connect()
-        {
-            Connected = true;
-        }
-
-        public void Disconnect()
-        {
-            Connected = false;
-        }
-
-        public bool Connecting
-        {
-            get
-            {
-                return false;
-            }
-        }
+        #region IFilterWheelV3 members
 
         /// <summary>
         /// Return the device's operational state in one call
         /// </summary>
-        public List<StateValue> DeviceState
+        public override List<StateValue> DeviceState
         {
             get
             {
@@ -257,7 +142,7 @@ namespace ASCOM.Simulators
                 return deviceState;
             }
         }
-#endregion
 
+        #endregion IFilterWheelV3 members
     }
 }
