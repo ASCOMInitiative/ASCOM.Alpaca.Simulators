@@ -6,103 +6,161 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Diagnostics;
+using System.IO.Pipes;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ASCOM.Alpaca.Simulators
 {
     public class Program
     {
+        private static Guid ApplicationGUID = new Guid("{1389A00E-006F-4117-8930-EAFCAA7DC397}");
+
+        private const string PipeGUID = "{2249563F-E844-4264-8956-73AC7A44BEA0}";
+
+
+
         public static void Main(string[] args)
         {
-            // Set console visibility (Windows only)
-            ShowConsole(ServerSettings.ConsoleDisplay);
+            // Unique ID for global mutex - Global prefix means it is global to the machine
+            string mutexId = string.Format("Global\\{{{0}}}", ApplicationGUID);
 
-            WriteAndLog($"{ServerSettings.ServerName} version {ServerSettings.ServerVersion}");
-            WriteAndLog($"Running on: {RuntimeInformation.OSDescription}.");
-
-            //Reset all stored settings if requested
-            if (args?.Any(str => str.Contains("--reset")) ?? false)
+            using (var mutex = new Mutex(false, mutexId, out bool createdNew))
             {
+                var hasHandle = false;
                 try
                 {
-                    //Load configuration
-                    DeviceManager.LoadConfiguration(new AlpacaConfiguration());
+                    try
+                    {
+                        //Time out fast, this is just to check if a copy is already running
+                        hasHandle = mutex.WaitOne(10, false);
 
-                    //Load devices
-                    DriverManager.LoadCamera(0);
-                    DriverManager.LoadCoverCalibrator(0);
-                    DriverManager.LoadDome(0);
-                    DriverManager.LoadFilterWheel(0);
-                    DriverManager.LoadFocuser(0);
-                    DriverManager.LoadObservingConditions(0);
-                    DriverManager.LoadRotator(0);
-                    DriverManager.LoadSafetyMonitor(0);
-                    DriverManager.LoadSwitch(0);
-                    DriverManager.LoadTelescope(0);
+                        //This is the second copy to start, either it will process an argument itself or it will pass the command to the running copy
+                        if (hasHandle == false)
+                        {
+                            var client = new NamedPipeClientStream(PipeGUID);
+                            client.Connect();
+                            StreamReader reader = new StreamReader(client);
+                            StreamWriter writer = new StreamWriter(client);
 
-                    WriteAndLog("Reseting stored settings");
-                    WriteAndLog("Reseting Server settings");
-                    ServerSettings.Reset();
-                    WriteAndLog("Reseting Device settings");
-                    DriverManager.Reset();
-                    WriteAndLog("Settings reset, shutting down");
-                    return;
+                            if (args != null && args.Count() > 0)
+                            {
+                                foreach (var arg in args)
+                                {
+
+                                    if (arg.Contains("--local-address"))
+                                    {
+                                        Console.WriteLine($"http://localhost:{ServerSettings.ServerPort}");
+                                        continue;
+                                    }
+
+                                    if (arg.Contains("--show-browser"))
+                                    {
+                                        StartBrowser(ServerSettings.ServerPort);
+                                        continue;
+                                    }
+
+                                    writer.WriteLine(arg);
+                                    writer.Flush();
+                                }
+                                return;
+                            }
+                            else
+                            {
+                                while (true)
+                                {
+                                    string input = Console.ReadLine();
+                                    if (String.IsNullOrEmpty(input)) break;
+                                    writer.WriteLine(input);
+                                    writer.Flush();
+                                    Console.WriteLine(reader.ReadLine());
+                                }
+                                throw new TimeoutException("Timeout waiting for exclusive access");
+                            }
+                        }
+                    }
+                    catch (AbandonedMutexException)
+                    {
+                        // Log the fact that the mutex was abandoned in another process,
+                        // it will still get acquired
+                        hasHandle = true;
+                    }
+
+                    PrintStartupInformation();
+
+                    //This is the first copy to start. It will start the Alpaca service and any other functions. This task listens for external commands
+                    Task.Factory.StartNew(() =>
+                    {
+                        var server = new NamedPipeServerStream(PipeGUID);
+                        server.WaitForConnection();
+                        StreamReader reader = new StreamReader(server);
+                        StreamWriter writer = new StreamWriter(server);
+                        while (true)
+                        {
+                            try
+                            {
+                                if (!server.IsConnected)
+                                {
+                                    server.Disconnect();
+                                    server.WaitForConnection();
+                                }
+                                var line = reader.ReadLine();
+
+                                if (line == null)
+                                {
+                                    System.Threading.Thread.Sleep(1);
+                                    continue;
+                                }
+
+                                Console.WriteLine($"Received external command {line}");
+
+                                ProcessArgs(new string[] { line }, true);
+
+                                writer.Flush();
+
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        }
+                    });
+
+                    // This is the first copy, process all args
+                    if(ProcessArgs(args, false))
+                    {
+                        //Exit if only one copy and command calls for exit
+                        return;
+                    }
+
+                    // Set console visibility (Windows only)
+                    ShowConsole(ServerSettings.ConsoleDisplay);
+
+                    var BlazorTask = InitServers(args);
+
+                    BlazorTask.Start();
+
+                    Console.ReadLine();
+
+                    // Perform your work here.
                 }
-                catch (Exception ex)
+                finally
                 {
-                    WriteAndLog(ex.Message);
-                    Logging.LogError(ex.Message);
-                    return;
+                    // edited by acidzombie24, added if statement
+                    if (hasHandle)
+                        mutex.ReleaseMutex();
                 }
             }
-
-            if (args?.Any(str => str.Contains("--set-no-browser")) ?? false)
-            {
-                WriteAndLog("Turning off auto start browser");
-                ServerSettings.AutoStartBrowser = false;
-                WriteAndLog("Auto start browser is off");
-                return;
-            }
-
-            //Turn off Authentication. Once off the user can change the password and re-enable authentication
-            if (args?.Any(str => str.Contains("--reset-auth")) ?? false)
-            {
-                WriteAndLog("Turning off Authentication to allow password reset.");
-                ServerSettings.UseAuth = false;
-                WriteAndLog("Authentication off, you can change the password and then re-enable Authentication.");
-            }
-
-            if (args?.Any(str => str.Contains("--local-address")) ?? false)
-            {
-                Console.WriteLine($"http://localhost:{ServerSettings.ServerPort}");
-            }
-
-#if ASCOM_COM
-            Debug.Assert(OperatingSystem.IsWindows());
-            OmniSim.LocalServer.Server.InitServer();
-            OmniSim.LocalServer.Drivers.Camera.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetCamera(0);
-            OmniSim.LocalServer.Drivers.CoverCalibrator.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetCoverCalibrator(0);
-            OmniSim.LocalServer.Drivers.Dome.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetDome(0);
-            OmniSim.LocalServer.Drivers.FilterWheel.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetFilterWheel(0);
-            OmniSim.LocalServer.Drivers.Focuser.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetFocuser(0);
-            OmniSim.LocalServer.Drivers.ObservingConditions.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetObservingConditions(0);
-            OmniSim.LocalServer.Drivers.Rotator.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetRotator(0);
-            OmniSim.LocalServer.Drivers.SafetyMonitor.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetSafetyMonitor(0);
-            OmniSim.LocalServer.Drivers.Switch.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetSwitch(0);
-            OmniSim.LocalServer.Drivers.Telescope.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetTelescope(0);
-
-            if (!OmniSim.LocalServer.Server.ProcessAllArguments(args))
-            {
-                return;
-            }
-            Debug.Assert(!OperatingSystem.IsWindows());
 #endif
 
-            try
+
+            /*try
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
@@ -130,8 +188,11 @@ namespace ASCOM.Alpaca.Simulators
             catch (Exception ex)
             {
                 Logging.LogError(ex.Message);
-            }
+            }*/
+        }
 
+        private static Task InitServers(string[] args)
+        {
             ASCOM.Alpaca.Logging.AttachLogger(Logging.Log);
 
             //Load configuration
@@ -148,10 +209,6 @@ namespace ASCOM.Alpaca.Simulators
             DriverManager.LoadSafetyMonitor(0);
             DriverManager.LoadSwitch(0);
             DriverManager.LoadTelescope(0);
-
-#if ASCOM_COM
-            OmniSim.LocalServer.Server.StartServer();
-#endif
 
             //Add the --urls argument for IHostBuilder
             if (!args?.Any(str => str.Contains("--urls")) ?? true)
@@ -190,23 +247,124 @@ namespace ASCOM.Alpaca.Simulators
 
             ServerSettings.CheckForUpdates();
 
-            try
+
+            return new Task(() =>
             {
-                CreateHostBuilder(args).Build().Run();
-            }
-            catch (OperationCanceledException)
+                try
+                {
+#if ASCOM_COM
+            OmniSim.LocalServer.Server.InitServer();
+            OmniSim.LocalServer.Drivers.Camera.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetCamera(0);
+            OmniSim.LocalServer.Drivers.CoverCalibrator.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetCoverCalibrator(0);
+            OmniSim.LocalServer.Drivers.Dome.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetDome(0);
+            OmniSim.LocalServer.Drivers.FilterWheel.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetFilterWheel(0);
+            OmniSim.LocalServer.Drivers.Focuser.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetFocuser(0);
+            OmniSim.LocalServer.Drivers.ObservingConditions.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetObservingConditions(0);
+            OmniSim.LocalServer.Drivers.Rotator.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetRotator(0);
+            OmniSim.LocalServer.Drivers.SafetyMonitor.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetSafetyMonitor(0);
+            OmniSim.LocalServer.Drivers.Switch.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetSwitch(0);
+            OmniSim.LocalServer.Drivers.Telescope.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetTelescope(0);
+
+            if (!OmniSim.LocalServer.Server.ProcessAllArguments(args))
             {
-                //Server was shutdown
+                return;
             }
-            catch (Exception ex)
+#endif
+
+#if ASCOM_COM
+            OmniSim.LocalServer.Server.StartServer();
+#endif
+
+
+                    CreateHostBuilder(args).Build().Run();
+                }
+                catch (OperationCanceledException)
+                {
+                    //Server was shutdown
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogError(ex.Message);
+                    Console.WriteLine("A fatal error has occurred and the OmniSim is shutting down.");
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                }
+            });
+        }
+
+        private static bool ProcessArgs(string[] args, bool existing_instance)
+        {
+            //Reset all stored settings if requested
+            if (args?.Any(str => str.Contains("--reset")) ?? false)
             {
-                Logging.LogError(ex.Message);
-                Console.WriteLine("A fatal error has occurred and the OmniSim is shutting down.");
-                Console.WriteLine(ex.Message);
+                try
+                {
+                    //Load configuration
+                    DeviceManager.LoadConfiguration(new AlpacaConfiguration());
+
+                    //Load devices
+                    DriverManager.LoadCamera(0);
+                    DriverManager.LoadCoverCalibrator(0);
+                    DriverManager.LoadDome(0);
+                    DriverManager.LoadFilterWheel(0);
+                    DriverManager.LoadFocuser(0);
+                    DriverManager.LoadObservingConditions(0);
+                    DriverManager.LoadRotator(0);
+                    DriverManager.LoadSafetyMonitor(0);
+                    DriverManager.LoadSwitch(0);
+                    DriverManager.LoadTelescope(0);
+
+                    WriteAndLog("Reseting stored settings");
+                    WriteAndLog("Reseting Server settings");
+                    ServerSettings.Reset();
+                    WriteAndLog("Reseting Device settings");
+                    DriverManager.Reset();
+                    WriteAndLog("Settings reset, shutting down");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    WriteAndLog(ex.Message);
+                    Logging.LogError(ex.Message);
+                    return true;
+                }
             }
-            finally
+
+            if (args?.Any(str => str.Contains("--set-no-browser")) ?? false)
             {
+                WriteAndLog("Turning off auto start browser");
+                ServerSettings.AutoStartBrowser = false;
+                WriteAndLog("Auto start browser is off");
+                return true;
             }
+
+            //Turn off Authentication. Once off the user can change the password and re-enable authentication
+            if (args?.Any(str => str.Contains("--reset-auth")) ?? false)
+            {
+                WriteAndLog("Turning off Authentication to allow password reset.");
+                ServerSettings.UseAuth = false;
+                WriteAndLog("Authentication off, you can change the password and then re-enable Authentication.");
+            }
+
+            if (args?.Any(str => str.Contains("--local-address")) ?? false)
+            {
+                Console.WriteLine($"http://localhost:{ServerSettings.ServerPort}");
+            }
+
+            if (args?.Any(str => str.Contains("--show-browser")) ?? false)
+            {
+                StartBrowser(ServerSettings.ServerPort);
+            }
+
+            return false;
+        }
+
+        private static void PrintStartupInformation()
+        {
+            WriteAndLog($"{ServerSettings.ServerName} version {ServerSettings.ServerVersion}");
+            WriteAndLog($"Running on: {RuntimeInformation.OSDescription}.");
         }
 
         /// <summary>
