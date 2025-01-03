@@ -33,13 +33,13 @@ namespace ASCOM.Simulators
         private short m_sTargetPosition;         // Filter position we want to get to
 
         private bool m_bMoving;                  // FilterWheel in motion?
-        public Setting<int> Slots = new Setting<int>("Slots", "Number of filter wheel positions, 1-8", 6);
+        public Setting<int> Slots { get; } = new Setting<int>("Slots", "Number of filter wheel positions, 1-8", 6);
         public string[] AllFilterNames;        // Array of filter name strings
         public int[] AllFocusOffsets;          // Array of focus offsets
         public Color[] AllFilterColours;       // Array of filter colors
-        public Setting<bool> ImplementsNames = new Setting<bool>("ImplementsNames", "True if the driver implements names", true);
-        public Setting<bool> ImplementsOffsets = new Setting<bool>("ImplementsOffsets", "True if the driver implements offsets", true);
-        public Setting<bool> PreemptMoves = new Setting<bool>("PreemptMoves", "True if the driver can interrupt moves", false);
+        public Setting<bool> ImplementsNames { get; } = new Setting<bool>("ImplementsNames", "True if the driver implements names", true);
+        public Setting<bool> ImplementsOffsets { get; } = new Setting<bool>("ImplementsOffsets", "True if the driver implements offsets", true);
+        public Setting<bool> PreemptMoves { get; } = new Setting<bool>("PreemptMoves", "True if the driver can interrupt moves", false);
 
         private const string m_sRegVer = "1";             // Used to track id registry entries exist or need updating
 
