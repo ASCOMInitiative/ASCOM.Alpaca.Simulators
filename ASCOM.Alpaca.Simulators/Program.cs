@@ -16,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -355,6 +356,20 @@ namespace ASCOM.Alpaca.Simulators
             if (args?.Any(str => str.Contains("--show-browser")) ?? false)
             {
                 StartBrowser(ServerSettings.ServerPort);
+            }
+
+            if (args?.Any(str => str.Contains("--settings")) ?? false)
+            {
+                var types = typeof(ASCOM.Simulators.FilterWheelHardware).GetProperties();
+                var props = types.Where(p=>p.PropertyType.ToString().Contains(typeof(OmniSim.BaseDriver.Setting<>).FullName.ToString()));
+
+                var realwheel = (DeviceManager.FilterWheels[0] as ASCOM.Simulators.FilterWheel).FilterWheelHardware;
+                foreach (var prop in props)
+                {
+                    dynamic setting = realwheel.GetType().GetProperty(prop.Name).GetValue(realwheel, null);
+                    Console.WriteLine($"{setting.Key} - {setting.Value} - {setting.Description}");
+                }
+
             }
 
             return false;
