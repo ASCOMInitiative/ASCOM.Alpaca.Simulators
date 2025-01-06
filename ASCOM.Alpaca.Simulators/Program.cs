@@ -160,7 +160,6 @@ namespace ASCOM.Alpaca.Simulators
                         mutex.ReleaseMutex();
                 }
             }
-#endif
 
 
             /*try
