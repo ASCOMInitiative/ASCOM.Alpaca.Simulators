@@ -53,7 +53,7 @@ namespace ASCOM.Alpaca
         /// <para>Reports if the specified switch device can be written to, default true. This is false if the device cannot be written to, for example a limit switch or a sensor. Devices are numbered from 0 to MaxSwitch - 1</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -64,11 +64,11 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/canwrite")]
         public ActionResult<BoolResponse> CanWrite(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)] short ID,
+            [Required][DefaultValue(0)] short Id,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).CanWrite(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).CanWrite(Id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace ASCOM.Alpaca
         /// <para>Return the state of switch device id as a boolean. Devices are numbered from 0 to MaxSwitch - 1</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -89,11 +89,11 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/getswitch")]
         public ActionResult<BoolResponse> GetSwitch(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)] short ID,
+            [Required][DefaultValue(0)] short Id,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).GetSwitch(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).GetSwitch(Id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace ASCOM.Alpaca
         /// <para>Gets the description of the specified switch device. This is to allow a fuller description of the device to be returned, for example for a tool tip. Devices are numbered from 0 to MaxSwitch - 1</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -114,10 +114,11 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/getswitchdescription")]
         public ActionResult<StringResponse> GetSwitchDescription(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)] short ID, [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [Required][DefaultValue(0)] short Id, 
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).GetSwitchDescription(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).GetSwitchDescription(Id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
@@ -127,7 +128,7 @@ namespace ASCOM.Alpaca
         /// <para>Gets the name of the specified switch device. Devices are numbered from 0 to MaxSwitch - 1</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -138,11 +139,11 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/getswitchname")]
         public ActionResult<StringResponse> GetSwitchName(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)] short ID,
+            [Required][DefaultValue(0)] short Id,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).GetSwitchName(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).GetSwitchName(Id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
@@ -152,7 +153,7 @@ namespace ASCOM.Alpaca
         /// <para>Gets the value of the specified switch device as a double. Devices are numbered from 0 to MaxSwitch - 1, The value of this switch is expected to be between MinSwitchValue and MaxSwitchValue.</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -163,11 +164,11 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/getswitchvalue")]
         public ActionResult<DoubleResponse> GetSwitchValue(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)] short ID,
+            [Required][DefaultValue(0)] short Id,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).GetSwitchValue(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).GetSwitchValue(Id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
@@ -177,7 +178,7 @@ namespace ASCOM.Alpaca
         /// <para>Gets the minimum value of the specified switch device as a double. Devices are numbered from 0 to MaxSwitch - 1.</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -188,11 +189,11 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/minswitchvalue")]
         public ActionResult<DoubleResponse> MinSwitchValue(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)] short ID,
+            [Required][DefaultValue(0)] short Id,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).MinSwitchValue(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).MinSwitchValue(Id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
@@ -202,7 +203,7 @@ namespace ASCOM.Alpaca
         /// <para>Gets the maximum value of the specified switch device as a double. Devices are numbered from 0 to MaxSwitch - 1.</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -213,10 +214,11 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/maxswitchvalue")]
         public ActionResult<DoubleResponse> MaxSwitchValue(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)] short ID, [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [Required][DefaultValue(0)] short Id, 
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).MaxSwitchValue(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).MaxSwitchValue(Id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
@@ -226,7 +228,7 @@ namespace ASCOM.Alpaca
         /// <para>Returns the step size that this device supports (the difference between successive values of the device). Devices are numbered from 0 to MaxSwitch - 1.</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -237,11 +239,11 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/switchstep")]
         public ActionResult<DoubleResponse> SwitchStep(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)] short ID,
+            [Required][DefaultValue(0)] short Id,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SwitchStep(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SwitchStep(Id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
@@ -251,7 +253,7 @@ namespace ASCOM.Alpaca
         /// <para>Sets a switch controller device to the specified state, true or false.</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="State">The required control state(True or False)</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
@@ -263,11 +265,12 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/setswitch")]
         public ActionResult<Response> SetSwitch(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short ID,
-            [FromForm][Required][SwaggerSchema("The required control state(True or False)")] bool State, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short Id,
+            [FromForm][Required][SwaggerSchema("The required control state(True or False)")] bool State,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetSwitch(ID, State), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetSwitch(Id, State), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
@@ -277,7 +280,7 @@ namespace ASCOM.Alpaca
         /// <para>Sets a switch device name to the specified value.</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="Name">The name of the device</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
@@ -289,11 +292,12 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/setswitchname")]
         public ActionResult<Response> SetSwitchName(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short ID,
-            [Required][FromForm][SwaggerSchema("The name of the device")] string Name, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short Id,
+            [Required][FromForm][SwaggerSchema("The name of the device")] string Name,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetSwitchName(ID, Name), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetSwitchName(Id, Name), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
@@ -303,7 +307,7 @@ namespace ASCOM.Alpaca
         /// <para>Sets a switch device value to the specified value.</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="Value ">The value to be set, between MinSwitchValue and MaxSwitchValue</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
@@ -315,11 +319,12 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/setswitchvalue")]
         public ActionResult<Response> SetSwitchValue(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short ID,
-            [Required][FromForm][SwaggerSchema("The value to be set, between MinSwitchValue and MaxSwitchValue")] double Value, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short Id,
+            [Required][FromForm][SwaggerSchema("The value to be set, between MinSwitchValue and MaxSwitchValue")] double Value,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetSwitchValue(ID, Value), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetSwitchValue(Id, Value), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         #endregion
@@ -330,7 +335,7 @@ namespace ASCOM.Alpaca
         /// </summary>
         /// <returns>True if the switch can operate asynchronously.</returns>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -341,11 +346,11 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/canasync")]
         public ActionResult<BoolResponse> CanAsync(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)] short ID,
+            [Required][DefaultValue(0)] short Id,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).CanAsync(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).CanAsync(Id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
@@ -354,7 +359,7 @@ namespace ASCOM.Alpaca
         /// <exception cref="OperationCancelledException">When an in-progress operation is cancelled by the <see cref="CancelAsync"/> method.</exception>
         /// <returns>False while an asynchronous operation is underway and true when it has completed.</returns>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -365,18 +370,18 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/statechangecomplete")]
         public ActionResult<BoolResponse> StateChangeComplete(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][DefaultValue(0)] short ID,
+            [Required][DefaultValue(0)] short Id,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).StateChangeComplete(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).StateChangeComplete(Id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
         /// Cancels an in-progress asynchronous operation.
         /// </summary>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -387,18 +392,18 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/cancelasync")]
         public ActionResult<Response> CancelAsync(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short ID,
+            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short Id,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).CancelAsync(ID), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).CancelAsync(Id), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
         /// Set a boolean switch's state asynchronously
         /// </summary>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="State">The required control state(True or False)</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
@@ -410,18 +415,19 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/setasync")]
         public ActionResult<Response> SetAsync(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short ID,
-            [FromForm][Required][SwaggerSchema("The required control state(True or False)")] bool State, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short Id,
+            [FromForm][Required][SwaggerSchema("The required control state(True or False)")] bool State, 
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetAsync(ID, State), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetAsync(Id, State), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         /// <summary>
         /// Set a switch's value asynchronously
         /// </summary>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ID">The device number (0 to MaxSwitch - 1)</param>
+        /// <param name="Id">The device number (0 to MaxSwitch - 1)</param>
         /// <param name="Value ">The value to be set, between MinSwitchValue and MaxSwitchValue</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
@@ -433,11 +439,12 @@ namespace ASCOM.Alpaca
         [Route("{DeviceNumber}/setasyncvalue")]
         public ActionResult<Response> SetAsyncValue(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short ID,
-            [Required][FromForm][SwaggerSchema("The value to be set, between MinSwitchValue and MaxSwitchValue")] double Value, [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][Required][DefaultValue(0)][SwaggerSchema("The device number (0 to MaxSwitch - 1)")] short Id,
+            [Required][FromForm][SwaggerSchema("The value to be set, between MinSwitchValue and MaxSwitchValue")] double Value,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetAsyncValue(ID, Value), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => DeviceManager.GetSwitch(DeviceNumber).SetAsyncValue(Id, Value), DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
 
         #endregion
