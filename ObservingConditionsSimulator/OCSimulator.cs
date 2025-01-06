@@ -13,6 +13,8 @@
 // Written by:	Bob Denny	29-May-2007
 // Modified by Chris Rowland and Peter Simpson to handle multiple hardware devices March 2011
 //
+// Ignore Spelling: CLOUDCOVER DEWPOINT RAINRATE SKYBRIGHTNESS SKYQUALITY STARFWHM SKYTEMPERATURE WINDDIRECTION WINDGUST WINDSPEED OBSERVINGCONDITIONS SENSORVIEW PROGID SIMTOVALUE PROFILENAME SIMFROMVALUE
+
 using ASCOM.Common;
 using ASCOM.Common.Interfaces;
 using System;
@@ -316,7 +318,7 @@ namespace ASCOM.Simulators
             catch (Exception ex)
             {
                 TL.LogError(ex.Message);
-                throw ex;
+                throw;
             }
         }
 

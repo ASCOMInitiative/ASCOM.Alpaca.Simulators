@@ -82,6 +82,7 @@ namespace ASCOM.Alpaca.Simulators
             }
 
 #if ASCOM_COM
+            Debug.Assert(OperatingSystem.IsWindows());
             OmniSim.LocalServer.Server.InitServer();
             OmniSim.LocalServer.Drivers.Camera.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetCamera(0);
             OmniSim.LocalServer.Drivers.CoverCalibrator.DeviceAccess = () => ASCOM.Alpaca.DeviceManager.GetCoverCalibrator(0);
@@ -98,6 +99,7 @@ namespace ASCOM.Alpaca.Simulators
             {
                 return;
             }
+            Debug.Assert(!OperatingSystem.IsWindows());
 #endif
 
             try

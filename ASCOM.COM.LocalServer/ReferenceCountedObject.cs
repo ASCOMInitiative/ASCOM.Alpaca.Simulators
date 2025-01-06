@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace OmniSim.LocalServer
 {
@@ -7,6 +8,7 @@ namespace OmniSim.LocalServer
     /// Class to keep track of COM object instanciations and destructions
     /// </summary>
     [ComVisible(false)]
+    [SupportedOSPlatform("windows")]
     public class ReferenceCountedObjectBase
     {
         /// <summary>
