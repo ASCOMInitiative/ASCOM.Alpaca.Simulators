@@ -75,6 +75,14 @@ namespace ASCOM.Simulators
             AutoReset = true,
         };
 
+        /// <summary>
+        /// This is not safe to call, it is use to create a default class used to create dynamic settings
+        /// </summary>
+        public FilterWheelHardware()
+        {
+
+        }
+
         //
         // Constructor - initialize state
         //
