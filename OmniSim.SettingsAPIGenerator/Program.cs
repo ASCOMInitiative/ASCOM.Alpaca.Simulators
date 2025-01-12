@@ -10,6 +10,11 @@ namespace OmniSim.SettingsAPIGenerator
     {
         private static void Main(string[] args)
         {
+            var api = BuildSettingsAPI(typeof(ASCOM.Simulators.FilterWheelHardware), "FilterWheel", "(DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware");
+        }
+
+        private static string BuildSettingsAPI(Type DriverType, string DeviceType, string AccessString)
+        {
             StringBuilder builder = new StringBuilder();
 
             builder.AppendLine(Usings);
@@ -17,17 +22,17 @@ namespace OmniSim.SettingsAPIGenerator
             builder.AppendLine("{");
 
             builder.AppendLine(ClassHeader);
-            builder.AppendLine($"public class {"FilterWheel"}SettingsController : ProcessBaseController");
+            builder.AppendLine($"public class {DeviceType}SettingsController : ProcessBaseController");
 
             builder.AppendLine("{");
 
             // Generate API for FilterWheel
-            foreach (var prop in SettingsHelpers.GetSettingsProperties(typeof(ASCOM.Simulators.FilterWheelHardware)))
+            foreach (var prop in SettingsHelpers.GetSettingsProperties(DriverType))
             {
-                dynamic setting = prop.GetValue(new ASCOM.Simulators.FilterWheelHardware());
+                dynamic setting = prop.GetValue(Activator.CreateInstance(DriverType));
 
-                builder.AppendLine(GetSettingRaw("FilterWheel", setting.Key, setting.Description, setting.Value.GetType().ToString(), GetResponseType(setting.Value.GetType()), $"(DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.{prop.Name}.Value"));
-                builder.AppendLine(PutSettingRaw("FilterWheel", setting.Key, setting.Description, setting.Value.GetType().ToString(), $"(DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.{prop.Name}.Value = {prop.Name};"));
+                builder.AppendLine(GetSettingRaw(DeviceType, setting.Key, setting.Description, setting.Value.GetType().ToString(), GetResponseType(setting.Value.GetType()), $"{AccessString}.{prop.Name}.Value"));
+                builder.AppendLine(PutSettingRaw(DeviceType, setting.Key, setting.Description, setting.Value.GetType().ToString(), $"{AccessString}.{prop.Name}.Value = {prop.Name};"));
             }
 
             builder.AppendLine("}");
@@ -35,6 +40,8 @@ namespace OmniSim.SettingsAPIGenerator
             builder.AppendLine("}");
 
             var res = builder.ToString();
+
+            return res;
         }
 
         private static string GetResponseType(Type t)
@@ -67,7 +74,8 @@ namespace OmniSim.SettingsAPIGenerator
             
         }
 
-        private static string Usings = @"using ASCOM.Common.Alpaca;
+        private static string Usings = @"//DO NOT EDIT, AUTO-GENORATED
+using ASCOM.Common.Alpaca;
 using ASCOM.Simulators;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
