@@ -11,6 +11,11 @@ namespace OmniSim.SettingsAPIGenerator
         private static void Main(string[] args)
         {
             var api = BuildSettingsAPI(typeof(ASCOM.Simulators.FilterWheelHardware), "FilterWheel", "(DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware");
+
+            using (StreamWriter writetext = File.CreateText("../../../../ASCOM.Alpaca.Simulators/Controllers/FilterWheelSettings.cs"))
+            {
+                writetext.Write(api);
+            }
         }
 
         private static string BuildSettingsAPI(Type DriverType, string DeviceType, string AccessString)
