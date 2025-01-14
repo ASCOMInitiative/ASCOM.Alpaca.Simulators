@@ -20,7 +20,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Time to move between filter positions (milliseconds)
         /// </summary>
-        public Setting<int> FilterChangeTimeInterval = new Setting<int>("FilterChangeTimeInterval", "Time to move between filter positions (milliseconds)", 1000);
+        public Setting<int> FilterChangeTimeInterval { get; } = new Setting<int>("FilterChangeTimeInterval", "Time to move between filter positions (milliseconds)", 1000);
 
         private int m_iTimeToMove;               // Time required to complete the current Move
         private int m_iTimeElapsed;              // Keeps track of the elapsed time of the current Move
