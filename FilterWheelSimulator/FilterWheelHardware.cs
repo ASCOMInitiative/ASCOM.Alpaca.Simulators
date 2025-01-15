@@ -14,40 +14,19 @@ namespace ASCOM.Simulators
     //
     public class FilterWheelHardware
     {
-        #region variables
+        private int timeToMove;               // Time required to complete the current Move
+        private int timeElapsed;              // Keeps track of the elapsed time of the current Move
+        private int timerTickInterval = 100;  // How often we pump the hardware
 
-        // Timer variables
-        /// <summary>
-        /// Time to move between filter positions (milliseconds)
-        /// </summary>
-        public Setting<int> FilterChangeTimeInterval { get; } = new Setting<int>("FilterChangeTimeInterval", "Time to move between filter positions (milliseconds)", 1000);
-
-        private int m_iTimeToMove;               // Time required to complete the current Move
-        private int m_iTimeElapsed;              // Keeps track of the elapsed time of the current Move
-        private int m_iTimerTickInterval = 100;  // How often we pump the hardware
+        // Current filter position
+        private short position;
 
         // invoking the full method
-        public short m_sPosition;                // Current filter position, public so the handbox can test without
+        private short targetPosition;         // Filter position we want to get to
 
-        // invoking the full method
-        private short m_sTargetPosition;         // Filter position we want to get to
-
-        private bool m_bMoving;                  // FilterWheel in motion?
-        public Setting<int> Slots { get; } = new Setting<int>("Slots", "Number of filter wheel positions, 1-8", 6);
-        public string[] AllFilterNames;        // Array of filter name strings
-        public int[] AllFocusOffsets;          // Array of focus offsets
-        public Color[] AllFilterColours;       // Array of filter colors
-        public Setting<bool> ImplementsNames { get; } = new Setting<bool>("ImplementsNames", "True if the driver implements names", true);
-        public Setting<bool> ImplementsOffsets { get; } = new Setting<bool>("ImplementsOffsets", "True if the driver implements offsets", true);
-        public Setting<bool> PreemptMoves { get; } = new Setting<bool>("PreemptMoves", "True if the driver can interrupt moves", false);
+        private bool moving;                  // FilterWheel in motion?
 
         private const string m_sRegVer = "1";             // Used to track id registry entries exist or need updating
-
-        internal ILogger Logger
-        {
-            get;
-            set;
-        }
 
         //
         // Create some 'realistic' defaults
@@ -68,7 +47,6 @@ namespace ASCOM.Simulators
         private int SCODE_MOVING = ErrorCodes.DriverBase + 0x405;
         private const string MSG_MOVING = "The filterwheel is already moving";
 
-        #endregion variables
 
         private Timer timer = new Timer(100)
         {
@@ -91,7 +69,7 @@ namespace ASCOM.Simulators
             Logger = logger;
             Profile = profile;
 
-            m_bMoving = false;
+            moving = false;
 
             AllFilterNames = new string[8];
             AllFocusOffsets = new int[8];
@@ -101,7 +79,30 @@ namespace ASCOM.Simulators
             timer.Start();
         }
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        /// <summary>
+        /// Time to move between filter positions (milliseconds)
+        /// </summary>
+        public Setting<int> FilterChangeTimeInterval { get; } = new Setting<int>("FilterChangeTimeInterval", "Time to move between filter positions (milliseconds)", 1000);
+
+        public Setting<bool> ImplementsNames { get; } = new Setting<bool>("ImplementsNames", "True if the driver implements names", true);
+
+        public Setting<bool> ImplementsOffsets { get; } = new Setting<bool>("ImplementsOffsets", "True if the driver implements offsets", true);
+
+        public Setting<bool> PreemptMoves { get; } = new Setting<bool>("PreemptMoves", "True if the driver can interrupt moves", false);
+
+        public Setting<int> Slots { get; } = new Setting<int>("Slots", "Number of filter wheel positions, 1-8", 6);
+
+        public string[] AllFilterNames { get; set; }        // Array of filter name strings
+        public int[] AllFocusOffsets { get; set; }         // Array of focus offsets
+        public Color[] AllFilterColours { get; }       // Array of filter colors
+
+        internal ILogger Logger
+        {
+            get;
+            set;
+        }
+
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
             UpdateState();
         }
@@ -124,10 +125,10 @@ namespace ASCOM.Simulators
                 {
                     short ret;
 
-                    if (m_bMoving)
+                    if (moving)
                         ret = -1;                       // Spec. says we must return -1 if position not determined
                     else
-                        ret = m_sPosition;      // Otherwise return position
+                        ret = position;      // Otherwise return position
 
                     Logger.LogVerbose("FilterWheel - Get Position = " + ret.ToString());
 
@@ -150,17 +151,17 @@ namespace ASCOM.Simulators
                         throw new DriverException("Position: " + MSG_VAL_OUTOFRANGE, SCODE_VAL_OUTOFRANGE);
                     }
 
-                    m_sTargetPosition = value;
+                    targetPosition = value;
 
                     // check if we are already there!
-                    if (value == m_sPosition)
+                    if (value == position)
                     {
                         Logger.LogInformation("FilterWheel -   (set position, no move required)");
                         return;
                     }
 
                     // check if we are already moving
-                    if (m_bMoving)
+                    if (moving)
                     {
                         if (PreemptMoves.Value)
                             AbortMove();   // Stop the motor
@@ -173,11 +174,11 @@ namespace ASCOM.Simulators
                     }
 
                     // Find the shortest distance between two filter positions
-                    Jumps = Math.Min(Math.Abs(m_sPosition - m_sTargetPosition), Slots.Value - Math.Abs(m_sPosition - m_sTargetPosition));
-                    m_iTimeToMove = Jumps * FilterChangeTimeInterval.Value;
+                    Jumps = Math.Min(Math.Abs(position - targetPosition), Slots.Value - Math.Abs(position - targetPosition));
+                    timeToMove = Jumps * FilterChangeTimeInterval.Value;
 
                     // trigger the "motor"
-                    m_bMoving = true;
+                    moving = true;
 
                     // log action
                     Logger.LogVerbose("FilterWheel -  (set position in progress)...");
@@ -216,11 +217,11 @@ namespace ASCOM.Simulators
         {
             Logger.LogInformation("FilterWheel - Abort move");
             // Clear the elapsed time
-            m_iTimeElapsed = 0;
+            timeElapsed = 0;
             // Stop moving
-            m_bMoving = false;
+            moving = false;
             // Set the postion intermediate between start and end
-            m_sPosition = (short)Math.Floor(Math.Abs(m_sTargetPosition - m_sPosition) / 2.0);
+            position = (short)Math.Floor(Math.Abs(targetPosition - position) / 2.0);
             Logger.LogInformation("FilterWheel - Abort done");
         }
 
@@ -228,20 +229,20 @@ namespace ASCOM.Simulators
         {
             lock (s_objSync)
             {
-                if (m_bMoving)
+                if (moving)
                 {
                     // We are moving so increment the elapsed move time
-                    m_iTimeElapsed += m_iTimerTickInterval;
+                    timeElapsed += timerTickInterval;
 
                     // Have we reached the filter position yet?
-                    if (m_iTimeElapsed >= m_iTimeToMove)
+                    if (timeElapsed >= timeToMove)
                     {
                         // Clear the elapsed time
-                        m_iTimeElapsed = 0;
+                        timeElapsed = 0;
                         // Stop moving
-                        m_bMoving = false;
+                        moving = false;
                         // Set the new position
-                        m_sPosition = m_sTargetPosition;
+                        position = targetPosition;
                     }
                 }
             }
@@ -266,7 +267,7 @@ namespace ASCOM.Simulators
                 // Read the hardware & driver config
                 Slots.Value = Convert.ToInt16(Profile.GetSettingReturningDefault(Slots));
                 if (Slots.Value < 1 || Slots.Value > 8) Slots.Value = 6;
-                m_sPosition = 0;
+                position = 0;
                 FilterChangeTimeInterval.Value = Convert.ToInt32(Profile.GetSettingReturningDefault(FilterChangeTimeInterval));
                 ImplementsNames.Value = Convert.ToBoolean(Profile.GetSettingReturningDefault(ImplementsNames));
                 ImplementsOffsets.Value = Convert.ToBoolean(Profile.GetSettingReturningDefault(ImplementsOffsets));
