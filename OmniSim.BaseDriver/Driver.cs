@@ -39,7 +39,7 @@ namespace OmniSim.BaseDriver
             Connecting = false;
         }
 
-        internal ILogger TraceLogger; // ASCOM Trace Logger component
+        public ILogger TraceLogger; // ASCOM Trace Logger component
 
         internal IProfile Profile; //Access to device settings
 

@@ -7,6 +7,7 @@
 <body>
     <fieldset>
         <legend>FilterWheel</legend>
+
         <div class="grid-container-two">
 
             <div class="grid-item-left">
@@ -16,6 +17,9 @@
                 <button @onclick="Connect">@ConnectText</button>
             </div>
             <div class="grid-item-right">
+                <ErrorBoundary>
+                    <LogLevelControl Logger="@Logger" />
+                </ErrorBoundary>
                 <button @onclick="Setup">Setup</button>
             </div>
 
@@ -64,6 +68,11 @@
         {
             return DeviceManager.GetFilterWheel((uint)InstanceID) as ASCOM.Simulators.FilterWheel;
         }
+    }
+
+    private ASCOM.Common.Interfaces.ILogger Logger 
+    {
+        get => (Device as OmniSim.BaseDriver.Driver).TraceLogger;
     }
 
     Timer timer = new Timer(100);
