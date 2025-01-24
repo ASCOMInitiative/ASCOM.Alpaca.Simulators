@@ -26,7 +26,7 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static void LoadFilterWheel(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.FilterWheel(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.FilterWheel, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.FilterWheel(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("FilterWheel", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.FilterWheel, (uint)DeviceID));
             DeviceManager.LoadFilterWheel(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
@@ -42,7 +42,7 @@ namespace ASCOM.Alpaca.Simulators
             DeviceManager.LoadObservingConditions(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
-        internal static void LoadRotator(int DeviceID) 
+        internal static void LoadRotator(int DeviceID)
         {
             var dev = new ASCOM.Simulators.Rotator(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Rotator, (uint)DeviceID));
             DeviceManager.LoadRotator(DeviceID, dev, dev.DeviceName, dev.UniqueID);
