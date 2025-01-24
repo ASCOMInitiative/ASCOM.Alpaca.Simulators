@@ -14,6 +14,10 @@ namespace OmniSim.BaseDriver
     {
         #region Internal Values
 
+        public short Platform7DriverInterfaceVersion { get; private set; }
+
+        public short ActionDriverInterfaceVersion { get; private set; }
+
         public int DeviceNumber
         {
             get; set;
@@ -31,7 +35,7 @@ namespace OmniSim.BaseDriver
 
         internal bool IsConnected { get; set; } = false;
 
-        internal System.Timers.Timer ConnectTimer = new System.Timers.Timer();
+        internal Timer ConnectTimer = new();
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
@@ -85,11 +89,14 @@ namespace OmniSim.BaseDriver
             }
         }
 
-        public Driver(int deviceNumber, ILogger logger, IProfile profile)
+        public Driver(int deviceNumber, ILogger logger, IProfile profile, short platform7DriverInterfaceVersion, short actionDriverInterfaceVersion)
         {
             DeviceNumber = deviceNumber;
             TraceLogger = logger;
             Profile = profile;
+
+            Platform7DriverInterfaceVersion = platform7DriverInterfaceVersion;
+            ActionDriverInterfaceVersion = actionDriverInterfaceVersion;
 
             TraceLogger?.SetMinimumLoggingLevel(SavedLoggingLevel);
 
@@ -116,6 +123,21 @@ namespace OmniSim.BaseDriver
             TraceLogger.LogInformation($"FilterWheel {DeviceNumber} - UUID of {UniqueID}");
         }
 
+        public void CheckSupportedInterface(short requiredLevel, string call, string message = "")
+        {
+            if (SafeInterfaceVersion < requiredLevel)
+            {
+                if (string.IsNullOrEmpty(message))
+                {
+                    throw new ASCOM.DriverException($"ASCOM call {call} requires Interface Version {requiredLevel} but the simulator is running at {SafeInterfaceVersion}.");
+                }
+                else
+                {
+                    throw new ASCOM.DriverException($"ASCOM call {call} requires Interface Version {requiredLevel} but the simulator is running at {SafeInterfaceVersion}. Extra information {message}");
+                }
+            }
+        }
+
         #region ASCOM Methods
 
         public bool Connecting { get; set; } = false;
@@ -126,7 +148,7 @@ namespace OmniSim.BaseDriver
         {
             get
             {
-                return ProcessCommand(() => IsConnected, "Connected", "Get");
+                return ProcessCommand(() => IsConnected, "Connected", "Get", Platform7DriverInterfaceVersion);
             }
             set
             {
@@ -142,7 +164,7 @@ namespace OmniSim.BaseDriver
                     {
                         IsConnected = false;
                     }
-                }, "Connected", "Set");
+                }, "Connected", "Set", Platform7DriverInterfaceVersion);
             }
         }
 
@@ -161,6 +183,8 @@ namespace OmniSim.BaseDriver
 
         public virtual short InterfaceVersion => throw new ASCOM.NotImplementedException();
 
+        public virtual short SafeInterfaceVersion => InterfaceVersion;
+
         public virtual string Name => throw new ASCOM.NotImplementedException();
 
         public virtual IList<string> SupportedActions
@@ -168,7 +192,7 @@ namespace OmniSim.BaseDriver
             get
             {
                 TraceLogger.LogVerbose($"SupportedActions - Returning empty list");
-                return new List<string>();
+                return [];
             }
         }
 
@@ -177,7 +201,7 @@ namespace OmniSim.BaseDriver
             ProcessCommand(() =>
             {
                 throw new ASCOM.ActionNotImplementedException(actionName);
-            }, "Action", "Action");
+            }, "Action", "Action", ActionDriverInterfaceVersion);
             throw new ASCOM.ActionNotImplementedException(actionName);
         }
 
@@ -187,7 +211,7 @@ namespace OmniSim.BaseDriver
             {
                 CheckConnected("CommandBlind");
                 throw new ASCOM.MethodNotImplementedException("CommandBlind");
-            }, "Command", "CommandBlind");
+            }, "Command", "CommandBlind", ActionDriverInterfaceVersion);
             throw new ASCOM.ActionNotImplementedException("CommandBlind");
         }
 
@@ -197,7 +221,7 @@ namespace OmniSim.BaseDriver
             {
                 CheckConnected("CommandBool");
                 throw new ASCOM.MethodNotImplementedException("CommandBool");
-            }, "Command", "CommandBool");
+            }, "Command", "CommandBool", ActionDriverInterfaceVersion);
             throw new ASCOM.ActionNotImplementedException("CommandBool");
         }
 
@@ -207,7 +231,7 @@ namespace OmniSim.BaseDriver
             {
                 CheckConnected("CommandString");
                 throw new ASCOM.MethodNotImplementedException("CommandString");
-            }, "Command", "CommandString");
+            }, "Command", "CommandString", ActionDriverInterfaceVersion);
             throw new ASCOM.ActionNotImplementedException("CommandString");
         }
 
@@ -220,7 +244,7 @@ namespace OmniSim.BaseDriver
                 Connecting = true;
 
                 ConnectTimer.Start();
-            }, "Connect", "Start");
+            }, "Connect", "Start", Platform7DriverInterfaceVersion);
         }
 
         public void Disconnect()
@@ -228,7 +252,7 @@ namespace OmniSim.BaseDriver
             ProcessCommand(() =>
             {
                 Connected = false;
-            }, "Disconnect", "Call");
+            }, "Disconnect", "Call", Platform7DriverInterfaceVersion);
         }
 
         public void Dispose()
@@ -236,22 +260,23 @@ namespace OmniSim.BaseDriver
             ProcessCommand(() =>
             {
                 Connected = false;
-            }, "Dispose", "Call");
+            }, "Dispose", "Call", ActionDriverInterfaceVersion);
         }
 
         #endregion ASCOM Methods
 
         #region LogTools
 
-        public T ProcessCommand<T>(Func<T> Operation, string Command, string Type)
+        public T ProcessCommand<T>(Func<T> Operation, string Command, string Type, short RequiredInterfaceVersion)
         {
-            Stopwatch stopWatch = new Stopwatch();
+            Stopwatch stopWatch = new();
             TraceLogger.LogVerbose($"{Command} - {Type} {Command}");
             stopWatch.Start();
             try
             {
+                this.CheckSupportedInterface(RequiredInterfaceVersion, Command);
                 var result = Operation.Invoke();
-                TraceLogger.LogVerbose($"{Command} - {Type} {Command} - Succeed in {stopWatch.Elapsed.Seconds} seconds with result: {result}");
+                TraceLogger.LogVerbose($"{Command} - {Type} {Command} - Succeed or started in {stopWatch.Elapsed.Seconds} seconds with result: {result}");
                 return result;
             }
             catch (Exception ex)
@@ -261,21 +286,34 @@ namespace OmniSim.BaseDriver
             }
         }
 
-        public void ProcessCommand(Action Operation, string Command, string Type)
+        public void ProcessCommand(Action Operation, string Command, string Type, short RequiredInterfaceVersion)
         {
-            Stopwatch stopWatch = new Stopwatch();
+            Stopwatch stopWatch = new();
             TraceLogger.LogVerbose($"{Command} - {Type} {Command}");
             stopWatch.Start();
             try
             {
+                this.CheckSupportedInterface(RequiredInterfaceVersion, Command);
                 Operation.Invoke();
-                TraceLogger.LogVerbose($"{Command} - {Type} {Command} - Succeed in {stopWatch.Elapsed.Seconds} seconds with no result.");
+                TraceLogger.LogVerbose($"{Command} - {Type} {Command} - Succeed or started in {stopWatch.Elapsed.Seconds} seconds with no result.");
             }
             catch (Exception ex)
             {
                 TraceLogger.LogInformation($"{Command} - {Type} {Command} - Failed in {stopWatch.Elapsed.Seconds} seconds with Exception {ex.Message}");
                 throw;
             }
+        }
+
+        /// <summary>
+        /// No-op but part of the ASCOM Interface. Settings are set through Alpaca.
+        /// </summary>
+        public void SetupDialog()
+        {
+            this.ProcessCommand(
+                () => { },
+                "SetupDialog",
+                "SetupDialog",
+                1);
         }
 
         #endregion LogTools
