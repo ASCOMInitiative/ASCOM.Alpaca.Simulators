@@ -12,7 +12,7 @@ namespace OmniSim.SettingsAPIGenerator
         {
             var api = BuildSettingsAPI(typeof(ASCOM.Simulators.FilterWheelHardware), "FilterWheel", "(DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware");
 
-            using (StreamWriter writetext = File.CreateText("../../../../ASCOM.Alpaca.Simulators/Controllers/FilterWheelSettings.cs"))
+            using (StreamWriter writetext = File.CreateText("../../../../ASCOM.Alpaca.Simulators/Controllers/FilterWheelSettingsController.cs"))
             {
                 writetext.Write(api);
             }
@@ -73,7 +73,7 @@ namespace OmniSim.SettingsAPIGenerator
             }
             else if (t == typeof(short))
             {
-                return typeof(ShortResponse).ToString();
+                return typeof(IntResponse).ToString();
             }
             throw new Exception($"Unknown Type {t}");
             

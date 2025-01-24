@@ -104,7 +104,7 @@ namespace OmniSim.BaseDriver
             ConnectTimer.Interval = 1500;
             ConnectTimer.Elapsed += OnTimedEvent;
 
-            UniqueID = Name + DeviceNumber.ToString();
+            UniqueID = Guid.NewGuid() + DeviceNumber.ToString();
             //Create a Unique ID if it does not exist
             try
             {
