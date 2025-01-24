@@ -67,11 +67,31 @@ namespace OmniSim.BaseDriver
 
         #endregion ISimulation
 
+        public LogLevel SavedLoggingLevel
+        {
+            get
+            {
+                if (Enum.TryParse(Profile.GetValue("LoggingLevel", LogLevel.Information.ToString()), out LogLevel result))
+                {
+                    return result;
+                }
+                TraceLogger?.SetMinimumLoggingLevel(LogLevel.Information);
+                return LogLevel.Information;
+            }
+            set
+            {
+                TraceLogger?.SetMinimumLoggingLevel(value);
+                Profile.WriteValue("LoggingLevel", value.ToString());
+            }
+        }
+
         public Driver(int deviceNumber, ILogger logger, IProfile profile)
         {
             DeviceNumber = deviceNumber;
             TraceLogger = logger;
             Profile = profile;
+
+            TraceLogger?.SetMinimumLoggingLevel(SavedLoggingLevel);
 
             ConnectTimer.AutoReset = false;
             ConnectTimer.Interval = 1500;

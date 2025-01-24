@@ -12,11 +12,12 @@
     int currentCount = 0;
 
     [Parameter]
-    public ASCOM.Common.Interfaces.ILogger Logger { get; set; }
+    public OmniSim.BaseDriver.Driver Driver { get; set; }
+
 
     public ASCOM.Common.Interfaces.LogLevel LogLevel 
     {
-        get => Logger.LoggingLevel;
-        set => Logger.SetMinimumLoggingLevel(value);
+        get => Driver.SavedLoggingLevel;
+        set => Driver.SavedLoggingLevel = value;
     }
 }
