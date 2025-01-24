@@ -14,6 +14,8 @@
     /// </summary>
     public class FilterWheel : OmniSim.BaseDriver.Driver, IFilterWheelV3, IAlpacaDevice, ISimulation // Early-bind interface implemented by this driver
     {
+        private const string DriverName = "Alpaca Filter Wheel Simulator";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FilterWheel"/> class.
         /// </summary>
@@ -21,7 +23,7 @@
         /// <param name="logger">An ASCOM Logger for this to write calls to.</param>
         /// <param name="profile">An ASCOM Profile for this driver to store information to.</param>
         public FilterWheel(int deviceNumber, ILogger logger, IProfile profile)
-            : base(deviceNumber, logger, profile, 3, 2)
+            : base(deviceNumber, logger, profile, DriverName, 3, 2)
         {
             this.DeviceNumber = deviceNumber;
 
@@ -116,7 +118,7 @@
                 return this.ProcessCommand(
                 () =>
                 {
-                    return "Alpaca Filter Wheel Simulator";
+                    return DriverName;
                 },
                 nameof(IFilterWheelV3.Name),
                 "Get",

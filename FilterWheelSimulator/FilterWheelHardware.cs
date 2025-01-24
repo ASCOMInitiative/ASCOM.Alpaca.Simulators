@@ -133,11 +133,6 @@
             {
                 string[] temp = this.AllFilterNames;
                 Array.Resize(ref temp, this.Slots.Value);
-                for (int i = 0; i < this.Slots.Value; i++)
-                {
-                    this.Logger.LogVerbose("FilterWheel -  Filter " + i.ToString() + " = " + temp[i].ToString());
-                }
-
                 return temp;
             }
         }
@@ -151,11 +146,6 @@
             {
                 int[] temp = this.AllFocusOffsets;
                 Array.Resize(ref temp, this.Slots.Value);
-                for (int i = 0; i < this.Slots.Value; i++)
-                {
-                    this.Logger.LogVerbose("FilterWheel -  Offset " + i.ToString() + " = " + temp[i].ToString());
-                }
-
                 return temp;
             }
         }

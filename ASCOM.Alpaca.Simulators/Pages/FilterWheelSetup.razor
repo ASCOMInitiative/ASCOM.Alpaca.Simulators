@@ -15,6 +15,16 @@
         <legend>Filter Wheel Settings</legend>
 
         <div>
+            <label for="interfaceVersion">Simulation Interface Version:</label>
+
+            <select name="interfaceVersion" id="interfaceVersion" @bind="InterfaceVersion">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+
+        <div>
             <label for="filters">Number of Filters:</label>
 
             <select name="filters" id="filters" @bind="NumberOfFilters">
@@ -114,11 +124,12 @@
     protected override void OnInitialized()
     {
 
-        NumberOfFilters = Device.Names.Count();
+        NumberOfFilters = Device.FilterWheelHardware.Slots.Value;
         TimeDelay = Device.FilterWheelHardware.FilterChangeTimeInterval.Value / 1000;
         ImplementsFilterNames = Device.FilterWheelHardware.ImplementsNames.Value;
         ImplementsFocusOffsets = Device.FilterWheelHardware.ImplementsOffsets.Value;
         PreemptMoves = Device.FilterWheelHardware.PreemptMoves.Value;
+        InterfaceVersion = Device.FilterWheelHardware.InterfaceVersion.Value;
 
         for (int i = 0; i < 8; i++)
         {
@@ -203,6 +214,12 @@
         get;
         set;
     }
+
+    short InterfaceVersion
+    {
+        get;
+        set;
+    }
     #endregion
 
     #region Filter Setup
@@ -255,6 +272,7 @@
     {
         try
         {
+            Device.FilterWheelHardware.InterfaceVersion.Value = InterfaceVersion;
             Device.FilterWheelHardware.Slots.Value = NumberOfFilters;
             Device.FilterWheelHardware.FilterChangeTimeInterval.Value = (int)TimeDelay * 1000;
             Device.FilterWheelHardware.AllFilterNames = FilterNames;

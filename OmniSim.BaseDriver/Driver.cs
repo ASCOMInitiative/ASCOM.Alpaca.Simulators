@@ -23,7 +23,7 @@ namespace OmniSim.BaseDriver
             get; set;
         } = 0;
 
-        public string DeviceName { get => Name; }
+        public string DeviceName { get; private set; }
 
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
@@ -33,7 +33,7 @@ namespace OmniSim.BaseDriver
             set;
         }
 
-        internal bool IsConnected { get; set; } = false;
+        public bool IsConnected { get; set; } = false;
 
         internal Timer ConnectTimer = new();
 
@@ -89,8 +89,9 @@ namespace OmniSim.BaseDriver
             }
         }
 
-        public Driver(int deviceNumber, ILogger logger, IProfile profile, short platform7DriverInterfaceVersion, short actionDriverInterfaceVersion)
+        public Driver(int deviceNumber, ILogger logger, IProfile profile, string safeName, short platform7DriverInterfaceVersion, short actionDriverInterfaceVersion)
         {
+            DeviceName = safeName;
             DeviceNumber = deviceNumber;
             TraceLogger = logger;
             Profile = profile;
@@ -148,7 +149,7 @@ namespace OmniSim.BaseDriver
         {
             get
             {
-                return ProcessCommand(() => IsConnected, "Connected", "Get", Platform7DriverInterfaceVersion);
+                return ProcessCommand(() => IsConnected, "Connected", "Get", 1);
             }
             set
             {
@@ -164,7 +165,7 @@ namespace OmniSim.BaseDriver
                     {
                         IsConnected = false;
                     }
-                }, "Connected", "Set", Platform7DriverInterfaceVersion);
+                }, "Connected", "Set", 1);
             }
         }
 
@@ -276,12 +277,12 @@ namespace OmniSim.BaseDriver
             {
                 this.CheckSupportedInterface(RequiredInterfaceVersion, Command);
                 var result = Operation.Invoke();
-                TraceLogger.LogVerbose($"{Command} - {Type} {Command} - Succeed or started in {stopWatch.Elapsed.Seconds} seconds with result: {result}");
+                TraceLogger.LogVerbose($"{Command} - {Type} {Command} - Succeed or started in {stopWatch.Elapsed.TotalSeconds} seconds with result: {result}");
                 return result;
             }
             catch (Exception ex)
             {
-                TraceLogger.LogInformation($"{Command} - {Type} {Command} - Failed in {stopWatch.Elapsed.Seconds} seconds with Exception {ex.Message}");
+                TraceLogger.LogInformation($"{Command} - {Type} {Command} - Failed in {stopWatch.Elapsed.TotalSeconds} seconds with Exception {ex.Message}");
                 throw;
             }
         }
@@ -295,11 +296,11 @@ namespace OmniSim.BaseDriver
             {
                 this.CheckSupportedInterface(RequiredInterfaceVersion, Command);
                 Operation.Invoke();
-                TraceLogger.LogVerbose($"{Command} - {Type} {Command} - Succeed or started in {stopWatch.Elapsed.Seconds} seconds with no result.");
+                TraceLogger.LogVerbose($"{Command} - {Type} {Command} - Succeed or started in {stopWatch.Elapsed.TotalSeconds} seconds with no result.");
             }
             catch (Exception ex)
             {
-                TraceLogger.LogInformation($"{Command} - {Type} {Command} - Failed in {stopWatch.Elapsed.Seconds} seconds with Exception {ex.Message}");
+                TraceLogger.LogInformation($"{Command} - {Type} {Command} - Failed in {stopWatch.Elapsed.TotalSeconds} seconds with Exception {ex.Message}");
                 throw;
             }
         }
