@@ -4,15 +4,26 @@
 @inject NavigationManager uriHelper;
 
 <body>
-    @if (Device.Connected)
+    @if (Device.IsConnected)
     {
         <fieldset>
             <legend>Device is Connected</legend>
             <p>The device must be disconnected in order to safely make changes.</p>
         </fieldset>
     }
-    <fieldset disabled="@Device.Connected">
+    <fieldset disabled="@Device.IsConnected">
         <legend>Focuser Settings</legend>
+
+        <label for="interfaceVersion">Simulation Interface Version:</label>
+
+        <select name="interfaceVersion" id="interfaceVersion" @bind="InterfaceVersion">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+
+        <br>
 
         <label for="maxPosition"> Maximum Position (steps):</label>
         <input type="number" id="maxPosition" name="maxPosition" min="0" @bind="maxPosition">
@@ -30,7 +41,7 @@
         <input type="number" id="settleTime" name="settleTime" min="0" @bind="settleTime">
         <br>
     </fieldset>
-    <fieldset disabled="@Device.Connected">
+    <fieldset disabled="@Device.IsConnected">
         <legend>Capabilities</legend>
 
         <input type="checkbox" id="tempProbe" name="tempProbe" @bind="tempProbe">
@@ -48,7 +59,7 @@
         <input type="checkbox" id="synchronous" name="synchronous" @bind="Synchronous">
         <label for="synchronous"> Synchronous</label><br>
     </fieldset>
-    <fieldset disabled="@Device.Connected">
+    <fieldset disabled="@Device.IsConnected">
         <legend>Temperature Simulator</legend>
 
         <label for="currentTemp"> Current Temperature (C):</label>
@@ -71,7 +82,7 @@
         <input type="number" id="steps" @bind="StepsPerC">
         <br>
     </fieldset>
-    <fieldset disabled="@Device.Connected">
+    <fieldset disabled="@Device.IsConnected">
         <legend>Type</legend>
 
         <input type="checkbox" id="absolute" @bind="Absolute">
@@ -80,7 +91,7 @@
         <label for="relative">Relative</label><br>
     </fieldset>
 
-    <fieldset disabled="@Device.Connected">
+    <fieldset disabled="@Device.IsConnected">
         <div class="grid-container-two">
 
             <div class="grid-item-left">
@@ -110,36 +121,38 @@
 
     protected override void OnInitialized()
     {
-        maxPosition = Device.MaxStep;
-        stepSize = Device.InternalStepSize;
+        maxPosition = Device.MaxStepSetting.Value;
+        stepSize = Device.StepSizeSetting.Value;
 
-        maxIncrement = Device.MaxIncrement;
+        maxIncrement = Device.MaxIncrementSetting.Value;
 
-        settleTime = Device.SettleTime;
+        settleTime = Device.SettleTime.Value;
 
-        tempProbe = Device.TempProbe;
+        tempProbe = Device.TempProbe.Value;
 
-        tempComp = Device.TempComp;
+        tempComp = Device.TempCompAvailableSetting.Value;
 
-        ImplementsStepSize = Device.CanStepSize;
+        ImplementsStepSize = Device.CanStepSize.Value;
 
-        Halt = Device.CanHalt;
+        Halt = Device.CanHalt.Value;
 
-        Synchronous = Device.Synchronous;
+        Synchronous = Device.Synchronous.Value;
 
-        CurrentTemperature = Device.Temperature;
+        CurrentTemperature = Device.TemperatureSetting.Value;
 
-        MaxTemperature = Device.TempMax;
+        MaxTemperature = Device.TempMax.Value;
 
-        MinimumTemperature = Device.TempMin;
+        MinimumTemperature = Device.TempMin.Value;
 
-        CyclePeriod = Device.TempPeriod;
+        CyclePeriod = Device.TempPeriod.Value;
 
-        StepsPerC = Device.TempSteps;
+        StepsPerC = Device.TempSteps.Value;
 
-        Absolute = Device.Absolute;
+        Absolute = Device.AbsoluteSetting.Value;
 
-        Relative = !Device.Absolute;
+        Relative = !Device.AbsoluteSetting.Value;
+
+        InterfaceVersion = Device.InterfaceVersionSetting.Value;
 
         base.OnInitialized();
     }
@@ -150,42 +163,19 @@
     {
         get
         {
-            return Device.Connected;
+            return Device.IsConnected;
         }
-    }
-
-    public string ConnectionColor
-    {
-        get
-        {
-            if (Connected)
-            {
-                return "red";
-            }
-            return "gray";
-        }
-    }
-
-    public string ConnectText
-    {
-        get
-        {
-            if (Device.Connected)
-            {
-                return "Disconnect";
-            }
-            return "Connect";
-        }
-    }
-
-    public void Connect()
-    {
-        Device.Connected = !Device.Connected;
     }
 
     #endregion
 
     #region Settings
+
+    short InterfaceVersion
+    {
+        get;
+        set;
+    }
 
     int maxPosition
     {
@@ -193,7 +183,7 @@
         set;
     }
 
-    double stepSize
+    int stepSize
     {
         get;
         set;
@@ -344,26 +334,28 @@
                 return;
             }
 
-            Device.MaxStep = maxPosition;
-            Device.StepSize = stepSize;
-            Device.MaxIncrement = maxIncrement;
-            Device.SettleTime = settleTime;
-            Device.TempProbe = tempProbe;
-            Device.TempComp = tempComp;
-            Device.CanStepSize = ImplementsStepSize;
-            Device.CanHalt = Halt;
-            Device.Synchronous = Synchronous;
-            Device.Temperature = CurrentTemperature;
+            Device.MaxStepSetting.Value = maxPosition;
+            Device.StepSizeSetting.Value = stepSize;
+            Device.MaxIncrementSetting.Value = maxIncrement;
+            Device.SettleTime.Value = settleTime;
+            Device.TempProbe.Value = tempProbe;
+            Device.TempCompAvailableSetting.Value = tempComp;
+            Device.CanStepSize.Value = ImplementsStepSize;
+            Device.CanHalt.Value = Halt;
+            Device.Synchronous.Value = Synchronous;
+            Device.TemperatureSetting.Value = CurrentTemperature;
 
-            Device.TempMax = MaxTemperature;
+            Device.TempMax.Value = MaxTemperature;
 
-            Device.TempMin = MinimumTemperature;
+            Device.TempMin.Value = MinimumTemperature;
 
-            Device.TempPeriod = CyclePeriod;
+            Device.TempPeriod.Value = CyclePeriod;
 
-            Device.TempSteps = StepsPerC;
+            Device.TempSteps.Value = StepsPerC;
 
-            Device.Absolute = Absolute;
+            Device.AbsoluteSetting.Value = Absolute;
+
+            Device.InterfaceVersionSetting.Value = InterfaceVersion;
 
             Device.SaveProfileSettings();
 

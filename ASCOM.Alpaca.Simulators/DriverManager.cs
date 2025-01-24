@@ -32,7 +32,7 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static void LoadFocuser(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.Focuser(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Focuser, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.Focuser(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("Focuser", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Focuser, (uint)DeviceID));
             DeviceManager.LoadFocuser(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 

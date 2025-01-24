@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OmniSim.BaseDriver
 {
-    public class Setting<T>
+    public class Setting<T>(string key, string description)
     {
         public T Value { get; set; }
 
@@ -16,18 +16,12 @@ namespace OmniSim.BaseDriver
         public string Description
         {
             get; set;
-        }
+        } = description;
 
         public string Key
         {
             get; set;
-        }
-
-        public Setting(string key, string description)
-        {
-            Key = key;
-            Description = description;
-        }
+        } = key;
 
         public Setting(string key, string description, T default_value) : this(key, description)
         {

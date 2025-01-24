@@ -1,383 +1,324 @@
-﻿using ASCOM.Common;
-using ASCOM.Common.DeviceInterfaces;
-using ASCOM.Common.Interfaces;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
+﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 
 namespace ASCOM.Simulators
 {
-    //
-    // Your driver's DeviceID is ASCOM.Simulator.Focuser
-    //
-    // The Guid attribute sets the CLSID for ASCOM.Simulator.Focuser
-    // The ClassInterface/None attributed prevents an empty interface called
-    // _Conceptual from being created and used as the [default] interface
-    //
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+
+    using ASCOM.Common;
+    using ASCOM.Common.DeviceInterfaces;
+    using ASCOM.Common.Interfaces;
+    using OmniSim.BaseDriver;
+
+    /// <summary>
+    /// Motor states.
+    /// </summary>
+    internal enum MotorState
+    {
+        /// <summary>
+        /// Idle state.
+        /// </summary>
+        Idle,
+
+        /// <summary>
+        /// Moving State.
+        /// </summary>
+        Moving,
+
+        /// <summary>
+        /// Settling State.
+        /// </summary>
+        Settling,
+    }
 
     /// <summary>
     /// ASCOM Focuser Driver for a Focuser.
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
-    public class Focuser : IFocuserV4, IDisposable, IAlpacaDevice, ISimulation
+    public class Focuser : OmniSim.BaseDriver.Driver, IFocuserV4, IAlpacaDevice, ISimulation
     {
-        #region Constants
-
-        private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
+        private const string UniqueIDProfileName = "UniqueID";
 
         /// <summary>
-        /// Name of the Driver
+        /// Name of the Driver.
         /// </summary>
-        private const string name = "Alpaca Focuser Simulator";
+        private const string SafeName = "Alpaca Focuser Simulator";
 
         /// <summary>
-        /// Description of the driver
+        /// Sets up the permanent store for saved settings.
         /// </summary>
-        private const string description = "ASCOM Focuser Simulator Driver";
+        private readonly IProfile profile;
 
-        /// <summary>
-        /// Driver information
-        /// </summary>
-        private const string driverInfo = "Focuser Simulator Driver";
+        // Shared tracelogger between this instances classes
+        private readonly ILogger traceLogger;
 
-        /// <summary>
-        /// Driver interface version
-        /// </summary>
-        /// 
-        private const short interfaceVersion = 4;
-
-        /// <summary>
-        /// ASCOM DeviceID (COM ProgID) for this driver.
-        /// The DeviceID is used by ASCOM applications to load the driver at runtime.
-        /// </summary>
-        private const string sCsDriverId = "ASCOM.Simulator.Focuser";
-
-        /// <summary>
-        /// Driver description that displays in the ASCOM Chooser.
-        /// </summary>
-        private const string sCsDriverDescription = "ASCOM Simulator Focuser Driver";
-
-        /// <summary>
-        /// Sets up the permanent store for saved settings
-        /// </summary>
-        private readonly IProfile Profile;
-
-#endregion Constants
-
-        internal ILogger TL;// Shared tracelogger between this instances classes
-
-        #region local parameters
-
-        private bool _isConnected;
-        private System.Timers.Timer _moveTimer; // drives the position and temperature changers
-        private int _position;
-        internal int Target;
-        private double _lastTemp;
+        // drives the position and temperature changers
+        private readonly System.Timers.Timer moveTimer;
+        private readonly Random randomGenerator;
+        private readonly int lastOffset;
+        private readonly bool keepMoving;
         private DateTime lastTempUpdate;
-        private Random RandomGenerator;
-        internal double InternalStepSize;
-        internal bool tempComp;
-
-        private enum MotorState
-        {
-            idle,
-            moving,
-            settling
-        }
-
-        private MotorState motorState = MotorState.idle;
+        private MotorState motorState = MotorState.Idle;
         private DateTime settleFinishTime;
 
-        #endregion local parameters
+        private int rateOfChange;
+        private double lastTemp = 0;
 
-        #region Constructor and dispose
+        private int target = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Focuser"/> class.
-        /// Must be public for COM registration.
         /// </summary>
+        /// <param name="deviceNumber">The device number from the Alpaca API instance. Used for log files and settings.</param>
+        /// <param name="logger">An ASCOM Logger for this to write calls to.</param>
+        /// <param name="profile">An ASCOM Profile for this driver to store information to.</param>
         public Focuser(int deviceNumber, ILogger logger, IProfile profile)
+            : base(deviceNumber, logger, profile, SafeName, 4, 2)
         {
             try
             {
-                TL = logger;
-                Profile = profile;
-                LogMessage($"New Focuser {deviceNumber}", "Started");
+                this.traceLogger = logger;
+                this.profile = profile;
+                this.DeviceNumber = deviceNumber;
+                this.traceLogger.LogInformation($"New Focuser {deviceNumber} Started");
 
-                DeviceNumber = deviceNumber;
+                this.keepMoving = false;
+                this.lastOffset = 0;
+                this.rateOfChange = 1;
 
-                //check to see if the profile is ok
-
-                LogMessage("New", "Validated OK");
-                KeepMoving = false;
-                LastOffset = 0;
-                RateOfChange = 1;
-                MouseDownTime = DateTime.MaxValue; //Initialise to "don't accelerate" value
-                RandomGenerator = new Random(); //Temperature fluctuation random generator
-                LoadFocuserKeyValues();
-                LogMessage("New", "Loaded Key Values");
-                LogMessage("FocusSettingsForm", "Created Handbox");
+                // Temperature fluctuation random generator
+                this.randomGenerator = new Random();
+                this.LoadFocuserKeyValues();
 
                 // start a timer that monitors and moves the focuser
-                _moveTimer = new System.Timers.Timer();
-                _moveTimer.Elapsed += new System.Timers.ElapsedEventHandler(MoveTimer_Tick);
-                _moveTimer.Interval = 100;
-                _moveTimer.Enabled = true;
-                _lastTemp = Temperature;
-                Target = _position;
+                this.moveTimer = new System.Timers.Timer();
+                this.moveTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.MoveTimer_Tick);
+                this.moveTimer.Interval = 100;
+                this.moveTimer.Enabled = true;
 
-                LogMessage("New", "Started Simulation");
+                this.UniqueID = SafeName + deviceNumber.ToString();
 
-                //This should be replaced by the next bit of code but is semi-unique as a default.
-                UniqueID = Name + deviceNumber.ToString();
-                //Create a Unique ID if it does not exist
+                // Create a Unique ID if it does not exist
                 try
                 {
-                    if (!profile.ContainsKey(UNIQUE_ID_PROFILE_NAME))
+                    if (!profile.ContainsKey(UniqueIDProfileName))
                     {
                         var uniqueid = Guid.NewGuid().ToString();
-                        profile.WriteValue(UNIQUE_ID_PROFILE_NAME, uniqueid);
+                        profile.WriteValue(UniqueIDProfileName, uniqueid);
                     }
-                    UniqueID = profile.GetValue(UNIQUE_ID_PROFILE_NAME);
+
+                    this.UniqueID = profile.GetValue(UniqueIDProfileName);
                 }
                 catch (Exception ex)
                 {
                     logger.LogError($"Focuser {deviceNumber} - {ex.Message}");
                 }
 
-                logger.LogInformation($"Focuser {deviceNumber} - UUID of {UniqueID}");
-
-                LogMessage("New", "Completed");
+                logger.LogInformation($"Focuser {deviceNumber} - UUID of {this.UniqueID}");
             }
             catch (Exception ex)
             {
-                TL.LogError(ex.Message.ToString());
+                this.traceLogger.LogError(ex.Message.ToString());
                 throw;
             }
         }
 
-        public string DeviceName { get => Name; }
-        public int DeviceNumber { get; private set; }
-        public string UniqueID { get; private set; }
+        /// <summary>
+        /// Gets the stored interface version to use.
+        /// </summary>
+        public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-4", 4);
 
-        protected virtual void Dispose(bool disposing)
+        /// <summary>
+        /// Gets an interface version for V1 drivers that would throw on a InterfaceVersion Call.
+        /// </summary>
+        public override short SafeInterfaceVersion
         {
-            if (disposing)
+            get
             {
-                //try { LogMessage("Dispose", "Dispose called: " + disposing.ToString()); } catch { }
-                //try { _moveTimer.Stop(); } catch { }
-                //try { _moveTimer.Close(); } catch { }
-                //try { _moveTimer.Dispose(); } catch { }
+                return this.InterfaceVersionSetting.Value;
             }
         }
 
-        public void Dispose()
-        {
-            try { LogMessage("Dispose", "Dispose called."); } catch { }
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion Constructor and dispose
-
-        #region Private Properties
-
-        internal bool CanHalt { get; set; }
-        internal bool TempProbe { get; set; }
-        internal bool Synchronous { get; set; }
-        internal bool CanStepSize { get; set; }
-        internal bool KeepMoving { get; set; }
-        internal int LastOffset { get; set; }
-        internal double TempMax { get; set; }
-        internal double TempMin { get; set; }
-        internal double TempPeriod { get; set; }
-        internal int TempSteps { get; set; }
-        internal int RateOfChange { get; set; }
-        internal DateTime MouseDownTime { get; set; }
-        internal int SettleTime { get; set; }
-
-        #endregion Private Properties
-
-        #region IFocuserV3 Members
+        /// <summary>
+        /// Gets a value indicating whether the focuser can halt.
+        /// </summary>
+        public Setting<bool> CanHalt { get; } = new Setting<bool>("CanHalt", "True if the focuser can halt", true);
 
         /// <summary>
-        /// True if the focuser is capable of absolute position;
+        /// Gets a value indicating whether the focuser has a temperature probe.
+        /// </summary>
+        public Setting<bool> TempProbe { get; } = new Setting<bool>("TempProbe", "True if the driver has a temperature probe", true);
+
+        /// <summary>
+        /// Gets a value indicating whether the setting is true.
+        /// </summary>
+        public Setting<bool> Synchronous { get; } = new Setting<bool>("Synchronous", "True if the focuser moves are synchronous", true);
+
+        /// <summary>
+        /// Gets a value indicating whether the setting is true.
+        /// </summary>
+        public Setting<bool> CanStepSize { get; } = new Setting<bool>("CanStepSize", "True if the driver can report step size", true);
+
+        /// <summary>
+        /// Gets a value.
+        /// </summary>
+        public Setting<double> TempMax { get; } = new Setting<double>("TempMax", "Maximum simulated temperature", 50);
+
+        /// <summary>
+        /// Gets a value.
+        /// </summary>
+        public Setting<double> TempMin { get; } = new Setting<double>("TempMin", "Minimum simulated temperature", -50);
+
+        /// <summary>
+        /// Gets a value.
+        /// </summary>
+        public Setting<double> TempPeriod { get; } = new Setting<double>("TempPeriod", "Period to use for temperature changes (seconds)", 3);
+
+        /// <summary>
+        /// Gets a value.
+        /// </summary>
+        public Setting<int> TempSteps { get; } = new Setting<int>("TempSteps", "How many steps per temp comp action", 10);
+
+        /// <summary>
+        /// Gets a value.
+        /// </summary>
+        public Setting<int> SettleTime { get; } = new Setting<int>("SettleTime", "Move settle time", 500);
+
+        /// <summary>
+        /// Gets a value indicating whether the setting is true.
+        /// </summary>
+        public Setting<bool> AbsoluteSetting { get; } = new Setting<bool>("Absolute", "True if the focuser is an absolute focuser", true);
+
+        /// <summary>
+        /// Gets a value.
+        /// </summary>
+        public Setting<int> MaxIncrementSetting { get; } = new Setting<int>("MaxIncrement", "The Maximum Increment for moves", 50000);
+
+        /// <summary>
+        /// Gets a value.
+        /// </summary>
+        public Setting<int> MaxStepSetting { get; } = new Setting<int>("MaxStep", "The Max Step for moves", 50000);
+
+        /// <summary>
+        /// Gets a value.
+        /// </summary>
+        public Setting<int> PositionSetting { get; } = new Setting<int>("Position", "The starting position", 25000);
+
+        /// <summary>
+        /// Gets a value.
+        /// </summary>
+        public Setting<int> StepSizeSetting { get; } = new Setting<int>("StepSize", "The focuser step size (microns)", 20);
+
+        /// <summary>
+        /// Gets a value indicating whether the setting is true.
+        /// </summary>
+        public Setting<bool> TempCompSetting { get; } = new Setting<bool>("TempComp", "Temp Comp State", false);
+
+        /// <summary>
+        /// Gets a value indicating whether the setting is true.
+        /// </summary>
+        public Setting<bool> TempCompAvailableSetting { get; } = new Setting<bool>("TempCompAvailable", "True if the driver supports temp comp", true);
+
+        /// <summary>
+        /// Gets a value.
+        /// </summary>
+        public Setting<double> TemperatureSetting { get; } = new Setting<double>("Temperature", "Starting Temperature", 5);
+
+        /// <summary>
+        /// Gets a value indicating whether the focuser is capable of absolute position;
         /// that is, being commanded to a specific step location.
         /// </summary>
-        public bool Absolute { get; set; }
-
-        /// <summary>
-        /// Invokes the specified device-specific action.
-        /// </summary>
-        /// <exception cref="MethodNotImplementedException"></exception>
-        public string Action(string actionName, string actionParameters)
-        {
-            throw new MethodNotImplementedException("Action");
-        }
-
-        /// <summary>
-        /// Transmits an arbitrary string to the device and does not
-        /// wait for a response. Optionally, protocol framing characters
-        /// may be added to the string before transmission.
-        /// mode.
-        /// </summary>
-        /// <exception cref="MethodNotImplementedException"></exception>
-        public void CommandBlind(string command, bool raw)
-        {
-            throw new MethodNotImplementedException("CommandBlind");
-        }
-
-        /// <summary>
-        /// Transmits an arbitrary string to the device and waits
-        /// for a boolean response. Optionally, protocol framing
-        /// characters may be added to the string before transmission.
-        /// </summary>
-        /// <exception cref="MethodNotImplementedException"></exception>
-        public bool CommandBool(string command, bool raw)
-        {
-            throw new MethodNotImplementedException("CommandBool");
-        }
-
-        /// <summary>
-        /// Transmits an arbitrary string to the device and waits
-        /// for a string response. Optionally, protocol framing
-        /// characters may be added to the string before transmission.
-        /// </summary>
-        /// <exception cref="MethodNotImplementedException"></exception>
-        public string CommandString(string command, bool raw)
-        {
-            throw new MethodNotImplementedException("CommandString");
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Focuser"/> is connected.
-        /// </summary>
-        /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-        public bool Connected
+        public bool Absolute
         {
             get
             {
-                LogMessage("Connected Get", _isConnected.ToString());
-                return _isConnected;
-            }
-            set
-            {
-                if (_isConnected == value)
+                return this.ProcessCommand(
+                () =>
                 {
-                    LogMessage("Connected Set", "Connected is already :" + _isConnected.ToString() + ", doing nothing.");
-                    return;
-                }
-                if (value)
-                {
-                    LogMessage("Connected Set", "Connecting driver.");
-                    if (_moveTimer == null)
-                    {
-                        LogMessage("Connected Set", "Move timer is null so creating new timer.");
-                        _moveTimer = new System.Timers.Timer();
-                    }
-                    LogMessage("Connected Set", "Adding move timer handler.");
-                    _moveTimer.Elapsed += new System.Timers.ElapsedEventHandler(MoveTimer_Tick);
-                    _moveTimer.Interval = 100;
-                    LogMessage("Connected Set", "Enabling move timer.");
-                    _moveTimer.Enabled = true;
-                    LogMessage("Connected Set", "Showing handbox.");
-                }
-                else
-                {
-                    LogMessage("Connected Set", "Disconnecting driver.");
-                    LogMessage("Connected Set", "Disabling move timer.");
-                    _moveTimer.Enabled = false;
-                    LogMessage("Connected Set", "Removing move timer handler.");
-                    _moveTimer.Elapsed -= MoveTimer_Tick;
-                    LogMessage("Connected Set", "Hiding handbox.");
-                }
-                _isConnected = value;
+                    return this.AbsoluteSetting.Value;
+                },
+                nameof(IFocuserV4.Absolute),
+                "Get",
+                1);
             }
         }
 
         /// <summary>
-        /// Gets the description.
+        /// Gets the ASCOM Driver Description.
         /// </summary>
-        /// <value>The description.</value>
-        public string Description
-        {
-            get { return description; }
-        }
-
-        /// <summary>
-        /// Gets the driver info.
-        /// </summary>
-        /// <value>The driver info.</value>
-        public string DriverInfo
-        {
-            get { return driverInfo; }
-        }
-
-        /// <summary>
-        /// Gets the driver version.
-        /// </summary>
-        /// <value>The driver version.</value>
-        public string DriverVersion
+        public override string Description
         {
             get
             {
-                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                return $"{version.Major}.{version.Minor}";
+                return this.ProcessCommand(
+                () =>
+                {
+                    return "A simulator for the ASCOM Focuser API usable with Alpaca and COM";
+                },
+                nameof(IFocuserV4.Description),
+                "Get",
+                2);
             }
         }
 
         /// <summary>
-        /// Immediately stop any focuser motion due to a previous Move()
-        /// method call. Some focusers may not support this function, in
-        /// which case an exception will be raised. Recommendation: Host
-        /// software should call this method upon initialization and, if
-        /// it fails, disable the Halt button in the user interface.
+        /// Gets the ASCOM Driver DriverInfo.
         /// </summary>
-        public void Halt()
+        public override string DriverInfo
         {
-            if (!CanHalt)
-                throw new MethodNotImplementedException("Halt");
-
-            CheckConnected("Halt");
-            if (Absolute)
+            get
             {
-                Target = _position;
-            }
-            else
-            {
-                _position = 0;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return "ASCOM focuser simulator";
+                },
+                nameof(IFocuserV4.DriverInfo),
+                "Get",
+                2);
             }
         }
 
         /// <summary>
-        /// Gets the interface version.
+        /// Gets the ASCOM Driver Interface Version.
         /// </summary>
-        /// <value>The interface version.</value>
-        public short InterfaceVersion
+        public override short InterfaceVersion
         {
-            get { return interfaceVersion; }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.InterfaceVersionSetting.Value;
+                },
+                nameof(IFocuserV4.InterfaceVersion),
+                "Get",
+                2);
+            }
         }
 
         /// <summary>
-        /// True if the focuser is currently moving to a new position. False if the focuser is stationary.
+        /// Gets a value indicating whether the focuser is currently moving to a new position. False if the focuser is stationary.
         /// </summary>
         /// <value><c>true</c> if moving; otherwise, <c>false</c>.</value>
         public bool IsMoving
         {
-            //get { return (_position != Target); }
             get
             {
-                LogMessage("IsMoving", "MotorState " + motorState.ToString());
-                return (motorState != MotorState.idle);
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.motorState != MotorState.Idle;
+                },
+                nameof(IFocuserV4.IsMoving),
+                "Get",
+                1);
             }
         }
 
         /// <summary>
-        /// State of the connection to the focuser. et True to start the link to the focuser;
+        /// Gets or sets a value indicating whether the focuser is connected. Set True to start the link to the focuser;
         /// set False to terminate the link. The current link status can also be read
         /// back as this property. An exception will be raised if the link fails to
         /// change state for any reason.
@@ -385,58 +326,68 @@ namespace ASCOM.Simulators
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
         public bool Link
         {
-            get { return Connected; }
-            set { Connected = value; }
+            get { return this.Connected; }
+            set { this.Connected = value; }
         }
 
         /// <summary>
-        /// Maximum increment size allowed by the focuser; i.e. the maximum number
+        /// Gets a value indicating the Maximum increment size allowed by the focuser; i.e. the maximum number
         /// of steps allowed in one move operation. For most focusers this is the
         /// same as the MaxStep property. This is normally used to limit the
         /// Increment display in the host software.
         /// </summary>
-        public int MaxIncrement { get; internal set; }
+        public int MaxIncrement
+        {
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.MaxIncrementSetting.Value;
+                },
+                nameof(IFocuserV4.MaxIncrement),
+                "Get",
+                1);
+            }
+        }
 
         /// <summary>
-        /// Maximum step position permitted. The focuser can step between 0 and MaxStep.
+        /// Gets a value of theMaximum step position permitted. The focuser can step between 0 and MaxStep.
         /// If an attempt is made to move the focuser beyond these limits,
         /// it will automatically stop at the limit.
         /// </summary>
-        public int MaxStep { get; internal set; }
-
-        /// <summary>
-        /// Step size (microns) for the focuser. Raises an exception if
-        /// the focuser does not intrinsically know what the step size is.
-        /// </summary>
-        public void Move(int value)
+        public int MaxStep
         {
-            CheckConnected("Move");
-            // Next two lines removed to implement IFocuserV3 requirement
-            // if (tempComp)
-            // throw new InvalidOperationException("Move not allowed when temperature compensation is active");
-            if (Absolute)
+            get
             {
-                LogMessage("Move Absolute", value.ToString());
-                Target = Truncate(0, value, MaxStep);
-                RateOfChange = 40;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.MaxStepSetting.Value;
+                },
+                nameof(IFocuserV4.MaxStep),
+                "Get",
+                1);
             }
-            else
-            {
-                LogMessage("Move Relative", value.ToString());
-                Target = 0;
-                _position = Truncate(-MaxStep, value, MaxStep);
-                RateOfChange = 40;
-            }
-            motorState = MotorState.moving;
         }
 
         /// <summary>
         /// Gets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name
+        public override string Name
         {
-            get { return name; }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return SafeName;
+                },
+                nameof(IFocuserV4.Name),
+                "Get",
+                2);
+            }
         }
 
         /// <summary>
@@ -448,61 +399,48 @@ namespace ASCOM.Simulators
         {
             get
             {
-                if (!Absolute)
+                return this.ProcessCommand(
+                () =>
                 {
-                    LogMessage("Position", "Position cannot be read for a relative focuser");
-                    throw new PropertyNotImplementedException("Position", "Position cannot be read for a relative focuser");
-                }
-                if (!(TL == null)) LogMessage("Position", _position.ToString());
-                return _position;
+                    if (!this.AbsoluteSetting.Value)
+                    {
+                        throw new PropertyNotImplementedException("Position", "Position cannot be read for a relative focuser");
+                    }
+
+                    return this.PositionSetting.Value;
+                },
+                nameof(IFocuserV4.Position),
+                "Get",
+                1);
             }
         }
 
         /// <summary>
-        /// Displays the Setup Dialog form.
-        /// If the user clicks the OK button to dismiss the form, then
-        /// the new settings are saved, otherwise the old values are reloaded.
-        /// </summary>
-        public void SetupDialog()
-        {
-        }
-
-        /// <summary>
-        /// Step size (microns) for the focuser. Raises an exception if the focuser
+        /// Gets the Step size (microns) for the focuser. Raises an exception if the focuser
         /// does not intrinsically know what the step size is.
         /// </summary>
         public double StepSize
         {
             get
             {
-                if (CanStepSize)
+                return this.ProcessCommand(
+                () =>
                 {
-                    return InternalStepSize;
-                }
-                throw new PropertyNotImplementedException("Property StepSize is not implemented");
-            }
-            internal set
-            {
-                InternalStepSize = value;
-            }
-        }
+                    if (this.CanStepSize.Value)
+                    {
+                        return this.StepSizeSetting.Value;
+                    }
 
-        //public double StepSize { get; internal set; }
-
-        /// <summary>
-        /// Gets the supported actions.
-        /// </summary>
-        public IList<string> SupportedActions
-        {
-            // no supported actions, return empty array
-            get
-            {
-                return new List<string>();
+                    throw new PropertyNotImplementedException("Property StepSize is not implemented");
+                },
+                nameof(IFocuserV4.StepSize),
+                "Get",
+                1);
             }
         }
 
         /// <summary>
-        /// The state of temperature compensation mode (if available), else always
+        /// Gets or sets a value indicating whether the state of temperature compensation mode (if available), else always
         /// False. If the TempCompAvailable property is True, then setting TempComp
         /// to True puts the focuser into temperature tracking mode. While in
         /// temperature tracking mode, Move commands will be rejected by the
@@ -512,258 +450,374 @@ namespace ASCOM.Simulators
         /// </summary>
         public bool TempComp
         {
-            get { return tempComp; }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    if (!this.TempCompAvailableSetting.Value)
+                    {
+                        return false;
+                    }
+
+                    return this.TempCompSetting.Value;
+                },
+                nameof(IFocuserV4.TempComp),
+                "Get",
+                1);
+            }
+
             set
             {
-                if (!TempCompAvailable)
-                    throw new PropertyNotImplementedException("TempComp");
-                tempComp = value;
+                this.ProcessCommand(
+                () =>
+                {
+                    if (!this.TempCompAvailableSetting.Value)
+                    {
+                        throw new PropertyNotImplementedException("TempComp");
+                    }
+
+                    this.TempCompSetting.Value = value;
+                },
+                nameof(IFocuserV4.TempComp),
+                "Set",
+                1);
             }
         }
 
         /// <summary>
-        /// True if focuser has temperature compensation available. Will be True
+        /// Gets a value indicating whether the focuser has temperature compensation available. Will be True
         /// only if the focuser's temperature compensation can be turned on and
         /// off via the TempComp property.
         /// </summary>
-        public bool TempCompAvailable { get; internal set; }
+        public bool TempCompAvailable
+        {
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.TempCompAvailableSetting.Value;
+                },
+                nameof(IFocuserV4.TempCompAvailable),
+                "Get",
+                1);
+            }
+        }
 
         /// <summary>
-        /// Current ambient temperature as measured by the focuser. Raises an
+        /// Gets the Current ambient temperature as measured by the focuser. Raises an
         /// exception if ambient temperature is not available. Commonly
         /// available on focusers with a built-in temperature compensation
         /// mode.
         /// </summary>
-        public double Temperature { get; internal set; }
-
-        #endregion IFocuserV3 Members
-
-#region IFocuserV4 members
-        public void Connect()
-        {
-            Connected = true;
-        }
-
-        public void Disconnect()
-        {
-            Connected = false;
-        }
-
-        public bool Connecting
+        public double Temperature
         {
             get
             {
-                return false;
+                return this.ProcessCommand(
+                () =>
+                {
+                    this.CheckConnected("Temperature");
+                    return this.TemperatureSetting.Value;
+                },
+                nameof(IFocuserV4.Temperature),
+                "Get",
+                1);
             }
         }
 
+        #region IFocuserV4 members
+
         /// <summary>
-        /// Return the device's operational state in one call
+        /// Gets and Returns the device's operational state in one call.
         /// </summary>
-        public List<StateValue> DeviceState
+        public override List<StateValue> DeviceState
         {
             get
             {
-                // Create an array list to hold the IStateValue entries
-                List<StateValue> deviceState = new List<StateValue>();
+                return this.ProcessCommand(
+                () =>
+                {
+                    // Create an array list to hold the IStateValue entries
+                    List<StateValue> deviceState = [];
 
-                try { deviceState.Add(new StateValue(nameof(IFocuserV4.IsMoving), IsMoving)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IFocuserV4.Position), Position)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IFocuserV4.Temperature), Temperature)); } catch { }
-                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+                    try
+                    {
+                        deviceState.Add(new StateValue(nameof(IFocuserV4.IsMoving), this.IsMoving));
+                    }
+                    catch
+                    {
+                    }
 
-                return deviceState;
+                    try
+                    {
+                        deviceState.Add(new StateValue(nameof(IFocuserV4.Position), this.Position));
+                    }
+                    catch
+                    {
+                    }
+
+                    try
+                    {
+                        deviceState.Add(new StateValue(nameof(IFocuserV4.Temperature), this.Temperature));
+                    }
+                    catch
+                    {
+                    }
+
+                    try
+                    {
+                        deviceState.Add(new StateValue(DateTime.Now));
+                    }
+                    catch
+                    {
+                    }
+
+                    return deviceState;
+                },
+                nameof(IFocuserV4.DeviceState),
+                "Get",
+                4);
             }
         }
-#endregion
 
-        #region Private Members
+        #endregion IFocuserV4 members
 
         /// <summary>
-        /// Ticks 10 times a second, updating the focuser position and IsMoving properties
+        /// Immediately stop any focuser motion due to a previous Move()
+        /// method call. Some focusers may not support this function, in
+        /// which case an exception will be raised. Recommendation: Host
+        /// software should call this method upon initialization and, if
+        /// it fails, disable the Halt button in the user interface.
+        /// </summary>
+        public void Halt()
+        {
+            this.ProcessCommand(
+                () =>
+                {
+                    if (!this.CanHalt.Value)
+                    {
+                        throw new MethodNotImplementedException("Halt");
+                    }
+
+                    this.CheckConnected("Halt");
+                    if (this.AbsoluteSetting.Value)
+                    {
+                        this.target = this.PositionSetting.Value;
+                    }
+                    else
+                    {
+                        this.PositionSetting.Value = 0;
+                    }
+                },
+                nameof(IFocuserV4.Halt),
+                "Command",
+                1);
+        }
+
+        /// <summary>
+        /// Step size (microns) for the focuser. Raises an exception if
+        /// the focuser does not intrinsically know what the step size is.
+        /// </summary>
+        /// <param name="value">Target position.</param>
+        /// <exception cref="InvalidOperationException">Raised for 1-2 version focusers.</exception>
+        public void Move(int value)
+        {
+            this.ProcessCommand(
+                () =>
+                {
+                    this.CheckConnected("Move");
+
+                    // Next two lines removed to implement IFocuserV3 requirement
+                    if (this.TempCompSetting.Value && this.InterfaceVersionSetting.Value < 3)
+                    {
+                        throw new InvalidOperationException("Move not allowed when temperature compensation is active");
+                    }
+
+                    if (this.AbsoluteSetting.Value)
+                    {
+                        this.TraceLogger.LogVerbose($"Move Absolute to: {value}");
+                        this.target = this.Truncate(0, value, this.MaxStepSetting.Value);
+                        this.rateOfChange = 40;
+                    }
+                    else
+                    {
+                        this.TraceLogger.LogVerbose($"Move Relative by: {value}");
+                        this.target = 0;
+                        this.PositionSetting.Value = this.Truncate(-this.MaxStepSetting.Value, value, this.MaxStepSetting.Value);
+                        this.rateOfChange = 40;
+                    }
+
+                    this.motorState = MotorState.Moving;
+                },
+                nameof(IFocuserV4.Move),
+                "Move Command",
+                1);
+        }
+
+        /// <summary>
+        /// Ticks 10 times a second, updating the focuser position and IsMoving properties.
         /// </summary>
         private void MoveTimer_Tick(object source, System.Timers.ElapsedEventArgs e)
         {
             // Change at introduction of IFocuserV3 - only allow random temperature induced changes when the motor is in the idle state
             // This is because IFocuser V3 allows moves when temperature compensation is active
-            if (motorState == MotorState.idle)
+            if (this.motorState == MotorState.Idle)
             {
-                //Create random temperature change
-                if (DateTime.Now.Subtract(lastTempUpdate).TotalSeconds > TempPeriod)
+                // Create random temperature change
+                if (DateTime.Now.Subtract(this.lastTempUpdate).TotalSeconds > this.TempPeriod.Value)
                 {
-                    lastTempUpdate = DateTime.Now;
+                    this.lastTempUpdate = DateTime.Now;
+
                     // apply a random change to the temperature
-                    double tempOffset = (RandomGenerator.NextDouble() - 0.5);// / 10.0;
-                    Temperature = Math.Round(Temperature + tempOffset, 2);
+                    double tempOffset = this.randomGenerator.NextDouble() - 0.5;
+                    this.TemperatureSetting.Value = Math.Round(this.TemperatureSetting.Value + tempOffset, 2);
 
                     // move the focuser target to track the temperature if required
-                    if (tempComp)
+                    if (this.TempCompSetting.Value)
                     {
-                        var dt = (int)((Temperature - _lastTemp) * TempSteps);
+                        var dt = (int)((this.TemperatureSetting.Value - this.lastTemp) * this.TempSteps.Value);
                         if (dt != 0)// return;
                         {
-                            Target += dt;
-                            _lastTemp = Temperature;
+                            this.target += dt;
+                            this.lastTemp = this.TemperatureSetting.Value;
                         }
                     }
                 }
             }
 
-            if (Target > MaxStep) Target = MaxStep; // Condition target within the acceptable range
-            if (Target < 0) Target = 0;
-
-            if (_position != Target) //Actually move the focuser if necessary
+            // Condition target within the acceptable range
+            if (this.target > this.MaxStepSetting.Value)
             {
-                LogMessage("Moving", "LastOffset, Position, Target RateOfChange " + LastOffset + " " + _position + " " + Target + " " + RateOfChange);
+                this.target = this.MaxStepSetting.Value;
+            }
 
-                if (Math.Abs(_position - Target) <= RateOfChange)
+            if (this.target < 0)
+            {
+                this.target = 0;
+            }
+
+            // Actually move the focuser if necessary
+            if (this.PositionSetting.Value != this.target)
+            {
+                if (Math.Abs(this.PositionSetting.Value - this.target) <= this.rateOfChange)
                 {
-                    _position = Target;
-                    LogMessage("Moving", "  Set position = target");
+                    this.PositionSetting.Value = this.target;
                 }
                 else
                 {
-                    _position += (_position > Target) ? -RateOfChange : RateOfChange;
-                    LogMessage("Moving", "  Updated position = " + _position);
+                    this.PositionSetting.Value += (this.PositionSetting.Value > this.target) ? -this.rateOfChange : this.rateOfChange;
                 }
-                LogMessage("Moving", "  New position = " + _position);
             }
-            if (KeepMoving & (DateTime.Now.Subtract(MouseDownTime).TotalSeconds > 0.5))
+
+            if (this.keepMoving)
             {
-                Target = (Math.Sign(LastOffset) > 0) ? MaxStep : 0;
-                MouseDownTime = DateTime.Now;
-                if (RateOfChange < 100)
+                this.target = (Math.Sign(this.lastOffset) > 0) ? this.MaxStepSetting.Value : 0;
+                if (this.rateOfChange < 100)
                 {
-                    RateOfChange = (int)Math.Ceiling((double)RateOfChange * 1.2);
+                    this.rateOfChange = (int)Math.Ceiling((double)this.rateOfChange * 1.2);
                 }
-                LogMessage("KeepMoving", "LastOffset, Position, Target, RateOfChange MouseDownTime " + LastOffset + " " + _position + " " + Target + " " + RateOfChange + " " + MouseDownTime.ToLongTimeString());
             }
 
             // handle MotorState
-            switch (motorState)
+            switch (this.motorState)
             {
-                case MotorState.moving:
-                    if (_position == Target)
+                case MotorState.Moving:
+                    if (this.PositionSetting.Value == this.target)
                     {
-                        motorState = MotorState.settling;
-                        settleFinishTime = DateTime.Now + TimeSpan.FromMilliseconds(SettleTime);
-                        LogMessage("MoveTimer", "Settle start, time " + SettleTime.ToString());
+                        this.motorState = MotorState.Settling;
+                        this.settleFinishTime = DateTime.Now + TimeSpan.FromMilliseconds(this.SettleTime.Value);
                     }
+
                     return;
 
-                case MotorState.settling:
-                    if (settleFinishTime < DateTime.Now)
+                case MotorState.Settling:
+                    if (this.settleFinishTime < DateTime.Now)
                     {
-                        motorState = MotorState.idle;
-                        LogMessage("MoveTimer", "settle finished");
+                        this.motorState = MotorState.Idle;
                     }
+
                     return;
             }
         }
 
-        private void CheckConnected(string property)
-        {
-            if (!_isConnected)
-                throw new NotConnectedException(property);
-        }
-
         /// <summary>
-        /// Truncate val to be between min and max
+        /// Truncate val to be between min and max.
         /// </summary>
-        /// <param name="min"></param>
-        /// <param name="val"></param>
-        /// <param name="max"></param>
-        /// <returns></returns>
-        private static int Truncate(int min, int val, int max)
+        /// <param name="min">Min Value.</param>
+        /// <param name="val">Current Value.</param>
+        /// <param name="max">Max Value.</param>
+        /// <returns>Truncated Value.</returns>
+        private int Truncate(int min, int val, int max)
         {
             return Math.Max(Math.Min(max, val), min);
         }
 
         /// <summary>
-        /// Load the profile values
+        /// Load the profile values.
         /// </summary>
         private void LoadFocuserKeyValues()
         {
-            Absolute = Convert.ToBoolean(Profile.GetValue("Absolute", true.ToString()), CultureInfo.InvariantCulture);
-            MaxIncrement = Convert.ToInt32(Profile.GetValue("MaxIncrement", "50000"), CultureInfo.InvariantCulture);
-            MaxStep = Convert.ToInt32(Profile.GetValue("MaxStep", "50000"), CultureInfo.InvariantCulture);
-            _position = Convert.ToInt32(Profile.GetValue("Position", "25000"), CultureInfo.InvariantCulture);
-            InternalStepSize = Convert.ToDouble(Profile.GetValue("StepSize", "20"), CultureInfo.InvariantCulture);
-            tempComp = Convert.ToBoolean(Profile.GetValue("TempComp", false.ToString()), CultureInfo.InvariantCulture);
-            TempCompAvailable = Convert.ToBoolean(Profile.GetValue("TempCompAvailable", true.ToString()), CultureInfo.InvariantCulture);
-            Temperature = Convert.ToDouble(Profile.GetValue("Temperature", "5"), CultureInfo.InvariantCulture);
-            //extended focuser items
-            CanHalt = Convert.ToBoolean(Profile.GetValue("CanHalt", true.ToString()), CultureInfo.InvariantCulture);
-            CanStepSize = Convert.ToBoolean(Profile.GetValue("CanStepSize", true.ToString()), CultureInfo.InvariantCulture);
-            Synchronous = Convert.ToBoolean(Profile.GetValue("Synchronous", false.ToString()), CultureInfo.InvariantCulture);
-            TempMax = Convert.ToDouble(Profile.GetValue("TempMax", "50"), CultureInfo.InvariantCulture);
-            TempMin = Convert.ToDouble(Profile.GetValue("TempMin", "-50"), CultureInfo.InvariantCulture);
-            TempPeriod = Convert.ToDouble(Profile.GetValue("TempPeriod", "3"), CultureInfo.InvariantCulture);
-            TempProbe = Convert.ToBoolean(Profile.GetValue("TempProbe", true.ToString()), CultureInfo.InvariantCulture);
-            TempSteps = Convert.ToInt32(Profile.GetValue("TempSteps", "10"), CultureInfo.InvariantCulture);
-            SettleTime = Convert.ToInt32(Profile.GetValue("SettleTime", "500"), CultureInfo.InvariantCulture);
+            this.AbsoluteSetting.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.AbsoluteSetting), CultureInfo.InvariantCulture);
+            this.MaxIncrementSetting.Value = Convert.ToInt32(this.profile.GetSettingReturningDefault(this.MaxIncrementSetting), CultureInfo.InvariantCulture);
+            this.MaxStepSetting.Value = Convert.ToInt32(this.profile.GetSettingReturningDefault(this.MaxStepSetting), CultureInfo.InvariantCulture);
+            this.PositionSetting.Value = Convert.ToInt32(this.profile.GetSettingReturningDefault(this.PositionSetting), CultureInfo.InvariantCulture);
+            this.target = this.PositionSetting.Value;
+            this.StepSizeSetting.Value = Convert.ToInt32(this.profile.GetSettingReturningDefault(this.StepSizeSetting), CultureInfo.InvariantCulture);
+            this.TempCompSetting.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.TempCompSetting), CultureInfo.InvariantCulture);
+            this.TempCompAvailableSetting.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.TempCompAvailableSetting), CultureInfo.InvariantCulture);
+            this.TemperatureSetting.Value = Convert.ToDouble(this.profile.GetSettingReturningDefault(this.TemperatureSetting), CultureInfo.InvariantCulture);
+            this.CanHalt.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.CanHalt), CultureInfo.InvariantCulture);
+            this.CanStepSize.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.CanStepSize), CultureInfo.InvariantCulture);
+            this.Synchronous.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.Synchronous), CultureInfo.InvariantCulture);
+            this.TempMax.Value = Convert.ToDouble(this.profile.GetSettingReturningDefault(this.TempMax), CultureInfo.InvariantCulture);
+            this.TempMin.Value = Convert.ToDouble(this.profile.GetSettingReturningDefault(this.TempMin), CultureInfo.InvariantCulture);
+            this.TempPeriod.Value = Convert.ToDouble(this.profile.GetSettingReturningDefault(this.TempPeriod), CultureInfo.InvariantCulture);
+            this.TempProbe.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.TempProbe), CultureInfo.InvariantCulture);
+            this.TempSteps.Value = Convert.ToInt32(this.profile.GetSettingReturningDefault(this.TempSteps), CultureInfo.InvariantCulture);
+            this.SettleTime.Value = Convert.ToInt32(this.profile.GetSettingReturningDefault(this.SettleTime), CultureInfo.InvariantCulture);
+            this.InterfaceVersionSetting.Value = Convert.ToInt16(this.profile.GetSettingReturningDefault(this.InterfaceVersionSetting), CultureInfo.InvariantCulture);
         }
 
         /// <summary>
-        /// Save profile values
+        /// Save profile values.
         /// </summary>
         public void SaveProfileSettings()
         {
-            if (Temperature > TempMax) Temperature = TempMax;
-            if (Temperature < TempMin) Temperature = TempMin;
-            if (_position > MaxStep) _position = MaxStep;
-
-            //ascom items
-            Profile.WriteValue("Absolute", Absolute.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("MaxIncrement", MaxIncrement.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("MaxStep", MaxStep.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("Position", _position.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("StepSize", InternalStepSize.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("TempComp", tempComp.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("TempCompAvailable", TempCompAvailable.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("Temperature", Temperature.ToString(CultureInfo.InvariantCulture));
-            //extended focuser items
-            Profile.WriteValue("CanHalt", CanHalt.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("CanStepSize", CanStepSize.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("Synchronous", Synchronous.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("TempMax", TempMax.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("TempMin", TempMin.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("TempPeriod", TempPeriod.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("TempProbe", TempProbe.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("TempSteps", TempSteps.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("SettleTime", SettleTime.ToString(CultureInfo.InvariantCulture));
-        }
-
-        #region ISimulator
-
-        public void ResetSettings()
-        {
-            Profile.Clear();
-            LoadFocuserKeyValues();
-        }
-
-        public string GetXMLProfile()
-        {
-            return Profile.GetProfile();
-        }
-
-        #endregion ISimulator
-
-        /// <summary>
-        /// Log a message making sure that the TraceLogger exists.
-        /// This is to work round an issue with the form timers that seem to fire after the form and trace logger have been disposed
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="message"></param>
-        private void LogMessage(string source, string message)
-        {
-            try
+            if (this.TemperatureSetting.Value > this.TempMax.Value)
             {
-                if (!(TL == null)) TL.LogVerbose(source + " - " + message);
+                this.TemperatureSetting.Value = this.TempMax.Value;
             }
-            catch { } // Ignore errors here
-        }
 
-        #endregion Private Members
+            if (this.TemperatureSetting.Value < this.TempMin.Value)
+            {
+                this.TemperatureSetting.Value = this.TempMin.Value;
+            }
+
+            if (this.PositionSetting.Value > this.MaxStepSetting.Value)
+            {
+                this.PositionSetting.Value = this.MaxStepSetting.Value;
+            }
+
+            this.profile.SetSetting(this.AbsoluteSetting);
+            this.profile.SetSetting(this.MaxIncrementSetting);
+            this.profile.SetSetting(this.MaxStepSetting);
+            this.profile.SetSetting(this.PositionSetting);
+            this.profile.SetSetting(this.StepSizeSetting);
+            this.profile.SetSetting(this.TempCompSetting);
+            this.profile.SetSetting(this.TempCompAvailableSetting);
+            this.profile.SetSetting(this.TemperatureSetting);
+            this.profile.SetSetting(this.CanHalt);
+            this.profile.SetSetting(this.CanStepSize);
+            this.profile.SetSetting(this.CanStepSize);
+            this.profile.SetSetting(this.TempMax);
+            this.profile.SetSetting(this.TempMin);
+            this.profile.SetSetting(this.TempPeriod);
+            this.profile.SetSetting(this.TempProbe);
+            this.profile.SetSetting(this.TempSteps);
+            this.profile.SetSetting(this.SettleTime);
+            this.profile.SetSetting(this.InterfaceVersionSetting);
+        }
     }
 }

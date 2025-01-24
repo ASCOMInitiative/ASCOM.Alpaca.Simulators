@@ -47,7 +47,7 @@ namespace OmniSim.BaseDriver
 
         internal IProfile Profile; //Access to device settings
 
-        private void CheckConnected(string message)
+        public void CheckConnected(string message)
         {
             if (!IsConnected)
             {
@@ -177,8 +177,15 @@ namespace OmniSim.BaseDriver
         {
             get
             {
-                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                return $"{version.Major}.{version.Minor}";
+                return ProcessCommand(() =>
+                {
+                    Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                    return $"{version.Major}.{version.Minor}";
+                },
+                "DriverVersion",
+                "Get",
+                ActionDriverInterfaceVersion
+                );
             }
         }
 
