@@ -371,7 +371,6 @@ namespace ASCOM.Alpaca.Simulators
 
                     Console.WriteLine(JsonSerializer.Serialize(setting));
                 }
-
             }
 
             return false;

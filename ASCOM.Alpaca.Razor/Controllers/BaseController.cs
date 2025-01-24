@@ -59,7 +59,7 @@ namespace ASCOM.Alpaca
                     }
                 }
 
-                if (HttpContext.Request.Query.Any())
+                if (HttpContext.Request.Query.Count > 0)
                 {
                     var keys = HttpContext.Request.Query.Keys;
                     Result = BadRequest(Strings.FormWithQueryDescription + string.Join(", ", keys));
@@ -68,7 +68,7 @@ namespace ASCOM.Alpaca
                 }
             }
 
-            if (HttpContext.Request.Method == "GET" && HttpContext.Request.HasFormContentType && HttpContext.Request.Form.Keys.Any())
+            if (HttpContext.Request.Method == "GET" && HttpContext.Request.HasFormContentType && HttpContext.Request.Form.Keys.Count > 0)
             {
                 var keys = HttpContext.Request.Form.Keys;
                 Result = BadRequest(Strings.QueryWithFormDescription + string.Join(", ", keys));
