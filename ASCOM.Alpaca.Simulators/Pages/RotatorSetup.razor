@@ -65,10 +65,10 @@
 
     protected override void OnInitialized()
     {
-        SyncOffset = Device.Offset;
-        RotationRate = ASCOM.Simulators.RotatorHardware.RotationRate;
-        CanReverse = ASCOM.Simulators.RotatorHardware.CanReverse;
-        Reverse = ASCOM.Simulators.RotatorHardware.Reverse;
+        SyncOffset = Device.RotatorHardware.SyncOffset.Value;
+        RotationRate = Device.RotatorHardware.RotationRate.Value;
+        CanReverse = Device.RotatorHardware.CanReverse.Value;
+        Reverse = Device.RotatorHardware.Reverse.Value;
 
         base.OnInitialized();
     }
@@ -145,7 +145,7 @@
     {
         try
         {
-            ASCOM.Simulators.RotatorHardware.ResetProfile();
+            Device.RotatorHardware.ResetProfile();
 
             toastService.ShowSuccess("Settings Reset");
 
@@ -176,7 +176,7 @@
                 return;
             }
 
-            ASCOM.Simulators.RotatorHardware.SaveProfile(RotationRate, CanReverse, Reverse, (float)SyncOffset);
+            Device.RotatorHardware.SaveProfile(RotationRate, CanReverse, Reverse, (float)SyncOffset);
 
             toastService.ShowSuccess("Settings Saved");
         }

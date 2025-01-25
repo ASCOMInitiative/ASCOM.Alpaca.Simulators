@@ -156,7 +156,7 @@ namespace OmniSim.BaseDriver
 
         public virtual List<StateValue> DeviceState => throw new ASCOM.NotImplementedException();
 
-        public bool Connected
+        public virtual bool Connected
         {
             get
             {
@@ -254,7 +254,7 @@ namespace OmniSim.BaseDriver
             throw new ASCOM.ActionNotImplementedException("CommandString");
         }
 
-        public void Connect()
+        public virtual void Connect()
         {
             ProcessCommand(() =>
             {
@@ -266,7 +266,7 @@ namespace OmniSim.BaseDriver
             }, "Connect", "Start", Platform7DriverInterfaceVersion);
         }
 
-        public void Disconnect()
+        public virtual void Disconnect()
         {
             ProcessCommand(() =>
             {

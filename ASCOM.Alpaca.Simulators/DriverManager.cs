@@ -143,13 +143,16 @@ namespace ASCOM.Alpaca.Simulators
                 }
             }
 
-            try
+            foreach (var dev in DeviceManager.Rotators.Values)
             {
-                ASCOM.Simulators.RotatorHardware.ResetProfile();
-            }
-            catch (Exception ex)
-            {
-                Logging.LogError($"Failed to reset Rotator settings with error: {ex.Message}");
+                try
+                {
+                    (dev as ASCOM.Simulators.Rotator).RotatorHardware.ResetProfile();
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogError($"Failed to reset Rotator settings with error: {ex.Message}");
+                }
             }
 
             foreach (var dev in DeviceManager.SafetyMonitors.Values)
