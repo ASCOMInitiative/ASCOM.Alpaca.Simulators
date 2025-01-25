@@ -1,7 +1,6 @@
 ﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("OmniSim.SettingsAPIGenerator")]
 
-
 namespace ASCOM.Simulators
 {
     using System;
