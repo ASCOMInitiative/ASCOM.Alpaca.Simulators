@@ -89,6 +89,11 @@ namespace OmniSim.BaseDriver
             }
         }
 
+        public Driver()
+        {
+
+        }
+
         public Driver(int deviceNumber, ILogger logger, IProfile profile, string safeName, short platform7DriverInterfaceVersion, short actionDriverInterfaceVersion)
         {
             DeviceName = safeName;
@@ -278,7 +283,7 @@ namespace OmniSim.BaseDriver
         public T ProcessCommand<T>(Func<T> Operation, string Command, string Type, short RequiredInterfaceVersion)
         {
             Stopwatch stopWatch = new();
-            TraceLogger.LogVerbose($"{Command} - {Type} {Command}");
+            TraceLogger.LogVerbose($"{Command} - {Type} {Command} Called");
             stopWatch.Start();
             try
             {
@@ -297,7 +302,7 @@ namespace OmniSim.BaseDriver
         public void ProcessCommand(Action Operation, string Command, string Type, short RequiredInterfaceVersion)
         {
             Stopwatch stopWatch = new();
-            TraceLogger.LogVerbose($"{Command} - {Type} {Command}");
+            TraceLogger.LogVerbose($"{Command} - {Type} {Command} Called");
             stopWatch.Start();
             try
             {

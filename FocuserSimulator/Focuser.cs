@@ -1,4 +1,6 @@
 ﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("OmniSim.SettingsAPIGenerator")]
+
 
 namespace ASCOM.Simulators
 {
@@ -66,6 +68,15 @@ namespace ASCOM.Simulators
         private double lastTemp = 0;
 
         private int target = 0;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Focuser"/> class.
+        /// This is not safe to use, it is used for auto generating API settings calls
+        /// </summary>
+        public Focuser()
+        {
+
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Focuser"/> class.
