@@ -12,6 +12,7 @@ namespace ASCOM.Simulators
     using ASCOM.Common.DeviceInterfaces;
     using ASCOM.Common.Interfaces;
     using OmniSim.BaseDriver;
+    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     /// <summary>
     /// Motor states.
@@ -46,11 +47,6 @@ namespace ASCOM.Simulators
         /// Name of the Driver.
         /// </summary>
         private const string SafeName = "Alpaca Focuser Simulator";
-
-        /// <summary>
-        /// Sets up the permanent store for saved settings.
-        /// </summary>
-        private readonly IProfile profile;
 
         // Shared tracelogger between this instances classes
         private readonly ILogger traceLogger;
@@ -90,7 +86,7 @@ namespace ASCOM.Simulators
             try
             {
                 this.traceLogger = logger;
-                this.profile = profile;
+                this.Profile = profile;
                 this.DeviceNumber = deviceNumber;
                 this.traceLogger.LogInformation($"New Focuser {deviceNumber} Started");
 
@@ -100,7 +96,7 @@ namespace ASCOM.Simulators
 
                 // Temperature fluctuation random generator
                 this.randomGenerator = new Random();
-                this.LoadFocuserKeyValues();
+                this.LoadSettings();
 
                 // start a timer that monitors and moves the focuser
                 this.moveTimer = new System.Timers.Timer();
@@ -664,7 +660,7 @@ namespace ASCOM.Simulators
                 },
                 nameof(IFocuserV4.Move),
                 "Move Command",
-                1);
+            1);
         }
 
         /// <summary>
@@ -768,27 +764,27 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Load the profile values.
         /// </summary>
-        private void LoadFocuserKeyValues()
+        public override void LoadSettings()
         {
-            this.AbsoluteSetting.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.AbsoluteSetting), CultureInfo.InvariantCulture);
-            this.MaxIncrementSetting.Value = Convert.ToInt32(this.profile.GetSettingReturningDefault(this.MaxIncrementSetting), CultureInfo.InvariantCulture);
-            this.MaxStepSetting.Value = Convert.ToInt32(this.profile.GetSettingReturningDefault(this.MaxStepSetting), CultureInfo.InvariantCulture);
-            this.PositionSetting.Value = Convert.ToInt32(this.profile.GetSettingReturningDefault(this.PositionSetting), CultureInfo.InvariantCulture);
+            this.AbsoluteSetting.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.AbsoluteSetting), CultureInfo.InvariantCulture);
+            this.MaxIncrementSetting.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.MaxIncrementSetting), CultureInfo.InvariantCulture);
+            this.MaxStepSetting.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.MaxStepSetting), CultureInfo.InvariantCulture);
+            this.PositionSetting.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.PositionSetting), CultureInfo.InvariantCulture);
             this.target = this.PositionSetting.Value;
-            this.StepSizeSetting.Value = Convert.ToInt32(this.profile.GetSettingReturningDefault(this.StepSizeSetting), CultureInfo.InvariantCulture);
-            this.TempCompSetting.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.TempCompSetting), CultureInfo.InvariantCulture);
-            this.TempCompAvailableSetting.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.TempCompAvailableSetting), CultureInfo.InvariantCulture);
-            this.TemperatureSetting.Value = Convert.ToDouble(this.profile.GetSettingReturningDefault(this.TemperatureSetting), CultureInfo.InvariantCulture);
-            this.CanHalt.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.CanHalt), CultureInfo.InvariantCulture);
-            this.CanStepSize.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.CanStepSize), CultureInfo.InvariantCulture);
-            this.Synchronous.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.Synchronous), CultureInfo.InvariantCulture);
-            this.TempMax.Value = Convert.ToDouble(this.profile.GetSettingReturningDefault(this.TempMax), CultureInfo.InvariantCulture);
-            this.TempMin.Value = Convert.ToDouble(this.profile.GetSettingReturningDefault(this.TempMin), CultureInfo.InvariantCulture);
-            this.TempPeriod.Value = Convert.ToDouble(this.profile.GetSettingReturningDefault(this.TempPeriod), CultureInfo.InvariantCulture);
-            this.TempProbe.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.TempProbe), CultureInfo.InvariantCulture);
-            this.TempSteps.Value = Convert.ToInt32(this.profile.GetSettingReturningDefault(this.TempSteps), CultureInfo.InvariantCulture);
-            this.SettleTime.Value = Convert.ToInt32(this.profile.GetSettingReturningDefault(this.SettleTime), CultureInfo.InvariantCulture);
-            this.InterfaceVersionSetting.Value = Convert.ToInt16(this.profile.GetSettingReturningDefault(this.InterfaceVersionSetting), CultureInfo.InvariantCulture);
+            this.StepSizeSetting.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.StepSizeSetting), CultureInfo.InvariantCulture);
+            this.TempCompSetting.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.TempCompSetting), CultureInfo.InvariantCulture);
+            this.TempCompAvailableSetting.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.TempCompAvailableSetting), CultureInfo.InvariantCulture);
+            this.TemperatureSetting.Value = Convert.ToDouble(this.Profile.GetSettingReturningDefault(this.TemperatureSetting), CultureInfo.InvariantCulture);
+            this.CanHalt.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.CanHalt), CultureInfo.InvariantCulture);
+            this.CanStepSize.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.CanStepSize), CultureInfo.InvariantCulture);
+            this.Synchronous.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.Synchronous), CultureInfo.InvariantCulture);
+            this.TempMax.Value = Convert.ToDouble(this.Profile.GetSettingReturningDefault(this.TempMax), CultureInfo.InvariantCulture);
+            this.TempMin.Value = Convert.ToDouble(this.Profile.GetSettingReturningDefault(this.TempMin), CultureInfo.InvariantCulture);
+            this.TempPeriod.Value = Convert.ToDouble(this.Profile.GetSettingReturningDefault(this.TempPeriod), CultureInfo.InvariantCulture);
+            this.TempProbe.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.TempProbe), CultureInfo.InvariantCulture);
+            this.TempSteps.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.TempSteps), CultureInfo.InvariantCulture);
+            this.SettleTime.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.SettleTime), CultureInfo.InvariantCulture);
+            this.InterfaceVersionSetting.Value = Convert.ToInt16(this.Profile.GetSettingReturningDefault(this.InterfaceVersionSetting), CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -811,24 +807,24 @@ namespace ASCOM.Simulators
                 this.PositionSetting.Value = this.MaxStepSetting.Value;
             }
 
-            this.profile.SetSetting(this.AbsoluteSetting);
-            this.profile.SetSetting(this.MaxIncrementSetting);
-            this.profile.SetSetting(this.MaxStepSetting);
-            this.profile.SetSetting(this.PositionSetting);
-            this.profile.SetSetting(this.StepSizeSetting);
-            this.profile.SetSetting(this.TempCompSetting);
-            this.profile.SetSetting(this.TempCompAvailableSetting);
-            this.profile.SetSetting(this.TemperatureSetting);
-            this.profile.SetSetting(this.CanHalt);
-            this.profile.SetSetting(this.CanStepSize);
-            this.profile.SetSetting(this.CanStepSize);
-            this.profile.SetSetting(this.TempMax);
-            this.profile.SetSetting(this.TempMin);
-            this.profile.SetSetting(this.TempPeriod);
-            this.profile.SetSetting(this.TempProbe);
-            this.profile.SetSetting(this.TempSteps);
-            this.profile.SetSetting(this.SettleTime);
-            this.profile.SetSetting(this.InterfaceVersionSetting);
+            this.Profile.SetSetting(this.AbsoluteSetting);
+            this.Profile.SetSetting(this.MaxIncrementSetting);
+            this.Profile.SetSetting(this.MaxStepSetting);
+            this.Profile.SetSetting(this.PositionSetting);
+            this.Profile.SetSetting(this.StepSizeSetting);
+            this.Profile.SetSetting(this.TempCompSetting);
+            this.Profile.SetSetting(this.TempCompAvailableSetting);
+            this.Profile.SetSetting(this.TemperatureSetting);
+            this.Profile.SetSetting(this.CanHalt);
+            this.Profile.SetSetting(this.CanStepSize);
+            this.Profile.SetSetting(this.CanStepSize);
+            this.Profile.SetSetting(this.TempMax);
+            this.Profile.SetSetting(this.TempMin);
+            this.Profile.SetSetting(this.TempPeriod);
+            this.Profile.SetSetting(this.TempProbe);
+            this.Profile.SetSetting(this.TempSteps);
+            this.Profile.SetSetting(this.SettleTime);
+            this.Profile.SetSetting(this.InterfaceVersionSetting);
         }
     }
 }

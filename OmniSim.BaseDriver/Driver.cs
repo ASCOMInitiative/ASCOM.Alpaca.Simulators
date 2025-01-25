@@ -45,7 +45,7 @@ namespace OmniSim.BaseDriver
 
         public ILogger TraceLogger; // ASCOM Trace Logger component
 
-        internal IProfile Profile; //Access to device settings
+        public IProfile Profile; //Access to device settings
 
         public void CheckConnected(string message)
         {
@@ -59,9 +59,15 @@ namespace OmniSim.BaseDriver
 
         #region ISimulation
 
-        public void ResetSettings()
+        public virtual void LoadSettings()
+        {
+
+        }
+
+        public virtual void ResetSettings()
         {
             Profile.Clear();
+            LoadSettings();
         }
 
         public string GetXMLProfile()

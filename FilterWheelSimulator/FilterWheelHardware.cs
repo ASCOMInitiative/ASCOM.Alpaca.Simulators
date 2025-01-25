@@ -299,7 +299,7 @@
             }
         }
 
-        private void LoadSettings()
+        internal void LoadSettings()
         {
             try
             {

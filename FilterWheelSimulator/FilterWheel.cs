@@ -234,5 +234,13 @@
         }
 
         #endregion IFilterWheelV3 members
+
+        /// <summary>
+        /// Load settings.
+        /// </summary>
+        public override void LoadSettings()
+        {
+            this.FilterWheelHardware.LoadSettings();
+        }
     }
 }
