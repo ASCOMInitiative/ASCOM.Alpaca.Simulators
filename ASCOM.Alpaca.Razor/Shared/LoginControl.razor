@@ -16,22 +16,14 @@
 
         <NotAuthorized>
 
-            <input type="text"
-                   placeholder="User Name"
-                   @bind="@Username" />
+            <form action=@($"/login?url={Return}") method="post">
+                <label for="fname">Username:</label>
+                <input type="text" id="username" name="username">
+                <label for="lname">Password:</label>
+                <input type="password" id="password" name="password">
+                <input class="btn btn-primary" type="submit" value="Login">
+            </form>
 
-            &nbsp;&nbsp;
-
-            <input type="password"
-                   placeholder="Password"
-                   @bind="@Password" />
-
-            &nbsp;&nbsp;
-
-            <button class="btn btn-primary" style="float: right;"
-                    @onclick="NavigateToLogin">
-                Login
-            </button>
         </NotAuthorized>
     </AuthorizeView>
 </fieldset>
