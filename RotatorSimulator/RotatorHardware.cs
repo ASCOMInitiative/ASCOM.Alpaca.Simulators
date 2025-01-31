@@ -14,8 +14,6 @@ namespace ASCOM.Simulators
     {
         private const int UpdateInterval = 250;
 
-        private float speed;
-
         private bool moving;
         private bool direction;
         private float targetPosition;
@@ -46,27 +44,248 @@ namespace ASCOM.Simulators
         /// </summary>
         public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-4", 4);
 
-        public Setting<float> Position { get; } = new Setting<float>("Position", "The ASCOM Interface Version, allowed values are 1-4", 0);
-        public Setting<double> RotationRate { get; } = new Setting<double>("RotationRate", "The ASCOM Interface Version, allowed values are 1-4", 3.0);
-        public Setting<bool> CanReverse { get; } = new Setting<bool>("CanReverse", "The ASCOM Interface Version, allowed values are 1-4", true);
-        public Setting<bool> Reverse { get; } = new Setting<bool>("Reverse", "The ASCOM Interface Version, allowed values are 1-4", false);
-        public Setting<float> SyncOffset { get; } = new Setting<float>("SyncOffset", "The ASCOM Interface Version, allowed values are 1-4", 0);
+        /// <summary>
+        /// Gets the stored starting, between 0 and 360.
+        /// </summary>
+        public Setting<float> Position { get; } = new Setting<float>("Position", "The starting position >= 0, < 360", 0);
 
-        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        /// <summary>
+        /// Gets the rotation rate in degrees per second.
+        /// </summary>
+        public Setting<double> RotationRate { get; } = new Setting<double>("RotationRate", "The rotation rate in degrees per second", 3.0);
+
+        /// <summary>
+        /// Gets a value indicating if the rotator can reverse.
+        /// </summary>
+        public Setting<bool> CanReverse { get; } = new Setting<bool>("CanReverse", "True if the rotator can reverse", true);
+
+        /// <summary>
+        /// Gets a value indicating if the rotator is reversed.
+        /// </summary>
+        public Setting<bool> Reverse { get; } = new Setting<bool>("Reverse", "True if the rotator is reversed", false);
+
+        /// <summary>
+        /// Gets the current Sync Offset, 0 to 360.
+        /// </summary>
+        public Setting<float> SyncOffset { get; } = new Setting<float>("SyncOffset", "The current Sync Offset, 0 to 360", 0);
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the simulator is connected.
+        /// </summary>
+        public bool Connected
         {
-            this.UpdateState();
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets a value for the target position.
+        /// </summary>
+        public float TargetPosition
+        {
+            get
+            {
+                this.CheckConnected();
+                return this.targetPosition;
+            }
+
+            set
+            {
+                this.CheckConnected();
+                lock (this.objSync)
+                {
+                    this.targetPosition = value;
+                    this.moving = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the rotator is moving.
+        /// </summary>
+        public bool Moving
+        {
+            get
+            {
+                this.CheckConnected();
+                lock (this.objSync)
+                {
+                    return this.moving;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the current step size.
+        /// </summary>
+        public float StepSize
+        {
+            get
+            {
+                return Convert.ToSingle(this.RotationRate.Value / 1000 * UpdateInterval);
+            }
         }
 
         /// <summary>
         /// Load default values.
         /// </summary>
-        /// <param name="profile"></param>
+        /// <param name="profile">Profile to use to store settings.</param>
         public void Initialize(IProfile profile)
         {
             this.profile = profile;
-            LoadProfile();
+            this.LoadProfile();
         }
 
+        /// <summary>
+        /// Resets the profile and loads defaults.
+        /// </summary>
+        public void ResetProfile()
+        {
+            this.profile.Clear();
+            this.LoadProfile();
+        }
+
+        /// <summary>
+        /// Saves the settings to the profile and updates the value.
+        /// </summary>
+        /// <param name="rate">Rotation Rate.</param>
+        /// <param name="canreverse">If the rotator can reverse.</param>
+        /// <param name="reverse">If the rotator is reversed.</param>
+        /// <param name="offset">The current sync offset.</param>
+        public void SaveProfile(double rate, bool canreverse, bool reverse, float offset, short interfaceversion)
+        {
+            this.RotationRate.Value = (float)rate;
+            this.CanReverse.Value = canreverse;
+            this.Reverse.Value = reverse;
+            this.SyncOffset.Value = offset;
+            this.InterfaceVersionSetting.Value = interfaceversion;
+
+            this.profile.SetSetting(this.RotationRate);
+            this.profile.SetSetting(this.CanReverse);
+            this.profile.SetSetting(this.Reverse);
+            this.profile.SetSetting(this.SyncOffset);
+            this.profile.SetSetting(this.InterfaceVersionSetting);
+        }
+
+        /// <summary>
+        /// Moves the rotator by an offset.
+        /// </summary>
+        /// <param name="relativePosition">The target position.</param>
+        /// <exception cref="ASCOM.InvalidValueException">If the value is out of range.</exception>
+        public void Move(float relativePosition)
+        {
+            this.CheckConnected();
+            lock (this.objSync)
+            {
+                // add check for relative position limits rather than using the check on the target.
+                if (relativePosition <= -360.0 || relativePosition >= 360.0)
+                {
+                    throw new ASCOM.InvalidValueException($"Relative Angle out of range {relativePosition.ToString()} -360 < angle < 360");
+                }
+
+                var target = this.targetPosition + relativePosition;
+
+                // force to the range 0 to 360
+                if (target >= 360.0)
+                {
+                    target -= 360.0F;
+                }
+
+                if (target < 0.0)
+                {
+                    target += 360.0F;
+                }
+
+                this.targetPosition = target;
+                this.moving = true;
+            }
+        }
+
+        /// <summary>
+        /// Moves the rotator to an absolute angle.
+        /// </summary>
+        /// <param name="position">Absolute target.</param>
+        public void MoveAbsolute(float position)
+        {
+            this.CheckConnected();
+            this.CheckAngle(position);
+            lock (this.objSync)
+            {
+                this.targetPosition = position;
+                this.moving = true;
+            }
+        }
+
+        /// <summary>
+        /// Halts an active move.
+        /// </summary>
+        public void Halt()
+        {
+            lock (this.objSync)
+            {
+                this.targetPosition = this.Position.Value;
+                this.moving = false;
+            }
+        }
+
+        /// <summary>
+        /// Update status.
+        /// </summary>
+        public void UpdateState()
+        {
+            lock (this.objSync)
+            {
+                float dPA = this.RangeAngle(this.targetPosition - this.Position.Value, -180, 180);
+                if (Math.Abs(dPA) == 0)
+                {
+                    this.moving = false;
+                    return;
+                }
+
+                // Must move
+                float fDelta = Convert.ToSingle(this.RotationRate.Value / 1000 * UpdateInterval);
+
+                // Inhibit sneaking past 180
+                if (this.Position.Value == 180)
+                {
+                    if (this.direction && Math.Sign(dPA) > 0)
+                    {
+                        dPA = -1;
+                    }
+                    else if (!this.direction && Math.Sign(dPA) < 0)
+                    {
+                        dPA = 1;
+                    }
+                }
+
+                if (dPA > 0 && this.Position.Value < 180 && this.RangeAngle(this.Position.Value + dPA, 0, 360) > 180)
+                {
+                    this.Position.Value -= fDelta;
+                }
+                else if (dPA < 0 && this.Position.Value > 180 && this.RangeAngle(this.Position.Value + dPA, 0, 360) < 180)
+                {
+                    this.Position.Value += fDelta;
+                }
+                else if (Math.Abs(dPA) >= fDelta)
+                {
+                    this.Position.Value += fDelta * Math.Sign(dPA);
+                }
+                else
+                {
+                    this.Position.Value += dPA;
+                }
+
+                this.Position.Value = this.RangeAngle(this.Position.Value, 0, 360);
+
+                // Remember last direction for 180 check
+                this.direction = Math.Sign(dPA) > 0;
+                this.moving = true;
+            }
+        }
+
+        /// <summary>
+        /// Loads stored settings or defaults from the profile.
+        /// </summary>
         internal void LoadProfile()
         {
             this.Position.Value = Convert.ToSingle(this.profile.GetSettingReturningDefault(this.Position), CultureInfo.InvariantCulture);
@@ -75,131 +294,7 @@ namespace ASCOM.Simulators
             this.CanReverse.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.CanReverse));
             this.Reverse.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.Reverse));
             this.SyncOffset.Value = Convert.ToSingle(this.profile.GetSettingReturningDefault(this.SyncOffset), CultureInfo.InvariantCulture);
-        }
-
-        public void ResetProfile()
-        {
-            profile.Clear();
-        }
-
-        public void SaveProfile(double rate, bool canreverse, bool reverse, float offset)  // "Finalize" exists in parent
-        {
-            profile.WriteValue("RotationRate.Value", rate.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue("CanReverse", canreverse.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue("Reverse", reverse.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue("SyncOffset", offset.ToString(CultureInfo.InvariantCulture));
-
-            RotationRate.Value = (float)rate;
-            CanReverse.Value = canreverse;
-            Reverse.Value = reverse;
-            SyncOffset.Value = offset;
-        }
-
-        public bool Connected
-        {
-            get;
-            set;
-        } = false;
-
-        public float TargetPosition
-        {
-            get { CheckConnected(); return targetPosition; }
-            set
-            {
-                CheckConnected();
-                lock (objSync)
-                {
-                    targetPosition = value;
-                    moving = true;                                   // Avoid timing window!(typ.)
-                }
-            }
-        }
-
-        public bool Moving
-        {
-            get { CheckConnected(); lock (objSync) { return moving; } }
-        }
-
-        public float StepSize
-        {
-            get { return speed * UpdateInterval; }
-        }
-
-        //
-        // Methods for clients
-        //
-        public void Move(float relativePosition)
-        {
-            CheckConnected();
-            lock (objSync)
-            {
-                // add check for relative position limits rather than using the check on the target.
-                if (relativePosition <= -360.0 || relativePosition >= 360.0)
-                {
-                    throw new ASCOM.InvalidValueException("Relative Angle out of range", relativePosition.ToString(), "-360 < angle < 360");
-                }
-                var target = targetPosition + relativePosition;
-                // force to the range 0 to 360
-                if (target >= 360.0) target -= 360.0F;
-                if (target < 0.0) target += 360.0F;
-                targetPosition = target;
-                moving = true;
-            }
-        }
-
-        public void MoveAbsolute(float position)
-        {
-            CheckConnected();
-            CheckAngle(position);
-            lock (objSync)
-            {
-                targetPosition = position;
-                moving = true;
-            }
-        }
-
-        public void Halt()
-        {
-            lock (objSync)
-            {
-                targetPosition = Position.Value;
-                moving = false;
-            }
-        }
-
-        public void UpdateState()
-        {
-            lock (objSync)
-            {
-                float dPA = RangeAngle(targetPosition - Position.Value, -180, 180);
-                if (Math.Abs(dPA) == 0)
-                {
-                    moving = false;
-                    return;
-                }
-                //
-                // Must move
-                //
-                float fDelta = speed * UpdateInterval;
-                if (Position.Value == 180)                                             // Inhibit sneaking past 180
-                {
-                    if (direction && Math.Sign(dPA) > 0)
-                        dPA = -1;
-                    else if (!direction && Math.Sign(dPA) < 0)
-                        dPA = 1;
-                }
-                if (dPA > 0 && Position.Value < 180 && RangeAngle((Position.Value + dPA), 0, 360) > 180)
-                    Position.Value -= fDelta;
-                else if (dPA < 0 && Position.Value > 180 && RangeAngle((Position.Value + dPA), 0, 360) < 180)
-                    Position.Value += fDelta;
-                else if (Math.Abs(dPA) >= fDelta)
-                    Position.Value += (fDelta * Math.Sign(dPA));
-                else
-                    Position.Value += dPA;
-                Position.Value = RangeAngle(Position.Value, 0, 360);
-                direction = Math.Sign(dPA) > 0;                                  // Remember last direction for 180 check
-                moving = true;
-            }
+            this.InterfaceVersionSetting.Value = Convert.ToInt16(this.profile.GetSettingReturningDefault(this.InterfaceVersionSetting), CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -235,6 +330,11 @@ namespace ASCOM.Simulators
             }
 
             return angle;
+        }
+
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            this.UpdateState();
         }
     }
 }

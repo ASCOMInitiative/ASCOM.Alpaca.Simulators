@@ -15,6 +15,17 @@
         <legend>Rotator Settings</legend>
 
         <div>
+            <label for="interfaceVersion">Simulation Interface Version:</label>
+
+            <select name="interfaceVersion" id="interfaceVersion" @bind="InterfaceVersion">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        </div>
+
+        <div>
             <label for="rotationrate">Rotation Rate (deg/sec):</label>
             <input name="rotationrate" id="rotationrate" type="number" min="0" max="60" step=".1" @bind="RotationRate" />
         </div>
@@ -69,6 +80,7 @@
         RotationRate = Device.RotatorHardware.RotationRate.Value;
         CanReverse = Device.RotatorHardware.CanReverse.Value;
         Reverse = Device.RotatorHardware.Reverse.Value;
+        InterfaceVersion = Device.RotatorHardware.InterfaceVersionSetting.Value;
 
         base.OnInitialized();
     }
@@ -139,6 +151,12 @@
         get;
         set;
     }
+
+    short InterfaceVersion
+    {
+        get;
+        set;
+    }
     #endregion
 
     public void Reset()
@@ -176,7 +194,7 @@
                 return;
             }
 
-            Device.RotatorHardware.SaveProfile(RotationRate, CanReverse, Reverse, (float)SyncOffset);
+            Device.RotatorHardware.SaveProfile(RotationRate, CanReverse, Reverse, (float)SyncOffset, InterfaceVersion);
 
             toastService.ShowSuccess("Settings Saved");
         }

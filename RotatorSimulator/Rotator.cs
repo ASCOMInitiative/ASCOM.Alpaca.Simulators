@@ -52,7 +52,7 @@
                     logger.LogError($"Rotator {deviceNumber} - {ex.Message}");
                 }
 
-                logger.LogInformation($"Rotator {deviceNumber} - UUID of {UniqueID}");
+                logger.LogInformation($"Rotator {deviceNumber} - UUID of {this.UniqueID}");
             }
             catch (Exception ex)
             {
@@ -135,6 +135,14 @@
                 "Get",
                 2);
             }
+        }
+
+        /// <summary>
+        /// Gets the safe interface version with no exception for V1.
+        /// </summary>
+        public override short SafeInterfaceVersion
+        {
+            get => this.RotatorHardware.InterfaceVersionSetting.Value;
         }
 
         /// <summary>

@@ -177,7 +177,10 @@
         {
             if (Device.Connected)
             {
-                return Device.MechanicalPosition.ToString("000.0");
+                if (Device.SafeInterfaceVersion > 2)
+                {
+                    return Device.MechanicalPosition.ToString("000.0");
+                }
             }
             return "---.-";
         }
