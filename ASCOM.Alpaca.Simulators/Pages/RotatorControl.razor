@@ -15,7 +15,11 @@
                 </svg>
                 <button @onclick="Connect">@ConnectText</button>
             </div>
+
             <div class="grid-item-right">
+                <ErrorBoundary>
+                    <LogLevelControl Driver="@(Device as OmniSim.BaseDriver.Driver)" />
+                </ErrorBoundary>
                 <button @onclick="Setup">Setup</button>
             </div>
 
