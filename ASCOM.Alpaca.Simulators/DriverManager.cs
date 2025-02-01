@@ -44,7 +44,7 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static void LoadRotator(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.Rotator(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Rotator, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.Rotator(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("Rotator", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Rotator, (uint)DeviceID));
             DeviceManager.LoadRotator(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
