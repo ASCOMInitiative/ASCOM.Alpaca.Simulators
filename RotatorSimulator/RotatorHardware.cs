@@ -47,7 +47,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Gets the stored starting, between 0 and 360.
         /// </summary>
-        public Setting<float> Position { get; } = new Setting<float>("Position", "The starting position >= 0, < 360", 0);
+        public Setting<float> Position { get; } = new Setting<float>("Position", "The starting position 0 to 359.999", 0);
 
         /// <summary>
         /// Gets the rotation rate in degrees per second.
@@ -67,7 +67,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Gets the current Sync Offset, 0 to 360.
         /// </summary>
-        public Setting<float> SyncOffset { get; } = new Setting<float>("SyncOffset", "The current Sync Offset, 0 to 360", 0);
+        public Setting<float> SyncOffset { get; } = new Setting<float>("SyncOffset", "The current Sync Offset, 0 to 359.999", 0);
 
         /// <summary>
         /// Gets or sets a value indicating whether the simulator is connected.
