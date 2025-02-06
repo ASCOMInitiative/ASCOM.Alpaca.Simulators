@@ -39,7 +39,7 @@ public class FilterWheelSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.FilterChangeTimeInterval.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.FilterChangeTimeInterval.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - Time to move between filter positions (milliseconds)
@@ -85,7 +85,7 @@ public class FilterWheelSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.ImplementsNames.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.ImplementsNames.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - True if the driver implements names
@@ -131,7 +131,7 @@ public class FilterWheelSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.ImplementsOffsets.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.ImplementsOffsets.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - True if the driver implements offsets
@@ -177,7 +177,7 @@ public class FilterWheelSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.PreemptMoves.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.PreemptMoves.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - True if the driver can interrupt moves
@@ -223,7 +223,7 @@ public class FilterWheelSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.Slots.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.Slots.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - Number of filter wheel positions, 1-8
@@ -269,7 +269,7 @@ public class FilterWheelSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.InterfaceVersion.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFilterWheel(DeviceNumber) as ASCOM.Simulators.FilterWheel).FilterWheelHardware.InterfaceVersion.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - The ASCOM Interface Version, allowed values are 1-3

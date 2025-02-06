@@ -39,7 +39,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).InterfaceVersionSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).InterfaceVersionSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - The ASCOM Interface Version, allowed values are 1-4
@@ -85,7 +85,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).CanHalt.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).CanHalt.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - True if the focuser can halt
@@ -131,7 +131,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempProbe.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempProbe.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - True if the driver has a temperature probe
@@ -177,7 +177,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).Synchronous.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).Synchronous.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - True if the focuser moves are synchronous
@@ -223,7 +223,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).CanStepSize.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).CanStepSize.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - True if the driver can report step size
@@ -269,7 +269,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempMax.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempMax.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - Maximum simulated temperature
@@ -315,7 +315,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempMin.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempMin.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - Minimum simulated temperature
@@ -361,7 +361,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempPeriod.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempPeriod.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - Period to use for temperature changes (seconds)
@@ -407,7 +407,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempSteps.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempSteps.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - How many steps per temp comp action
@@ -453,7 +453,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).SettleTime.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).SettleTime.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - Move settle time
@@ -499,7 +499,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).AbsoluteSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).AbsoluteSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - True if the focuser is an absolute focuser
@@ -545,7 +545,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).MaxIncrementSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).MaxIncrementSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - The Maximum Increment for moves
@@ -591,7 +591,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).MaxStepSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).MaxStepSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - The Max Step for moves
@@ -637,7 +637,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).PositionSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).PositionSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - The starting position
@@ -683,7 +683,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).StepSizeSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).StepSizeSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - The focuser step size (microns)
@@ -729,7 +729,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempCompSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempCompSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - Temp Comp State
@@ -775,7 +775,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempCompAvailableSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempCompAvailableSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - True if the driver supports temp comp
@@ -821,7 +821,7 @@ public class FocuserSettingsController : ProcessBaseController
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() =>  (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TemperatureSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TemperatureSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - Starting Temperature
