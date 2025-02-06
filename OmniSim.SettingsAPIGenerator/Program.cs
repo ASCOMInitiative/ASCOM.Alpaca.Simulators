@@ -23,6 +23,13 @@ namespace OmniSim.SettingsAPIGenerator
             {
                 writetext.Write(focuserAPI);
             }
+
+            var rotatorAPI = BuildSettingsAPI(typeof(ASCOM.Simulators.RotatorHardware), "Rotator", "((DeviceManager.GetRotator(DeviceNumber) as ASCOM.Simulators.Rotator)).RotatorHardware");
+
+            using (StreamWriter writetext = File.CreateText("../../../../ASCOM.Alpaca.Simulators/Controllers/RotatorSettingsController.cs"))
+            {
+                writetext.Write(rotatorAPI);
+            }
         }
 
         private static string BuildSettingsAPI(Type DriverType, string DeviceType, string AccessString)
@@ -67,6 +74,10 @@ namespace OmniSim.SettingsAPIGenerator
                 return typeof(DateTimeResponse).ToString();
             }
             else if (t == typeof(double))
+            {
+                return typeof(DoubleResponse).ToString();
+            }
+            else if (t == typeof(float))
             {
                 return typeof(DoubleResponse).ToString();
             }
@@ -130,7 +141,7 @@ using System.Net.Mime;
                 $"            [SwaggerSchema(Strings.ClientIDDescription, Format = \"uint32\")][Range(0, 4294967295)] uint ClientID = 0,\r\n" +
                 $"            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = \"uint32\")][Range(0, 4294967295)] uint ClientTransactionID = 0)\r\n" +
                 $"        {{\r\n" +
-                $"            return ProcessRequest(() =>  {command}, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);\r\n" +
+                $"            return ProcessRequest(() => {command}, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);\r\n" +
                 $"        }}";
         }
 
