@@ -184,7 +184,7 @@ namespace ASCOM.Simulators
             {
                 if (!Connected)
                 {
-                    return false;
+                    throw new NotConnectedException("As of 2025/02 Safety Monitors should throw when not connected.");
                 }
                 return _isSafe;
             }
