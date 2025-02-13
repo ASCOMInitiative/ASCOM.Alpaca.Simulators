@@ -1,77 +1,58 @@
-﻿//tabs=4
-// --------------------------------------------------------------------------------
-// TODO fill in this information for your driver, then remove this line!
-//
-// ASCOM Rotator driver for RotatorSimulator
-//
-// Description:	Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-//				nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-//				erat, sed diam voluptua. At vero eos et accusam et justo duo
-//				dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-//				sanctus est Lorem ipsum dolor sit amet.
-//
-// Implements:	ASCOM Rotator interface version: 1.0
-// Author:		(XXX) Your N. Here <your@email.here>
-//
-// Edit Log:
-//
-// Date			Who	Vers	Description
-// -----------	---	-----	-------------------------------------------------------
-// dd-mmm-yyyy	XXX	1.0.0	Initial edit, from ASCOM Rotator Driver template
-// --------------------------------------------------------------------------------
-//
-using ASCOM.Common;
-using ASCOM.Common.DeviceInterfaces;
-using ASCOM.Common.Interfaces;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace ASCOM.Simulators
+﻿namespace ASCOM.Simulators
 {
-    //
-    // Your driver's ID is ASCOM.Simulator.Rotator
-    //
-    // The Guid attribute sets the CLSID for ASCOM.Simulator.Rotator
-    // The ClassInterface/None addribute prevents an empty interface called
-    // _Rotator from being created and used as the [default] interface
-    //
-    public class Rotator : IRotatorV4, IAlpacaDevice, ISimulation
-    {
-        /// <summary>
-        /// Driver ID - ClassID and used in the profile
-        /// </summary>
-        private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
+    using ASCOM.Common;
+    using ASCOM.Common.DeviceInterfaces;
+    using ASCOM.Common.Interfaces;
+    using System;
+    using System.Collections.Generic;
 
-        //
-        // Constructor - Must be public for COM registration!
-        //
+    /// <summary>
+    /// ASCOM Rotator simulator.
+    /// </summary>
+    public class Rotator : OmniSim.BaseDriver.Driver, IRotatorV4, IAlpacaDevice, ISimulation
+    {
+        private const string UniqueIDProfileKey = "UniqueID";
+
+        private const string RotatorName = "Alpaca Rotator Simulator";
+        private const string RotatorDescription = "ASCOM Rotator Driver for RotatorSimulator";
+        private const string RotatorDriverInfo = "ASCOM.Simulator.Rotator";
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Rotator"/> class.
+        /// </summary>
+        /// <param name="deviceNumber">Alpaca device number.</param>
+        /// <param name="logger">Tracelogger.</param>
+        /// <param name="profile">Profile.</param>
         public Rotator(int deviceNumber, ILogger logger, IProfile profile)
+            : base(deviceNumber, logger, profile, RotatorName, 4, 2)
         {
             try
             {
-                RotatorHardware.Initialize(profile);
+                this.RotatorHardware = new RotatorHardware();
 
-                DeviceNumber = deviceNumber;
+                this.RotatorHardware.Initialize(profile);
 
-                //This should be replaced by the next bit of code but is semi-unique as a default.
-                UniqueID = Name + deviceNumber.ToString();
-                //Create a Unique ID if it does not exist
+                this.DeviceNumber = deviceNumber;
+
+                // This should be replaced by the next bit of code but is semi-unique as a default.
+                this.UniqueID = RotatorName + deviceNumber.ToString();
+                // Create a Unique ID if it does not exist
                 try
                 {
-                    if (!profile.ContainsKey(UNIQUE_ID_PROFILE_NAME))
+                    if (!profile.ContainsKey(UniqueIDProfileKey))
                     {
                         var uniqueid = Guid.NewGuid().ToString();
-                        profile.WriteValue(UNIQUE_ID_PROFILE_NAME, uniqueid);
+                        profile.WriteValue(UniqueIDProfileKey, uniqueid);
                     }
-                    UniqueID = profile.GetValue(UNIQUE_ID_PROFILE_NAME);
+
+                    this.UniqueID = profile.GetValue(UniqueIDProfileKey);
                 }
                 catch (Exception ex)
                 {
                     logger.LogError($"Rotator {deviceNumber} - {ex.Message}");
                 }
 
-                logger.LogInformation($"Rotator {deviceNumber} - UUID of {UniqueID}");
+                logger.LogInformation($"Rotator {deviceNumber} - UUID of {this.UniqueID}");
             }
             catch (Exception ex)
             {
@@ -80,229 +61,405 @@ namespace ASCOM.Simulators
             }
         }
 
-        public string DeviceName { get => Name; }
-        public int DeviceNumber { get; private set; }
-        public string UniqueID { get; private set; }
-
-        //
-        // PUBLIC COM INTERFACE IRotator IMPLEMENTATION
-        //
-
-        #region IDeviceControl Members
+        /// <summary>
+        /// Gets access to the underlying simulation.
+        /// </summary>
+        public RotatorHardware RotatorHardware { get; }
 
         /// <summary>
-        /// Invokes the specified device-specific action.
+        /// Gets or sets a value indicating whether the Rotator is connected.
         /// </summary>
-        /// <exception cref="MethodNotImplementedException"></exception>
-        public string Action(string actionName, string actionParameters)
-        {
-            throw new ASCOM.ActionNotImplementedException(actionName);
-        }
-
-        public void CommandBlind(string command, bool raw)
-        {
-            throw new ASCOM.MethodNotImplementedException("CommandBlind " + command);
-        }
-
-        public bool CommandBool(string command, bool raw)
-        {
-            throw new ASCOM.MethodNotImplementedException("CommandBool " + command);
-        }
-
-        public string CommandString(string command, bool raw)
-        {
-            throw new ASCOM.MethodNotImplementedException("CommandString " + command);
-        }
-
-        public void Dispose()
-        {
-            //throw new MethodNotImplementedException("Dispose");
-        }
-
-        /// <summary>
-        /// Gets the supported actions.
-        /// </summary>
-        public IList<string> SupportedActions
-        {
-            // no supported actions, return empty array
-            get { return new List<string>(); }
-        }
-
-        #endregion IDeviceControl Members
-
-        #region IRotatorV3 Members
-
-        public bool Connected
-        {
-            get { return RotatorHardware.Connected; }
-            set { RotatorHardware.Connected = value; }
-        }
-
-        public string Description
-        {
-            get { return RotatorHardware.Description; }
-        }
-
-        public string DriverInfo
-        {
-            get { return RotatorHardware.DriverInfo; }
-        }
-
-        public string DriverVersion
+        public override bool Connected
         {
             get
             {
-                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                return $"{version.Major}.{version.Minor}";
+                return base.Connected && this.RotatorHardware.Connected;
+            }
+
+            set
+            {
+                base.Connected = value;
+                this.RotatorHardware.Connected = value;
             }
         }
 
-        public short InterfaceVersion
+        /// <summary>
+        /// Gets the ASCOM Driver Description.
+        /// </summary>
+        public override string Description
         {
-            get { return RotatorHardware.InterfaceVersion; }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return RotatorDescription;
+                },
+                nameof(IRotatorV4.Description),
+                "Get",
+                2);
+            }
         }
 
-        public string Name
+        /// <summary>
+        /// Gets the ASCOM Driver DriverInfo.
+        /// </summary>
+        public override string DriverInfo
         {
-            get { return RotatorHardware.RotatorName; }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return RotatorDriverInfo;
+                },
+                nameof(IRotatorV4.DriverInfo),
+                "Get",
+                2);
+            }
         }
 
+        /// <summary>
+        /// Gets the ASCOM Driver Interface Version.
+        /// </summary>
+        public override short InterfaceVersion
+        {
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.RotatorHardware.InterfaceVersionSetting.Value;
+                },
+                nameof(IRotatorV4.InterfaceVersion),
+                "Get",
+                2);
+            }
+        }
+
+        /// <summary>
+        /// Gets the safe interface version with no exception for V1.
+        /// </summary>
+        public override short SafeInterfaceVersion
+        {
+            get => this.RotatorHardware.InterfaceVersionSetting.Value;
+        }
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        public override string Name
+        {
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return RotatorName;
+                },
+                nameof(IRotatorV4.Name),
+                "Get",
+                2);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the rotator can reverse.
+        /// </summary>
         public bool CanReverse
         {
-            get { return RotatorHardware.CanReverse; }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.RotatorHardware.CanReverse.Value;
+                },
+                nameof(IRotatorV4.CanReverse),
+                "Get",
+                2);
+            }
         }
 
-        public void Halt()
-        {
-            RotatorHardware.Halt();
-        }
-
+        /// <summary>
+        /// Gets a value indicating whether the rotator is moving.
+        /// </summary>
         public bool IsMoving
         {
-            get { return RotatorHardware.Moving; }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.RotatorHardware.Moving;
+                },
+                nameof(IRotatorV4.IsMoving),
+                "Get",
+                1);
+            }
         }
 
-        public void Move(float position)
-        {
-            RotatorHardware.Move(position);
-        }
-
-        public void MoveMechanical(float position)
-        {
-            RotatorHardware.MoveAbsolute(position);
-        }
-
+        /// <summary>
+        /// Gets the current mechanical position.
+        /// </summary>
         public float MechanicalPosition
         {
-            get { return RotatorHardware.Position; }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.RotatorHardware.Position.Value;
+                },
+                nameof(IRotatorV4.MechanicalPosition),
+                "Get",
+                3);
+            }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the rotator is reversed.
+        /// </summary>
         public bool Reverse
         {
             get
             {
-                if (InterfaceVersion < 3 && !CanReverse)
+                return this.ProcessCommand(
+                () =>
                 {
-                    throw new PropertyNotImplementedException();
-                }
-                return RotatorHardware.Reverse;
+                    if (this.RotatorHardware.InterfaceVersionSetting.Value < 3 && !this.RotatorHardware.CanReverse.Value)
+                    {
+                        throw new PropertyNotImplementedException();
+                    }
+
+                    return this.RotatorHardware.Reverse.Value;
+                },
+                nameof(IRotatorV4.Reverse),
+                "Get",
+                1);
             }
+
             set
             {
-                if (InterfaceVersion < 3 && !CanReverse)
+                this.ProcessCommand(
+                () =>
                 {
-                    throw new PropertyNotImplementedException();
-                }
-                RotatorHardware.Reverse = value;
-            }
-        }
+                    if (this.RotatorHardware.InterfaceVersionSetting.Value < 3 && !this.RotatorHardware.CanReverse.Value)
+                    {
+                        throw new PropertyNotImplementedException();
+                    }
 
-        public float StepSize
-        {
-            get { return RotatorHardware.StepSize; }
-        }
-
-        public float TargetPosition
-        {
-            get { return RotatorHardware.TargetPosition; }
-        }
-
-        public float Offset
-        {
-            get => RotatorHardware.SyncOffset;
-        }
-
-        public float Position
-        {
-            get
-            {
-                return (MechanicalPosition + Offset + 360) % 360;
-            }
-        }
-
-        public void MoveAbsolute(float position)
-        {
-            MoveMechanical((position - Offset + 36000) % 360);
-        }
-
-        public void Sync(float position)
-        {
-            RotatorHardware.SyncOffset = position - MechanicalPosition;
-        }
-
-        #endregion IRotator Members
-
-#region IRotatorV4 members
-        public void Connect()
-        {
-            Connected = true;
-        }
-
-        public void Disconnect()
-        {
-            Connected = false;
-        }
-
-        public bool Connecting
-        {
-            get
-            {
-                return false;
+                    this.RotatorHardware.Reverse.Value = value;
+                },
+                nameof(IRotatorV4.Reverse),
+                "Set",
+                1);
             }
         }
 
         /// <summary>
-        /// Return the device's operational state in one call
+        /// Gets the rotator step size.
         /// </summary>
-        public List<StateValue> DeviceState
+        public float StepSize
         {
             get
             {
-                // Create an array list to hold the IStateValue entries
-                List<StateValue> deviceState = new List<StateValue>();
-
-                try { deviceState.Add(new StateValue(nameof(IRotatorV4.IsMoving), IsMoving)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IRotatorV4.MechanicalPosition), MechanicalPosition)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IRotatorV4.Position), Position)); } catch { }
-                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
-
-                return deviceState;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.RotatorHardware.StepSize;
+                },
+                nameof(IRotatorV4.StepSize),
+                "Get",
+                1);
             }
         }
-#endregion
 
-        #region ISimulation
-
-        public void ResetSettings()
+        /// <summary>
+        /// Gets the rotator Target Position.
+        /// </summary>
+        public float TargetPosition
         {
-            RotatorHardware.ResetProfile();
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.RotatorHardware.TargetPosition;
+                },
+                nameof(IRotatorV4.TargetPosition),
+                "Get",
+                1);
+            }
         }
 
-        public string GetXMLProfile()
+        /// <summary>
+        /// Gets the Rotators position with any Sync Offsets applied.
+        /// </summary>
+        public float Position
         {
-            return RotatorHardware.Profile.GetProfile();
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return (this.RotatorHardware.Position.Value + this.RotatorHardware.SyncOffset.Value + 360) % 360;
+                },
+                nameof(IRotatorV4.Position),
+                "Get",
+                1);
+            }
         }
 
-        #endregion ISimulation
+        /// <summary>
+        /// Gets the device's operational state in one call.
+        /// </summary>
+        public override List<StateValue> DeviceState
+        {
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    // Create an array list to hold the IStateValue entries
+                    List<StateValue> deviceState = new List<StateValue>();
+
+                    try
+                    {
+                        deviceState.Add(new StateValue(nameof(IRotatorV4.IsMoving), this.IsMoving));
+                    }
+                    catch
+                    {
+                    }
+
+                    try
+                    {
+                        deviceState.Add(new StateValue(nameof(IRotatorV4.MechanicalPosition), this.MechanicalPosition));
+                    }
+                    catch
+                    {
+                    }
+
+                    try
+                    {
+                        deviceState.Add(new StateValue(nameof(IRotatorV4.Position), this.Position));
+                    }
+                    catch
+                    {
+                    }
+
+                    try
+                    {
+                        deviceState.Add(new StateValue(DateTime.Now));
+                    }
+                    catch
+                    {
+                    }
+
+                    return deviceState;
+                },
+                nameof(IRotatorV4.MoveMechanical),
+                "Get",
+                4);
+            }
+        }
+
+        /// <summary>
+        /// Halts the rotator.
+        /// </summary>
+        public void Halt()
+        {
+            this.ProcessCommand(
+                () =>
+                {
+                    this.RotatorHardware.Halt();
+                },
+                nameof(IRotatorV4.Halt),
+                "Command",
+                1);
+        }
+
+        /// <summary>
+        /// Moves the rotator.
+        /// </summary>
+        /// <param name="position">Target position.</param>
+        public void Move(float position)
+        {
+            this.ProcessCommand(
+                () =>
+                {
+                    this.RotatorHardware.Move(position);
+                },
+                nameof(IRotatorV4.Move),
+                $"Command to {position}",
+                1);
+        }
+
+        /// <summary>
+        /// Moves the rotator.
+        /// </summary>
+        /// <param name="position">Target position.</param>
+        public void MoveMechanical(float position)
+        {
+            this.ProcessCommand(
+                () =>
+                {
+                    this.RotatorHardware.MoveAbsolute(position);
+                },
+                nameof(IRotatorV4.MoveMechanical),
+                $"Command to {position}",
+                3);
+        }
+
+        /// <summary>
+        /// Moves the rotator to target absolute location.
+        /// </summary>
+        /// <param name="position">The target position.</param>
+        public void MoveAbsolute(float position)
+        {
+            this.ProcessCommand(
+                () =>
+                {
+                    this.RotatorHardware.MoveAbsolute((position - this.RotatorHardware.SyncOffset.Value + 36000) % 360);
+                },
+                nameof(IRotatorV4.MoveAbsolute),
+                $"Command to {position}",
+                1);
+        }
+
+        /// <summary>
+        /// Syncs the rotator to a target location without moving it.
+        /// </summary>
+        /// <param name="position">The position to sync to.</param>
+        public void Sync(float position)
+        {
+            this.ProcessCommand(
+                () =>
+                {
+                    this.RotatorHardware.SyncOffset.Value = position - this.RotatorHardware.Position.Value;
+                },
+                nameof(IRotatorV4.MoveMechanical),
+                $"Command to {position}",
+                3);
+        }
+
+        /// <summary>
+        /// Connects to the hardware.
+        /// </summary>
+        public override void Connect()
+        {
+            this.RotatorHardware.Connected = true;
+            base.Connect();
+        }
+
+        /// <summary>
+        /// Disconnects from the hardware.
+        /// </summary>
+        public override void Disconnect()
+        {
+            this.RotatorHardware.Connected = false;
+            base.Disconnect();
+        }
     }
 }

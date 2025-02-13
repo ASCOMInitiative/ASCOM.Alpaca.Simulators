@@ -26,13 +26,13 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static void LoadFilterWheel(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.FilterWheel(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.FilterWheel, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.FilterWheel(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("FilterWheel", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.FilterWheel, (uint)DeviceID));
             DeviceManager.LoadFilterWheel(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
         internal static void LoadFocuser(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.Focuser(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Focuser, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.Focuser(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("Focuser", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Focuser, (uint)DeviceID));
             DeviceManager.LoadFocuser(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
@@ -42,9 +42,9 @@ namespace ASCOM.Alpaca.Simulators
             DeviceManager.LoadObservingConditions(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
-        internal static void LoadRotator(int DeviceID) 
+        internal static void LoadRotator(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.Rotator(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Rotator, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.Rotator(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("Rotator", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Rotator, (uint)DeviceID));
             DeviceManager.LoadRotator(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
@@ -143,13 +143,16 @@ namespace ASCOM.Alpaca.Simulators
                 }
             }
 
-            try
+            foreach (var dev in DeviceManager.Rotators.Values)
             {
-                ASCOM.Simulators.RotatorHardware.ResetProfile();
-            }
-            catch (Exception ex)
-            {
-                Logging.LogError($"Failed to reset Rotator settings with error: {ex.Message}");
+                try
+                {
+                    (dev as ASCOM.Simulators.Rotator).RotatorHardware.ResetProfile();
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogError($"Failed to reset Rotator settings with error: {ex.Message}");
+                }
             }
 
             foreach (var dev in DeviceManager.SafetyMonitors.Values)

@@ -94,6 +94,20 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        internal static string LogFileNameDevice(string deviceType, int instanceID)
+        {
+            var logstring = $"{_logFileName}-{deviceType}-{instanceID}";
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return logstring;
+            }
+            else
+            {
+                return logstring.ToLowerInvariant();
+            }
+        }
+
         private static string ServerFolderName
         {
             get

@@ -17,7 +17,7 @@ namespace ASCOM.Alpaca.Simulators
 
         static Logging()
         {
-            Log = new MultiLogger(ServerSettings.LogFileName);
+            Log = new ConsoleAndTraceLogger(ServerSettings.LogFileName);
 
             Log.SetMinimumLoggingLevel(ServerSettings.LoggingLevel);
         }

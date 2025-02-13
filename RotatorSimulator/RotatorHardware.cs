@@ -1,337 +1,340 @@
-//
-// 02-Oct-09	Bob Denny	ASCOM-24 : Fis conform error, Halt() when ot moving is harmless.
-//							Throw error if angles outside 0 <= angle < 360
-//							(this is a reference implementation!)
-//
-using ASCOM.Common.Interfaces;
-using System;
-using System.Globalization;
-using System.Timers;
-
 namespace ASCOM.Simulators
 {
-    //
-    // This implements the simulated hardware layer.
-    //
-    public static class RotatorHardware
+    using System;
+    using System.Globalization;
+    using System.Timers;
+
+    using ASCOM.Common.Interfaces;
+    using OmniSim.BaseDriver;
+
+    /// <summary>
+    /// A Reference implementation of the ASCOM Rotator Specification used for Simulation.
+    /// </summary>
+    public class RotatorHardware
     {
+        private const int UpdateInterval = 250;
+
+        private bool moving;
+        private bool direction;
+        private float targetPosition;
+        private object objSync = new object();
+
+        private Timer timer = new Timer(100)
+        {
+            AutoReset = true,
+        };
+
+        private IProfile profile;
+
         /// <summary>
-        /// Name of the Driver
+        /// Initializes a new instance of the <see cref="RotatorHardware"/> class.
         /// </summary>
+        public RotatorHardware()
+        {
+            this.Position.Value = 0.0F;
+            this.Connected = false;
+            this.moving = false;
+            this.targetPosition = 0.0F;
+            this.timer.Elapsed += this.OnTimedEvent;
+            this.timer.Start();
+        }
 
-        //
-        // Settings, persistent
-        //
-        private static float s_fPosition;
+        /// <summary>
+        /// Gets the stored interface version to use.
+        /// </summary>
+        public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-4", 4);
 
-        private static float s_fSpeed;
-        private static bool s_bCanReverse;
-        private static bool s_bReverse;
-        private static float s_fsyncOffset;
+        /// <summary>
+        /// Gets the stored starting, between 0 and 360.
+        /// </summary>
+        public Setting<float> Position { get; } = new Setting<float>("Position", "The starting position 0 to 359.999", 0);
 
-        //
-        // State variables
-        //
-        private static bool s_bConnected;
+        /// <summary>
+        /// Gets the rotation rate in degrees per second.
+        /// </summary>
+        public Setting<double> RotationRate { get; } = new Setting<double>("RotationRate", "The rotation rate in degrees per second", 3.0);
 
-        private static bool s_bMoving;
-        private static bool s_bDirection;
-        private static float s_fTargetPosition;
-        private static int s_iUpdateInterval = 250;			// Milliseconds, default, set by main form
-        private static string _rotatorName = "Alpaca Rotator Simulator";
-        private static string _description = "ASCOM Rotator Driver for RotatorSimulator";
-        private static string _driverInfo = "ASCOM.Simulator.Rotator";
+        /// <summary>
+        /// Gets a value indicating if the rotator can reverse.
+        /// </summary>
+        public Setting<bool> CanReverse { get; } = new Setting<bool>("CanReverse", "True if the rotator can reverse", true);
 
-        private static short _interfaceVersion = 4;
+        /// <summary>
+        /// Gets a value indicating if the rotator is reversed.
+        /// </summary>
+        public Setting<bool> Reverse { get; } = new Setting<bool>("Reverse", "True if the rotator is reversed", false);
 
-        //
-        // Sync object
-        //
-        private static object s_objSync = new object(); // Better than lock(this) - Jeffrey Richter, MSDN Jan 2003
+        /// <summary>
+        /// Gets the current Sync Offset, 0 to 360.
+        /// </summary>
+        public Setting<float> SyncOffset { get; } = new Setting<float>("SyncOffset", "The current Sync Offset, 0 to 359.999", 0);
 
-        internal static IProfile Profile
+        /// <summary>
+        /// Gets or sets a value indicating whether the simulator is connected.
+        /// </summary>
+        public bool Connected
         {
             get;
             set;
         }
 
-        //
-        // Timer to update status
-        //
-
-        private static Timer timer = new Timer(100)
+        /// <summary>
+        /// Gets or sets a value for the target position.
+        /// </summary>
+        public float TargetPosition
         {
-            AutoReset = true,
-        };
-
-        //
-        // Constructor - initialize state
-        //
-        static RotatorHardware()
-        {
-            s_fPosition = 0.0F;
-            s_bConnected = false;
-            s_bMoving = false;
-            s_fTargetPosition = 0.0F;
-            timer.Elapsed += OnTimedEvent;
-            timer.Start();
-        }
-
-        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
-        {
-            UpdateState();
-        }
-
-        //
-        // Initialize/finalize for server startup/shutdown
-        //
-        public static void Initialize(IProfile profile)
-        {
-            Profile = profile;
-            s_fPosition = Convert.ToSingle(profile.GetValue("Position", "0.0"), CultureInfo.InvariantCulture);
-            s_fTargetPosition = s_fPosition;
-            RotationRate = Convert.ToSingle(profile.GetValue("RotationRate", "3.0"), CultureInfo.InvariantCulture);
-            s_bCanReverse = Convert.ToBoolean(profile.GetValue("CanReverse", bool.TrueString));
-            s_bReverse = Convert.ToBoolean(profile.GetValue("Reverse", bool.FalseString));
-            s_fsyncOffset = Convert.ToSingle(profile.GetValue("SyncOffset", "0.0"), CultureInfo.InvariantCulture);
-        }
-
-        public static void ResetProfile()
-        {
-            Profile.Clear();
-        }
-
-        public static void SaveProfile(double rate, bool canreverse, bool reverse, float offset)  // "Finalize" exists in parent
-        {
-            Profile.WriteValue("RotationRate", rate.ToString(CultureInfo.InvariantCulture));
-            Profile.WriteValue("CanReverse", canreverse.ToString());
-            Profile.WriteValue("Reverse", reverse.ToString());
-            Profile.WriteValue("SyncOffset", offset.ToString());
-
-            RotationRate = (float)rate;
-            s_bCanReverse = canreverse;
-            s_bReverse = reverse;
-            s_fsyncOffset = offset;
-        }
-
-        //
-        // Properties for setup dialog
-        //
-        public static float RotationRate
-        {
-            get { return s_fSpeed * 1000; }             // Internally deg/millisecond
-            set { s_fSpeed = value / 1000; }
-        }
-
-        public static float SyncOffset
-        {
-            get => s_fsyncOffset;
-            set
+            get
             {
-                s_fsyncOffset = value;
-                Profile.WriteValue("SyncOffset", value.ToString());
+                this.CheckConnected();
+                return this.targetPosition;
             }
-        }
 
-        public static bool CanReverse
-        {
-            get { return s_bCanReverse; }
             set
             {
-                s_bCanReverse = value;
-                if (!value) s_bReverse = false;
-            }
-        }
-
-        //
-        // State properties for clients
-        //
-        public static string RotatorName
-        {
-            get { return _rotatorName; }
-            set { _rotatorName = value; }
-        }
-
-        public static string Description
-        {
-            get { return _description; }
-            set { _description = value; }
-        }
-
-        public static string DriverInfo
-        {
-            get { return _driverInfo; }
-            set { _driverInfo = value; }
-        }
-
-        public static short InterfaceVersion
-        {
-            get { return _interfaceVersion; }
-            set { _interfaceVersion = value; }
-        }
-
-        public static bool Connected
-        {
-            get { return s_bConnected; }
-            set { s_bConnected = value; }
-        }
-
-        public static float Position
-        {
-            get { CheckConnected(); lock (s_objSync) { return s_fPosition; } }
-        }
-
-        public static float TargetPosition
-        {
-            get { CheckConnected(); return s_fTargetPosition; }
-            set
-            {
-                CheckConnected();
-                lock (s_objSync)
+                this.CheckConnected();
+                lock (this.objSync)
                 {
-                    s_fTargetPosition = value;
-                    s_bMoving = true;                                   // Avoid timing window!(typ.)
+                    this.targetPosition = value;
+                    this.moving = true;
                 }
             }
         }
 
-        public static bool Reverse
+        /// <summary>
+        /// Gets a value indicating whether the rotator is moving.
+        /// </summary>
+        public bool Moving
         {
-            get { return s_bReverse; }
-            set { s_bReverse = value; }
+            get
+            {
+                this.CheckConnected();
+                lock (this.objSync)
+                {
+                    return this.moving;
+                }
+            }
         }
 
-        public static bool Moving
+        /// <summary>
+        /// Gets the current step size.
+        /// </summary>
+        public float StepSize
         {
-            get { CheckConnected(); lock (s_objSync) { return s_bMoving; } }
+            get
+            {
+                return Convert.ToSingle(this.RotationRate.Value / 1000 * UpdateInterval);
+            }
         }
 
-        public static float StepSize
+        /// <summary>
+        /// Load default values.
+        /// </summary>
+        /// <param name="profile">Profile to use to store settings.</param>
+        public void Initialize(IProfile profile)
         {
-            get { return s_fSpeed * s_iUpdateInterval; }
+            this.profile = profile;
+            this.LoadProfile();
         }
 
-        //
-        // Methods for clients
-        //
-        public static void Move(float relativePosition)
+        /// <summary>
+        /// Resets the profile and loads defaults.
+        /// </summary>
+        public void ResetProfile()
         {
-            CheckConnected();
-            lock (s_objSync)
+            this.profile.Clear();
+            this.LoadProfile();
+        }
+
+        /// <summary>
+        /// Saves the settings to the profile and updates the value.
+        /// </summary>
+        /// <param name="rate">Rotation Rate.</param>
+        /// <param name="canreverse">If the rotator can reverse.</param>
+        /// <param name="reverse">If the rotator is reversed.</param>
+        /// <param name="offset">The current sync offset.</param>
+        public void SaveProfile(double rate, bool canreverse, bool reverse, float offset, short interfaceversion)
+        {
+            this.RotationRate.Value = (float)rate;
+            this.CanReverse.Value = canreverse;
+            this.Reverse.Value = reverse;
+            this.SyncOffset.Value = offset;
+            this.InterfaceVersionSetting.Value = interfaceversion;
+
+            this.profile.SetSetting(this.RotationRate);
+            this.profile.SetSetting(this.CanReverse);
+            this.profile.SetSetting(this.Reverse);
+            this.profile.SetSetting(this.SyncOffset);
+            this.profile.SetSetting(this.InterfaceVersionSetting);
+        }
+
+        /// <summary>
+        /// Moves the rotator by an offset.
+        /// </summary>
+        /// <param name="relativePosition">The target position.</param>
+        /// <exception cref="ASCOM.InvalidValueException">If the value is out of range.</exception>
+        public void Move(float relativePosition)
+        {
+            this.CheckConnected();
+            lock (this.objSync)
             {
                 // add check for relative position limits rather than using the check on the target.
                 if (relativePosition <= -360.0 || relativePosition >= 360.0)
                 {
-                    throw new ASCOM.InvalidValueException("Relative Angle out of range", relativePosition.ToString(), "-360 < angle < 360");
+                    throw new ASCOM.InvalidValueException($"Relative Angle out of range {relativePosition.ToString()} -360 < angle < 360");
                 }
-                var target = s_fTargetPosition + relativePosition;
+
+                var target = this.targetPosition + relativePosition;
+
                 // force to the range 0 to 360
-                if (target >= 360.0) target -= 360.0F;
-                if (target < 0.0) target += 360.0F;
-                s_fTargetPosition = target;
-                s_bMoving = true;
+                if (target >= 360.0)
+                {
+                    target -= 360.0F;
+                }
+
+                if (target < 0.0)
+                {
+                    target += 360.0F;
+                }
+
+                this.targetPosition = target;
+                this.moving = true;
             }
         }
 
-        public static void MoveAbsolute(float position)
+        /// <summary>
+        /// Moves the rotator to an absolute angle.
+        /// </summary>
+        /// <param name="position">Absolute target.</param>
+        public void MoveAbsolute(float position)
         {
-            CheckConnected();
-            CheckAngle(position);
-            lock (s_objSync)
+            this.CheckConnected();
+            this.CheckAngle(position);
+            lock (this.objSync)
             {
-                s_fTargetPosition = position;
-                s_bMoving = true;
+                this.targetPosition = position;
+                this.moving = true;
             }
         }
 
-        public static void Halt()
+        /// <summary>
+        /// Halts an active move.
+        /// </summary>
+        public void Halt()
         {
-            // CheckMoving(true);	// ASCOM-24: Fails Conform, should be harmless.
-            lock (s_objSync)
+            lock (this.objSync)
             {
-                s_fTargetPosition = s_fPosition;
-                s_bMoving = false;
+                this.targetPosition = this.Position.Value;
+                this.moving = false;
             }
         }
 
-        //
-        // Members used by frmMain to run the machine using its timer. This
-        // avoids having two timers. Since it has to poll the machinery anyway,
-        // it just calls the UpdateState method here just before reading the
-        // state variables. It also sets the update rate for motion calculations
-        // here, based on the update rate of its timer.
-        //
-        public static int UpdateInterval
+        /// <summary>
+        /// Update status.
+        /// </summary>
+        public void UpdateState()
         {
-            set { s_iUpdateInterval = value; }
-        }
-
-        public static void UpdateState()
-        {
-            lock (s_objSync)
+            lock (this.objSync)
             {
-                float dPA = RangeAngle(s_fTargetPosition - s_fPosition, -180, 180);
+                float dPA = this.RangeAngle(this.targetPosition - this.Position.Value, -180, 180);
                 if (Math.Abs(dPA) == 0)
                 {
-                    s_bMoving = false;
+                    this.moving = false;
                     return;
                 }
-                //
+
                 // Must move
-                //
-                float fDelta = s_fSpeed * s_iUpdateInterval;
-                if (s_fPosition == 180)                                             // Inhibit sneaking past 180
+                float fDelta = Convert.ToSingle(this.RotationRate.Value / 1000 * UpdateInterval);
+
+                // Inhibit sneaking past 180
+                if (this.Position.Value == 180)
                 {
-                    if (s_bDirection && Math.Sign(dPA) > 0)
+                    if (this.direction && Math.Sign(dPA) > 0)
+                    {
                         dPA = -1;
-                    else if (!s_bDirection && Math.Sign(dPA) < 0)
+                    }
+                    else if (!this.direction && Math.Sign(dPA) < 0)
+                    {
                         dPA = 1;
+                    }
                 }
-                if (dPA > 0 && s_fPosition < 180 && RangeAngle((s_fPosition + dPA), 0, 360) > 180)
-                    s_fPosition -= fDelta;
-                else if (dPA < 0 && s_fPosition > 180 && RangeAngle((s_fPosition + dPA), 0, 360) < 180)
-                    s_fPosition += fDelta;
+
+                if (dPA > 0 && this.Position.Value < 180 && this.RangeAngle(this.Position.Value + dPA, 0, 360) > 180)
+                {
+                    this.Position.Value -= fDelta;
+                }
+                else if (dPA < 0 && this.Position.Value > 180 && this.RangeAngle(this.Position.Value + dPA, 0, 360) < 180)
+                {
+                    this.Position.Value += fDelta;
+                }
                 else if (Math.Abs(dPA) >= fDelta)
-                    s_fPosition += (fDelta * Math.Sign(dPA));
+                {
+                    this.Position.Value += fDelta * Math.Sign(dPA);
+                }
                 else
-                    s_fPosition += dPA;
-                s_fPosition = RangeAngle(s_fPosition, 0, 360);
-                s_bDirection = Math.Sign(dPA) > 0;                                  // Remember last direction for 180 check
-                s_bMoving = true;
+                {
+                    this.Position.Value += dPA;
+                }
+
+                this.Position.Value = this.RangeAngle(this.Position.Value, 0, 360);
+
+                // Remember last direction for 180 check
+                this.direction = Math.Sign(dPA) > 0;
+                this.moving = true;
             }
         }
 
-        //
-        // Private utilities
-        //
-        private static void CheckConnected()
+        /// <summary>
+        /// Loads stored settings or defaults from the profile.
+        /// </summary>
+        internal void LoadProfile()
         {
-            if (!s_bConnected) throw new NotConnectedException("The rotator is not connected");
+            this.Position.Value = Convert.ToSingle(this.profile.GetSettingReturningDefault(this.Position), CultureInfo.InvariantCulture);
+            this.targetPosition = this.Position.Value;
+            this.RotationRate.Value = Convert.ToSingle(this.profile.GetSettingReturningDefault(this.RotationRate), CultureInfo.InvariantCulture);
+            this.CanReverse.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.CanReverse));
+            this.Reverse.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.Reverse));
+            this.SyncOffset.Value = Convert.ToSingle(this.profile.GetSettingReturningDefault(this.SyncOffset), CultureInfo.InvariantCulture);
+            this.InterfaceVersionSetting.Value = Convert.ToInt16(this.profile.GetSettingReturningDefault(this.InterfaceVersionSetting), CultureInfo.InvariantCulture);
         }
 
-        private static void CheckAngle(float angle)
+        /// <summary>
+        /// Checks if the rotator hardware is set to connected.
+        /// </summary>
+        /// <exception cref="NotConnectedException">Thrown if not connected.</exception>
+        private void CheckConnected()
+        {
+            if (!this.Connected)
+            {
+                throw new NotConnectedException("The rotator is not connected");
+            }
+        }
+
+        private void CheckAngle(float angle)
         {
             if (angle < 0.0F || angle >= 360.0F)
-                throw new ASCOM.InvalidValueException("Angle out of range", angle.ToString(), "0 <= angle < 360");
-        }
-
-        private static void CheckMoving(bool bAssert)
-        {
-            CheckConnected();
-            lock (s_objSync)
             {
-                if (s_bMoving != bAssert)
-                    throw new DriverException(
-                        "Illegal - the rotator is " + (s_bMoving ? "" : "not " + "moving"),
-                        unchecked(ErrorCodes.DriverBase + 3));
+                throw new ASCOM.InvalidValueException("Angle out of range", angle.ToString(), "0 <= angle < 360");
             }
         }
 
-        private static float RangeAngle(float angle, float min, float max)
+        private float RangeAngle(float angle, float min, float max)
         {
-            while (angle >= max) angle -= 360.0F;
-            while (angle < min) angle += 360.0F;
+            while (angle >= max)
+            {
+                angle -= 360.0F;
+            }
+
+            while (angle < min)
+            {
+                angle += 360.0F;
+            }
+
             return angle;
+        }
+
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            this.UpdateState();
         }
     }
 }

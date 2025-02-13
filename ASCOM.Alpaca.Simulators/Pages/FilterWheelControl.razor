@@ -7,6 +7,7 @@
 <body>
     <fieldset>
         <legend>FilterWheel</legend>
+
         <div class="grid-container-two">
 
             <div class="grid-item-left">
@@ -16,6 +17,9 @@
                 <button @onclick="Connect">@ConnectText</button>
             </div>
             <div class="grid-item-right">
+                <ErrorBoundary>
+                    <LogLevelControl Driver="@(Device as OmniSim.BaseDriver.Driver)" />
+                </ErrorBoundary>
                 <button @onclick="Setup">Setup</button>
             </div>
 
@@ -112,7 +116,7 @@
     {
         get
         {
-            return Device.Connected;
+            return Device.IsConnected;
         }
     }
 
@@ -132,7 +136,7 @@
     {
         get
         {
-            if (Device.Connected)
+            if (Device.IsConnected)
             {
                 return "Disconnect";
             }
@@ -151,7 +155,7 @@
         {
             if (Connected)
             {
-                Device.Position = (short)((Device.Position - 1 + Device.Names.Length) % Device.Names.Length);
+                Device.Position = (short)((Device.FilterWheelHardware.Position - 1 + Device.FilterWheelHardware.Slots.Value) % Device.FilterWheelHardware.Slots.Value);
             }
         }
         catch (Exception ex)
@@ -166,7 +170,7 @@
         {
             if (Connected)
             {
-                Device.Position = (short)((Device.Position + 1) % Device.Names.Length);
+                Device.Position = (short)((Device.FilterWheelHardware.Position + 1) % Device.FilterWheelHardware.Slots.Value);
             }
         }
         catch (Exception ex)
@@ -181,7 +185,7 @@
         {
             if (Connected)
             {
-                return Device.Position;
+                return Device.FilterWheelHardware.Position;
             }
             return 0;
         }
@@ -195,7 +199,7 @@
             {
                 if (Position >= 0)
                 {
-                    return Device.Names[Position];
+                    return Device.FilterWheelHardware.AllFilterNames[Position];
                 }
                 return "Moving";
             }
@@ -211,7 +215,7 @@
             {
                 if (Position >= 0)
                 {
-                    return Device.FocusOffsets[Position];
+                    return Device.FilterWheelHardware.FocusOffsets[Position];
                 }
                 return 0;
             }

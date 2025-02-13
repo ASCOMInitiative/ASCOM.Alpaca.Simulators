@@ -1,0 +1,23 @@
+﻿
+<span>Device Log Level:</span>
+<select class="log-level" @bind="@LogLevel">
+    @foreach (var level in (ASCOM.Common.Interfaces.LogLevel[])Enum.GetValues(typeof(ASCOM.Common.Interfaces.LogLevel)))
+    {
+        <option value="@level"> @level.ToString() </option>
+    }
+</select>
+
+
+@code {
+    int currentCount = 0;
+
+    [Parameter]
+    public OmniSim.BaseDriver.Driver Driver { get; set; }
+
+
+    public ASCOM.Common.Interfaces.LogLevel LogLevel 
+    {
+        get => Driver.SavedLoggingLevel;
+        set => Driver.SavedLoggingLevel = value;
+    }
+}

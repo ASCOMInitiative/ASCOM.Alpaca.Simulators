@@ -1,433 +1,365 @@
-﻿using ASCOM.Common;
-using ASCOM.Common.Interfaces;
-using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Timers;
-
-namespace ASCOM.Simulators
+﻿namespace ASCOM.Simulators
 {
-    //
-    // Implements the simulated hardware
-    //
+    using System;
+    using System.Drawing;
+    using System.Timers;
+
+    using ASCOM.Common;
+    using ASCOM.Common.Interfaces;
+    using OmniSim.BaseDriver;
+
+    /// <summary>
+    /// The FilterWheel hardware simulation class.
+    /// </summary>
     public class FilterWheelHardware
     {
-        #region variables
+        // Used to track id registry entries exist or need updating
+        private const string RegVersion = "1";
 
-        // Timer variables
-        private static int m_iTimeInterval;             // Time to move between filter positions (miilisecs)
+        // How often we pump the hardware
+        private readonly int timerTickInterval = 100;
 
-        private static int m_iTimeToMove;               // Time required to complete the current Move
-        private static int m_iTimeElapsed;              // Keeps track of the elapsed time of the current Move
-        private static int m_iTimerTickInterval = 100;  // How often we pump the hardware
-
-        public static bool m_bConnected;                // Tracked connected state, public so the handbox can test without
-
-        // invoking the full method
-        public static short m_sPosition;                // Current filter position, public so the handbox can test without
-
-        // invoking the full method
-        private static short m_sTargetPosition;         // Filter position we want to get to
-
-        private static bool m_bMoving;                  // FilterWheel in motion?
-        private static int m_iSlots;                    // Number of filter wheel positions
-        private static string[] m_asFilterNames;        // Array of filter name strings
-        private static int[] m_aiFocusOffsets;          // Array of focus offsets
-        private static Color[] m_acFilterColours;       // Array of filter colours
-        private static bool m_bImplementsNames;         // Return filter names?
-        private static bool m_bImplementsOffsets;       // Return Offsets?
-        private static bool m_bPreemptMoves;            // Driver can interupt moves
-
-        private const string m_sRegVer = "1";             // Used to track id registry entries exist or need updating
-
-        internal static ILogger Logger
-        {
-            get;
-            set;
-        }
-
-
-        //
         // Create some 'realistic' defaults
-        //
-        private static Color[] DefaultColors = new Color[8] {Color.Red, Color.Green, Color.Blue, Color.Gray,
-                                                Color.DarkRed, Color.Teal, Color.Violet, Color.Black};
+        private readonly Color[] defaultColors = [Color.Red, Color.Green, Color.Blue, Color.Gray,
+                                                Color.DarkRed, Color.Teal, Color.Violet, Color.Black];
 
-        //
         // Sync object
-        //
-        private static object s_objSync = new object();	// Better than lock(this) - Jeffrey Richter, MSDN Jan 2003
+        private readonly object objSync = new();
 
-        public const string g_csDriverID = "ASCOM.Simulator.FilterWheel";
-        public static IProfile g_Profile;
 
-        // Exception codes/messages
-        public const string ERR_SOURCE = "ASCOM FilterWheel Simulator";
+        private readonly IProfile settingsProfile;
 
-        public static int SCODE_NOT_IMPLEMENTED = ErrorCodes.NotImplemented;
-        public const string MSG_NOT_IMPLEMENTED = " is not implemented by this filter wheel driver.";
-
-        public static int SCODE_DLL_LOADFAIL = ErrorCodes.DriverBase + 0x401;
-        // Error message for above generated at run time
-
-        public static int SCODE_NOT_CONNECTED = ErrorCodes.DriverBase + 0x402;
-        public const string MSG_NOT_CONNECTED = "The filter wheel is not connected";
-
-        public static int SCODE_VAL_OUTOFRANGE = ErrorCodes.InvalidValue;
-        public const string MSG_VAL_OUTOFRANGE = "The value is out of range";
-
-        public static int SCODE_MOVING = ErrorCodes.DriverBase + 0x405;
-        public const string MSG_MOVING = "The filterwheel is already moving";
-
-        private static int SCODE_SETUP_NOT_ALLOWED = ErrorCodes.DriverBase + 0x406;
-        private const string MSG_SETUP_NOT_ALLOWED = "Setup not allowed whilst connected";
-
-        #endregion variables
-
-        private static Timer timer = new Timer(100)
+        private readonly Timer timer = new(100)
         {
             AutoReset = true,
         };
 
-        //
-        // Constructor - initialize state
-        //
-        static FilterWheelHardware()
+        // Time required to complete the current Move
+        private int timeToMove;
+
+        // Keeps track of the elapsed time of the current Move
+        private int timeElapsed;
+
+        // Current filter position
+        private short position;
+
+        // Filter position we want to get to
+        private short targetPosition;
+
+        // FilterWheel in motion?
+        private bool moving;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FilterWheelHardware"/> class.
+        /// This is not safe to call directly, it is used to auto-generate the Settings APIs.
+        /// </summary>
+        public FilterWheelHardware()
         {
-            m_bMoving = false;
-
-            m_asFilterNames = new string[8];
-            m_aiFocusOffsets = new int[8];
-            m_acFilterColours = new Color[8];
-
-            timer.Elapsed += OnTimedEvent;
-            timer.Start();
         }
 
-        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FilterWheelHardware"/> class.
+        /// </summary>
+        /// <param name="logger">An ASCOM Logger for reports.</param>
+        /// <param name="profile">An ASCOM Profile to store settings.</param>
+        public FilterWheelHardware(ILogger logger, IProfile profile)
         {
-            UpdateState();
+            this.Logger = logger;
+            this.settingsProfile = profile;
+
+            this.moving = false;
+
+            this.AllFilterNames = new string[8];
+            this.AllFocusOffsets = new int[8];
+            this.AllFilterColours = new Color[8];
+
+            this.timer.Elapsed += this.OnTimedEvent;
+            this.timer.Start();
+
+            this.Initialize();
         }
 
-        #region Properties and Methods
+        /// <summary>
+        /// Gets the setting indicating the time to move between filter positions (milliseconds).
+        /// </summary>
+        public Setting<int> FilterChangeTimeInterval { get; } = new Setting<int>("FilterChangeTimeInterval", "Time to move between filter positions (milliseconds)", 1000);
 
-        //
-        // Initialize/finalize for server startup/shutdown
-        //
-        public static void Initialize()
-        {
-            LoadSettings();
-        }
+        /// <summary>
+        /// Gets the setting indicating if the driver can implement names.
+        /// </summary>
+        public Setting<bool> ImplementsNames { get; } = new Setting<bool>("ImplementsNames", "True if the driver implements names", true);
 
-        public static bool Connected
+        /// <summary>
+        /// Gets the setting indicating if the driver can implement focus offsets.
+        /// </summary>
+        public Setting<bool> ImplementsOffsets { get; } = new Setting<bool>("ImplementsOffsets", "True if the driver implements offsets", true);
+
+        /// <summary>
+        /// Gets the setting indicating if the driver can interrupt moves.
+        /// </summary>
+        public Setting<bool> PreemptMoves { get; } = new Setting<bool>("PreemptMoves", "True if the driver can interrupt moves", false);
+
+        /// <summary>
+        /// Gets the setting reporting the number of slots.
+        /// </summary>
+        public Setting<int> Slots { get; } = new Setting<int>("Slots", "Number of filter wheel positions, 1-8", 6);
+
+        /// <summary>
+        /// Gets the stored interface version to use.
+        /// </summary>
+        public Setting<short> InterfaceVersion { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-3", 3);
+
+        /// <summary>
+        /// Gets or sets the Array of filter name strings.
+        /// </summary>
+        public string[] AllFilterNames { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Array of focus offsets.
+        /// </summary>
+        public int[] AllFocusOffsets { get; set; }
+
+        /// <summary>
+        /// Gets the Array of filter colors.
+        /// </summary>
+        public Color[] AllFilterColours { get; }
+
+        /// <summary>
+        /// Gets the filter names for the current number of slots.
+        /// </summary>
+        public string[] FilterNames
         {
             get
             {
-                lock (s_objSync)
-                {
-                    Logger.LogVerbose("FilterWheel - Get Connected = " + m_bConnected);
-                    return m_bConnected;
-                }
-            }
-            set
-            {
-                lock (s_objSync)
-                {
-                    Logger.LogInformation("FilterWheel - Set Connected = " + m_bConnected + " -> " + value);
-
-                    // We are always connected to the hardware in the simulator
-                    // So just keep a record of the state change
-                    m_bConnected = value;
-
-                    Logger.LogVerbose("FilterWheel -   (set connected, done)");
-                }
+                string[] temp = this.AllFilterNames;
+                Array.Resize(ref temp, this.Slots.Value);
+                return temp;
             }
         }
 
-        public static short Position
+        /// <summary>
+        /// Gets the filter offsets for the current number of slots.
+        /// </summary>
+        public int[] FocusOffsets
         {
             get
             {
-                lock (s_objSync)
+                int[] temp = this.AllFocusOffsets;
+                Array.Resize(ref temp, this.Slots.Value);
+                return temp;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the filter wheel position.
+        /// </summary>
+        public short Position
+        {
+            get
+            {
+                lock (this.objSync)
                 {
-                    short ret;
-
-                    CheckConnected();
-
-                    if (m_bMoving)
-                        ret = -1;                       // Spec. says we must return -1 if position not determined
+                    if (this.moving)
+                    {
+                        // Spec. says we must return -1 if position not determined or moving
+                        return -1;
+                    }
                     else
-                        ret = m_sPosition;      // Otherwise return position
-
-                    Logger.LogVerbose("FilterWheel - Get Position = " + ret.ToString());
-
-                    return ret;
+                    {
+                        // Otherwise return position
+                        return this.position;
+                    }
                 }
             }
+
             set
             {
-                lock (s_objSync)
+                lock (this.objSync)
                 {
-                    int Jumps;      // number of slot positions we have to move
-
-                    Logger.LogInformation("FilterWheel - Set Position = " + value + " ...");
+                    this.Logger.LogInformation("FilterWheel - Set Position to " + value);
 
                     // position range check
-                    if (value >= m_iSlots || value < 0)
+                    if (value >= this.Slots.Value || value < 0)
                     {
-                        Logger.LogError("FilterWheel -   (set position failed, out of range)");
-
-                        throw new DriverException("Position: " + MSG_VAL_OUTOFRANGE, SCODE_VAL_OUTOFRANGE);
+                        throw new ASCOM.InvalidValueException($"Position: {value} is out of range 0 - {this.Slots.Value}");
                     }
 
-                    m_sTargetPosition = value;
+                    this.targetPosition = value;
 
                     // check if we are already there!
-                    if (value == m_sPosition)
+                    if (value == this.position)
                     {
-                        Logger.LogInformation("FilterWheel -   (set position, no move required)");
+                        this.Logger.LogInformation($"FilterWheel - Set Position, Already at position {this.position} no move required)");
                         return;
                     }
 
                     // check if we are already moving
-                    if (m_bMoving)
+                    if (this.moving)
                     {
-                        if (m_bPreemptMoves)
-                            AbortMove();   // Stop the motor
+                        if (this.PreemptMoves.Value)
+                        {
+                            // Stop the motor
+                            this.AbortMove();
+                        }
                         else
                         {
-                            Logger.LogInformation("FilterWheel -   (set position failed, already moving)");
-
-                            throw new DriverException("Position: " + MSG_MOVING, SCODE_MOVING);
+                            throw new InvalidOperationException("The FilterWheel is already moving");
                         }
                     }
 
                     // Find the shortest distance between two filter positions
-                    Jumps = Math.Min(Math.Abs(m_sPosition - m_sTargetPosition), m_iSlots - Math.Abs(m_sPosition - m_sTargetPosition));
-                    m_iTimeToMove = Jumps * m_iTimeInterval;
+                    int jumps = Math.Min(Math.Abs(this.position - this.targetPosition), this.Slots.Value - Math.Abs(this.position - this.targetPosition));
+                    this.timeToMove = jumps * this.FilterChangeTimeInterval.Value;
 
                     // trigger the "motor"
-                    m_bMoving = true;
+                    this.moving = true;
 
                     // log action
-                    Logger.LogVerbose("FilterWheel -  (set position in progress)...");
+                    this.Logger.LogVerbose($"FilterWheel - Set position to {this.targetPosition} in progress");
                 }
             }
         }
 
-        public static string[] FilterNames
+        /// <summary>
+        /// Gets the Logger.
+        /// </summary>
+        internal ILogger Logger
         {
-            get
-            {
-                Logger.LogVerbose("FilterWheel - Get FilterNames...");
-
-                string[] temp = m_asFilterNames;
-                Array.Resize(ref temp, m_iSlots);
-                    for (int i = 0; i < m_iSlots; i++)
-                        Logger.LogVerbose("FilterWheel -  Filter " + i.ToString() + " = " + temp[i].ToString());
-                return temp;
-            }
+            get;
+            private set;
         }
 
-        public static int[] FocusOffsets
+        /// <summary>
+        /// Save the current settings.
+        /// </summary>
+        public void SaveSettings()
         {
-            get
+            this.settingsProfile.SetSetting(this.Slots);
+            this.settingsProfile.SetSetting(this.FilterChangeTimeInterval);
+            for (int i = 0; i <= 7; i++)
             {
-                Logger.LogVerbose("FilterWheel - Get FocusOffsets..." + Environment.NewLine);
-                int[] temp = m_aiFocusOffsets;
-                Array.Resize(ref temp, m_iSlots);
-                    for (int i = 0; i < m_iSlots; i++)
-                        Logger.LogVerbose("FilterWheel -  Offset " + i.ToString() + " = " + temp[i].ToString() + Environment.NewLine);
-                return temp;
+                this.settingsProfile.WriteValue($"FilterNames {i}", this.AllFilterNames[i]);
+                this.settingsProfile.WriteValue($"FocusOffsets {i}", this.AllFocusOffsets[i].ToString());
+                this.settingsProfile.WriteValue($"Filter {i} Color", this.AllFilterColours[i].Name);
             }
+
+            this.settingsProfile.SetSetting(this.ImplementsNames);
+            this.settingsProfile.SetSetting(this.ImplementsOffsets);
+            this.settingsProfile.SetSetting(this.PreemptMoves);
+            this.settingsProfile.SetSetting(this.InterfaceVersion);
+
+            this.LoadSettings();
         }
 
-        // For the setup dialog
-        public static string[] FullFilterNames
-        { get { return m_asFilterNames; } }
-
-        // For the setup dialog
-        public static int[] FullFocusOffsets
-        { get { return m_aiFocusOffsets; } }
-
-        // For the setup dialog
-        public static Color[] FullFilterColours
-        { get { return m_acFilterColours; } }
-
-        // For the setup dialog
-        public static bool ImplementsNames
-        { get { return m_bImplementsNames; } }
-
-        // For the setup dialog
-        public static bool ImplementsOffsets
-        { get { return m_bImplementsOffsets; } }
-
-        // For the setup dialog
-        public static bool PreemptMoves
-        { get { return m_bPreemptMoves; } }
-
-        // For the Handbox
-        public static int Slots
-        { get { return m_iSlots; } }
-
-        // For the Handbox
-        public static bool Moving
-        { get { return m_bMoving; } }
-
-        // For the Handbox
-        public static int Interval
-        { get { return m_iTimeInterval; } }
-
-        // For the Handbox
-        public static string CurrFilterName
-        { get { return m_asFilterNames[m_sPosition]; } }
-
-        // For the Handbox
-        public static int CurrFilterOffset
-        { get { return m_aiFocusOffsets[m_sPosition]; } }
-
-        // For the Handbox
-        public static Color CurrFilterColour
-        { get { return m_acFilterColours[m_sPosition]; } }
-
-        // Sends the Pump interval from the Handbox
-        public static int TimerTickInverval
-        { set { m_iTimerTickInterval = value; } }
-
-        public static void AbortMove()
+        /// <summary>
+        /// Initialize/finalize for server startup/shutdown.
+        /// </summary>
+        private void Initialize()
         {
-            Logger.LogInformation("FilterWheel - Abort move");
+            this.LoadSettings();
+        }
+
+        private void AbortMove()
+        {
+            this.Logger.LogInformation("FilterWheel - Abort move");
+
             // Clear the elapsed time
-            m_iTimeElapsed = 0;
+            this.timeElapsed = 0;
+
             // Stop moving
-            m_bMoving = false;
-            // Set the postion intermediate between start and end
-            m_sPosition = (short)Math.Floor(Math.Abs(m_sTargetPosition - m_sPosition) / 2.0);
-            Logger.LogInformation("FilterWheel - Abort done");
+            this.moving = false;
+
+            // Set the position intermediate between start and end
+            this.position = (short)Math.Floor(Math.Abs(this.targetPosition - this.position) / 2.0);
+            this.Logger.LogInformation("FilterWheel - Abort done");
         }
 
-        public static void UpdateState()
+        private void UpdateState()
         {
-            lock (s_objSync)
+            lock (this.objSync)
             {
-                if (m_bMoving)
+                if (this.moving)
                 {
                     // We are moving so increment the elapsed move time
-                    m_iTimeElapsed += m_iTimerTickInterval;
+                    this.timeElapsed += this.timerTickInterval;
 
                     // Have we reached the filter position yet?
-                    if (m_iTimeElapsed >= m_iTimeToMove)
+                    if (this.timeElapsed >= this.timeToMove)
                     {
                         // Clear the elapsed time
-                        m_iTimeElapsed = 0;
+                        this.timeElapsed = 0;
+
                         // Stop moving
-                        m_bMoving = false;
+                        this.moving = false;
+
                         // Set the new position
-                        m_sPosition = m_sTargetPosition;
+                        this.position = this.targetPosition;
                     }
                 }
             }
         }
 
-        #endregion Properties and Methods
-
-        #region private utilities
-
-        //
-        // Get Settings from Registry
-        //
-        private static void LoadSettings()
+        internal void LoadSettings()
         {
             try
             {
-                if (g_Profile.GetValue("RegVer", string.Empty) != m_sRegVer)
+                if (this.settingsProfile.GetValue("RegVer", string.Empty) != RegVersion)
                 {
-                    SetDefaultSettings();
+                    this.SetDefaultSettings();
                 }
 
                 // Read the hardware & driver config
-                m_iSlots = Convert.ToInt32(GetSetting("Slots", "6"));
-                if (m_iSlots < 1 || m_iSlots > 8) m_iSlots = 6;
-                m_sPosition = Convert.ToInt16(GetSetting("Position", "0"));
-                if (m_sPosition < 0 || m_sPosition >= m_iSlots) m_sPosition = 0;
-                m_iTimeInterval = Convert.ToInt32(GetSetting("Time", "1000"));
-                m_bImplementsNames = Convert.ToBoolean(GetSetting("ImplementsNames", "true"));
-                m_bImplementsOffsets = Convert.ToBoolean(GetSetting("ImplementsOffsets", "true"));
-                m_bPreemptMoves = Convert.ToBoolean(GetSetting("PreemptMoves", "false"));
+                this.Slots.Value = Convert.ToInt16(this.settingsProfile.GetSettingReturningDefault(this.Slots));
+                if (this.Slots.Value < 1 || this.Slots.Value > 8)
+                {
+                    this.Slots.Value = 6;
+                }
+
+                this.position = 0;
+                this.FilterChangeTimeInterval.Value = Convert.ToInt32(this.settingsProfile.GetSettingReturningDefault(this.FilterChangeTimeInterval));
+                this.InterfaceVersion.Value = Convert.ToInt16(this.settingsProfile.GetSettingReturningDefault(this.InterfaceVersion));
+                this.ImplementsNames.Value = Convert.ToBoolean(this.settingsProfile.GetSettingReturningDefault(this.ImplementsNames));
+                this.ImplementsOffsets.Value = Convert.ToBoolean(this.settingsProfile.GetSettingReturningDefault(this.ImplementsOffsets));
+                this.PreemptMoves.Value = Convert.ToBoolean(this.settingsProfile.GetSettingReturningDefault(this.PreemptMoves));
                 for (int i = 0; i <= 7; i++)
                 {
-                    m_asFilterNames[i] = g_Profile.GetValue($"FilterNames {i}");
-                    m_aiFocusOffsets[i] = Convert.ToInt32(g_Profile.GetValue($"FocusOffsets {i}"));
-                    m_acFilterColours[i] = Color.FromName(g_Profile.GetValue($"Filter {i} Color", DefaultColors[i].Name));
+                    this.AllFilterNames[i] = this.settingsProfile.GetValue($"FilterNames {i}");
+                    this.AllFocusOffsets[i] = Convert.ToInt32(this.settingsProfile.GetValue($"FocusOffsets {i}"));
+                    this.AllFilterColours[i] = Color.FromName(this.settingsProfile.GetValue($"Filter {i} Color", this.defaultColors[i].Name));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Logger.LogError($"FilterWheel - {ex.Message}");
-                SetDefaultSettings();
+                this.Logger.LogError($"FilterWheel - Failed to load settings with error: {ex.Message}");
+                this.SetDefaultSettings();
             }
         }
 
-        private static void SetDefaultSettings()
+        private void SetDefaultSettings()
         {
-            //
-            // initialize variables that are not present
-            //
+            string[] names = ["Red", "Green", "Blue", "Clear", "Ha", "OIII", "LPR", "Dark"];
+            Random rand = new();
 
-            string[] names = new string[8] { "Red", "Green", "Blue", "Clear", "Ha", "OIII", "LPR", "Dark" };
-            Random rand = new Random();
-
-            g_Profile.WriteValue("RegVer", m_sRegVer);
-            g_Profile.WriteValue("Position", "0");
-            g_Profile.WriteValue("Slots", "6");
-            g_Profile.WriteValue("Time", "1000");
-            g_Profile.WriteValue("ImplementsNames", "true");
-            g_Profile.WriteValue("ImplementsOffsets", "true");
-            g_Profile.WriteValue("PreemptMoves", "false");
+            this.settingsProfile.WriteValue("RegVer", RegVersion);
+            this.settingsProfile.WriteValue("Position", "0");
+            this.settingsProfile.SetSettingDefault(this.Slots);
+            this.settingsProfile.SetSettingDefault(this.FilterChangeTimeInterval);
+            this.settingsProfile.SetSettingDefault(this.ImplementsNames);
+            this.settingsProfile.SetSettingDefault(this.ImplementsNames);
+            this.settingsProfile.SetSettingDefault(this.ImplementsOffsets);
+            this.settingsProfile.SetSettingDefault(this.PreemptMoves);
+            this.settingsProfile.SetSettingDefault(this.InterfaceVersion);
             for (int i = 0; i < 8; i++)
             {
-                g_Profile.WriteValue($"FilterNames {i}", names[i]);
-                g_Profile.WriteValue($"FocusOffsets {i}", rand.Next(10000).ToString());
-                g_Profile.WriteValue($"Filter {i} Color", DefaultColors[i].Name);
+                this.settingsProfile.WriteValue($"FilterNames {i}", names[i]);
+                this.settingsProfile.WriteValue($"FocusOffsets {i}", rand.Next(10000).ToString());
+                this.settingsProfile.WriteValue($"Filter {i} Color", this.defaultColors[i].Name);
             }
         }
 
-        public static void SaveSettings(int slots, double seconds, string[] names, int[] offsets, Color[] colors, bool implementsNames, bool implementsOffsets, bool preemptMoves)
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            int i = 0;
-            g_Profile.WriteValue("Slots", slots.ToString());
-            // Convert secs to millisecs
-            try { i = Convert.ToInt32(seconds * 1000); }
-            catch { i = 1000; }
-            g_Profile.WriteValue("Time", i.ToString());
-            for (i = 0; i <= 7; i++)
-            {
-                g_Profile.WriteValue($"FilterNames {i}", names[i]);
-                g_Profile.WriteValue($"FocusOffsets {i}", offsets[i].ToString());
-                g_Profile.WriteValue($"Filter {i} Color", colors[i].Name);
-            }
-            g_Profile.WriteValue("ImplementsNames", implementsNames.ToString());
-            g_Profile.WriteValue("ImplementsOffsets", implementsOffsets.ToString());
-            g_Profile.WriteValue("PreemptMoves", preemptMoves.ToString());
-
-            LoadSettings();
+            this.UpdateState();
         }
-
-        //
-        // Settings support
-        //
-        private static string GetSetting(string Name, string DefValue)
-        {
-            string s = g_Profile.GetValue(Name, "");
-            if (s == "") s = DefValue;
-            return s;
-        }
-
-        private static void CheckConnected()
-        {
-            if (!m_bConnected) throw new ASCOM.DriverException(MSG_NOT_CONNECTED, SCODE_NOT_CONNECTED);
-        }
-
-        #endregion private utilities
     }
 }
