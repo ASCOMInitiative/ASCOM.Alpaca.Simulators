@@ -1,6 +1,6 @@
 ## ASCOM.Alpaca.Simulators Project
 
-Copyright 2021-23 Daniel Van Noord
+Copyright 2021-25 Daniel Van Noord
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -11,7 +11,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ## 3rd Party packages
 This project uses awesome open source projects. You can find a list here in alphabetical order:
 
-* .Net 6.0 and Asp.Net Core - .NET Foundation and Contributors - MIT License
+* .Net 8.0 and Asp.Net Core - .NET Foundation and Contributors - MIT License
 * ASCOM Cross Platform Libraries - ASCOM Initiative - MIT License
 * Blazored.Toast - Chris Sainty - MIT License
 * Microsoft.AspNetCore.Authorization - Microsoft - Apache 2.0
