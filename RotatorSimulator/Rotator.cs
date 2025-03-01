@@ -62,6 +62,11 @@
         }
 
         /// <summary>
+        /// Gets what device this this driver exposes.
+        /// </summary>
+        public override DeviceTypes DeviceType { get; } = DeviceTypes.Rotator;
+
+        /// <summary>
         /// Gets access to the underlying simulation.
         /// </summary>
         public RotatorHardware RotatorHardware { get; }

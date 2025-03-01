@@ -131,6 +131,11 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
+        /// Gets what device this this driver exposes.
+        /// </summary>
+        public override DeviceTypes DeviceType { get; } = DeviceTypes.Focuser;
+
+        /// <summary>
         /// Gets the stored interface version to use.
         /// </summary>
         public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-4", 4);

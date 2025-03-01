@@ -33,6 +33,11 @@
         }
 
         /// <summary>
+        /// Gets what device this this driver exposes.
+        /// </summary>
+        public override DeviceTypes DeviceType { get; } = DeviceTypes.FilterWheel;
+
+        /// <summary>
         /// Gets the underlying Hardware simulation.
         /// </summary>
         public FilterWheelHardware FilterWheelHardware
@@ -65,10 +70,7 @@
                 () =>
                 {
                     return "A simulator for the ASCOM FilterWheel API usable with Alpaca and COM";
-                },
-                nameof(IFilterWheelV3.Description),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.Description, "Get");
             }
         }
 
@@ -83,10 +85,7 @@
                 () =>
                 {
                     return "ASCOM filter wheel driver simulator";
-                },
-                nameof(IFilterWheelV3.DriverInfo),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.DriverInfo, "Get");
             }
         }
 
@@ -101,10 +100,7 @@
                 () =>
                 {
                     return this.FilterWheelHardware.InterfaceVersion.Value;
-                },
-                nameof(IFilterWheelV3.InterfaceVersion),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.InterfaceVersion, "Get");
             }
         }
 
@@ -119,10 +115,7 @@
                 () =>
                 {
                     return DriverName;
-                },
-                nameof(IFilterWheelV3.Name),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.Name, "Get");
             }
         }
 
@@ -137,10 +130,7 @@
                 () =>
                 {
                     return this.FilterWheelHardware.Position;
-                },
-                nameof(IFilterWheelV3.Position),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.Position, "Get");
             }
 
             set
@@ -149,10 +139,7 @@
                 () =>
                 {
                     this.FilterWheelHardware.Position = value;
-                },
-                nameof(IFilterWheelV3.Position),
-                "Set",
-                1);
+                }, DeviceType, MemberNames.Position, "Set");
             }
         }
 
@@ -167,10 +154,7 @@
                 () =>
                 {
                     return this.FilterWheelHardware.FocusOffsets;
-                },
-                nameof(IFilterWheelV3.FocusOffsets),
-                "Set",
-                1);
+                }, DeviceType, MemberNames.FocusOffsets, "Get");
             }
         }
 
@@ -185,10 +169,7 @@
                 () =>
                 {
                     return this.FilterWheelHardware.FilterNames;
-                },
-                nameof(IFilterWheelV3.Names),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.Names, "Get");
             }
         }
 
@@ -226,10 +207,7 @@
                     }
 
                     return deviceState;
-                },
-                nameof(IFilterWheelV3.DeviceState),
-                "Get",
-                3);
+                }, DeviceType, MemberNames.DeviceState, "Get");
             }
         }
 

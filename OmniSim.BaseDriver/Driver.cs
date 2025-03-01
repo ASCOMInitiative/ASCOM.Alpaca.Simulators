@@ -18,6 +18,8 @@ namespace OmniSim.BaseDriver
 
         public short ActionDriverInterfaceVersion { get; private set; }
 
+        public abstract DeviceTypes DeviceType {get;}
+
         public int DeviceNumber
         {
             get; set;
@@ -160,7 +162,7 @@ namespace OmniSim.BaseDriver
         {
             get
             {
-                return ProcessCommand(() => IsConnected, "Connected", "Get", 1);
+                return ProcessCommand(() => IsConnected, DeviceType, MemberNames.Connected, "Get");
             }
             set
             {
@@ -176,7 +178,7 @@ namespace OmniSim.BaseDriver
                     {
                         IsConnected = false;
                     }
-                }, "Connected", "Set", 1);
+                }, DeviceType, MemberNames.Connected, "Set");
             }
         }
 
@@ -192,10 +194,7 @@ namespace OmniSim.BaseDriver
                 {
                     Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                     return $"{version.Major}.{version.Minor}";
-                },
-                "DriverVersion",
-                "Get",
-                ActionDriverInterfaceVersion
+                }, DeviceType, MemberNames.DriverVersion, "Get"
                 );
             }
         }
@@ -220,7 +219,7 @@ namespace OmniSim.BaseDriver
             ProcessCommand(() =>
             {
                 throw new ASCOM.ActionNotImplementedException(actionName);
-            }, "Action", "Action", ActionDriverInterfaceVersion);
+            }, DeviceType, MemberNames.Action, "Action");
             throw new ASCOM.ActionNotImplementedException(actionName);
         }
 
@@ -230,7 +229,7 @@ namespace OmniSim.BaseDriver
             {
                 CheckConnected("CommandBlind");
                 throw new ASCOM.MethodNotImplementedException("CommandBlind");
-            }, "Command", "CommandBlind", ActionDriverInterfaceVersion);
+            }, DeviceType, MemberNames.CommandBlind, "Command");
             throw new ASCOM.ActionNotImplementedException("CommandBlind");
         }
 
@@ -240,7 +239,7 @@ namespace OmniSim.BaseDriver
             {
                 CheckConnected("CommandBool");
                 throw new ASCOM.MethodNotImplementedException("CommandBool");
-            }, "Command", "CommandBool", ActionDriverInterfaceVersion);
+            }, DeviceType, MemberNames.CommandBool, "Command");
             throw new ASCOM.ActionNotImplementedException("CommandBool");
         }
 
@@ -250,7 +249,7 @@ namespace OmniSim.BaseDriver
             {
                 CheckConnected("CommandString");
                 throw new ASCOM.MethodNotImplementedException("CommandString");
-            }, "Command", "CommandString", ActionDriverInterfaceVersion);
+            }, DeviceType, MemberNames.CommandString, "Command");
             throw new ASCOM.ActionNotImplementedException("CommandString");
         }
 
@@ -263,7 +262,7 @@ namespace OmniSim.BaseDriver
                 Connecting = true;
 
                 ConnectTimer.Start();
-            }, "Connect", "Start", Platform7DriverInterfaceVersion);
+            }, DeviceType, MemberNames.Connect, "Called");
         }
 
         public virtual void Disconnect()
@@ -271,7 +270,7 @@ namespace OmniSim.BaseDriver
             ProcessCommand(() =>
             {
                 Connected = false;
-            }, "Disconnect", "Call", Platform7DriverInterfaceVersion);
+            }, DeviceType, MemberNames.Disconnect, "Called");
         }
 
         public void Dispose()
@@ -279,7 +278,7 @@ namespace OmniSim.BaseDriver
             ProcessCommand(() =>
             {
                 Connected = false;
-            }, "Dispose", "Call", ActionDriverInterfaceVersion);
+            }, DeviceType, MemberNames.Dispose, "Called");
         }
 
         #endregion ASCOM Methods
@@ -305,6 +304,24 @@ namespace OmniSim.BaseDriver
             }
         }
 
+        public T ProcessCommand<T>(Func<T> Operation, DeviceTypes ASCOMDeviceType, MemberNames Name, string CommandType)
+        {
+            Stopwatch stopWatch = new();
+            TraceLogger.LogVerbose($"{ASCOMDeviceType} - {Name} - {CommandType} - Called");
+            stopWatch.Start();
+            try
+            {
+                this.CheckSupportedInterface(DeviceCapabilities.VersionIntroduced(Name, ASCOMDeviceType), Name.ToString());
+                var result = Operation.Invoke();
+                TraceLogger.LogVerbose($"{ASCOMDeviceType} - {Name} - {CommandType} - Succeed or started in {stopWatch.Elapsed.TotalSeconds} seconds with result: {result}");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                TraceLogger.LogInformation($"{ASCOMDeviceType} - {Name} - {CommandType} - Failed in {stopWatch.Elapsed.TotalSeconds} seconds with Exception {ex.Message}");
+                throw;
+            }
+        }
         public void ProcessCommand(Action Operation, string Command, string Type, short RequiredInterfaceVersion)
         {
             Stopwatch stopWatch = new();
@@ -323,16 +340,31 @@ namespace OmniSim.BaseDriver
             }
         }
 
+        public void ProcessCommand(Action Operation, DeviceTypes ASCOMDeviceType, MemberNames Name, string CommandType)
+        {
+            Stopwatch stopWatch = new();
+            TraceLogger.LogVerbose($"{ASCOMDeviceType} -  {Name} {CommandType} -Called");
+            stopWatch.Start();
+            try
+            {
+                this.CheckSupportedInterface(DeviceCapabilities.VersionIntroduced(Name, ASCOMDeviceType), Name.ToString());
+                Operation.Invoke();
+                TraceLogger.LogVerbose($"{ASCOMDeviceType} - {Name} - {CommandType} - Succeed or started in {stopWatch.Elapsed.TotalSeconds} seconds with no result.");
+            }
+            catch (Exception ex)
+            {
+                TraceLogger.LogInformation($"{ASCOMDeviceType} - {Name} - {CommandType} -Failed in {stopWatch.Elapsed.TotalSeconds} seconds with Exception {ex.Message}");
+                throw;
+            }
+        }
+
         /// <summary>
         /// No-op but part of the ASCOM Interface. Settings are set through Alpaca.
         /// </summary>
         public void SetupDialog()
         {
             this.ProcessCommand(
-                () => { },
-                "SetupDialog",
-                "SetupDialog",
-                1);
+                () => { }, DeviceType, MemberNames.SetupDialog, "SetupDialog");
         }
 
         #endregion LogTools
