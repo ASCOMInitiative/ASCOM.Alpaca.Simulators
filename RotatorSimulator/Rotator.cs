@@ -99,10 +99,7 @@
                 () =>
                 {
                     return RotatorDescription;
-                },
-                nameof(IRotatorV4.Description),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.Description, "Get");
             }
         }
 
@@ -117,10 +114,7 @@
                 () =>
                 {
                     return RotatorDriverInfo;
-                },
-                nameof(IRotatorV4.DriverInfo),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.DriverInfo, "Get");
             }
         }
 
@@ -135,10 +129,7 @@
                 () =>
                 {
                     return this.RotatorHardware.InterfaceVersionSetting.Value;
-                },
-                nameof(IRotatorV4.InterfaceVersion),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.InterfaceVersion, "Get");
             }
         }
 
@@ -162,10 +153,7 @@
                 () =>
                 {
                     return RotatorName;
-                },
-                nameof(IRotatorV4.Name),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.Name, "Get");
             }
         }
 
@@ -180,10 +168,7 @@
                 () =>
                 {
                     return this.RotatorHardware.CanReverse.Value;
-                },
-                nameof(IRotatorV4.CanReverse),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.CanReverse, "Get");
             }
         }
 
@@ -198,10 +183,7 @@
                 () =>
                 {
                     return this.RotatorHardware.Moving;
-                },
-                nameof(IRotatorV4.IsMoving),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.IsMoving, "Get");
             }
         }
 
@@ -216,10 +198,7 @@
                 () =>
                 {
                     return this.RotatorHardware.Position.Value;
-                },
-                nameof(IRotatorV4.MechanicalPosition),
-                "Get",
-                3);
+                }, DeviceType, MemberNames.MechanicalPosition, "Get");
             }
         }
 
@@ -239,10 +218,7 @@
                     }
 
                     return this.RotatorHardware.Reverse.Value;
-                },
-                nameof(IRotatorV4.Reverse),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.Reverse, "Get");
             }
 
             set
@@ -256,10 +232,7 @@
                     }
 
                     this.RotatorHardware.Reverse.Value = value;
-                },
-                nameof(IRotatorV4.Reverse),
-                "Set",
-                1);
+                }, DeviceType, MemberNames.Reverse, "Set");
             }
         }
 
@@ -274,10 +247,7 @@
                 () =>
                 {
                     return this.RotatorHardware.StepSize;
-                },
-                nameof(IRotatorV4.StepSize),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.StepSize, "Get");
             }
         }
 
@@ -292,10 +262,7 @@
                 () =>
                 {
                     return this.RotatorHardware.TargetPosition;
-                },
-                nameof(IRotatorV4.TargetPosition),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.TargetPosition, "Get");
             }
         }
 
@@ -310,10 +277,7 @@
                 () =>
                 {
                     return (this.RotatorHardware.Position.Value + this.RotatorHardware.SyncOffset.Value + 360) % 360;
-                },
-                nameof(IRotatorV4.Position),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.Position, "Get");
             }
         }
 
@@ -363,10 +327,7 @@
                     }
 
                     return deviceState;
-                },
-                nameof(IRotatorV4.MoveMechanical),
-                "Get",
-                4);
+                }, DeviceType, MemberNames.DeviceState, "Get");
             }
         }
 
@@ -379,10 +340,7 @@
                 () =>
                 {
                     this.RotatorHardware.Halt();
-                },
-                nameof(IRotatorV4.Halt),
-                "Command",
-                1);
+                }, DeviceType, MemberNames.Halt, "Command");
         }
 
         /// <summary>
@@ -395,10 +353,7 @@
                 () =>
                 {
                     this.RotatorHardware.Move(position);
-                },
-                nameof(IRotatorV4.Move),
-                $"Command to {position}",
-                1);
+                }, DeviceType, MemberNames.Move, $"Command to {position}");
         }
 
         /// <summary>
@@ -411,10 +366,7 @@
                 () =>
                 {
                     this.RotatorHardware.MoveAbsolute(position);
-                },
-                nameof(IRotatorV4.MoveMechanical),
-                $"Command to {position}",
-                3);
+                }, DeviceType, MemberNames.MoveMechanical, $"Command to {position}");
         }
 
         /// <summary>
@@ -427,10 +379,7 @@
                 () =>
                 {
                     this.RotatorHardware.MoveAbsolute((position - this.RotatorHardware.SyncOffset.Value + 36000) % 360);
-                },
-                nameof(IRotatorV4.MoveAbsolute),
-                $"Command to {position}",
-                1);
+                }, DeviceType, MemberNames.MoveAbsolute, $"Command to {position}");
         }
 
         /// <summary>
@@ -443,10 +392,7 @@
                 () =>
                 {
                     this.RotatorHardware.SyncOffset.Value = position - this.RotatorHardware.Position.Value;
-                },
-                nameof(IRotatorV4.MoveMechanical),
-                $"Command to {position}",
-                3);
+                }, DeviceType, MemberNames.Sync, $"Command to {position}");
         }
 
         /// <summary>
