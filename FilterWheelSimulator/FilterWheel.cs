@@ -23,7 +23,7 @@
         /// <param name="logger">An ASCOM Logger for this to write calls to.</param>
         /// <param name="profile">An ASCOM Profile for this driver to store information to.</param>
         public FilterWheel(int deviceNumber, ILogger logger, IProfile profile)
-            : base(deviceNumber, logger, profile, DriverName, 3, 2)
+            : base(deviceNumber, logger, profile, DriverName)
         {
             this.DeviceNumber = deviceNumber;
 

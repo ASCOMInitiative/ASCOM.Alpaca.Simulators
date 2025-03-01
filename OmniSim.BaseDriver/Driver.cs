@@ -14,10 +14,6 @@ namespace OmniSim.BaseDriver
     {
         #region Internal Values
 
-        public short Platform7DriverInterfaceVersion { get; private set; }
-
-        public short ActionDriverInterfaceVersion { get; private set; }
-
         public abstract DeviceTypes DeviceType {get;}
 
         public int DeviceNumber
@@ -102,15 +98,12 @@ namespace OmniSim.BaseDriver
 
         }
 
-        public Driver(int deviceNumber, ILogger logger, IProfile profile, string safeName, short platform7DriverInterfaceVersion, short actionDriverInterfaceVersion)
+        public Driver(int deviceNumber, ILogger logger, IProfile profile, string safeName)
         {
             DeviceName = safeName;
             DeviceNumber = deviceNumber;
             TraceLogger = logger;
             Profile = profile;
-
-            Platform7DriverInterfaceVersion = platform7DriverInterfaceVersion;
-            ActionDriverInterfaceVersion = actionDriverInterfaceVersion;
 
             TraceLogger?.SetMinimumLoggingLevel(SavedLoggingLevel);
 
@@ -284,26 +277,6 @@ namespace OmniSim.BaseDriver
         #endregion ASCOM Methods
 
         #region LogTools
-
-        public T ProcessCommand<T>(Func<T> Operation, string Command, string Type, short RequiredInterfaceVersion)
-        {
-            Stopwatch stopWatch = new();
-            TraceLogger.LogVerbose($"{Command} - {Type} {Command} Called");
-            stopWatch.Start();
-            try
-            {
-                this.CheckSupportedInterface(RequiredInterfaceVersion, Command);
-                var result = Operation.Invoke();
-                TraceLogger.LogVerbose($"{Command} - {Type} {Command} - Succeed or started in {stopWatch.Elapsed.TotalSeconds} seconds with result: {result}");
-                return result;
-            }
-            catch (Exception ex)
-            {
-                TraceLogger.LogInformation($"{Command} - {Type} {Command} - Failed in {stopWatch.Elapsed.TotalSeconds} seconds with Exception {ex.Message}");
-                throw;
-            }
-        }
-
         public T ProcessCommand<T>(Func<T> Operation, DeviceTypes ASCOMDeviceType, MemberNames Name, string CommandType)
         {
             Stopwatch stopWatch = new();
@@ -319,23 +292,6 @@ namespace OmniSim.BaseDriver
             catch (Exception ex)
             {
                 TraceLogger.LogInformation($"{ASCOMDeviceType} - {Name} - {CommandType} - Failed in {stopWatch.Elapsed.TotalSeconds} seconds with Exception {ex.Message}");
-                throw;
-            }
-        }
-        public void ProcessCommand(Action Operation, string Command, string Type, short RequiredInterfaceVersion)
-        {
-            Stopwatch stopWatch = new();
-            TraceLogger.LogVerbose($"{Command} - {Type} {Command} Called");
-            stopWatch.Start();
-            try
-            {
-                this.CheckSupportedInterface(RequiredInterfaceVersion, Command);
-                Operation.Invoke();
-                TraceLogger.LogVerbose($"{Command} - {Type} {Command} - Succeed or started in {stopWatch.Elapsed.TotalSeconds} seconds with no result.");
-            }
-            catch (Exception ex)
-            {
-                TraceLogger.LogInformation($"{Command} - {Type} {Command} - Failed in {stopWatch.Elapsed.TotalSeconds} seconds with Exception {ex.Message}");
                 throw;
             }
         }

@@ -24,7 +24,7 @@
         /// <param name="logger">Tracelogger.</param>
         /// <param name="profile">Profile.</param>
         public Rotator(int deviceNumber, ILogger logger, IProfile profile)
-            : base(deviceNumber, logger, profile, RotatorName, 4, 2)
+            : base(deviceNumber, logger, profile, RotatorName)
         {
             try
             {

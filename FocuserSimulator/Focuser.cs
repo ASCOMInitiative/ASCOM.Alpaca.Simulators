@@ -80,7 +80,7 @@ namespace ASCOM.Simulators
         /// <param name="logger">An ASCOM Logger for this to write calls to.</param>
         /// <param name="profile">An ASCOM Profile for this driver to store information to.</param>
         public Focuser(int deviceNumber, ILogger logger, IProfile profile)
-            : base(deviceNumber, logger, profile, SafeName, 4, 2)
+            : base(deviceNumber, logger, profile, SafeName)
         {
             try
             {
