@@ -20,8 +20,8 @@
     <PackageReference Include="ASCOM.Common.Components" Version="2.0.9" />
     <PackageReference Include="ASCOM.Exception.Library" Version="7.0.1" />
     <PackageReference Include="ASCOM.Tools" Version="2.0.9" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.3.1" />
   </ItemGroup>
 
   <PropertyGroup>
