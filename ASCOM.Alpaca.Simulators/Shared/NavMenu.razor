@@ -24,9 +24,13 @@
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="control/v1/filterwheel/0/" Match="NavLinkMatch.All">
-                <span class="oi oi-sun" aria-hidden="true"></span> Filter Wheel
-            </NavLink>
+
+            @foreach (var key in ASCOM.Alpaca.DeviceManager.Focusers)
+            {
+                <NavLink class="nav-link" href=@GetSetupURL("filterwheel", key.Key) Match="NavLinkMatch.All">
+                    <span class="oi oi-sun" aria-hidden="true"></span> Filter Wheel - @key.Key
+                </NavLink>
+            }
         </li>
         <li class="nav-item px-3">
 
