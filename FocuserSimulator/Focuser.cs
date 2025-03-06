@@ -1,4 +1,4 @@
-﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("OmniSim.SettingsAPIGenerator")]
 
 namespace ASCOM.Simulators
@@ -80,7 +80,7 @@ namespace ASCOM.Simulators
         /// <param name="logger">An ASCOM Logger for this to write calls to.</param>
         /// <param name="profile">An ASCOM Profile for this driver to store information to.</param>
         public Focuser(int deviceNumber, ILogger logger, IProfile profile)
-            : base(deviceNumber, logger, profile, SafeName)
+            : base(deviceNumber, logger, profile)
         {
             try
             {
@@ -103,7 +103,7 @@ namespace ASCOM.Simulators
                 this.moveTimer.Interval = 100;
                 this.moveTimer.Enabled = true;
 
-                this.UniqueID = SafeName + deviceNumber.ToString();
+                this.UniqueID = DeviceName + deviceNumber.ToString();
 
                 // Create a Unique ID if it does not exist
                 try
@@ -129,6 +129,11 @@ namespace ASCOM.Simulators
                 throw;
             }
         }
+
+        /// <summary>
+        /// Name of the Driver.
+        /// </summary>
+        public override string DeviceName { get { return $"{SafeName} - {DeviceNumber}"; } }
 
         /// <summary>
         /// Gets what device this this driver exposes.

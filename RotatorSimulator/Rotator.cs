@@ -24,7 +24,7 @@
         /// <param name="logger">Tracelogger.</param>
         /// <param name="profile">Profile.</param>
         public Rotator(int deviceNumber, ILogger logger, IProfile profile)
-            : base(deviceNumber, logger, profile, RotatorName)
+            : base(deviceNumber, logger, profile)
         {
             try
             {
@@ -60,6 +60,11 @@
                 throw;
             }
         }
+
+        /// <summary>
+        /// Name of the Driver.
+        /// </summary>
+        public override string DeviceName { get { return $"{RotatorName} - {DeviceNumber}"; } }
 
         /// <summary>
         /// Gets what device this this driver exposes.

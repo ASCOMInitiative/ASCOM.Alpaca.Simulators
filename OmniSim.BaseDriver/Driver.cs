@@ -21,7 +21,7 @@ namespace OmniSim.BaseDriver
             get; set;
         } = 0;
 
-        public string DeviceName { get; private set; }
+        public abstract string DeviceName { get; }
 
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
@@ -98,9 +98,8 @@ namespace OmniSim.BaseDriver
 
         }
 
-        public Driver(int deviceNumber, ILogger logger, IProfile profile, string safeName)
+        public Driver(int deviceNumber, ILogger logger, IProfile profile)
         {
-            DeviceName = safeName;
             DeviceNumber = deviceNumber;
             TraceLogger = logger;
             Profile = profile;

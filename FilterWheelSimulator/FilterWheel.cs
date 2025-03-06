@@ -1,4 +1,4 @@
-﻿namespace ASCOM.Simulators
+namespace ASCOM.Simulators
 {
     using System;
     using System.Collections.Generic;
@@ -23,7 +23,7 @@
         /// <param name="logger">An ASCOM Logger for this to write calls to.</param>
         /// <param name="profile">An ASCOM Profile for this driver to store information to.</param>
         public FilterWheel(int deviceNumber, ILogger logger, IProfile profile)
-            : base(deviceNumber, logger, profile, DriverName)
+            : base(deviceNumber, logger, profile)
         {
             this.DeviceNumber = deviceNumber;
 
@@ -56,6 +56,8 @@
                 return this.FilterWheelHardware.InterfaceVersion.Value;
             }
         }
+
+        public override string DeviceName { get { return $"{DriverName} - {DeviceNumber}"; } }
 
         #region IFilterWheelV2 members
 
