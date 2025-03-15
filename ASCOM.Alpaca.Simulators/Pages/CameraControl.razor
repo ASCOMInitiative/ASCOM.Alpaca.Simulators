@@ -5,6 +5,12 @@
 @using System.Timers;
 
 <body>
+        @if (!InstanceExists)
+    {
+        <h2>Device Instance @InstanceID does not exist in this simulator</h2>
+    }
+    else
+    {
     <fieldset>
         <legend>Camera</legend>
         <div class="grid-container-two">
@@ -65,11 +71,20 @@
             </div>
         </div>
     </fieldset>
+    }
 </body>
 
 @code {
     [Parameter]
     public int InstanceID { get; set; }
+
+    private bool InstanceExists
+    {
+        get
+        {
+            return DeviceManager.Cameras.ContainsKey(InstanceID);
+        }
+    }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.

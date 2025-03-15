@@ -4,80 +4,95 @@
 @inject NavigationManager uriHelper;
 
 <body>
-    @if (Device.Connected)
+    @if (!InstanceExists)
     {
-        <fieldset>
-            <legend>Device is Connected</legend>
-            <p>The device must be disconnected in order to safely make changes.</p>
+        <h2>Device Instance @InstanceID does not exist in this simulator</h2>
+    }
+    else
+    {
+        @if (Device.Connected)
+        {
+            <fieldset>
+                <legend>Device is Connected</legend>
+                <p>The device must be disconnected in order to safely make changes.</p>
+            </fieldset>
+        }
+        <fieldset disabled="@Device.Connected">
+            <legend>General Settings</legend>
+
+            <label for="SensorQueryInterval">Sensor Query Interval (seconds)</label>
+            <input type="number" id="SensorQueryInterval" min="0" max="300" step="1" @bind="SensorQueryInterval">
+            <br>
+
+            <label for="AveragePeriod">Average Period (hours)</label>
+            <input type="number" id="AveragePeriod" min="0" max="24" step=".1" @bind="AveragePeriod">
+            <br>
+
+            <label for="NumberOfReadings">Number of readings in average period</label>
+            <input type="number" id="NumberOfReadings" min="0" max="128" step="1" @bind="NumberOfReadings">
+            <br>
+
+        </fieldset>
+        <fieldset disabled="@Device.Connected">
+            <legend>Sensor Settings</legend>
+
+            <table style="width:100%">
+                <tr>
+                    <th></th>
+                    <th>Enabled</th>
+                    <th>Min</th>
+                    <th>Max</th>
+                    <th>Unit</th>
+                    <th>Time</th>
+                    <th>Delay</th>
+                </tr>
+                @{
+                    @foreach (var dev in Sensors)
+                    {
+                        if (dev.Key == "DewPoint")
+                        {
+                            continue;
+                        }
+                        <tr>
+
+                            <th>@dev.Value.SensorName</th>
+                            <th><input type="checkbox" @bind="@Sensors[dev.Key].IsImplemented"></th>
+                            <th><input type="number" @bind="@Sensors[dev.Key].SimFromValue" max="@Sensors[dev.Key].SimToValue" class="oc-number"></th>
+                            <th><input type="number" @bind="@Sensors[dev.Key].SimToValue" min="@Sensors[dev.Key].SimFromValue" class="oc-number"></th>
+                            <th>@Sensors[dev.Key].Unit</th>
+                            <th><input type="number" @bind="@Sensors[dev.Key].ValueCycleTime" min="0" max="3600" step="1" class="oc-number"></th>
+                            <th><input type="number" @bind="@Sensors[dev.Key].NotReadyDelay" min="0" max="120" step="1" class="oc-number"></th>
+                        </tr>
+                    }
+                }
+            </table>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <div class="grid-container-two">
+
+                <div class="grid-item-left">
+                    <button @onclick="Reset">Reset</button>
+                </div>
+                <div class="grid-item-right">
+                    <button @onclick="SaveDeviceSettings">Save</button>
+                </div>
+            </div>
         </fieldset>
     }
-    <fieldset disabled="@Device.Connected">
-        <legend>General Settings</legend>
-
-        <label for="SensorQueryInterval">Sensor Query Interval (seconds)</label>
-        <input type="number" id="SensorQueryInterval" min="0" max="300" step="1" @bind="SensorQueryInterval">
-        <br>
-
-        <label for="AveragePeriod">Average Period (hours)</label>
-        <input type="number" id="AveragePeriod" min="0" max="24" step=".1" @bind="AveragePeriod">
-        <br>
-
-        <label for="NumberOfReadings">Number of readings in average period</label>
-        <input type="number" id="NumberOfReadings" min="0" max="128" step="1" @bind="NumberOfReadings">
-        <br>
-
-    </fieldset>
-    <fieldset disabled="@Device.Connected">
-        <legend>Sensor Settings</legend>
-
-        <table style="width:100%">
-            <tr>
-                <th></th>
-                <th>Enabled</th>
-                <th>Min</th>
-                <th>Max</th>
-                <th>Unit</th>
-                <th>Time</th>
-                <th>Delay</th>
-            </tr>
-            @{
-                @foreach (var dev in Sensors)
-                {
-                    if (dev.Key == "DewPoint")
-                    {
-                        continue;
-                    }
-                    <tr>
-
-                        <th>@dev.Value.SensorName</th>
-                        <th><input type="checkbox" @bind="@Sensors[dev.Key].IsImplemented"></th>
-                        <th><input type="number" @bind="@Sensors[dev.Key].SimFromValue" max="@Sensors[dev.Key].SimToValue" class="oc-number"></th>
-                        <th><input type="number" @bind="@Sensors[dev.Key].SimToValue" min="@Sensors[dev.Key].SimFromValue" class="oc-number"></th>
-                        <th>@Sensors[dev.Key].Unit</th>
-                        <th><input type="number" @bind="@Sensors[dev.Key].ValueCycleTime" min="0" max="3600" step="1" class="oc-number"></th>
-                        <th><input type="number" @bind="@Sensors[dev.Key].NotReadyDelay" min="0" max="120" step="1" class="oc-number"></th>
-                    </tr>
-                }
-            }
-        </table>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <div class="grid-container-two">
-
-            <div class="grid-item-left">
-                <button @onclick="Reset">Reset</button>
-            </div>
-            <div class="grid-item-right">
-                <button @onclick="SaveDeviceSettings">Save</button>
-            </div>
-        </div>
-    </fieldset>
 </body>
 
 @code {
     [Parameter]
     public int InstanceID { get; set; }
+
+    private bool InstanceExists
+    {
+        get
+        {
+            return DeviceManager.ObservingConditions.ContainsKey(InstanceID);
+        }
+    }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -97,17 +112,20 @@
 
     protected override void OnInitialized()
     {
-        var interfaceversion = Device.InterfaceVersion;
-
-        SensorQueryInterval = ASCOM.Simulators.OCSimulator.SensorQueryInterval;
-
-        AveragePeriod = ASCOM.Simulators.OCSimulator.AveragePeriod;
-
-        NumberOfReadings = ASCOM.Simulators.OCSimulator.NumberOfReadingsToAverage;
-
-        foreach (var sensor in ASCOM.Simulators.OCSimulator.Sensors)
+        if (InstanceExists)
         {
-            Sensors.Add(sensor.Key, sensor.Value);
+            var interfaceversion = Device.InterfaceVersion;
+
+            SensorQueryInterval = ASCOM.Simulators.OCSimulator.SensorQueryInterval;
+
+            AveragePeriod = ASCOM.Simulators.OCSimulator.AveragePeriod;
+
+            NumberOfReadings = ASCOM.Simulators.OCSimulator.NumberOfReadingsToAverage;
+
+            foreach (var sensor in ASCOM.Simulators.OCSimulator.Sensors)
+            {
+                Sensors.Add(sensor.Key, sensor.Value);
+            }
         }
         base.OnInitialized();
     }
@@ -200,17 +218,17 @@
 
             foreach (var sensor in Sensors)
             {
-                if(sensor.Key == "DewPoint")
+                if (sensor.Key == "DewPoint")
                 {
                     continue;
                 }
-                if(sensor.Value.SimFromValue > sensor.Value.SimToValue)
+                if (sensor.Value.SimFromValue > sensor.Value.SimToValue)
                 {
                     toastService.ShowWarning($"Sensor {sensor.Key} must have the Max be greater than or equal to the Min.");
                     return;
                 }
 
-                if(sensor.Value.NotReadyDelay < 0)
+                if (sensor.Value.NotReadyDelay < 0)
                 {
                     toastService.ShowWarning($"Sensor {sensor.Key} must have the Delay be greater than 0.");
                     return;

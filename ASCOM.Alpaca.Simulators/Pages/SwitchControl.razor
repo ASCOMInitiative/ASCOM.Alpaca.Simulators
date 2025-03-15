@@ -5,49 +5,64 @@
 @using System.Timers;
 
 <body>
-    <fieldset>
-        <legend>Switch</legend>
-        <div class="grid-container-two">
+    @if (!InstanceExists)
+    {
+        <h2>Device Instance @InstanceID does not exist in this simulator</h2>
+    }
+    else
+    {
+        <fieldset>
+            <legend>Switch</legend>
+            <div class="grid-container-two">
 
-            <div class="grid-item-left">
-                <svg width="30" height="30">
-                    <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
-                </svg>
-                <button @onclick="Connect">@ConnectText</button>
+                <div class="grid-item-left">
+                    <svg width="30" height="30">
+                        <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
+                    </svg>
+                    <button @onclick="Connect">@ConnectText</button>
+                </div>
+                <div class="grid-item-right">
+                    <button @onclick="Setup">Setup</button>
+                </div>
             </div>
-            <div class="grid-item-right">
-                <button @onclick="Setup">Setup</button>
-            </div>
-        </div>
 
-        <table style="width:100%">
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Set</th>
-                <th>Value</th>
-            </tr>
-            @if (Connected)
-            {
-                @for (short i = 0; i < Device.MaxSwitch; i++)
+            <table style="width:100%">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Set</th>
+                    <th>Value</th>
+                </tr>
+                @if (Connected)
                 {
-                    int index = i + 1;
-                    <tr>
-                        <th>@index</th>
-                        <th>@Device.GetSwitchName(i)</th>
-                        <th><input type="range" min="@Device.MinSwitchValue(i)" max="@Device.MaxSwitchValue(i)" step="@Device.SwitchStep(i)" value="@Device.GetSwitchValue(i)" @onchange="@((ChangeEventArgs __e) => SetValue(index, Convert.ToDouble(__e.Value)))" style="min-width:40ch"></th>
-                        <th>@Device.GetSwitchValue(i)</th>
-                    </tr>
+                    @for (short i = 0; i < Device.MaxSwitch; i++)
+                    {
+                        int index = i + 1;
+                        <tr>
+                            <th>@index</th>
+                            <th>@Device.GetSwitchName(i)</th>
+                            <th><input type="range" min="@Device.MinSwitchValue(i)" max="@Device.MaxSwitchValue(i)" step="@Device.SwitchStep(i)" value="@Device.GetSwitchValue(i)" @onchange="@((ChangeEventArgs __e) => SetValue(index, Convert.ToDouble(__e.Value)))" style="min-width:40ch"></th>
+                            <th>@Device.GetSwitchValue(i)</th>
+                        </tr>
+                    }
                 }
-            }
-        </table>
+            </table>
 
-    </fieldset>
+        </fieldset>
+    }
 </body>
 
 @code {
     [Parameter]
     public int InstanceID { get; set; }
+
+    private bool InstanceExists
+    {
+        get
+        {
+            return DeviceManager.Switches.ContainsKey(InstanceID);
+        }
+    }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.

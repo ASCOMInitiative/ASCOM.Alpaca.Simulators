@@ -4,111 +4,126 @@
 @inject NavigationManager uriHelper;
 
 <body>
-    @if (Device.Connected)
+    @if (!InstanceExists)
     {
-        <fieldset>
-            <legend>Device is Connected</legend>
-            <p>The device must be disconnected in order to safely make changes.</p>
+        <h2>Device Instance @InstanceID does not exist in this simulator</h2>
+    }
+    else
+    {
+        @if (Device.Connected)
+        {
+            <fieldset>
+                <legend>Device is Connected</legend>
+                <p>The device must be disconnected in order to safely make changes.</p>
+            </fieldset>
+        }
+        <fieldset disabled="@Device.Connected">
+            <legend>Filter Wheel Settings</legend>
+
+            <div>
+                <label for="interfaceVersion">Simulation Interface Version:</label>
+
+                <select name="interfaceVersion" id="interfaceVersion" @bind="InterfaceVersion">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="filters">Number of Filters:</label>
+
+                <select name="filters" id="filters" @bind="NumberOfFilters">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="timedelay">Time between slots (secs):</label>
+
+                <select name="timedelay" id="timedelay" @bind="TimeDelay">
+                    <option value=".5">0.5</option>
+                    <option value="1">1.0</option>
+                    <option value="1.5">1.5</option>
+                    <option value="2">2.0</option>
+                    <option value="2.5">2.5</option>
+                    <option value="3">3.0</option>
+                    <option value="3.5">3.5</option>
+                    <option value="4">4.0</option>
+                </select>
+            </div>
+            <div>
+                <input type="checkbox" id="implementsfilternames" name="implementsfilternames" @bind="ImplementsFilterNames">
+                <label for="implementsfilternames"> Implements Filter Names</label><br>
+
+                <input type="checkbox" id="implementsfocusoffsets" name="implementsfocusoffsets" @bind="ImplementsFocusOffsets">
+                <label for="implementsfocusoffsets"> Implements Focus Offsets</label><br>
+
+                <input type="checkbox" id="preemptmoves" name="preemptmoves" @bind="PreemptMoves">
+                <label for="preemptmoves"> Allow Pre-emption of Moves</label><br>
+            </div>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <legend>Filter Setup</legend>
+            <table style="width:100%">
+                <tr>
+                    <th></th>
+                    <th>Color</th>
+                    <th>Filter Name</th>
+                    <th>Focus Offset</th>
+                </tr>
+
+                @for (int i = 0; i < 8; i++)
+                {
+                    var local = i;
+                    <tr>
+                        <td>Slot @local</td>
+                        <td>
+                            <svg width="32" height="32">
+                                <rect width="32" height="32" style="fill:@FilterColor[i];stroke-width:3;stroke:rgb(0,0,0)" />
+                            </svg>
+                        </td>
+                        <td><input type="text" @bind="FilterNames[local]" disabled="@SlotDisabled(local)" /></td>
+                        <td><input type="number" step="1" @bind="FilterOffsets[local]" disabled="@SlotDisabled(local)" /></td>
+                    </tr>
+                }
+            </table>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <legend>Save</legend>
+            <div class="grid-container-two">
+
+                <div class="grid-item-left">
+                    <button @onclick="Reset">Reset</button>
+                </div>
+                <div class="grid-item-right">
+                    <button @onclick="SaveDeviceSettings">Save</button>
+                </div>
+            </div>
         </fieldset>
     }
-    <fieldset disabled="@Device.Connected">
-        <legend>Filter Wheel Settings</legend>
-
-        <div>
-            <label for="interfaceVersion">Simulation Interface Version:</label>
-
-            <select name="interfaceVersion" id="interfaceVersion" @bind="InterfaceVersion">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-            </select>
-        </div>
-
-        <div>
-            <label for="filters">Number of Filters:</label>
-
-            <select name="filters" id="filters" @bind="NumberOfFilters">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-            </select>
-        </div>
-
-        <div>
-            <label for="timedelay">Time between slots (secs):</label>
-
-            <select name="timedelay" id="timedelay" @bind="TimeDelay">
-                <option value=".5">0.5</option>
-                <option value="1">1.0</option>
-                <option value="1.5">1.5</option>
-                <option value="2">2.0</option>
-                <option value="2.5">2.5</option>
-                <option value="3">3.0</option>
-                <option value="3.5">3.5</option>
-                <option value="4">4.0</option>
-            </select>
-        </div>
-        <div>
-            <input type="checkbox" id="implementsfilternames" name="implementsfilternames" @bind="ImplementsFilterNames">
-            <label for="implementsfilternames"> Implements Filter Names</label><br>
-
-            <input type="checkbox" id="implementsfocusoffsets" name="implementsfocusoffsets" @bind="ImplementsFocusOffsets">
-            <label for="implementsfocusoffsets"> Implements Focus Offsets</label><br>
-
-            <input type="checkbox" id="preemptmoves" name="preemptmoves" @bind="PreemptMoves">
-            <label for="preemptmoves"> Allow Pre-emption of Moves</label><br>
-        </div>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <legend>Filter Setup</legend>
-        <table style="width:100%">
-            <tr>
-                <th></th>
-                <th>Color</th>
-                <th>Filter Name</th>
-                <th>Focus Offset</th>
-            </tr>
-
-            @for (int i = 0; i < 8; i++)
-            {
-                var local = i;
-                <tr>
-                    <td>Slot @local</td>
-                    <td>
-                        <svg width="32" height="32">
-                            <rect width="32" height="32" style="fill:@FilterColor[i];stroke-width:3;stroke:rgb(0,0,0)" />
-                        </svg>
-                    </td>
-                    <td><input type="text" @bind="FilterNames[local]" disabled="@SlotDisabled(local)" /></td>
-                    <td><input type="number" step="1" @bind="FilterOffsets[local]" disabled="@SlotDisabled(local)" /></td>
-                </tr>
-            }
-        </table>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <legend>Save</legend>
-        <div class="grid-container-two">
-
-            <div class="grid-item-left">
-                <button @onclick="Reset">Reset</button>
-            </div>
-            <div class="grid-item-right">
-                <button @onclick="SaveDeviceSettings">Save</button>
-            </div>
-        </div>
-    </fieldset>
 </body>
 
 @code {
     [Parameter]
     public int InstanceID { get; set; }
+
+    private bool InstanceExists
+    {
+        get
+        {
+            return DeviceManager.FilterWheels.ContainsKey(InstanceID);
+        }
+    }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -123,24 +138,25 @@
 
     protected override void OnInitialized()
     {
-
-        NumberOfFilters = Device.FilterWheelHardware.Slots.Value;
-        TimeDelay = Device.FilterWheelHardware.FilterChangeTimeInterval.Value / 1000;
-        ImplementsFilterNames = Device.FilterWheelHardware.ImplementsNames.Value;
-        ImplementsFocusOffsets = Device.FilterWheelHardware.ImplementsOffsets.Value;
-        PreemptMoves = Device.FilterWheelHardware.PreemptMoves.Value;
-        InterfaceVersion = Device.FilterWheelHardware.InterfaceVersion.Value;
-
-        for (int i = 0; i < 8; i++)
+        if (InstanceExists)
         {
-            FilterNames[i] = Device.FilterWheelHardware.AllFilterNames[i];
-            FilterOffsets[i] = Device.FilterWheelHardware.AllFocusOffsets[i];
-            FilterColor[i] = $"rgb({Device.FilterWheelHardware.AllFilterColours[i].R},{Device.FilterWheelHardware.AllFilterColours[i].G},{Device.FilterWheelHardware.AllFilterColours[i].B})";
+            NumberOfFilters = Device.FilterWheelHardware.Slots.Value;
+            TimeDelay = Device.FilterWheelHardware.FilterChangeTimeInterval.Value / 1000;
+            ImplementsFilterNames = Device.FilterWheelHardware.ImplementsNames.Value;
+            ImplementsFocusOffsets = Device.FilterWheelHardware.ImplementsOffsets.Value;
+            PreemptMoves = Device.FilterWheelHardware.PreemptMoves.Value;
+            InterfaceVersion = Device.FilterWheelHardware.InterfaceVersion.Value;
+
+            for (int i = 0; i < 8; i++)
+            {
+                FilterNames[i] = Device.FilterWheelHardware.AllFilterNames[i];
+                FilterOffsets[i] = Device.FilterWheelHardware.AllFocusOffsets[i];
+                FilterColor[i] = $"rgb({Device.FilterWheelHardware.AllFilterColours[i].R},{Device.FilterWheelHardware.AllFilterColours[i].G},{Device.FilterWheelHardware.AllFilterColours[i].B})";
+
+            }
 
         }
-
         base.OnInitialized();
-
     }
 
     #region Connection

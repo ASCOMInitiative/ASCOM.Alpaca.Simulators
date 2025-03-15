@@ -4,109 +4,131 @@
 @inject NavigationManager uriHelper;
 
 <body>
-    @if (Device.IsConnected)
+    @if (!InstanceExists)
     {
-        <fieldset>
-            <legend>Device is Connected</legend>
-            <p>The device must be disconnected in order to safely make changes.</p>
+        <h2>Device Instance @InstanceID does not exist in this simulator</h2>
+    }
+    else
+    {
+        @if (Device.IsConnected)
+        {
+            <fieldset>
+                <legend>Device is Connected</legend>
+                <p>The device must be disconnected in order to safely make changes.</p>
+            </fieldset>
+        }
+        <fieldset disabled="@Device.IsConnected">
+            <legend>Focuser Settings</legend>
+
+            <label for="interfaceVersion">Simulation Interface Version:</label>
+
+            <select name="interfaceVersion" id="interfaceVersion" @bind="InterfaceVersion">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+
+            <br>
+
+            <label for="maxPosition"> Maximum Position (steps):</label>
+            <input type="number" id="maxPosition" name="maxPosition" min="0" @bind="maxPosition">
+            <br>
+
+            <label for="stepSize"> Step Size (microns):</label>
+            <input type="number" id="stepSize" name="stepSize" min="0" @bind="stepSize">
+            <br>
+
+            <label for="maxIncrement"> Maximum Increment:</label>
+            <input type="number" id="maxIncrement" name="maxIncrement" min="0" @bind="maxIncrement">
+            <br>
+
+            <label for="settleTime"> Settle Time (ms):</label>
+            <input type="number" id="settleTime" name="settleTime" min="0" @bind="settleTime">
+            <br>
+        </fieldset>
+        <fieldset disabled="@Device.IsConnected">
+            <legend>Capabilities</legend>
+
+            <input type="checkbox" id="tempProbe" name="tempProbe" @bind="tempProbe">
+            <label for="tempProbe"> Temperature Probe</label>
+            <br>
+
+            <input type="checkbox" id="tempComp" name="tempComp" @bind="tempComp">
+            <label for="tempComp"> Temperature Compensation</label>
+            <br>
+
+            <input type="checkbox" id="implementsStepSize" name="implementsStepSize" @bind="ImplementsStepSize">
+            <label for="implementsStepSize">Step Size</label>
+            <br>
+
+            <input type="checkbox" id="halt" name="halt" @bind="Halt">
+            <label for="halt"> Halt</label>
+            <br>
+
+            <input type="checkbox" id="synchronous" name="synchronous" @bind="Synchronous">
+            <label for="synchronous"> Synchronous</label>
+            <br>
+        </fieldset>
+        <fieldset disabled="@Device.IsConnected">
+            <legend>Temperature Simulator</legend>
+
+            <label for="currentTemp"> Current Temperature (C):</label>
+            <input type="number" id="currentTemp" min="@MinimumTemperature" max="@MaxTemperature" @bind="CurrentTemperature">
+            <br>
+
+            <label for="maxTemp"> Maximum Temperature (C):</label>
+            <input type="number" id="maxTemp" min="@MinimumTemperature" max="100" @bind="MaxTemperature">
+            <br>
+
+            <label for="minTemp"> Minimum Temperature (C):</label>
+            <input type="number" id="minTemp" min="-273" max="@MaxTemperature" @bind="MinimumTemperature">
+            <br>
+
+            <label for="cyclePeriod"> Cycle Period (sec):</label>
+            <input type="number" id="cyclePeriod" min="0" @bind="CyclePeriod">
+            <br>
+
+            <label for="steps"> Steps / C:</label>
+            <input type="number" id="steps" @bind="StepsPerC">
+            <br>
+        </fieldset>
+        <fieldset disabled="@Device.IsConnected">
+            <legend>Type</legend>
+
+            <input type="checkbox" id="absolute" @bind="Absolute">
+            <label for="absolute">Absolute</label>
+            <br>
+            <input type="checkbox" id="relative" @bind="Relative">
+            <label for="relative">Relative</label>
+            <br>
+        </fieldset>
+
+        <fieldset disabled="@Device.IsConnected">
+            <div class="grid-container-two">
+
+                <div class="grid-item-left">
+                    <button @onclick="Reset">Reset</button>
+                </div>
+                <div class="grid-item-right">
+                    <button @onclick="SaveDeviceSettings">Save</button>
+                </div>
+            </div>
         </fieldset>
     }
-    <fieldset disabled="@Device.IsConnected">
-        <legend>Focuser Settings</legend>
-
-        <label for="interfaceVersion">Simulation Interface Version:</label>
-
-        <select name="interfaceVersion" id="interfaceVersion" @bind="InterfaceVersion">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-        </select>
-
-        <br>
-
-        <label for="maxPosition"> Maximum Position (steps):</label>
-        <input type="number" id="maxPosition" name="maxPosition" min="0" @bind="maxPosition">
-        <br>
-
-        <label for="stepSize"> Step Size (microns):</label>
-        <input type="number" id="stepSize" name="stepSize" min="0" @bind="stepSize">
-        <br>
-
-        <label for="maxIncrement"> Maximum Increment:</label>
-        <input type="number" id="maxIncrement" name="maxIncrement" min="0" @bind="maxIncrement">
-        <br>
-
-        <label for="settleTime"> Settle Time (ms):</label>
-        <input type="number" id="settleTime" name="settleTime" min="0" @bind="settleTime">
-        <br>
-    </fieldset>
-    <fieldset disabled="@Device.IsConnected">
-        <legend>Capabilities</legend>
-
-        <input type="checkbox" id="tempProbe" name="tempProbe" @bind="tempProbe">
-        <label for="tempProbe"> Temperature Probe</label><br>
-
-        <input type="checkbox" id="tempComp" name="tempComp" @bind="tempComp">
-        <label for="tempComp"> Temperature Compensation</label><br>
-
-        <input type="checkbox" id="implementsStepSize" name="implementsStepSize" @bind="ImplementsStepSize">
-        <label for="implementsStepSize">Step Size</label><br>
-
-        <input type="checkbox" id="halt" name="halt" @bind="Halt">
-        <label for="halt"> Halt</label><br>
-
-        <input type="checkbox" id="synchronous" name="synchronous" @bind="Synchronous">
-        <label for="synchronous"> Synchronous</label><br>
-    </fieldset>
-    <fieldset disabled="@Device.IsConnected">
-        <legend>Temperature Simulator</legend>
-
-        <label for="currentTemp"> Current Temperature (C):</label>
-        <input type="number" id="currentTemp" min="@MinimumTemperature" max="@MaxTemperature" @bind="CurrentTemperature">
-        <br>
-
-        <label for="maxTemp"> Maximum Temperature (C):</label>
-        <input type="number" id="maxTemp" min="@MinimumTemperature" max="100" @bind="MaxTemperature">
-        <br>
-
-        <label for="minTemp"> Minimum Temperature (C):</label>
-        <input type="number" id="minTemp" min="-273" max="@MaxTemperature" @bind="MinimumTemperature">
-        <br>
-
-        <label for="cyclePeriod"> Cycle Period (sec):</label>
-        <input type="number" id="cyclePeriod" min="0" @bind="CyclePeriod">
-        <br>
-
-        <label for="steps"> Steps / C:</label>
-        <input type="number" id="steps" @bind="StepsPerC">
-        <br>
-    </fieldset>
-    <fieldset disabled="@Device.IsConnected">
-        <legend>Type</legend>
-
-        <input type="checkbox" id="absolute" @bind="Absolute">
-        <label for="absolute">Absolute</label><br>
-        <input type="checkbox" id="relative" @bind="Relative">
-        <label for="relative">Relative</label><br>
-    </fieldset>
-
-    <fieldset disabled="@Device.IsConnected">
-        <div class="grid-container-two">
-
-            <div class="grid-item-left">
-                <button @onclick="Reset">Reset</button>
-            </div>
-            <div class="grid-item-right">
-                <button @onclick="SaveDeviceSettings">Save</button>
-            </div>
-        </div>
-    </fieldset>
 </body>
 
 @code {
     [Parameter]
     public int InstanceID { get; set; }
+
+    private bool InstanceExists
+    {
+        get
+        {
+            return DeviceManager.Focusers.ContainsKey(InstanceID);
+        }
+    }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -121,39 +143,42 @@
 
     protected override void OnInitialized()
     {
-        maxPosition = Device.MaxStepSetting.Value;
+        if (InstanceExists)
+        {
+            maxPosition = Device.MaxStepSetting.Value;
 
-        stepSize = Device.StepSizeSetting.Value;
+            stepSize = Device.StepSizeSetting.Value;
 
-        maxIncrement = Device.MaxIncrementSetting.Value;
+            maxIncrement = Device.MaxIncrementSetting.Value;
 
-        settleTime = Device.SettleTime.Value;
+            settleTime = Device.SettleTime.Value;
 
-        tempProbe = Device.TempProbe.Value;
+            tempProbe = Device.TempProbe.Value;
 
-        tempComp = Device.TempCompAvailableSetting.Value;
+            tempComp = Device.TempCompAvailableSetting.Value;
 
-        ImplementsStepSize = Device.CanStepSize.Value;
+            ImplementsStepSize = Device.CanStepSize.Value;
 
-        Halt = Device.CanHalt.Value;
+            Halt = Device.CanHalt.Value;
 
-        Synchronous = Device.Synchronous.Value;
+            Synchronous = Device.Synchronous.Value;
 
-        CurrentTemperature = Device.TemperatureSetting.Value;
+            CurrentTemperature = Device.TemperatureSetting.Value;
 
-        MaxTemperature = Device.TempMax.Value;
+            MaxTemperature = Device.TempMax.Value;
 
-        MinimumTemperature = Device.TempMin.Value;
+            MinimumTemperature = Device.TempMin.Value;
 
-        CyclePeriod = Device.TempPeriod.Value;
+            CyclePeriod = Device.TempPeriod.Value;
 
-        StepsPerC = Device.TempSteps.Value;
+            StepsPerC = Device.TempSteps.Value;
 
-        Absolute = Device.AbsoluteSetting.Value;
+            Absolute = Device.AbsoluteSetting.Value;
 
-        Relative = !Device.AbsoluteSetting.Value;
+            Relative = !Device.AbsoluteSetting.Value;
 
-        InterfaceVersion = Device.InterfaceVersionSetting.Value;
+            InterfaceVersion = Device.InterfaceVersionSetting.Value;
+        }
 
         base.OnInitialized();
     }
@@ -305,13 +330,13 @@
     {
         try
         {
-            if(MinimumTemperature >= MaxTemperature)
+            if (MinimumTemperature >= MaxTemperature)
             {
                 toastService.ShowWarning("The minimum temperature must be less than the maximum.");
                 return;
             }
 
-            if(maxPosition <= 0)
+            if (maxPosition <= 0)
             {
                 toastService.ShowWarning("The maximum position must be greater than 0.");
                 return;

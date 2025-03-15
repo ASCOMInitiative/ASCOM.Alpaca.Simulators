@@ -6,68 +6,83 @@
 @using ASCOM.Tools;
 
 <body>
-    <fieldset>
-        <legend>Telescope</legend>
-        <div class="grid-container-two">
+    @if (!InstanceExists)
+    {
+        <h2>Device Instance @InstanceID does not exist in this simulator</h2>
+    }
+    else
+    {
+        <fieldset>
+            <legend>Telescope</legend>
+            <div class="grid-container-two">
 
-            <div class="grid-item-left">
-                <svg width="30" height="30">
-                    <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
-                </svg>
-                <button @onclick="Connect">@ConnectText</button>
+                <div class="grid-item-left">
+                    <svg width="30" height="30">
+                        <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
+                    </svg>
+                    <button @onclick="Connect">@ConnectText</button>
+                </div>
+                <div class="grid-item-right">
+                    <button @onclick="Setup">Setup</button>
+                </div>
             </div>
-            <div class="grid-item-right">
-                <button @onclick="Setup">Setup</button>
-            </div>
-        </div>
-        <div class="grid-container-two">
+            <div class="grid-container-two">
 
-            <div class="grid-item-right">
-                <label>LST</label>
-            </div>
-            <div class="grid-item-left">
-                <p>@LSTText</p>
-            </div>
+                <div class="grid-item-right">
+                    <label>LST</label>
+                </div>
+                <div class="grid-item-left">
+                    <p>@LSTText</p>
+                </div>
 
-            <div class="grid-item-right">
-                <label>RA</label>
-            </div>
-            <div class="grid-item-left">
-                <p>@RAText</p>
-            </div>
+                <div class="grid-item-right">
+                    <label>RA</label>
+                </div>
+                <div class="grid-item-left">
+                    <p>@RAText</p>
+                </div>
 
-            <div class="grid-item-right">
-                <label>Dec</label>
-            </div>
-            <div class="grid-item-left">
-                <p>@DecText</p>
-            </div>
+                <div class="grid-item-right">
+                    <label>Dec</label>
+                </div>
+                <div class="grid-item-left">
+                    <p>@DecText</p>
+                </div>
 
-            <div class="grid-item-right">
-                <label>Az</label>
-            </div>
-            <div class="grid-item-left">
-                <p>@AzText</p>
-            </div>
+                <div class="grid-item-right">
+                    <label>Az</label>
+                </div>
+                <div class="grid-item-left">
+                    <p>@AzText</p>
+                </div>
 
-            <div class="grid-item-right">
-                <label>Alt</label>
+                <div class="grid-item-right">
+                    <label>Alt</label>
+                </div>
+                <div class="grid-item-left">
+                    <p>@AltText</p>
+                </div>
             </div>
-            <div class="grid-item-left">
-                <p>@AltText</p>
+            <div class="centered">
+                <label style="color:@SlewColor">@SlewText</label>&nbsp;
+                <label style="color:@HomeColor">@HomeText</label>&nbsp;
+                <label style="color:@ParkColor">@ParkText</label>
             </div>
-        </div>
-        <div class="centered">
-            <label style="color:@SlewColor">@SlewText</label>&nbsp;
-            <label style="color:@HomeColor">@HomeText</label>&nbsp;
-            <label style="color:@ParkColor">@ParkText</label>
-        </div>
-    </fieldset>
+        </fieldset>
+    }
 </body>
 
 @code {
     [Parameter]
     public int InstanceID { get; set; }
+
+    private bool InstanceExists
+    {
+        get
+        {
+            return DeviceManager.Telescopes.ContainsKey(InstanceID);
+        }
+    }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.

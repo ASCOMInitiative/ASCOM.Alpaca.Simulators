@@ -1,44 +1,59 @@
 ﻿@page "/setup/v1/SafetyMonitor/{InstanceID:int}/setup"
+@page "/control/v1/SafetyMonitor/{InstanceID:int}"
 
 @inject IToastService toastService
 @inject NavigationManager uriHelper;
 @using System.Timers;
 
 <body>
-    <fieldset>
-        <legend>SafetyMonitor Settings</legend>
-        <div class="grid-container-two">
-            <div class="grid-item-left">
-                <svg width="30" height="30">
-                    <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
-                </svg>
-                <button @onclick="Connect">@ConnectText</button>
+    @if (!InstanceExists)
+    {
+        <h2>Device Instance @InstanceID does not exist in this simulator</h2>
+    }
+    else
+    {
+        <fieldset>
+            <legend>SafetyMonitor Settings</legend>
+            <div class="grid-container-two">
+                <div class="grid-item-left">
+                    <svg width="30" height="30">
+                        <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
+                    </svg>
+                    <button @onclick="Connect">@ConnectText</button>
+                </div>
+                <div class="grid-item-right">
+                </div>
             </div>
-            <div class="grid-item-right">
 
+            <div class="grid-container-two">
+                <div class="grid-item-right">
+                    <span>Is Safe Value:</span>
+                </div>
+                <div class="grid-item-left">
+                    <input type="checkbox" @bind="@IsSafe">
+                </div>
+                <div class="grid-item-right">
+                    <span>Reset Profile:</span>
+                </div>
+                <div class="grid-item-left">
+                    <button @onclick="Reset">Reset</button>
+                </div>
             </div>
-        </div>
-
-        <div class="grid-container-two">
-            <div class="grid-item-right">
-                <span>Is Safe Value:</span>
-            </div>
-            <div class="grid-item-left">
-                <input type="checkbox" @bind="@IsSafe">
-            </div>
-            <div class="grid-item-right">
-                <span>Reset Profile:</span>
-            </div>
-            <div class="grid-item-left">
-                <button @onclick="Reset">Reset</button>
-            </div>
-        </div>
-    </fieldset>
+        </fieldset>
+    }
 </body>
 
 @code {
     [Parameter]
     public int InstanceID { get; set; }
+
+    private bool InstanceExists
+    {
+        get
+        {
+            return DeviceManager.SafetyMonitors.ContainsKey(InstanceID);
+        }
+    }
 
     Timer timer = new Timer(100);
 
@@ -132,7 +147,11 @@
     {
         get
         {
-            return Device.IsSafe;
+            if (Device.Connected)
+            {
+                return Device.IsSafe;
+            }
+            return false;
         }
         set
         {

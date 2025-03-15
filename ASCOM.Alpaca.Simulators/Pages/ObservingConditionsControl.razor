@@ -5,92 +5,107 @@
 @using System.Timers;
 
 <body>
-    <fieldset>
-        <legend>ObservingConditions</legend>
-        <div class="grid-container-two">
+    @if (!InstanceExists)
+    {
+        <h2>Device Instance @InstanceID does not exist in this simulator</h2>
+    }
+    else
+    {
+        <fieldset>
+            <legend>ObservingConditions</legend>
+            <div class="grid-container-two">
 
-            <div class="grid-item-left">
-                <svg width="30" height="30">
-                    <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
-                </svg>
-                <button @onclick="Connect">@ConnectText</button>
+                <div class="grid-item-left">
+                    <svg width="30" height="30">
+                        <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
+                    </svg>
+                    <button @onclick="Connect">@ConnectText</button>
+                </div>
+                <div class="grid-item-right">
+                    <button @onclick="Setup">Setup</button>
+                </div>
             </div>
-            <div class="grid-item-right">
-                <button @onclick="Setup">Setup</button>
-            </div>
-        </div>
 
-        <table style="width:100%">
-            <tr>
-                <th>Name</th>
-                <th>Value</th>
-                <th>Unit</th>
-                <th></th>
-                <th>Override</th>
-            </tr>
-
-            @foreach (var dev in ASCOM.Simulators.OCSimulator.Sensors)
-            {
+            <table style="width:100%">
                 <tr>
-                    <th>@dev.Value.SensorName</th>
-                    @if (Connected)
-                    {
-
-                        @if (ASCOM.Simulators.OCSimulator.Sensors[@dev.Value.SensorName].IsImplemented)
-                        {
-                            <th>
-                                @ASCOM.Simulators.OCSimulator.GetSensorValue(@dev.Value.SensorName).ToString("0.000")
-                            </th>
-                        }
-                        else
-                        {
-                            <th>
-                                NA
-                            </th>
-                        }
-
-                        <th>@dev.Value.Unit</th>
-                        <th>
-                            @if (dev.Key != "DewPoint")
-                            {
-                                <input type="checkbox" @bind="@dev.Value.Override">
-                            }
-                        </th>
-                        @if (dev.Key == "DewPoint")
-                        {
-                            <th>Calculated from Temp. & Humidity</th>
-                        }
-                        else
-                        {
-                            <th>
-                                <input type="range" min="@dev.Value.SimFromValue" max="@dev.Value.SimToValue" step=".1" @bind="@dev.Value.OverrideValue" style="min-width:30ch">
-                            </th>
-                        }
-                    }
-                    else
-                    {
-                        <th>-----</th>
-                        <th>@dev.Value.Unit</th>
-                    }
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Unit</th>
+                    <th></th>
+                    <th>Override</th>
                 </tr>
-            }
 
-        </table>
+                @foreach (var dev in ASCOM.Simulators.OCSimulator.Sensors)
+                {
+                    <tr>
+                        <th>@dev.Value.SensorName</th>
+                        @if (Connected)
+                        {
 
-        <div class="grid-container-two">
+                            @if (ASCOM.Simulators.OCSimulator.Sensors[@dev.Value.SensorName].IsImplemented)
+                            {
+                                <th>
+                                    @ASCOM.Simulators.OCSimulator.GetSensorValue(@dev.Value.SensorName).ToString("0.000")
+                                </th>
+                            }
+                            else
+                            {
+                                <th>
+                                    NA
+                                </th>
+                            }
 
-            <div class="grid-item-left">
+                            <th>@dev.Value.Unit</th>
+                            <th>
+                                @if (dev.Key != "DewPoint")
+                                {
+                                    <input type="checkbox" @bind="@dev.Value.Override">
+                                }
+                            </th>
+                            @if (dev.Key == "DewPoint")
+                            {
+                                <th>Calculated from Temp. & Humidity</th>
+                            }
+                            else
+                            {
+                                <th>
+                                    <input type="range" min="@dev.Value.SimFromValue" max="@dev.Value.SimToValue" step=".1" @bind="@dev.Value.OverrideValue" style="min-width:30ch">
+                                </th>
+                            }
+                        }
+                        else
+                        {
+                            <th>-----</th>
+                            <th>@dev.Value.Unit</th>
+                        }
+                    </tr>
+                }
+
+            </table>
+
+            <div class="grid-container-two">
+
+                <div class="grid-item-left">
+                </div>
+                <div class="grid-item-right">
+                    <button @onclick="SaveOverride">Save Overrides</button>
+                </div>
             </div>
-            <div class="grid-item-right">
-                <button @onclick="SaveOverride">Save Overrides</button>
-            </div>
-        </div>
-    </fieldset>
+        </fieldset>
+    }
 </body>
 
 @code {
-        [Parameter]
-        public int InstanceID { get; set; }
+    [Parameter]
+    public int InstanceID { get; set; }
+
+    private bool InstanceExists
+    {
+        get
+        {
+            return DeviceManager.ObservingConditions.ContainsKey(InstanceID);
+        }
+    }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
