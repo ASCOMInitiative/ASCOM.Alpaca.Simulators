@@ -33,7 +33,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/interfaceversion")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/interfaceversion")]
         public ActionResult<ASCOM.Common.Alpaca.IntResponse> InterfaceVersion(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -56,7 +56,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/interfaceversion")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/interfaceversion")]
         public ActionResult<Response> InterfaceVersion(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The ASCOM Interface Version, allowed values are 1-4")] System.Int16 InterfaceVersion,
@@ -79,7 +79,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/canhalt")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/canhalt")]
         public ActionResult<ASCOM.Common.Alpaca.BoolResponse> CanHalt(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -102,7 +102,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/canhalt")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/canhalt")]
         public ActionResult<Response> CanHalt(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True if the focuser can halt")] System.Boolean CanHalt,
@@ -125,7 +125,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempprobe")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempprobe")]
         public ActionResult<ASCOM.Common.Alpaca.BoolResponse> TempProbe(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -148,7 +148,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempprobe")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempprobe")]
         public ActionResult<Response> TempProbe(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True if the driver has a temperature probe")] System.Boolean TempProbe,
@@ -171,7 +171,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/synchronous")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/synchronous")]
         public ActionResult<ASCOM.Common.Alpaca.BoolResponse> Synchronous(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -194,7 +194,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/synchronous")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/synchronous")]
         public ActionResult<Response> Synchronous(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True if the focuser moves are synchronous")] System.Boolean Synchronous,
@@ -217,7 +217,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/canstepsize")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/canstepsize")]
         public ActionResult<ASCOM.Common.Alpaca.BoolResponse> CanStepSize(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -240,7 +240,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/canstepsize")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/canstepsize")]
         public ActionResult<Response> CanStepSize(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True if the driver can report step size")] System.Boolean CanStepSize,
@@ -263,7 +263,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempmax")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempmax")]
         public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> TempMax(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -286,7 +286,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempmax")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempmax")]
         public ActionResult<Response> TempMax(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Maximum simulated temperature")] System.Double TempMax,
@@ -309,7 +309,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempmin")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempmin")]
         public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> TempMin(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -332,7 +332,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempmin")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempmin")]
         public ActionResult<Response> TempMin(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Minimum simulated temperature")] System.Double TempMin,
@@ -355,7 +355,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempperiod")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempperiod")]
         public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> TempPeriod(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -378,7 +378,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempperiod")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempperiod")]
         public ActionResult<Response> TempPeriod(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Period to use for temperature changes (seconds)")] System.Double TempPeriod,
@@ -401,7 +401,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempsteps")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempsteps")]
         public ActionResult<ASCOM.Common.Alpaca.IntResponse> TempSteps(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -424,7 +424,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempsteps")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempsteps")]
         public ActionResult<Response> TempSteps(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("How many steps per temp comp action")] System.Int32 TempSteps,
@@ -447,7 +447,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/settletime")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/settletime")]
         public ActionResult<ASCOM.Common.Alpaca.IntResponse> SettleTime(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -470,7 +470,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/settletime")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/settletime")]
         public ActionResult<Response> SettleTime(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Move settle time")] System.Int32 SettleTime,
@@ -493,7 +493,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/absolute")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/absolute")]
         public ActionResult<ASCOM.Common.Alpaca.BoolResponse> Absolute(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -516,7 +516,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/absolute")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/absolute")]
         public ActionResult<Response> Absolute(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True if the focuser is an absolute focuser")] System.Boolean Absolute,
@@ -539,7 +539,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/maxincrement")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/maxincrement")]
         public ActionResult<ASCOM.Common.Alpaca.IntResponse> MaxIncrement(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -562,7 +562,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/maxincrement")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/maxincrement")]
         public ActionResult<Response> MaxIncrement(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The Maximum Increment for moves")] System.Int32 MaxIncrement,
@@ -585,7 +585,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/maxstep")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/maxstep")]
         public ActionResult<ASCOM.Common.Alpaca.IntResponse> MaxStep(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -608,7 +608,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/maxstep")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/maxstep")]
         public ActionResult<Response> MaxStep(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The Max Step for moves")] System.Int32 MaxStep,
@@ -631,7 +631,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/position")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/position")]
         public ActionResult<ASCOM.Common.Alpaca.IntResponse> Position(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -654,7 +654,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/position")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/position")]
         public ActionResult<Response> Position(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The starting position")] System.Int32 Position,
@@ -677,7 +677,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/stepsize")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/stepsize")]
         public ActionResult<ASCOM.Common.Alpaca.IntResponse> StepSize(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -700,7 +700,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/stepsize")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/stepsize")]
         public ActionResult<Response> StepSize(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The focuser step size (microns)")] System.Int32 StepSize,
@@ -723,7 +723,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempcomp")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempcomp")]
         public ActionResult<ASCOM.Common.Alpaca.BoolResponse> TempComp(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -746,7 +746,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempcomp")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempcomp")]
         public ActionResult<Response> TempComp(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Temp Comp State")] System.Boolean TempComp,
@@ -769,7 +769,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempcompavailable")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempcompavailable")]
         public ActionResult<ASCOM.Common.Alpaca.BoolResponse> TempCompAvailable(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -792,7 +792,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/tempcompavailable")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/tempcompavailable")]
         public ActionResult<Response> TempCompAvailable(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True if the driver supports temp comp")] System.Boolean TempCompAvailable,
@@ -815,7 +815,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/temperature")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/temperature")]
         public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> Temperature(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -838,7 +838,7 @@ public class FocuserSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("focuser/{DeviceNumber}/temperature")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("focuser/{DeviceNumber}/temperature")]
         public ActionResult<Response> Temperature(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Starting Temperature")] System.Double Temperature,

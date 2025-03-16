@@ -33,7 +33,7 @@ public class RotatorSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("rotator/{DeviceNumber}/interfaceversion")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("rotator/{DeviceNumber}/interfaceversion")]
         public ActionResult<ASCOM.Common.Alpaca.IntResponse> InterfaceVersion(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -56,7 +56,7 @@ public class RotatorSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("rotator/{DeviceNumber}/interfaceversion")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("rotator/{DeviceNumber}/interfaceversion")]
         public ActionResult<Response> InterfaceVersion(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The ASCOM Interface Version, allowed values are 1-4")] System.Int16 InterfaceVersion,
@@ -66,10 +66,10 @@ public class RotatorSettingsController : ProcessBaseController
             return ProcessRequest(() => { ((DeviceManager.GetRotator(DeviceNumber) as ASCOM.Simulators.Rotator)).RotatorHardware.InterfaceVersionSetting.Value = InterfaceVersion; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"InterfaceVersion={InterfaceVersion}");
         }
         /// <summary>
-        /// OmniSim Only - The starting position >= 0, < 360
+        /// OmniSim Only - The starting position 0 to 359.999
         /// </summary>
         /// <remarks>
-        /// <para>The starting position >= 0, < 360</para>
+        /// <para>The starting position 0 to 359.999</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
         /// <param name="ClientID">Client's unique ID.</param>
@@ -79,7 +79,7 @@ public class RotatorSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("rotator/{DeviceNumber}/position")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("rotator/{DeviceNumber}/position")]
         public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> Position(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -88,13 +88,13 @@ public class RotatorSettingsController : ProcessBaseController
             return ProcessRequest(() => ((DeviceManager.GetRotator(DeviceNumber) as ASCOM.Simulators.Rotator)).RotatorHardware.Position.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
-        /// OmniSim Only - The starting position >= 0, < 360
+        /// OmniSim Only - The starting position 0 to 359.999
         /// </summary>
         /// <remarks>
-        /// <para>The starting position >= 0, < 360</para>
+        /// <para>The starting position 0 to 359.999</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="Position">The starting position >= 0, < 360</param>
+        /// <param name="Position">The starting position 0 to 359.999</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -102,10 +102,10 @@ public class RotatorSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("rotator/{DeviceNumber}/position")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("rotator/{DeviceNumber}/position")]
         public ActionResult<Response> Position(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("The starting position >= 0, < 360")] System.Single Position,
+            [Required][FromForm][SwaggerSchema("The starting position 0 to 359.999")] System.Single Position,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
@@ -125,7 +125,7 @@ public class RotatorSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("rotator/{DeviceNumber}/rotationrate")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("rotator/{DeviceNumber}/rotationrate")]
         public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> RotationRate(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -148,7 +148,7 @@ public class RotatorSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("rotator/{DeviceNumber}/rotationrate")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("rotator/{DeviceNumber}/rotationrate")]
         public ActionResult<Response> RotationRate(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The rotation rate in degrees per second")] System.Double RotationRate,
@@ -171,7 +171,7 @@ public class RotatorSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("rotator/{DeviceNumber}/canreverse")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("rotator/{DeviceNumber}/canreverse")]
         public ActionResult<ASCOM.Common.Alpaca.BoolResponse> CanReverse(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -194,7 +194,7 @@ public class RotatorSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("rotator/{DeviceNumber}/canreverse")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("rotator/{DeviceNumber}/canreverse")]
         public ActionResult<Response> CanReverse(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True if the rotator can reverse")] System.Boolean CanReverse,
@@ -217,7 +217,7 @@ public class RotatorSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("rotator/{DeviceNumber}/reverse")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("rotator/{DeviceNumber}/reverse")]
         public ActionResult<ASCOM.Common.Alpaca.BoolResponse> Reverse(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -240,7 +240,7 @@ public class RotatorSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("rotator/{DeviceNumber}/reverse")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("rotator/{DeviceNumber}/reverse")]
         public ActionResult<Response> Reverse(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True if the rotator is reversed")] System.Boolean Reverse,
@@ -250,10 +250,10 @@ public class RotatorSettingsController : ProcessBaseController
             return ProcessRequest(() => { ((DeviceManager.GetRotator(DeviceNumber) as ASCOM.Simulators.Rotator)).RotatorHardware.Reverse.Value = Reverse; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reverse={Reverse}");
         }
         /// <summary>
-        /// OmniSim Only - The current Sync Offset, 0 to 360
+        /// OmniSim Only - The current Sync Offset, 0 to 359.999
         /// </summary>
         /// <remarks>
-        /// <para>The current Sync Offset, 0 to 360</para>
+        /// <para>The current Sync Offset, 0 to 359.999</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
         /// <param name="ClientID">Client's unique ID.</param>
@@ -263,7 +263,7 @@ public class RotatorSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("rotator/{DeviceNumber}/syncoffset")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("rotator/{DeviceNumber}/syncoffset")]
         public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> SyncOffset(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -272,13 +272,13 @@ public class RotatorSettingsController : ProcessBaseController
             return ProcessRequest(() => ((DeviceManager.GetRotator(DeviceNumber) as ASCOM.Simulators.Rotator)).RotatorHardware.SyncOffset.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
-        /// OmniSim Only - The current Sync Offset, 0 to 360
+        /// OmniSim Only - The current Sync Offset, 0 to 359.999
         /// </summary>
         /// <remarks>
-        /// <para>The current Sync Offset, 0 to 360</para>
+        /// <para>The current Sync Offset, 0 to 359.999</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="SyncOffset">The current Sync Offset, 0 to 360</param>
+        /// <param name="SyncOffset">The current Sync Offset, 0 to 359.999</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -286,10 +286,10 @@ public class RotatorSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("rotator/{DeviceNumber}/syncoffset")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("rotator/{DeviceNumber}/syncoffset")]
         public ActionResult<Response> SyncOffset(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("The current Sync Offset, 0 to 360")] System.Single SyncOffset,
+            [Required][FromForm][SwaggerSchema("The current Sync Offset, 0 to 359.999")] System.Single SyncOffset,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {

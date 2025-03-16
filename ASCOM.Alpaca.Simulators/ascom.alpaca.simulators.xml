@@ -797,8 +797,35 @@
             <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
             <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:ASCOM.Alpaca.Simulators.RotatorSettingsController.Position(System.UInt32,System.UInt32,System.UInt32)" -->
-        <!-- Badly formed XML comment ignored for member "M:ASCOM.Alpaca.Simulators.RotatorSettingsController.Position(System.UInt32,System.Single,System.UInt32,System.UInt32)" -->
+        <member name="M:ASCOM.Alpaca.Simulators.RotatorSettingsController.Position(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim Only - The starting position 0 to 359.999
+            </summary>
+            <remarks>
+            <para>The starting position 0 to 359.999</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.RotatorSettingsController.Position(System.UInt32,System.Single,System.UInt32,System.UInt32)">
+            <summary>
+            OmniSim Only - The starting position 0 to 359.999
+            </summary>
+            <remarks>
+            <para>The starting position 0 to 359.999</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <param name="Position">The starting position 0 to 359.999</param>
+            <param name="ClientID">Client's unique ID.</param>
+            <param name="ClientTransactionID">Client's transaction ID.</param>
+            <response code="200">Transaction complete or exception</response>
+            <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
         <member name="M:ASCOM.Alpaca.Simulators.RotatorSettingsController.RotationRate(System.UInt32,System.UInt32,System.UInt32)">
             <summary>
             OmniSim Only - The rotation rate in degrees per second
@@ -888,10 +915,10 @@
         </member>
         <member name="M:ASCOM.Alpaca.Simulators.RotatorSettingsController.SyncOffset(System.UInt32,System.UInt32,System.UInt32)">
             <summary>
-            OmniSim Only - The current Sync Offset, 0 to 360
+            OmniSim Only - The current Sync Offset, 0 to 359.999
             </summary>
             <remarks>
-            <para>The current Sync Offset, 0 to 360</para>
+            <para>The current Sync Offset, 0 to 359.999</para>
             </remarks>
             <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
             <param name="ClientID">Client's unique ID.</param>
@@ -902,13 +929,13 @@
         </member>
         <member name="M:ASCOM.Alpaca.Simulators.RotatorSettingsController.SyncOffset(System.UInt32,System.Single,System.UInt32,System.UInt32)">
             <summary>
-            OmniSim Only - The current Sync Offset, 0 to 360
+            OmniSim Only - The current Sync Offset, 0 to 359.999
             </summary>
             <remarks>
-            <para>The current Sync Offset, 0 to 360</para>
+            <para>The current Sync Offset, 0 to 359.999</para>
             </remarks>
             <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-            <param name="SyncOffset">The current Sync Offset, 0 to 360</param>
+            <param name="SyncOffset">The current Sync Offset, 0 to 359.999</param>
             <param name="ClientID">Client's unique ID.</param>
             <param name="ClientTransactionID">Client's transaction ID.</param>
             <response code="200">Transaction complete or exception</response>
