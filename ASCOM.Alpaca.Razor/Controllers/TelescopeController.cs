@@ -10,6 +10,7 @@ using System.Net.Mime;
 namespace ASCOM.Alpaca
 {
     [ServiceFilter(typeof(AuthorizationFilter))]
+    [ApiExplorerSettings(GroupName = "Alpaca")]
     [ApiController]
     [Route("api/v1/telescope/")]
     public class TelescopeController : AlpacaController
@@ -837,7 +838,7 @@ namespace ASCOM.Alpaca
         }
 
         /// <summary>
-        /// Sets the current Declination rate offset for telescope guiding.
+        /// Returns the current Declination rate offset for telescope guiding
         /// </summary>
         /// <remarks>
         /// <para>The current Declination movement rate offset for telescope guiding (degrees/sec)</para>
@@ -860,7 +861,7 @@ namespace ASCOM.Alpaca
         }
 
         /// <summary>
-        /// Returns the current Declination rate offset for telescope guiding
+        /// Sets the current Declination movement rate offset for telescope guiding (degrees/sec).
         /// </summary>
         /// <remarks>
         /// <para>Sets the current Declination movement rate offset for telescope guiding (degrees/sec).</para>

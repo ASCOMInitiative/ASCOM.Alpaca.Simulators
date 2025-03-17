@@ -4,110 +4,136 @@
 @inject NavigationManager uriHelper;
 
 <body>
-    @if (Device.Connected)
+    @if (!InstanceExists)
     {
-        <fieldset>
-            <legend>Device is Connected</legend>
-            <p>The device must be disconnected to safely make changes.</p>
+        <h2>Device Instance @InstanceID does not exist in this simulator</h2>
+    }
+    else
+    {
+        @if (Device.Connected)
+        {
+            <fieldset>
+                <legend>Device is Connected</legend>
+                <p>The device must be disconnected to safely make changes.</p>
+            </fieldset>
+        }
+        <fieldset disabled="@Device.Connected">
+            <legend>Shutter Control</legend>
+
+            <label for="ShutterSlewRate">Slew Rate (deg/sec)</label>
+            <input type="number" id="ShutterSlewRate" min="0" max="90" @bind="ShutterSlewRate">
+            <br>
+
+            <label for="ShutterOpenCloseTime">Open/Close time (sec)</label>
+            <input type="number" id="ShutterOpenCloseTime" min="0" max="30" @bind="ShutterOpenCloseTime">
+            <br>
+
+            <label for="ShutterMaximumAltitude">Maximum Altitude (deg)</label>
+            <input type="number" id="ShutterMaximumAltitude" min="0" max="90" @bind="ShutterMaximumAltitude">
+            <br>
+
+            <label for="ShutterMinimumAltitude">Minimum Altitude (deg)</label>
+            <input type="number" id="ShutterMinimumAltitude" min="0" max="90" @bind="ShutterMinimumAltitude">
+            <br>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <legend>Azimuth Control</legend>
+
+            <label for="AzimuthSlewRate">Slew Rate (deg/sec)</label>
+            <input type="number" id="AzimuthSlewRate" min="0" max="90" @bind="AzimuthSlewRate">
+            <br>
+
+            <label for="AzimuthStepSize">Step Size (deg)</label>
+            <input type="number" id="AzimuthStepSize" min="0" max="90" @bind="AzimuthStepSize">
+            <br>
+
+            <label for="AzimuthPark">Park Position (deg)</label>
+            <input type="number" id="AzimuthPark" min="0" max="360" @bind="AzimuthPark">
+            <br>
+
+            <label for="AzimuthHome">Home Position (deg)</label>
+            <input type="number" id="AzimuthHome" min="0" max="360" @bind="AzimuthHome">
+            <br>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <legend>Interface Capabilities</legend>
+
+            <input type="checkbox" id="CanFindHome" @bind="CanFindHome">
+            <label for="CanFindHome">Can Find Home</label>
+            <br>
+
+            <input type="checkbox" id="CanPark" @bind="CanPark">
+            <label for="CanPark">Can Park</label>
+            <br>
+
+            <input type="checkbox" id="CanSlewAltitude" @bind="CanSlewAltitude">
+            <label for="CanSlewAltitude">Can Slew Altitude</label>
+            <br>
+
+            <input type="checkbox" id="CanSlewAzimuth" @bind="CanSlewAzimuth">
+            <label for="CanSlewAzimuth">Can Slew Azimuth</label>
+            <br>
+
+            <input type="checkbox" id="CanOpenCloseShutter" @bind="CanOpenCloseShutter">
+            <label for="CanOpenCloseShutter">Can Open Close Shutter</label>
+            <br>
+
+            <input type="checkbox" id="CanSetPark" @bind="CanSetPark">
+            <label for="CanSetPark">Can Set Park</label>
+            <br>
+
+            <input type="checkbox" id="CanSyncAzimuth" @bind="CanSyncAzimuth">
+            <label for="CanSyncAzimuth">Can Sync Azimuth</label>
+            <br>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <legend>Nonstandard Behavior</legend>
+
+            <input type="checkbox" id="AtHomeWithoutFindHome" @bind="AtHomeWithoutFindHome">
+            <label for="AtHomeWithoutFindHome">AtHome without FindHome</label>
+            <br>
+
+            <input type="checkbox" id="AtParkWithoutPark" @bind="AtParkWithoutPark">
+            <label for="AtParkWithoutPark">At Park without Park()</label>
+            <br>
+
+            <input type="checkbox" id="StartUpWithShutterError" @bind="StartUpWithShutterError">
+            <label for="StartUpWithShutterError">Start up with Shutter Error</label>
+            <br>
+
+            <input type="checkbox" id="SlewingOnOpenClose" @bind="SlewingOnOpenClose">
+            <label for="SlewingOnOpenClose">Slewing on Open/Close</label>
+            <br>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <div class="grid-container-two">
+
+                <div class="grid-item-left">
+                    <button @onclick="Reset">Reset</button>
+                </div>
+                <div class="grid-item-right">
+                    <button @onclick="SaveDeviceSettings">Save</button>
+                </div>
+            </div>
         </fieldset>
     }
-    <fieldset disabled="@Device.Connected">
-        <legend>Shutter Control</legend>
-
-        <label for="ShutterSlewRate">Slew Rate (deg/sec)</label>
-        <input type="number" id="ShutterSlewRate" min="0" max="90" @bind="ShutterSlewRate">
-        <br>
-
-        <label for="ShutterOpenCloseTime">Open/Close time (sec)</label>
-        <input type="number" id="ShutterOpenCloseTime" min="0" max="30" @bind="ShutterOpenCloseTime">
-        <br>
-
-        <label for="ShutterMaximumAltitude">Maximum Altitude (deg)</label>
-        <input type="number" id="ShutterMaximumAltitude" min="0" max="90" @bind="ShutterMaximumAltitude">
-        <br>
-
-        <label for="ShutterMinimumAltitude">Minimum Altitude (deg)</label>
-        <input type="number" id="ShutterMinimumAltitude" min="0" max="90" @bind="ShutterMinimumAltitude">
-        <br>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <legend>Azimuth Control</legend>
-
-        <label for="AzimuthSlewRate">Slew Rate (deg/sec)</label>
-        <input type="number" id="AzimuthSlewRate" min="0" max="90" @bind="AzimuthSlewRate">
-        <br>
-
-        <label for="AzimuthStepSize">Step Size (deg)</label>
-        <input type="number" id="AzimuthStepSize" min="0" max="90" @bind="AzimuthStepSize">
-        <br>
-
-        <label for="AzimuthPark">Park Position (deg)</label>
-        <input type="number" id="AzimuthPark" min="0" max="360" @bind="AzimuthPark">
-        <br>
-
-        <label for="AzimuthHome">Home Position (deg)</label>
-        <input type="number" id="AzimuthHome" min="0" max="360" @bind="AzimuthHome">
-        <br>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <legend>Interface Capabilities</legend>
-
-        <input type="checkbox" id="CanFindHome" @bind="CanFindHome">
-        <label for="CanFindHome">Can Find Home</label><br>
-
-        <input type="checkbox" id="CanPark" @bind="CanPark">
-        <label for="CanPark">Can Park</label><br>
-
-        <input type="checkbox" id="CanSlewAltitude" @bind="CanSlewAltitude">
-        <label for="CanSlewAltitude">Can Slew Altitude</label><br>
-
-        <input type="checkbox" id="CanSlewAzimuth" @bind="CanSlewAzimuth">
-        <label for="CanSlewAzimuth">Can Slew Azimuth</label><br>
-
-        <input type="checkbox" id="CanOpenCloseShutter" @bind="CanOpenCloseShutter">
-        <label for="CanOpenCloseShutter">Can Open Close Shutter</label><br>
-
-        <input type="checkbox" id="CanSetPark" @bind="CanSetPark">
-        <label for="CanSetPark">Can Set Park</label><br>
-
-        <input type="checkbox" id="CanSyncAzimuth" @bind="CanSyncAzimuth">
-        <label for="CanSyncAzimuth">Can Sync Azimuth</label><br>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <legend>Nonstandard Behavior</legend>
-
-        <input type="checkbox" id="AtHomeWithoutFindHome" @bind="AtHomeWithoutFindHome">
-        <label for="AtHomeWithoutFindHome">AtHome without FindHome</label><br>
-
-        <input type="checkbox" id="AtParkWithoutPark" @bind="AtParkWithoutPark">
-        <label for="AtParkWithoutPark">At Park without Park()</label><br>
-
-        <input type="checkbox" id="StartUpWithShutterError" @bind="StartUpWithShutterError">
-        <label for="StartUpWithShutterError">Start up with Shutter Error</label><br>
-
-        <input type="checkbox" id="SlewingOnOpenClose" @bind="SlewingOnOpenClose">
-        <label for="SlewingOnOpenClose">Slewing on Open/Close</label><br>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <div class="grid-container-two">
-
-            <div class="grid-item-left">
-                <button @onclick="Reset">Reset</button>
-            </div>
-            <div class="grid-item-right">
-                <button @onclick="SaveDeviceSettings">Save</button>
-            </div>
-        </div>
-    </fieldset>
 </body>
 
 @code {
     [Parameter]
     public int InstanceID { get; set; }
+
+    private bool InstanceExists
+    {
+        get
+        {
+            return DeviceManager.Domes.ContainsKey(InstanceID);
+        }
+    }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -122,45 +148,48 @@
 
     protected override void OnInitialized()
     {
-        var temp = Device.InterfaceVersion;
+        if (InstanceExists)
+        {
+            var temp = Device.InterfaceVersion;
 
-        ShutterSlewRate = ASCOM.Simulators.Hardware.g_dAltRate;
+            ShutterSlewRate = ASCOM.Simulators.Hardware.g_dAltRate;
 
-        ShutterOpenCloseTime = ASCOM.Simulators.Hardware.g_dOCDelay;
+            ShutterOpenCloseTime = ASCOM.Simulators.Hardware.g_dOCDelay;
 
-        ShutterMaximumAltitude = ASCOM.Simulators.Hardware.g_dMaxAlt;
+            ShutterMaximumAltitude = ASCOM.Simulators.Hardware.g_dMaxAlt;
 
-        ShutterMinimumAltitude = ASCOM.Simulators.Hardware.g_dMinAlt;
+            ShutterMinimumAltitude = ASCOM.Simulators.Hardware.g_dMinAlt;
 
-        AzimuthSlewRate = ASCOM.Simulators.Hardware.g_dAzRate;
+            AzimuthSlewRate = ASCOM.Simulators.Hardware.g_dAzRate;
 
-        AzimuthStepSize = ASCOM.Simulators.Hardware.g_dStepSize;
+            AzimuthStepSize = ASCOM.Simulators.Hardware.g_dStepSize;
 
-        AzimuthPark = ASCOM.Simulators.Hardware.g_dSetPark;
+            AzimuthPark = ASCOM.Simulators.Hardware.g_dSetPark;
 
-        AzimuthHome = ASCOM.Simulators.Hardware.g_dSetHome;
+            AzimuthHome = ASCOM.Simulators.Hardware.g_dSetHome;
 
-        CanFindHome = ASCOM.Simulators.Hardware.g_bCanFindHome;
+            CanFindHome = ASCOM.Simulators.Hardware.g_bCanFindHome;
 
-        CanPark = ASCOM.Simulators.Hardware.g_bCanPark;
+            CanPark = ASCOM.Simulators.Hardware.g_bCanPark;
 
-        CanSlewAltitude = ASCOM.Simulators.Hardware.g_bCanSetAltitude;
+            CanSlewAltitude = ASCOM.Simulators.Hardware.g_bCanSetAltitude;
 
-        CanSlewAzimuth = ASCOM.Simulators.Hardware.g_bCanSetAzimuth;
+            CanSlewAzimuth = ASCOM.Simulators.Hardware.g_bCanSetAzimuth;
 
-        CanOpenCloseShutter = ASCOM.Simulators.Hardware.g_bCanSetShutter;
+            CanOpenCloseShutter = ASCOM.Simulators.Hardware.g_bCanSetShutter;
 
-        CanSetPark = ASCOM.Simulators.Hardware.g_bCanSetPark;
+            CanSetPark = ASCOM.Simulators.Hardware.g_bCanSetPark;
 
-        CanSyncAzimuth = ASCOM.Simulators.Hardware.g_bCanSyncAzimuth;
+            CanSyncAzimuth = ASCOM.Simulators.Hardware.g_bCanSyncAzimuth;
 
-        AtHomeWithoutFindHome = !ASCOM.Simulators.Hardware.g_bStandardAtHome;
+            AtHomeWithoutFindHome = !ASCOM.Simulators.Hardware.g_bStandardAtHome;
 
-        AtParkWithoutPark = !ASCOM.Simulators.Hardware.g_bStandardAtPark;
+            AtParkWithoutPark = !ASCOM.Simulators.Hardware.g_bStandardAtPark;
 
-        StartUpWithShutterError = ASCOM.Simulators.Hardware.g_bStartShutterError;
+            StartUpWithShutterError = ASCOM.Simulators.Hardware.g_bStartShutterError;
 
-        SlewingOnOpenClose = ASCOM.Simulators.Hardware.g_bSlewingOpenClose;
+            SlewingOnOpenClose = ASCOM.Simulators.Hardware.g_bSlewingOpenClose;
+        }
 
         base.OnInitialized();
     }

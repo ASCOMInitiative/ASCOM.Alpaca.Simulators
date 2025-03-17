@@ -135,6 +135,7 @@ using System.Net.Mime;
                 $"        /// <response code=\"500\" examples=\"Error message describing why the command cannot be processed\">Server internal error, check error message</response>\r\n" +
                 $"        [HttpGet]\r\n" +
                 $"        [Produces(MediaTypeNames.Application.Json)]\r\n" +
+                $"        [ApiExplorerSettings(GroupName = \"OmniSim\")]" +
                 $"        [Route(\"{device.ToLower()}/{{DeviceNumber}}/{key.ToLower()}\")]\r\n" +
                 $"        public ActionResult<{responsetype}> {key}(\r\n" +
                 $"            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = \"uint32\")][Range(0, 4294967295)] uint DeviceNumber,\r\n" +
@@ -163,6 +164,7 @@ using System.Net.Mime;
                 $"        /// <response code=\"500\" examples=\"Error message describing why the command cannot be processed\">Server internal error, check error message</response>\r\n" +
                 $"        [HttpPut]\r\n" +
                 $"        [Produces(MediaTypeNames.Application.Json)]\r\n" +
+                $"        [ApiExplorerSettings(GroupName = \"OmniSim\")]" +
                 $"        [Route(\"{device.ToLower()}/{{DeviceNumber}}/{key.ToLower()}\")]\r\n" +
                 $"        public ActionResult<Response> {key}(\r\n" +
                 $"            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = \"uint32\")][Range(0, 4294967295)] uint DeviceNumber,\r\n" +

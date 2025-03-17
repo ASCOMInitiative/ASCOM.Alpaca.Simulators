@@ -31,7 +31,9 @@ namespace ASCOM.Alpaca.Razor
                     //This is off for now
                     //c.UseOneOfForPolymorphism();
 
-                    c.SwaggerDoc("v1", new OpenApiInfo { Title = $"{DeviceManager.Configuration.ServerName}", Description = "Please note that the Alpaca API documentation on the ASCOM website is the canonical version. There are several issues with this auto generated version that will be resolved in future versions. This is currently provided only for testing..", Version = "v0" });
+                    c.SwaggerDoc("Alpaca", new OpenApiInfo { Title = $"{DeviceManager.Configuration.ServerName}", Description = "Please note that the Alpaca API documentation on the ASCOM website is the canonical version. There are several issues with this auto generated version that will be resolved in future versions. This is currently provided only for testing..", Version = "v1" });
+                    c.SwaggerDoc("OmniSim", new OpenApiInfo { Title = "OmniSim Setup", Version = "v1" });
+
 
                     if (File.Exists(host_xml_file))
                     {
@@ -76,8 +78,11 @@ namespace ASCOM.Alpaca.Razor
             if (DeviceManager.Configuration.RunSwagger)
             {
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json",
-                                 $"{DeviceManager.Configuration.ServerName} v1"));
+                app.UseSwaggerUI(c => {
+                    c.SwaggerEndpoint("/swagger/Alpaca/swagger.json",
+                                 $"Alpaca Endpoints - v1");
+                    c.SwaggerEndpoint("/swagger/OmniSim/swagger.json", "OmniSim Only Endpoints");
+                });
             }
         }
 

@@ -206,9 +206,12 @@ namespace ASCOM.Alpaca.Simulators
             DriverManager.LoadCoverCalibrator(0);
             DriverManager.LoadDome(0);
             DriverManager.LoadFilterWheel(0);
+            DriverManager.LoadFilterWheel(1);
             DriverManager.LoadFocuser(0);
+            DriverManager.LoadFocuser(1);
             DriverManager.LoadObservingConditions(0);
             DriverManager.LoadRotator(0);
+            DriverManager.LoadRotator(1);
             DriverManager.LoadSafetyMonitor(0);
             DriverManager.LoadSwitch(0);
             DriverManager.LoadTelescope(0);

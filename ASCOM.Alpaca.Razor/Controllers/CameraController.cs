@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 namespace ASCOM.Alpaca
 {
     [ServiceFilter(typeof(AuthorizationFilter))]
+    [ApiExplorerSettings(GroupName = "Alpaca")]
     [ApiController]
     [Route("api/v1/camera/")]
     public class CameraController : AlpacaController

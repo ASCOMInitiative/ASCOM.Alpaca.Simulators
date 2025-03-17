@@ -1,4 +1,4 @@
-﻿namespace ASCOM.Simulators
+namespace ASCOM.Simulators
 {
     using System;
     using System.Collections.Generic;
@@ -23,7 +23,7 @@
         /// <param name="logger">An ASCOM Logger for this to write calls to.</param>
         /// <param name="profile">An ASCOM Profile for this driver to store information to.</param>
         public FilterWheel(int deviceNumber, ILogger logger, IProfile profile)
-            : base(deviceNumber, logger, profile, DriverName, 3, 2)
+            : base(deviceNumber, logger, profile)
         {
             this.DeviceNumber = deviceNumber;
 
@@ -31,6 +31,11 @@
 
             this.FilterWheelHardware = new FilterWheelHardware(logger, profile);
         }
+
+        /// <summary>
+        /// Gets what device this this driver exposes.
+        /// </summary>
+        public override DeviceTypes DeviceType { get; } = DeviceTypes.FilterWheel;
 
         /// <summary>
         /// Gets the underlying Hardware simulation.
@@ -52,6 +57,8 @@
             }
         }
 
+        public override string DeviceName { get { return $"{DriverName} - {DeviceNumber}"; } }
+
         #region IFilterWheelV2 members
 
         /// <summary>
@@ -65,10 +72,7 @@
                 () =>
                 {
                     return "A simulator for the ASCOM FilterWheel API usable with Alpaca and COM";
-                },
-                nameof(IFilterWheelV3.Description),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.Description, "Get");
             }
         }
 
@@ -83,10 +87,7 @@
                 () =>
                 {
                     return "ASCOM filter wheel driver simulator";
-                },
-                nameof(IFilterWheelV3.DriverInfo),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.DriverInfo, "Get");
             }
         }
 
@@ -101,10 +102,7 @@
                 () =>
                 {
                     return this.FilterWheelHardware.InterfaceVersion.Value;
-                },
-                nameof(IFilterWheelV3.InterfaceVersion),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.InterfaceVersion, "Get");
             }
         }
 
@@ -119,10 +117,7 @@
                 () =>
                 {
                     return DriverName;
-                },
-                nameof(IFilterWheelV3.Name),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.Name, "Get");
             }
         }
 
@@ -137,10 +132,7 @@
                 () =>
                 {
                     return this.FilterWheelHardware.Position;
-                },
-                nameof(IFilterWheelV3.Position),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.Position, "Get");
             }
 
             set
@@ -149,10 +141,7 @@
                 () =>
                 {
                     this.FilterWheelHardware.Position = value;
-                },
-                nameof(IFilterWheelV3.Position),
-                "Set",
-                1);
+                }, DeviceType, MemberNames.Position, "Set");
             }
         }
 
@@ -167,10 +156,7 @@
                 () =>
                 {
                     return this.FilterWheelHardware.FocusOffsets;
-                },
-                nameof(IFilterWheelV3.FocusOffsets),
-                "Set",
-                1);
+                }, DeviceType, MemberNames.FocusOffsets, "Get");
             }
         }
 
@@ -185,10 +171,7 @@
                 () =>
                 {
                     return this.FilterWheelHardware.FilterNames;
-                },
-                nameof(IFilterWheelV3.Names),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.Names, "Get");
             }
         }
 
@@ -226,10 +209,7 @@
                     }
 
                     return deviceState;
-                },
-                nameof(IFilterWheelV3.DeviceState),
-                "Get",
-                3);
+                }, DeviceType, MemberNames.DeviceState, "Get");
             }
         }
 

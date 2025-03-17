@@ -4,69 +4,84 @@
 @inject NavigationManager uriHelper;
 
 <body>
-    @if (Device.Connected)
+    @if (!InstanceExists)
     {
-        <fieldset>
-            <legend>Device is Connected</legend>
-            <p>The device must be disconnected in order to safely make changes.</p>
+        <h2>Device Instance @InstanceID does not exist in this simulator</h2>
+    }
+    else
+    {
+        @if (Device.Connected)
+        {
+            <fieldset>
+                <legend>Device is Connected</legend>
+                <p>The device must be disconnected in order to safely make changes.</p>
+            </fieldset>
+        }
+        <fieldset disabled="@Device.Connected" class="switch">
+            <legend>Switch Settings</legend>
+
+            <table style="width:100%">
+                <tr class="switch-title">
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Value</th>
+                    <th>Min</th>
+                    <th>Max</th>
+                    <th>Step</th>
+                    <th>Can Write</th>
+                    <th>Can Async</th>
+                    <th>Duration</th>
+                </tr>
+                @{
+                    int i = 0;
+                    @foreach (var dev in Switches)
+                    {
+                        int index = i;
+                        <tr>
+                            <th>@i</th>
+                            <th><input type="text" @bind="@Switches[index].Name" style="max-width:11ch"></th>
+                            <th><input type="text" @bind="@Switches[index].Description"></th>
+                            <th><input type="number" @bind="@Switches[index].Value" min="@Switches[index].Minimum" max="@Switches[index].Maximum" class="switch-number"></th>
+                            <th><input type="number" @bind="@Switches[index].Minimum" max="@Switches[index].Maximum" class="switch-number"></th>
+                            <th><input type="number" @bind="@Switches[index].Maximum" min="@Switches[index].Minimum" class="switch-number"></th>
+                            <th><input type="number" min="0" @bind="@Switches[index].StepSize" max="@Switches[index].Maximum" class="switch-number"></th>
+                            <th><input type="checkbox" @bind="@Switches[index].CanWrite" class="switch-number"></th>
+                            <th><input type="checkbox" @bind="@Switches[index].CanAsync" class="switch-number"></th>
+                            <th><input type="number" min="0" @bind="@Switches[index].Duration" class="switch-number"></th>
+                        </tr>
+
+                        i++;
+                    }
+                }
+            </table>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <div class="grid-container-two">
+
+                <div class="grid-item-left">
+                    <button @onclick="Reset">Reset</button>
+                </div>
+                <div class="grid-item-right">
+                    <button @onclick="SaveDeviceSettings">Save</button>
+                </div>
+            </div>
         </fieldset>
     }
-    <fieldset disabled="@Device.Connected" class="switch">
-        <legend>Switch Settings</legend>
-
-        <table style="width:100%">
-            <tr class="switch-title">
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Value</th>
-                <th>Min</th>
-                <th>Max</th>
-                <th>Step</th>
-                <th>Can Write</th>
-                <th>Can Async</th>
-                <th>Duration</th>
-            </tr>
-            @{
-                int i = 0;
-                @foreach (var dev in Switches)
-                {
-                    int index = i;
-                    <tr>
-                        <th>@i</th>
-                        <th><input type="text" @bind="@Switches[index].Name" style="max-width:11ch"></th>
-                        <th><input type="text" @bind="@Switches[index].Description"></th>
-                        <th><input type="number" @bind="@Switches[index].Value" min="@Switches[index].Minimum" max="@Switches[index].Maximum" class="switch-number"></th>
-                        <th><input type="number" @bind="@Switches[index].Minimum" max="@Switches[index].Maximum" class="switch-number"></th>
-                        <th><input type="number" @bind="@Switches[index].Maximum" min="@Switches[index].Minimum" class="switch-number"></th>
-                        <th><input type="number" min="0" @bind="@Switches[index].StepSize" max="@Switches[index].Maximum" class="switch-number"></th>
-                        <th><input type="checkbox" @bind="@Switches[index].CanWrite" class="switch-number"></th>
-                        <th><input type="checkbox" @bind="@Switches[index].CanAsync" class="switch-number"></th>
-                        <th><input type="number" min="0" @bind="@Switches[index].Duration" class="switch-number"></th>
-                    </tr>
-
-                    i++;
-                }
-            }
-        </table>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <div class="grid-container-two">
-
-            <div class="grid-item-left">
-                <button @onclick="Reset">Reset</button>
-            </div>
-            <div class="grid-item-right">
-                <button @onclick="SaveDeviceSettings">Save</button>
-            </div>
-        </div>
-    </fieldset>
 </body>
 
 @code {
     [Parameter]
     public int InstanceID { get; set; }
+
+    private bool InstanceExists
+    {
+        get
+        {
+            return DeviceManager.Switches.ContainsKey(InstanceID);
+        }
+    }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.

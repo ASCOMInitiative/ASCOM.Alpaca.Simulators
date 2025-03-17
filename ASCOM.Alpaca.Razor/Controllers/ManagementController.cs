@@ -10,6 +10,7 @@ using System.Net.Mime;
 namespace ASCOM.Alpaca
 {
     [ServiceFilter(typeof(AuthorizationFilter))]
+    [ApiExplorerSettings(GroupName = "Alpaca")]
     [ApiController]
     public class ManagementController : Controller
     {

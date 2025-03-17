@@ -5,276 +5,291 @@
 @using ASCOM.Simulators;
 @using ASCOM.Common.DeviceInterfaces;
 <body>
-    @if (Device.Connected)
+    @if (!InstanceExists)
     {
-        <fieldset>
-            <legend>Device is Connected</legend>
-            <p>The device must be disconnected in order to safely make changes.</p>
+        <h2>Device Instance @InstanceID does not exist in this simulator</h2>
+    }
+    else
+    {
+        @if (Device.Connected)
+        {
+            <fieldset>
+                <legend>Device is Connected</legend>
+                <p>The device must be disconnected in order to safely make changes.</p>
+            </fieldset>
+        }
+        <fieldset disabled="@Device.Connected">
+            <legend>Telescope Settings</legend>
+
+            <input type="checkbox" id="AutoUnpark" @bind="AutoUnpark">
+            <label for="AutoUnpark">Auto Unpark / Track on Start</label>
+            <br>
+
+            <input type="checkbox" id="NoCoordinates" @bind="NoCoordinates">
+            <label for="NoCoordinates">No Coordinates while Parked</label>
+            <br>
+
+            <input type="checkbox" id="DisconnectOnPark" @bind="DisconnectOnPark">
+            <label for="DisconnectOnPark">Disconnect On Park</label>
+            <br>
+
+            <label for="SlewRate">Slew Rate (deg/sec)</label>
+            <input type="number" id="SlewRate" min="0" max="360" step="1" @bind="SlewRate">
+            <br>
+
+            <input type="checkbox" id="RefractionOn" @bind="RefractionOn">
+            <label for="RefractionOn">Refraction On</label>
+            <br>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <legend>Site Information</legend>
+
+            <label for="LatitudeSign">Latitude</label>
+            <select id="LatitudeSign" @bind="LatitudeSign">
+                <option value="1">N</option>
+                <option value="-1">S</option>
+            </select>
+            <input type="number" min="0" max="90" @bind="LatitudeDegrees">
+            <input type="number" min="0" max="60" @bind="LatitudeMinutes">
+            <br>
+
+            <label for="LongitudeSign">Longitude</label>
+            <select id="LongitudeSign" @bind="LongitudeSign">
+                <option value="1">E</option>
+                <option value="-1">W</option>
+            </select>
+            <input type="number" min="0" max="180" @bind="LongitudeDegrees">
+            <input type="number" min="0" max="60" @bind="LongitudeMinutes">
+            <br>
+
+            <label for="Elevation">Elevation</label>
+            <input type="number" min="-3000" max="30000" step="1" id="Elevation" @bind="Elevation">
+            <br>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <legend>Mount Type</legend>
+            <select id="MountType" @bind="MountType">
+                <option value="AltAz">Alt-Azimuth</option>
+                <option value="Polar">Equatorial</option>
+                <option value="GermanPolar">German Equatorial</option>
+            </select>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <legend>Optics</legend>
+
+            <label for="Aperture">Aperture (m)</label>
+            <input type="number" id="Aperture" min="0" step=".01" @bind="Aperture">
+            <br>
+
+            <label for="ApertureArea">ApertureArea (m^2)</label>
+            <input type="number" id="ApertureArea" min="0" step=".01" @bind="ApertureArea">
+            <br>
+
+            <label for="FocalLength">FocalLength (m)</label>
+            <input type="number" id="FocalLength" min="0" step=".01" @bind="FocalLength">
+            <br>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <legend>Interface</legend>
+
+            <input type="checkbox" id="AltAzCoordinates" @bind="AltAzCoordinates">
+            <label for="AltAzCoordinates">Alt / Az Coordinates</label>
+            <br>
+            <input type="checkbox" id="AltAzSlewing" @bind="AltAzSlewing">
+            <label for="AltAzSlewing">Alt / Az Slewing</label>
+            <br>
+            <input type="checkbox" id="AltAzSync" @bind="AltAzSync">
+            <label for="AltAzSync">Alt / Az Sync</label>
+            <br>
+            <input type="checkbox" id="AltAzAsynchronous" @bind="AltAzAsynchronous">
+            <label for="AltAzAsynchronous">Alt / Az Asynchronous</label>
+            <br>
+
+            <input type="checkbox" id="EquatorialCoordinates" @bind="EquatorialCoordinates">
+            <label for="EquatorialCoordinates">Equatorial Coordinates</label>
+            <br>
+            <input type="checkbox" id="EquatorialSlewing" @bind="EquatorialSlewing">
+            <label for="EquatorialSlewing">Equatorial Slewing</label>
+            <br>
+            <input type="checkbox" id="EquatorialSync" @bind="EquatorialSync">
+            <label for="EquatorialSync">Equatorial Sync</label>
+            <br>
+            <input type="checkbox" id="EquatorialAsynchronous" @bind="EquatorialAsynchronous">
+            <label for="EquatorialAsynchronous">Equatorial Asynchronous</label>
+            <br>
+
+            <input type="checkbox" id="FindHome" @bind="FindHome">
+            <label for="FindHome">Find Home</label>
+            <br>
+            <input type="checkbox" id="Parking" @bind="Parking">
+            <label for="Parking">Parking</label>
+            <br>
+            <input type="checkbox" id="SetParkPosition" @bind="SetParkPosition">
+            <label for="SetParkPosition">Set Park Position</label>
+            <br>
+            <input type="checkbox" id="Unparking" @bind="Unparking">
+            <label for="Unparking">Unparking</label>
+            <br>
+
+            <label for="NumberAxis">Axes for Move</label>
+            <select id="NumberAxis" @bind="NumberAxis">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+            <br>
+
+            <input type="checkbox" id="LatLongElev" @bind="LatLongElev">
+            <label for="LatLongElev">Lat/Long/Elevation</label>
+            <br>
+
+            <input type="checkbox" id="Optics" @bind="Optics">
+            <label for="Optics">Optics</label>
+            <br>
+
+            <input type="checkbox" id="AlignmentMode" @bind="AlignmentMode">
+            <label for="AlignmentMode">Alignment Mode</label>
+            <br>
+            <input type="checkbox" id="SideOfPier" @bind="SideOfPier">
+            <label for="SideOfPier">Side of Pier</label>
+            <br>
+            <input type="checkbox" id="SetSideOfPier" @bind="SetSideOfPier">
+            <label for="BlahSetSideOfPier">Set Side of Pier</label>
+            <br>
+            <input type="checkbox" id="DestinationSideOfPier" @bind="DestinationSideOfPier">
+            <label for="DestinationSideOfPier">Destination Side of Pier</label>
+            <br>
+            <input type="checkbox" id="RefractionSupport" @bind="RefractionSupport">
+            <label for="RefractionSupport">Refraction Support</label>
+            <br>
+
+            <label for="EquatorialSystem">Equatorial System</label>
+            <select id="EquatorialSystem" @bind="EquatorialSystem">
+                <option value="1">Local</option>
+                <option value="4">B1950</option>
+                <option value="2">J2000</option>
+                <option value="3">J2050</option>
+                <option value="0">Other</option>
+            </select>
+            <br>
+
+            <input type="checkbox" id="DateTimeOn" @bind="DateTimeOn">
+            <label for="DateTimeOn">Date Time (UTC)</label>
+            <br>
+
+            <input type="checkbox" id="SiderealTime" @bind="SiderealTime">
+            <label for="SiderealTime">Sidereal Time</label>
+            <br>
+
+            <input type="checkbox" id="TrackingOnOff" @bind="TrackingOnOff">
+            <label for="BlaTrackingOnOffh">Tracking On / Off</label>
+            <br>
+            <input type="checkbox" id="TrackingRates" @bind="TrackingRates">
+            <label for="TrackingRates">Tracking Rates</label>
+            <br>
+            <input type="checkbox" id="GuideRates" @bind="GuideRates">
+            <label for="GuideRates">Guide Rates</label>
+            <br>
+            <input type="checkbox" id="PulseGuide" @bind="PulseGuide">
+            <label for="PulseGuide">Pulse Guide</label>
+            <br>
+            <input type="checkbox" id="DualAxisPulseGuide" @bind="DualAxisPulseGuide">
+            <label for="DualAxisPulseGuide">Dual Axis Pulse Guide</label>
+            <br>
+            <input type="checkbox" id="RaDecRates" @bind="RaDecRates">
+            <label for="RaDecRates">RA / Dec Rates</label>
+            <br>
+
+            <input type="checkbox" id="NoSyncMeridian" @bind="NoSyncMeridian">
+            <label for="NoSyncMeridian">No Sync past meridian</label>
+            <br>
+            <input type="checkbox" id="Version1Interface" @bind="Version1Interface">
+            <label for="Version1Interface">Version 1 Interface</label>
+            <br>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <legend>Park, Home and Startup</legend>
+
+            <label for="StartupMode">Startup Mode</label>
+            <select id="StartupMode" @bind="StartupMode">
+                @foreach (var mode in ASCOM.Simulators.TelescopeHardware.StartupOptions)
+                {
+                    <option value="@mode">@mode</option>
+                }
+            </select>
+            <br>
+            <br>
+
+            <label>Startup Position</label>
+            <br>
+
+            <input type="number" id="StartupAzimuth" @bind="StartupAzimuth">
+            <label for="StartupAzimuth" min="0" max="360" step=".1">Azimuth (deg)</label>
+            <br>
+
+            <input type="number" id="StartupAltitude" @bind="StartupAltitude">
+            <label for="StartupAltitude" min="-90" max="90" step=".1">Altitude  (deg)</label>
+
+            <br>
+            <br>
+
+            <label>Park Position</label>
+            <br>
+
+            <input type="number" id="ParkAzimuth" @bind="ParkAzimuth">
+            <label for="ParkAzimuth" min="0" max="360" step=".1">Azimuth (deg)</label>
+            <br>
+
+            <input type="number" id="ParkAltitude" @bind="ParkAltitude">
+            <label for="ParkAltitude" min="-90" max="90" step=".1">Altitude  (deg)</label>
+
+            <br>
+            <br>
+
+            <label>Home Position</label>
+            <br>
+
+            <input type="number" id="HomeAzimuth" @bind="HomeAzimuth">
+            <label for="HomeAzimuth" min="0" max="360" step=".1">Azimuth (deg)</label>
+            <br>
+
+            <input type="number" id="HomeAltitude" @bind="HomeAltitude">
+            <label for="HomeAltitude" min="-90" max="90" step=".1">Altitude  (deg)</label>
+
+            <br>
+        </fieldset>
+
+        <fieldset disabled="@Device.Connected">
+            <div class="grid-container-two">
+
+                <div class="grid-item-left">
+                    <button @onclick="Reset">Reset</button>
+                </div>
+                <div class="grid-item-right">
+                    <button @onclick="SaveDeviceSettings">Save</button>
+                </div>
+            </div>
         </fieldset>
     }
-    <fieldset disabled="@Device.Connected">
-        <legend>Telescope Settings</legend>
-
-        <input type="checkbox" id="AutoUnpark" @bind="AutoUnpark">
-        <label for="AutoUnpark">Auto Unpark / Track on Start</label>
-        <br>
-
-        <input type="checkbox" id="NoCoordinates" @bind="NoCoordinates">
-        <label for="NoCoordinates">No Coordinates while Parked</label>
-        <br>
-
-        <input type="checkbox" id="DisconnectOnPark" @bind="DisconnectOnPark">
-        <label for="DisconnectOnPark">Disconnect On Park</label>
-        <br>
-
-        <label for="SlewRate">Slew Rate (deg/sec)</label>
-        <input type="number" id="SlewRate" min="0" max="360" step="1" @bind="SlewRate">
-        <br>
-
-        <input type="checkbox" id="RefractionOn" @bind="RefractionOn">
-        <label for="RefractionOn">Refraction On</label>
-        <br>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <legend>Site Information</legend>
-
-        <label for="LatitudeSign">Latitude</label>
-        <select id="LatitudeSign" @bind="LatitudeSign">
-            <option value="1">N</option>
-            <option value="-1">S</option>
-        </select>
-        <input type="number" min="0" max="90" @bind="LatitudeDegrees">
-        <input type="number" min="0" max="60" @bind="LatitudeMinutes">
-        <br>
-
-        <label for="LongitudeSign">Longitude</label>
-        <select id="LongitudeSign" @bind="LongitudeSign">
-            <option value="1">E</option>
-            <option value="-1">W</option>
-        </select>
-        <input type="number" min="0" max="180" @bind="LongitudeDegrees">
-        <input type="number" min="0" max="60" @bind="LongitudeMinutes">
-        <br>
-
-        <label for="Elevation">Elevation</label>
-        <input type="number" min="-3000" max="30000" step="1" id="Elevation" @bind="Elevation">
-        <br>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <legend>Mount Type</legend>
-        <select id="MountType" @bind="MountType">
-            <option value="AltAz">Alt-Azimuth</option>
-            <option value="Polar">Equatorial</option>
-            <option value="GermanPolar">German Equatorial</option>
-        </select>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <legend>Optics</legend>
-
-        <label for="Aperture">Aperture (m)</label>
-        <input type="number" id="Aperture" min="0" step=".01" @bind="Aperture">
-        <br>
-
-        <label for="ApertureArea">ApertureArea (m^2)</label>
-        <input type="number" id="ApertureArea" min="0" step=".01" @bind="ApertureArea">
-        <br>
-
-        <label for="FocalLength">FocalLength (m)</label>
-        <input type="number" id="FocalLength" min="0" step=".01" @bind="FocalLength">
-        <br>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <legend>Interface</legend>
-
-        <input type="checkbox" id="AltAzCoordinates" @bind="AltAzCoordinates">
-        <label for="AltAzCoordinates">Alt / Az Coordinates</label>
-        <br>
-        <input type="checkbox" id="AltAzSlewing" @bind="AltAzSlewing">
-        <label for="AltAzSlewing">Alt / Az Slewing</label>
-        <br>
-        <input type="checkbox" id="AltAzSync" @bind="AltAzSync">
-        <label for="AltAzSync">Alt / Az Sync</label>
-        <br>
-        <input type="checkbox" id="AltAzAsynchronous" @bind="AltAzAsynchronous">
-        <label for="AltAzAsynchronous">Alt / Az Asynchronous</label>
-        <br>
-
-        <input type="checkbox" id="EquatorialCoordinates" @bind="EquatorialCoordinates">
-        <label for="EquatorialCoordinates">Equatorial Coordinates</label>
-        <br>
-        <input type="checkbox" id="EquatorialSlewing" @bind="EquatorialSlewing">
-        <label for="EquatorialSlewing">Equatorial Slewing</label>
-        <br>
-        <input type="checkbox" id="EquatorialSync" @bind="EquatorialSync">
-        <label for="EquatorialSync">Equatorial Sync</label>
-        <br>
-        <input type="checkbox" id="EquatorialAsynchronous" @bind="EquatorialAsynchronous">
-        <label for="EquatorialAsynchronous">Equatorial Asynchronous</label>
-        <br>
-
-        <input type="checkbox" id="FindHome" @bind="FindHome">
-        <label for="FindHome">Find Home</label>
-        <br>
-        <input type="checkbox" id="Parking" @bind="Parking">
-        <label for="Parking">Parking</label>
-        <br>
-        <input type="checkbox" id="SetParkPosition" @bind="SetParkPosition">
-        <label for="SetParkPosition">Set Park Position</label>
-        <br>
-        <input type="checkbox" id="Unparking" @bind="Unparking">
-        <label for="Unparking">Unparking</label>
-        <br>
-
-        <label for="NumberAxis">Axes for Move</label>
-        <select id="NumberAxis" @bind="NumberAxis">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-        </select>
-        <br>
-
-        <input type="checkbox" id="LatLongElev" @bind="LatLongElev">
-        <label for="LatLongElev">Lat/Long/Elevation</label>
-        <br>
-
-        <input type="checkbox" id="Optics" @bind="Optics">
-        <label for="Optics">Optics</label>
-        <br>
-
-        <input type="checkbox" id="AlignmentMode" @bind="AlignmentMode">
-        <label for="AlignmentMode">Alignment Mode</label>
-        <br>
-        <input type="checkbox" id="SideOfPier" @bind="SideOfPier">
-        <label for="SideOfPier">Side of Pier</label>
-        <br>
-        <input type="checkbox" id="SetSideOfPier" @bind="SetSideOfPier">
-        <label for="BlahSetSideOfPier">Set Side of Pier</label>
-        <br>
-        <input type="checkbox" id="DestinationSideOfPier" @bind="DestinationSideOfPier">
-        <label for="DestinationSideOfPier">Destination Side of Pier</label>
-        <br>
-        <input type="checkbox" id="RefractionSupport" @bind="RefractionSupport">
-        <label for="RefractionSupport">Refraction Support</label>
-        <br>
-
-        <label for="EquatorialSystem">Equatorial System</label>
-        <select id="EquatorialSystem" @bind="EquatorialSystem">
-            <option value="1">Local</option>
-            <option value="4">B1950</option>
-            <option value="2">J2000</option>
-            <option value="3">J2050</option>
-            <option value="0">Other</option>
-        </select>
-        <br>
-
-        <input type="checkbox" id="DateTimeOn" @bind="DateTimeOn">
-        <label for="DateTimeOn">Date Time (UTC)</label>
-        <br>
-
-        <input type="checkbox" id="SiderealTime" @bind="SiderealTime">
-        <label for="SiderealTime">Sidereal Time</label>
-        <br>
-
-        <input type="checkbox" id="TrackingOnOff" @bind="TrackingOnOff">
-        <label for="BlaTrackingOnOffh">Tracking On / Off</label>
-        <br>
-        <input type="checkbox" id="TrackingRates" @bind="TrackingRates">
-        <label for="TrackingRates">Tracking Rates</label>
-        <br>
-        <input type="checkbox" id="GuideRates" @bind="GuideRates">
-        <label for="GuideRates">Guide Rates</label>
-        <br>
-        <input type="checkbox" id="PulseGuide" @bind="PulseGuide">
-        <label for="PulseGuide">Pulse Guide</label>
-        <br>
-        <input type="checkbox" id="DualAxisPulseGuide" @bind="DualAxisPulseGuide">
-        <label for="DualAxisPulseGuide">Dual Axis Pulse Guide</label>
-        <br>
-        <input type="checkbox" id="RaDecRates" @bind="RaDecRates">
-        <label for="RaDecRates">RA / Dec Rates</label>
-        <br>
-
-        <input type="checkbox" id="NoSyncMeridian" @bind="NoSyncMeridian">
-        <label for="NoSyncMeridian">No Sync past meridian</label>
-        <br>
-        <input type="checkbox" id="Version1Interface" @bind="Version1Interface">
-        <label for="Version1Interface">Version 1 Interface</label>
-        <br>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <legend>Park, Home and Startup</legend>
-
-        <label for="StartupMode">Startup Mode</label>
-        <select id="StartupMode" @bind="StartupMode">
-            @foreach (var mode in ASCOM.Simulators.TelescopeHardware.StartupOptions)
-            {
-                <option value="@mode">@mode</option>
-            }
-        </select>
-        <br>
-        <br>
-
-        <label>Startup Position</label>
-        <br>
-
-        <input type="number" id="StartupAzimuth" @bind="StartupAzimuth">
-        <label for="StartupAzimuth" min="0" max="360" step=".1">Azimuth (deg)</label>
-        <br>
-
-        <input type="number" id="StartupAltitude" @bind="StartupAltitude">
-        <label for="StartupAltitude" min="-90" max="90" step=".1">Altitude  (deg)</label>
-
-        <br>
-        <br>
-
-        <label>Park Position</label>
-        <br>
-
-        <input type="number" id="ParkAzimuth" @bind="ParkAzimuth">
-        <label for="ParkAzimuth" min="0" max="360" step=".1">Azimuth (deg)</label>
-        <br>
-
-        <input type="number" id="ParkAltitude" @bind="ParkAltitude">
-        <label for="ParkAltitude" min="-90" max="90" step=".1">Altitude  (deg)</label>
-
-        <br>
-        <br>
-
-        <label>Home Position</label>
-        <br>
-
-        <input type="number" id="HomeAzimuth" @bind="HomeAzimuth">
-        <label for="HomeAzimuth" min="0" max="360" step=".1">Azimuth (deg)</label>
-        <br>
-
-        <input type="number" id="HomeAltitude" @bind="HomeAltitude">
-        <label for="HomeAltitude" min="-90" max="90" step=".1">Altitude  (deg)</label>
-
-        <br>
-    </fieldset>
-
-    <fieldset disabled="@Device.Connected">
-        <div class="grid-container-two">
-
-            <div class="grid-item-left">
-                <button @onclick="Reset">Reset</button>
-            </div>
-            <div class="grid-item-right">
-                <button @onclick="SaveDeviceSettings">Save</button>
-            </div>
-        </div>
-    </fieldset>
 </body>
 
 @code {
     [Parameter]
     public int InstanceID { get; set; }
+
+    private bool InstanceExists
+    {
+        get
+        {
+            return DeviceManager.Telescopes.ContainsKey(InstanceID);
+        }
+    }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -289,123 +304,127 @@
 
     protected override void OnInitialized()
     {
-        try
+
+        if (InstanceExists)
         {
-            var interfaceversion = Device.InterfaceVersion;
+            try
+            {
+                var interfaceversion = Device.InterfaceVersion;
+            }
+            catch
+            {
+
+            }
+
+
+            AutoUnpark = TelescopeHardware.AutoTrack;
+
+            NoCoordinates = TelescopeHardware.NoCoordinatesAtPark;
+
+            DisconnectOnPark = TelescopeHardware.DisconnectOnPark;
+
+            SlewRate = TelescopeHardware.MaximumSlewRate;
+
+            RefractionOn = TelescopeHardware.Refraction;
+
+            LatitudeSign = Math.Sign(TelescopeHardware.Latitude);
+
+            LatitudeDegrees = (int)Math.Abs(TelescopeHardware.Latitude);
+
+            LatitudeMinutes = double.Parse(Math.Abs((TelescopeHardware.Latitude - (int)TelescopeHardware.Latitude) * 60).ToString("00.000"));
+
+            LongitudeSign = Math.Sign(TelescopeHardware.Longitude);
+
+            LongitudeDegrees = Math.Abs((int)TelescopeHardware.Longitude);
+
+            LongitudeMinutes = double.Parse(Math.Abs((TelescopeHardware.Longitude - (int)TelescopeHardware.Longitude) * 60).ToString("00.000"));
+
+            Elevation = TelescopeHardware.Elevation;
+
+            MountType = TelescopeHardware.AlignmentMode;
+
+            Aperture = TelescopeHardware.ApertureDiameter;
+
+            ApertureArea = TelescopeHardware.ApertureArea;
+
+            FocalLength = TelescopeHardware.FocalLength;
+
+            StartupMode = TelescopeHardware.StartUpMode;
+
+            StartupAzimuth = TelescopeHardware.StartCoordinates.X;
+
+            StartupAltitude = TelescopeHardware.StartCoordinates.Y;
+
+            ParkAzimuth = TelescopeHardware.ParkAzimuth;
+
+            ParkAltitude = TelescopeHardware.ParkAltitude;
+
+            HomeAzimuth = TelescopeHardware.HomePosition.X;
+
+            HomeAltitude = TelescopeHardware.HomePosition.Y;
+
+            AltAzCoordinates = TelescopeHardware.CanAltAz;
+
+            AltAzSlewing = TelescopeHardware.CanSlewAltAz;
+
+            AltAzSync = TelescopeHardware.CanSyncAltAz;
+
+            AltAzAsynchronous = TelescopeHardware.CanSlewAltAzAsync;
+
+            EquatorialCoordinates = TelescopeHardware.CanEquatorial;
+
+            EquatorialSlewing = TelescopeHardware.CanSlew;
+
+            EquatorialSync = TelescopeHardware.CanSync;
+
+            EquatorialAsynchronous = TelescopeHardware.CanSlewAsync;
+
+            FindHome = TelescopeHardware.CanFindHome;
+
+            Parking = TelescopeHardware.CanPark;
+
+            SetParkPosition = TelescopeHardware.CanSetPark;
+
+            Unparking = TelescopeHardware.CanUnpark;
+
+            NumberAxis = TelescopeHardware.NumberMoveAxis;
+
+            LatLongElev = TelescopeHardware.CanLatLongElev;
+
+            Optics = TelescopeHardware.CanOptics;
+
+            AlignmentMode = TelescopeHardware.CanAlignmentMode;
+
+            SideOfPier = TelescopeHardware.CanPointingState;
+
+            SetSideOfPier = TelescopeHardware.CanSetPointingState;
+
+            DestinationSideOfPier = TelescopeHardware.CanDestinationSideofPier;
+
+            RefractionSupport = TelescopeHardware.CanDoesRefraction;
+
+            EquatorialSystem = TelescopeHardware.EquatorialSystem;
+
+            DateTimeOn = TelescopeHardware.CanDateTime;
+
+            SiderealTime = TelescopeHardware.CanSiderealTime;
+
+            TrackingOnOff = TelescopeHardware.CanSetTracking;
+
+            TrackingRates = TelescopeHardware.CanTrackingRates;
+
+            GuideRates = TelescopeHardware.CanSetGuideRates;
+
+            PulseGuide = TelescopeHardware.CanPulseGuide;
+
+            DualAxisPulseGuide = TelescopeHardware.CanDualAxisPulseGuide;
+
+            RaDecRates = TelescopeHardware.CanSetEquatorialRates;
+
+            NoSyncMeridian = TelescopeHardware.NoSyncPastMeridian;
+
+            Version1Interface = TelescopeHardware.VersionOneOnly;
         }
-        catch
-        {
-            
-        }
-
-
-        AutoUnpark = TelescopeHardware.AutoTrack;
-
-        NoCoordinates = TelescopeHardware.NoCoordinatesAtPark;
-
-        DisconnectOnPark = TelescopeHardware.DisconnectOnPark;
-
-        SlewRate = TelescopeHardware.MaximumSlewRate;
-
-        RefractionOn = TelescopeHardware.Refraction;
-
-        LatitudeSign = Math.Sign(TelescopeHardware.Latitude);
-
-        LatitudeDegrees = (int)Math.Abs(TelescopeHardware.Latitude);
-
-        LatitudeMinutes = double.Parse(Math.Abs((TelescopeHardware.Latitude - (int)TelescopeHardware.Latitude) * 60).ToString("00.000"));
-
-        LongitudeSign = Math.Sign(TelescopeHardware.Longitude);
-
-        LongitudeDegrees = Math.Abs((int)TelescopeHardware.Longitude);
-
-        LongitudeMinutes = double.Parse(Math.Abs((TelescopeHardware.Longitude - (int)TelescopeHardware.Longitude) * 60).ToString("00.000"));
-
-        Elevation = TelescopeHardware.Elevation;
-
-        MountType = TelescopeHardware.AlignmentMode;
-
-        Aperture = TelescopeHardware.ApertureDiameter;
-
-        ApertureArea = TelescopeHardware.ApertureArea;
-
-        FocalLength = TelescopeHardware.FocalLength;
-
-        StartupMode = TelescopeHardware.StartUpMode;
-
-        StartupAzimuth = TelescopeHardware.StartCoordinates.X;
-
-        StartupAltitude = TelescopeHardware.StartCoordinates.Y;
-
-        ParkAzimuth = TelescopeHardware.ParkAzimuth;
-
-        ParkAltitude = TelescopeHardware.ParkAltitude;
-
-        HomeAzimuth = TelescopeHardware.HomePosition.X;
-
-        HomeAltitude = TelescopeHardware.HomePosition.Y;
-
-        AltAzCoordinates = TelescopeHardware.CanAltAz;
-
-        AltAzSlewing = TelescopeHardware.CanSlewAltAz;
-
-        AltAzSync = TelescopeHardware.CanSyncAltAz;
-
-        AltAzAsynchronous = TelescopeHardware.CanSlewAltAzAsync;
-
-        EquatorialCoordinates = TelescopeHardware.CanEquatorial;
-
-        EquatorialSlewing = TelescopeHardware.CanSlew;
-
-        EquatorialSync = TelescopeHardware.CanSync;
-
-        EquatorialAsynchronous = TelescopeHardware.CanSlewAsync;
-
-        FindHome = TelescopeHardware.CanFindHome;
-
-        Parking = TelescopeHardware.CanPark;
-
-        SetParkPosition = TelescopeHardware.CanSetPark;
-
-        Unparking = TelescopeHardware.CanUnpark;
-
-        NumberAxis = TelescopeHardware.NumberMoveAxis;
-
-        LatLongElev = TelescopeHardware.CanLatLongElev;
-
-        Optics = TelescopeHardware.CanOptics;
-
-        AlignmentMode = TelescopeHardware.CanAlignmentMode;
-
-        SideOfPier = TelescopeHardware.CanPointingState;
-
-        SetSideOfPier = TelescopeHardware.CanSetPointingState;
-
-        DestinationSideOfPier = TelescopeHardware.CanDestinationSideofPier;
-
-        RefractionSupport = TelescopeHardware.CanDoesRefraction;
-
-        EquatorialSystem = TelescopeHardware.EquatorialSystem;
-
-        DateTimeOn = TelescopeHardware.CanDateTime;
-
-        SiderealTime = TelescopeHardware.CanSiderealTime;
-
-        TrackingOnOff = TelescopeHardware.CanSetTracking;
-
-        TrackingRates = TelescopeHardware.CanTrackingRates;
-
-        GuideRates = TelescopeHardware.CanSetGuideRates;
-
-        PulseGuide = TelescopeHardware.CanPulseGuide;
-
-        DualAxisPulseGuide = TelescopeHardware.CanDualAxisPulseGuide;
-
-        RaDecRates = TelescopeHardware.CanSetEquatorialRates;
-
-        NoSyncMeridian = TelescopeHardware.NoSyncPastMeridian;
-
-        Version1Interface = TelescopeHardware.VersionOneOnly;
 
         base.OnInitialized();
     }

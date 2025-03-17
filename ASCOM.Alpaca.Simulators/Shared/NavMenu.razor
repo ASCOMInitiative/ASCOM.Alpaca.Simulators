@@ -24,14 +24,22 @@
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="control/v1/filterwheel/0/" Match="NavLinkMatch.All">
-                <span class="oi oi-sun" aria-hidden="true"></span> Filter Wheel
-            </NavLink>
+
+            @foreach (var key in ASCOM.Alpaca.DeviceManager.Focusers)
+            {
+                <NavLink class="nav-link" href=@GetSetupURL("filterwheel", key.Key) Match="NavLinkMatch.All">
+                    <span class="oi oi-sun" aria-hidden="true"></span> Filter Wheel - @key.Key
+                </NavLink>
+            }
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="control/v1/focuser/0/" Match="NavLinkMatch.All">
-                <span class="oi oi-elevator" aria-hidden="true"></span> Focuser
-            </NavLink>
+
+            @foreach(var key in ASCOM.Alpaca.DeviceManager.Focusers)
+            {
+                <NavLink class="nav-link" href=@GetSetupURL("focuser", key.Key) Match="NavLinkMatch.All">
+                    <span class="oi oi-elevator" aria-hidden="true"></span> Focuser - @key.Key
+                </NavLink>
+            }
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="control/v1/observingconditions/0/" Match="NavLinkMatch.All">
@@ -39,9 +47,12 @@
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="control/v1/rotator/0/" Match="NavLinkMatch.All">
-                <span class="oi oi-loop-circular" aria-hidden="true"></span> Rotator
-            </NavLink>
+            @foreach (var key in ASCOM.Alpaca.DeviceManager.Focusers)
+            {
+                <NavLink class="nav-link" href=@GetSetupURL("rotator", key.Key) Match="NavLinkMatch.All">
+                    <span class="oi oi-elevator" aria-hidden="true"></span> Rotator - @key.Key
+                </NavLink>
+            }
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="setup/v1/safetymonitor/0/setup" Match="NavLinkMatch.All">
@@ -67,9 +78,9 @@
         {
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="update" Match="NavLinkMatch.All">
-                <span class="oi oi-data-transfer-download" aria-hidden="true"></span> Update Available
-            </NavLink>
-        </li>
+                    <span class="oi oi-data-transfer-download" aria-hidden="true"></span> Update Available
+                </NavLink>
+            </li>
         }
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="about" Match="NavLinkMatch.All">
@@ -97,6 +108,11 @@
     bool AllowShutdown
     {
         get => !EnableShutdown;
+    }
+
+    string GetSetupURL(string dev, int index)
+    {
+        return $"control/v1/{dev}/{index}/";
     }
 
     void Shutdown()

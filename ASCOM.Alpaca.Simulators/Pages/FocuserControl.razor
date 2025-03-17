@@ -5,66 +5,81 @@
 @using System.Timers;
 
 <body>
-    <fieldset>
-        <legend>Focuser</legend>
-        <div class="grid-container-two">
+    @if (!InstanceExists)
+    {
+        <h2>Device Instance @InstanceID does not exist in this simulator</h2>
+    }
+    else
+    {
+        <fieldset>
+            <legend>Focuser</legend>
+            <div class="grid-container-two">
 
-            <div class="grid-item-left">
-                <svg width="30" height="30">
-                    <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
-                </svg>
-                <button @onclick="Connect">@ConnectText</button>
-            </div>
+                <div class="grid-item-left">
+                    <svg width="30" height="30">
+                        <circle cx="15" cy="15" r="11" style="fill:@ConnectionColor;stroke-width:3;stroke:rgb(0,0,0)" />
+                    </svg>
+                    <button @onclick="Connect">@ConnectText</button>
+                </div>
 
-            <div class="grid-item-right">
-                <ErrorBoundary>
-                    <LogLevelControl Driver="@(Device as OmniSim.BaseDriver.Driver)" />
-                </ErrorBoundary>
-                <button @onclick="Setup">Setup</button>
-            </div>
+                <div class="grid-item-right">
+                    <ErrorBoundary>
+                        <LogLevelControl Driver="@(Device as OmniSim.BaseDriver.Driver)" />
+                    </ErrorBoundary>
+                    <button @onclick="Setup">Setup</button>
+                </div>
 
-            <div class="grid-item-right">
-                <p>Temperature (C):</p>
-            </div>
-            <div class="grid-item-left">
-                <p>@Temperature</p>
-            </div>
+                <div class="grid-item-right">
+                    <p>Temperature (C):</p>
+                </div>
+                <div class="grid-item-left">
+                    <p>@Temperature</p>
+                </div>
 
 
-            <div class="grid-item-right">
-                <p>Position (Steps):</p>
-            </div>
-            <div class="grid-item-left">
-                <p>@Position</p>
-            </div>
+                <div class="grid-item-right">
+                    <p>Position (Steps):</p>
+                </div>
+                <div class="grid-item-left">
+                    <p>@Position</p>
+                </div>
 
-            <div class="grid-item-right">
-                <input type="number" min="0" step="1" max="@Device.MaxStepSetting.Value" @bind="GoToPosition" />
-            </div>
-            <div class="grid-item-left">
-                <button @onclick="GoTo">GoTo</button>
-            </div>
+                <div class="grid-item-right">
+                    <input type="number" min="0" step="1" max="@Device.MaxStepSetting.Value" @bind="GoToPosition" />
+                </div>
+                <div class="grid-item-left">
+                    <button @onclick="GoTo">GoTo</button>
+                </div>
 
-            <div class="grid-item-right">
-            </div>
-            <div class="grid-item-left">
-                <button @onclick="Halt">Halt</button>
-            </div>
+                <div class="grid-item-right">
+                </div>
+                <div class="grid-item-left">
+                    <button @onclick="Halt">Halt</button>
+                </div>
 
-            <div class="grid-item-right">
-                <label>Temp Comp</label>
-                <input type="checkbox" @bind="TempComp" />
-            </div>
-            <div class="grid-item-left">
-            </div>
+                <div class="grid-item-right">
+                    <label>Temp Comp</label>
+                    <input type="checkbox" @bind="TempComp" />
+                </div>
+                <div class="grid-item-left">
+                </div>
 
-        </div>
-    </fieldset>
+            </div>
+        </fieldset>
+    }
 </body>
 
 @code {
     [Parameter]
     public int InstanceID { get; set; }
+
+    private bool InstanceExists
+    {
+        get
+        {
+            return DeviceManager.Focusers.ContainsKey(InstanceID);
+        }
+    }
 
     /// <summary>
     /// This access the device type not the interface to allow the device specific settings to be accessed.
@@ -216,7 +231,7 @@
                 Device.Move(GoToPosition);
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             DisplayError(ex.Message);
         }

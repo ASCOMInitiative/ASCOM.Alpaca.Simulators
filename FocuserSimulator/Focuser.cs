@@ -1,4 +1,4 @@
-﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("OmniSim.SettingsAPIGenerator")]
 
 namespace ASCOM.Simulators
@@ -80,7 +80,7 @@ namespace ASCOM.Simulators
         /// <param name="logger">An ASCOM Logger for this to write calls to.</param>
         /// <param name="profile">An ASCOM Profile for this driver to store information to.</param>
         public Focuser(int deviceNumber, ILogger logger, IProfile profile)
-            : base(deviceNumber, logger, profile, SafeName, 4, 2)
+            : base(deviceNumber, logger, profile)
         {
             try
             {
@@ -103,7 +103,7 @@ namespace ASCOM.Simulators
                 this.moveTimer.Interval = 100;
                 this.moveTimer.Enabled = true;
 
-                this.UniqueID = SafeName + deviceNumber.ToString();
+                this.UniqueID = DeviceName + deviceNumber.ToString();
 
                 // Create a Unique ID if it does not exist
                 try
@@ -129,6 +129,16 @@ namespace ASCOM.Simulators
                 throw;
             }
         }
+
+        /// <summary>
+        /// Name of the Driver.
+        /// </summary>
+        public override string DeviceName { get { return $"{SafeName} - {DeviceNumber}"; } }
+
+        /// <summary>
+        /// Gets what device this this driver exposes.
+        /// </summary>
+        public override DeviceTypes DeviceType { get; } = DeviceTypes.Focuser;
 
         /// <summary>
         /// Gets the stored interface version to use.
@@ -243,10 +253,7 @@ namespace ASCOM.Simulators
                 () =>
                 {
                     return this.AbsoluteSetting.Value;
-                },
-                nameof(IFocuserV4.Absolute),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.Absolute, "Get");
             }
         }
 
@@ -261,10 +268,7 @@ namespace ASCOM.Simulators
                 () =>
                 {
                     return "A simulator for the ASCOM Focuser API usable with Alpaca and COM";
-                },
-                nameof(IFocuserV4.Description),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.Description, "Get");
             }
         }
 
@@ -279,10 +283,7 @@ namespace ASCOM.Simulators
                 () =>
                 {
                     return "ASCOM focuser simulator";
-                },
-                nameof(IFocuserV4.DriverInfo),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.DriverInfo, "Get");
             }
         }
 
@@ -297,10 +298,7 @@ namespace ASCOM.Simulators
                 () =>
                 {
                     return this.InterfaceVersionSetting.Value;
-                },
-                nameof(IFocuserV4.InterfaceVersion),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.InterfaceVersion, "Get");
             }
         }
 
@@ -316,10 +314,7 @@ namespace ASCOM.Simulators
                 () =>
                 {
                     return this.motorState != MotorState.Idle;
-                },
-                nameof(IFocuserV4.IsMoving),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.IsMoving, "Get");
             }
         }
 
@@ -350,10 +345,7 @@ namespace ASCOM.Simulators
                 () =>
                 {
                     return this.MaxIncrementSetting.Value;
-                },
-                nameof(IFocuserV4.MaxIncrement),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.MaxIncrement, "Get");
             }
         }
 
@@ -370,10 +362,7 @@ namespace ASCOM.Simulators
                 () =>
                 {
                     return this.MaxStepSetting.Value;
-                },
-                nameof(IFocuserV4.MaxStep),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.MaxStep, "Get");
             }
         }
 
@@ -389,10 +378,7 @@ namespace ASCOM.Simulators
                 () =>
                 {
                     return SafeName;
-                },
-                nameof(IFocuserV4.Name),
-                "Get",
-                2);
+                }, DeviceType, MemberNames.Name, "Get");
             }
         }
 
@@ -414,10 +400,7 @@ namespace ASCOM.Simulators
                     }
 
                     return this.PositionSetting.Value;
-                },
-                nameof(IFocuserV4.Position),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.Position, "Get");
             }
         }
 
@@ -438,10 +421,7 @@ namespace ASCOM.Simulators
                     }
 
                     throw new PropertyNotImplementedException("Property StepSize is not implemented");
-                },
-                nameof(IFocuserV4.StepSize),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.StepSize, "Get");
             }
         }
 
@@ -467,10 +447,7 @@ namespace ASCOM.Simulators
                     }
 
                     return this.TempCompSetting.Value;
-                },
-                nameof(IFocuserV4.TempComp),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.TempComp, "Get");
             }
 
             set
@@ -484,10 +461,7 @@ namespace ASCOM.Simulators
                     }
 
                     this.TempCompSetting.Value = value;
-                },
-                nameof(IFocuserV4.TempComp),
-                "Set",
-                1);
+                }, DeviceType, MemberNames.TempComp, "Set");
             }
         }
 
@@ -504,10 +478,7 @@ namespace ASCOM.Simulators
                 () =>
                 {
                     return this.TempCompAvailableSetting.Value;
-                },
-                nameof(IFocuserV4.TempCompAvailable),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.TempCompAvailable, "Get");
             }
         }
 
@@ -526,10 +497,7 @@ namespace ASCOM.Simulators
                 {
                     this.CheckConnected("Temperature");
                     return this.TemperatureSetting.Value;
-                },
-                nameof(IFocuserV4.Temperature),
-                "Get",
-                1);
+                }, DeviceType, MemberNames.Temperature, "Get");
             }
         }
 
@@ -581,10 +549,7 @@ namespace ASCOM.Simulators
                     }
 
                     return deviceState;
-                },
-                nameof(IFocuserV4.DeviceState),
-                "Get",
-                4);
+                }, DeviceType, MemberNames.DeviceState, "Get");
             }
         }
 
@@ -616,10 +581,7 @@ namespace ASCOM.Simulators
                     {
                         this.PositionSetting.Value = 0;
                     }
-                },
-                nameof(IFocuserV4.Halt),
-                "Command",
-                1);
+                }, DeviceType, MemberNames.Halt, "Command");
         }
 
         /// <summary>
@@ -656,10 +618,7 @@ namespace ASCOM.Simulators
                     }
 
                     this.motorState = MotorState.Moving;
-                },
-                nameof(IFocuserV4.Move),
-                "Move Command",
-            1);
+                }, DeviceType, MemberNames.Move, "Command");
         }
 
         /// <summary>
