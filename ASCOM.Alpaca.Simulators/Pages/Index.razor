@@ -11,9 +11,15 @@
 
     <p>Server Transactions: @DeviceManager.RawTransactionID</p>
 
-    <a href="/swagger" target="_blank">View Swagger docs and interactive queries</a>
-    <p>Please note that the Alpaca API documentation on the ASCOM website is the canonical version. There are several issues with this auto generated version that will be resolved in future versions. This is currently provided only for testing the simulators.</p>
+
 </fieldset>
+
+    <fieldset>
+        <legend>Swagger API Documentation</legend>
+        <p>The OmniSim includes an interactive Swagger document for the Alpaca APIs and the OmniSim specific APIs. This includes json and yaml swagger files.</p>
+        <a href="/swagger" target="_blank" style=" border:3px solid  #003997; border-radius: 5px; padding: 3px; margin-bottom: 15px">View Swagger docs and interactive queries</a>
+        <p>Please note that the Alpaca API documentation on the ASCOM website is the canonical version. There are several issues with this auto generated version that will be resolved in future versions. This is currently provided only for autogenerating clients and testing the simulators.</p>
+    </fieldset>
 
 @if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 {
