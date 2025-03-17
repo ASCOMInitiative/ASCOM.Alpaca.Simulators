@@ -33,10 +33,18 @@ namespace ASCOM.Alpaca
                         keys.Add(key);
                     }
 
-                    if (key.Equals("Exception"))
+                    if (key.Contains("Exception"))
                     {
                         keys.Add(key);
                     }
+                }
+            }
+
+            foreach (var key in schemaRegistry.SchemaRepository.Schemas.Keys)
+            {
+                if (key.Contains("Exception"))
+                {
+                    keys.Add(key);
                 }
             }
             foreach (var key in keys)
