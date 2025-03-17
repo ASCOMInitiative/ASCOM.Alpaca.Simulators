@@ -9,6 +9,7 @@ using System.Net.Mime;
 namespace ASCOM.Alpaca
 {
     [ServiceFilter(typeof(AuthorizationFilter))]
+    [ApiExplorerSettings(GroupName = "Alpaca")]
     [ApiController]
     [Route("api/v1/dome/")]
     public class DomeController : AlpacaController

@@ -13,6 +13,7 @@ namespace ASCOM.Alpaca.Simulators
     /// OmniSim only, not part of Alpaca
     /// </summary>
     [ServiceFilter(typeof(AuthorizationFilter))]
+    [ApiExplorerSettings(GroupName = "OmniSim")]
     [ApiController]
     [Route("simulator/v1/")]
     public class SimulatorController : ProcessBaseController
