@@ -20,7 +20,11 @@
             Gets the current Logging Level that is in use.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:ASCOM.Alpaca.Simulators.ConsoleAndTraceLogger.LogToConsole" -->
+        <member name="P:ASCOM.Alpaca.Simulators.ConsoleAndTraceLogger.LogToConsole">
+            <summary>
+            Gets or sets a value indicating whether the log should write to the console at all.
+            </summary>
+        </member>
         <member name="M:ASCOM.Alpaca.Simulators.ConsoleAndTraceLogger.Log(ASCOM.Common.Interfaces.LogLevel,System.String)">
             <summary>
             Logs a message at the specified level.

@@ -31,7 +31,7 @@
 
         /// <summary>
         /// Gets or sets a value indicating whether the log should write to the console at all.
-        //// </summary>
+        /// </summary>
         internal static bool LogToConsole
         {
             get => ServerSettings.LogToConsole;
