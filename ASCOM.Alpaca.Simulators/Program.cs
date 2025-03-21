@@ -132,6 +132,7 @@ namespace ASCOM.Alpaca.Simulators
                             }
                             catch (Exception ex)
                             {
+                                WriteAndLog("Error processing external command" + ex.Message);
                             }
                         }
                     });
@@ -161,37 +162,6 @@ namespace ASCOM.Alpaca.Simulators
                         mutex.ReleaseMutex();
                 }
             }
-
-
-            /*try
-            {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    //Already running, start the browser, detects based on port in use
-                    var con1 = IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpConnections().Where(con => con.LocalEndPoint.Port == ServerSettings.ServerPort);
-                    if (IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpConnections().Any(con => con.LocalEndPoint.Port == ServerSettings.ServerPort && (con.State == TcpState.Listen || con.State == TcpState.Established)))
-                    {
-                        WriteAndLog("Detected driver port already open, starting web browser on IP and Port. If this fails something else is using the port");
-                        StartBrowser(ServerSettings.ServerPort);
-                        return;
-                    }
-                }
-                else
-                {
-                    //This was working fine for .Net Core 3.1. Initial tests for .Net 5 show a change in how single file deployments work on Linux
-                    //This should probably be changed to a Mutex or another similar lock
-                    if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1)
-                    {
-                        WriteAndLog("Detected driver already running, starting web browser on IP and Port");
-                        StartBrowser(ServerSettings.ServerPort);
-                        return;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logging.LogError(ex.Message);
-            }*/
         }
 
         private static Task InitServers(string[] args)

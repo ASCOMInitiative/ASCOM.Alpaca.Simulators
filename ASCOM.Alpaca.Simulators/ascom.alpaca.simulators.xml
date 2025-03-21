@@ -20,7 +20,11 @@
             Gets the current Logging Level that is in use.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:ASCOM.Alpaca.Simulators.ConsoleAndTraceLogger.LogToConsole" -->
+        <member name="P:ASCOM.Alpaca.Simulators.ConsoleAndTraceLogger.LogToConsole">
+            <summary>
+            Gets or sets a value indicating whether the log should write to the console at all.
+            </summary>
+        </member>
         <member name="M:ASCOM.Alpaca.Simulators.ConsoleAndTraceLogger.Log(ASCOM.Common.Interfaces.LogLevel,System.String)">
             <summary>
             Logs a message at the specified level.
@@ -940,6 +944,149 @@
             <param name="ClientTransactionID">Client's transaction ID.</param>
             <response code="200">Transaction complete or exception</response>
             <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Controllers.SetupController.ServerSetup(System.UInt32)">
+            <summary>
+            Primary browser web page for the overall collection of devices and the Alpaca service
+            </summary>
+            <remarks>
+            This is a single, well-known, API version-independent, browser interface that provides a consistent user experience and well known "new user" starting point for all Alpaca devices. The web page must describe the overall device, including name, manufacturer and version number.
+            This page must also enable the user to set cross cutting information that applies to the whole device such as the operating IP address and port number.
+            This URL could also provide links to configuration pages of available devices, at the developer's discretion.
+            </remarks>
+            <response code="200">Alpaca device primary HTML page</response>
+            <response code="403" examples="Error message describing why the command cannot be processed">The provided path specifies an unsupported device or method, return an error message to display in the browser</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Controllers.SetupController.CameraSetup(System.UInt32)">
+            <summary>
+            Configuration web page for the specified device
+            </summary>
+            <remarks>
+            <para>Web page user interface that enables device specific configuration to be set for each available device. This must be implemented, even if the response to the user is that the device is not configurable.
+            User relevance is increased by providing a unique configuration page for each device.This enables deep linking directly to the device's individual configuration page and avoids displaying non-relevant information about other devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <response code="200">Alpaca individual ASCOM device HTML configuration page.This must be implemented, even if the response to the user is that the device is not configurable</response>
+            <response code="403" examples="Error message describing why the command cannot be processed">The provided path specifies an unsupported device or method, return an error message to display in the browser</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Controllers.SetupController.CoverCalibratorSetup(System.UInt32)">
+            <summary>
+            Configuration web page for the specified device
+            </summary>
+            <remarks>
+            <para>Web page user interface that enables device specific configuration to be set for each available device. This must be implemented, even if the response to the user is that the device is not configurable.
+            User relevance is increased by providing a unique configuration page for each device.This enables deep linking directly to the device's individual configuration page and avoids displaying non-relevant information about other devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <response code="200">Alpaca individual ASCOM device HTML configuration page.This must be implemented, even if the response to the user is that the device is not configurable</response>
+            <response code="403" examples="Error message describing why the command cannot be processed">The provided path specifies an unsupported device or method, return an error message to display in the browser</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Controllers.SetupController.DomeSetup(System.UInt32)">
+            <summary>
+            Configuration web page for the specified device
+            </summary>
+            <remarks>
+            <para>Web page user interface that enables device specific configuration to be set for each available device. This must be implemented, even if the response to the user is that the device is not configurable.
+            User relevance is increased by providing a unique configuration page for each device.This enables deep linking directly to the device's individual configuration page and avoids displaying non-relevant information about other devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <response code="200">Alpaca individual ASCOM device HTML configuration page.This must be implemented, even if the response to the user is that the device is not configurable</response>
+            <response code="403" examples="Error message describing why the command cannot be processed">The provided path specifies an unsupported device or method, return an error message to display in the browser</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Controllers.SetupController.FilterWheelSetup(System.UInt32)">
+            <summary>
+            Configuration web page for the specified device
+            </summary>
+            <remarks>
+            <para>Web page user interface that enables device specific configuration to be set for each available device. This must be implemented, even if the response to the user is that the device is not configurable.
+            User relevance is increased by providing a unique configuration page for each device.This enables deep linking directly to the device's individual configuration page and avoids displaying non-relevant information about other devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <response code="200">Alpaca individual ASCOM device HTML configuration page.This must be implemented, even if the response to the user is that the device is not configurable</response>
+            <response code="403" examples="Error message describing why the command cannot be processed">The provided path specifies an unsupported device or method, return an error message to display in the browser</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Controllers.SetupController.FocuserSetup(System.UInt32)">
+            <summary>
+            Configuration web page for the specified device
+            </summary>
+            <remarks>
+            <para>Web page user interface that enables device specific configuration to be set for each available device. This must be implemented, even if the response to the user is that the device is not configurable.
+            User relevance is increased by providing a unique configuration page for each device.This enables deep linking directly to the device's individual configuration page and avoids displaying non-relevant information about other devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <response code="200">Alpaca individual ASCOM device HTML configuration page.This must be implemented, even if the response to the user is that the device is not configurable</response>
+            <response code="403" examples="Error message describing why the command cannot be processed">The provided path specifies an unsupported device or method, return an error message to display in the browser</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Controllers.SetupController.ObservingConditionsSetup(System.UInt32)">
+            <summary>
+            Configuration web page for the specified device
+            </summary>
+            <remarks>
+            <para>Web page user interface that enables device specific configuration to be set for each available device. This must be implemented, even if the response to the user is that the device is not configurable.
+            User relevance is increased by providing a unique configuration page for each device.This enables deep linking directly to the device's individual configuration page and avoids displaying non-relevant information about other devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <response code="200">Alpaca individual ASCOM device HTML configuration page.This must be implemented, even if the response to the user is that the device is not configurable</response>
+            <response code="403" examples="Error message describing why the command cannot be processed">The provided path specifies an unsupported device or method, return an error message to display in the browser</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Controllers.SetupController.RotatorSetup(System.UInt32)">
+            <summary>
+            Configuration web page for the specified device
+            </summary>
+            <remarks>
+            <para>Web page user interface that enables device specific configuration to be set for each available device. This must be implemented, even if the response to the user is that the device is not configurable.
+            User relevance is increased by providing a unique configuration page for each device.This enables deep linking directly to the device's individual configuration page and avoids displaying non-relevant information about other devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <response code="200">Alpaca individual ASCOM device HTML configuration page.This must be implemented, even if the response to the user is that the device is not configurable</response>
+            <response code="403" examples="Error message describing why the command cannot be processed">The provided path specifies an unsupported device or method, return an error message to display in the browser</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Controllers.SetupController.SafetyMonitorSetup(System.UInt32)">
+            <summary>
+            Configuration web page for the specified device
+            </summary>
+            <remarks>
+            <para>Web page user interface that enables device specific configuration to be set for each available device. This must be implemented, even if the response to the user is that the device is not configurable.
+            User relevance is increased by providing a unique configuration page for each device.This enables deep linking directly to the device's individual configuration page and avoids displaying non-relevant information about other devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <response code="200">Alpaca individual ASCOM device HTML configuration page.This must be implemented, even if the response to the user is that the device is not configurable</response>
+            <response code="403" examples="Error message describing why the command cannot be processed">The provided path specifies an unsupported device or method, return an error message to display in the browser</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Controllers.SetupController.SwitchSetup(System.UInt32)">
+            <summary>
+            Configuration web page for the specified device
+            </summary>
+            <remarks>
+            <para>Web page user interface that enables device specific configuration to be set for each available device. This must be implemented, even if the response to the user is that the device is not configurable.
+            User relevance is increased by providing a unique configuration page for each device.This enables deep linking directly to the device's individual configuration page and avoids displaying non-relevant information about other devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <response code="200">Alpaca individual ASCOM device HTML configuration page.This must be implemented, even if the response to the user is that the device is not configurable</response>
+            <response code="403" examples="Error message describing why the command cannot be processed">The provided path specifies an unsupported device or method, return an error message to display in the browser</response>
+            <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        </member>
+        <member name="M:ASCOM.Alpaca.Simulators.Controllers.SetupController.TelescopeSetup(System.UInt32)">
+            <summary>
+            Configuration web page for the specified device
+            </summary>
+            <remarks>
+            <para>Web page user interface that enables device specific configuration to be set for each available device. This must be implemented, even if the response to the user is that the device is not configurable.
+            User relevance is increased by providing a unique configuration page for each device.This enables deep linking directly to the device's individual configuration page and avoids displaying non-relevant information about other devices.</para>
+            </remarks>
+            <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+            <response code="200">Alpaca individual ASCOM device HTML configuration page.This must be implemented, even if the response to the user is that the device is not configurable</response>
+            <response code="403" examples="Error message describing why the command cannot be processed">The provided path specifies an unsupported device or method, return an error message to display in the browser</response>
             <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         </member>
         <member name="T:ASCOM.Alpaca.Simulators.SimulatorController">

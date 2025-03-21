@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,6 +83,7 @@ namespace ASCOM.Alpaca.Razor
                     c.SwaggerEndpoint("/swagger/Alpaca/swagger.json",
                                  $"Alpaca Endpoints - v1");
                     c.SwaggerEndpoint("/swagger/OmniSim/swagger.json", "OmniSim Only Endpoints");
+                    c.DocExpansion(DocExpansion.None);
                 });
             }
         }
