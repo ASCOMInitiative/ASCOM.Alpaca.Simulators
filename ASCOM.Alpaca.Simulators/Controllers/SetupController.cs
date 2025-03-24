@@ -8,12 +8,12 @@ using ASCOM.Common;
 using Octokit;
 using System.Xml;
 using OmniSim.BaseDriver;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IO;
 
 namespace ASCOM.Alpaca.Simulators.Controllers
 {
+    [ApiExplorerSettings(GroupName = "AlpacaSetup")]
     public class SetupController : Controller
     {
         /// <summary>
@@ -29,7 +29,6 @@ namespace ASCOM.Alpaca.Simulators.Controllers
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Text.Html)]
-        [ApiExplorerSettings(GroupName = "Alpaca")]
         [FeatureGate("HideAlpacaUI")]
         [Route("/setup")]
         public ActionResult<string> ServerSetup([Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber)
@@ -50,7 +49,6 @@ namespace ASCOM.Alpaca.Simulators.Controllers
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Text.Html)]
-        [ApiExplorerSettings(GroupName = "Alpaca")]
         [FeatureGate("HideAlpacaUI")]
         [Route("/setup/v1/camera/{DeviceNumber}/setup")]
         public ActionResult<string> CameraSetup([Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber)
@@ -71,7 +69,6 @@ namespace ASCOM.Alpaca.Simulators.Controllers
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Text.Html)]
-        [ApiExplorerSettings(GroupName = "Alpaca")]
         [FeatureGate("HideAlpacaUI")]
         [Route("/setup/v1/covercalibrator/{DeviceNumber}/setup")]
         public ActionResult<string> CoverCalibratorSetup([Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber)
@@ -92,7 +89,6 @@ namespace ASCOM.Alpaca.Simulators.Controllers
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Text.Html)]
-        [ApiExplorerSettings(GroupName = "Alpaca")]
         [FeatureGate("HideAlpacaUI")]
         [Route("/setup/v1/dome/{DeviceNumber}/setup")]
         public ActionResult<string> DomeSetup([Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber)
@@ -113,7 +109,6 @@ namespace ASCOM.Alpaca.Simulators.Controllers
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Text.Html)]
-        [ApiExplorerSettings(GroupName = "Alpaca")]
         [FeatureGate("HideAlpacaUI")]
         [Route("/setup/v1/filterwheel/{DeviceNumber}/setup")]
         public ActionResult<string> FilterWheelSetup([Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber)
@@ -134,7 +129,6 @@ namespace ASCOM.Alpaca.Simulators.Controllers
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Text.Html)]
-        [ApiExplorerSettings(GroupName = "Alpaca")]
         [FeatureGate("HideAlpacaUI")]
         [Route("/setup/v1/focuser/{DeviceNumber}/setup")]
         public ActionResult<string> FocuserSetup([Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber)
@@ -155,7 +149,6 @@ namespace ASCOM.Alpaca.Simulators.Controllers
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Text.Html)]
-        [ApiExplorerSettings(GroupName = "Alpaca")]
         [FeatureGate("HideAlpacaUI")]
         [Route("/setup/v1/observingconditions/{DeviceNumber}/setup")]
         public ActionResult<string> ObservingConditionsSetup([Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber)
@@ -176,7 +169,6 @@ namespace ASCOM.Alpaca.Simulators.Controllers
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Text.Html)]
-        [ApiExplorerSettings(GroupName = "Alpaca")]
         [FeatureGate("HideAlpacaUI")]
         [Route("/setup/v1/rotator/{DeviceNumber}/setup")]
         public ActionResult<string> RotatorSetup([Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber)
@@ -197,7 +189,6 @@ namespace ASCOM.Alpaca.Simulators.Controllers
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Text.Html)]
-        [ApiExplorerSettings(GroupName = "Alpaca")]
         [FeatureGate("HideAlpacaUI")]
         [Route("/setup/v1/safetymonitor/{DeviceNumber}/setup")]
         public ActionResult<string> SafetyMonitorSetup([Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber)
@@ -218,7 +209,6 @@ namespace ASCOM.Alpaca.Simulators.Controllers
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Text.Html)]
-        [ApiExplorerSettings(GroupName = "Alpaca")]
         [FeatureGate("HideAlpacaUI")]
         [Route("/setup/v1/switch/{DeviceNumber}/setup")]
         public ActionResult<string> SwitchSetup([Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber)
@@ -239,7 +229,6 @@ namespace ASCOM.Alpaca.Simulators.Controllers
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Text.Html)]
-        [ApiExplorerSettings(GroupName = "Alpaca")]
         [FeatureGate("HideAlpacaUI")]
         [Route("/setup/v1/telescope/{DeviceNumber}/setup")]
         public ActionResult<string> TelescopeSetup([Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber)
