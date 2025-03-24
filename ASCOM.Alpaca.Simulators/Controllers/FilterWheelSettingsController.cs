@@ -17,8 +17,8 @@ namespace ASCOM.Alpaca.Simulators
     [ServiceFilter(typeof(AuthorizationFilter))]
     [ApiController]
     [Route("simulator/v1/")]
-public class FilterWheelSettingsController : ProcessBaseController
-{
+    public class FilterWheelSettingsController : ProcessBaseController
+    {
         /// <summary>
         /// OmniSim Only - Time to move between filter positions (milliseconds)
         /// </summary>
@@ -33,7 +33,8 @@ public class FilterWheelSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("filterwheel/{DeviceNumber}/filterchangetimeinterval")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("filterwheel/{DeviceNumber}/filterchangetimeinterval")]
         public ActionResult<ASCOM.Common.Alpaca.IntResponse> FilterChangeTimeInterval(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -56,7 +57,8 @@ public class FilterWheelSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("filterwheel/{DeviceNumber}/filterchangetimeinterval")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("filterwheel/{DeviceNumber}/filterchangetimeinterval")]
         public ActionResult<Response> FilterChangeTimeInterval(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Time to move between filter positions (milliseconds)")] System.Int32 FilterChangeTimeInterval,
@@ -79,7 +81,8 @@ public class FilterWheelSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("filterwheel/{DeviceNumber}/implementsnames")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("filterwheel/{DeviceNumber}/implementsnames")]
         public ActionResult<ASCOM.Common.Alpaca.BoolResponse> ImplementsNames(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -102,7 +105,8 @@ public class FilterWheelSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("filterwheel/{DeviceNumber}/implementsnames")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("filterwheel/{DeviceNumber}/implementsnames")]
         public ActionResult<Response> ImplementsNames(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True if the driver implements names")] System.Boolean ImplementsNames,
@@ -125,7 +129,8 @@ public class FilterWheelSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("filterwheel/{DeviceNumber}/implementsoffsets")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("filterwheel/{DeviceNumber}/implementsoffsets")]
         public ActionResult<ASCOM.Common.Alpaca.BoolResponse> ImplementsOffsets(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -148,7 +153,8 @@ public class FilterWheelSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("filterwheel/{DeviceNumber}/implementsoffsets")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("filterwheel/{DeviceNumber}/implementsoffsets")]
         public ActionResult<Response> ImplementsOffsets(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True if the driver implements offsets")] System.Boolean ImplementsOffsets,
@@ -171,7 +177,8 @@ public class FilterWheelSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("filterwheel/{DeviceNumber}/preemptmoves")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("filterwheel/{DeviceNumber}/preemptmoves")]
         public ActionResult<ASCOM.Common.Alpaca.BoolResponse> PreemptMoves(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -194,7 +201,8 @@ public class FilterWheelSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("filterwheel/{DeviceNumber}/preemptmoves")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("filterwheel/{DeviceNumber}/preemptmoves")]
         public ActionResult<Response> PreemptMoves(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("True if the driver can interrupt moves")] System.Boolean PreemptMoves,
@@ -217,7 +225,8 @@ public class FilterWheelSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("filterwheel/{DeviceNumber}/slots")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("filterwheel/{DeviceNumber}/slots")]
         public ActionResult<ASCOM.Common.Alpaca.IntResponse> Slots(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -240,7 +249,8 @@ public class FilterWheelSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("filterwheel/{DeviceNumber}/slots")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("filterwheel/{DeviceNumber}/slots")]
         public ActionResult<Response> Slots(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("Number of filter wheel positions, 1-8")] System.Int32 Slots,
@@ -263,7 +273,8 @@ public class FilterWheelSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("filterwheel/{DeviceNumber}/interfaceversion")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("filterwheel/{DeviceNumber}/interfaceversion")]
         public ActionResult<ASCOM.Common.Alpaca.IntResponse> InterfaceVersion(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
@@ -286,7 +297,8 @@ public class FilterWheelSettingsController : ProcessBaseController
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]        [Route("filterwheel/{DeviceNumber}/interfaceversion")]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("filterwheel/{DeviceNumber}/interfaceversion")]
         public ActionResult<Response> InterfaceVersion(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The ASCOM Interface Version, allowed values are 1-3")] System.Int16 InterfaceVersion,
