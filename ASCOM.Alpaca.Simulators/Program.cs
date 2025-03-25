@@ -149,15 +149,12 @@ namespace ASCOM.Alpaca.Simulators
 
                     var BlazorTask = InitServers(args);
 
-                    BlazorTask.Start();
+                    BlazorTask.RunSynchronously();
 
-                    Console.ReadLine();
-
-                    // Perform your work here.
+                    Console.WriteLine("OmniSim shutting down...");
                 }
                 finally
                 {
-                    // edited by acidzombie24, added if statement
                     if (hasHandle)
                         mutex.ReleaseMutex();
                 }
