@@ -19,6 +19,8 @@ COPY DomeSimulator/*.csproj ./DomeSimulator/
 COPY FilterWheelSimulator/*.csproj ./FilterWheelSimulator/
 COPY FocuserSimulator/*.csproj ./FocuserSimulator/
 COPY ObservingConditionsSimulator/*.csproj ./ObservingConditionsSimulator/
+COPY OmniSim.BaseDriver/*.csproj ./OmniSim.BaseDriver/
+COPY OmniSim.SettingsAPIGenerator/*.csproj ./OmniSim.SettingsAPIGenerator/
 COPY OmniSim.Tools/*.csproj ./OmniSim.Tools/
 COPY RotatorSimulator/*.csproj ./RotatorSimulator/
 COPY SafetyMonitorSimulator/*.csproj ./SafetyMonitorSimulator/
