@@ -32,9 +32,9 @@ namespace ASCOM.Alpaca.Razor
                     //This is off for now
                     //c.UseOneOfForPolymorphism();
 
-                    c.SwaggerDoc("Alpaca", new OpenApiInfo { Title = $"{DeviceManager.Configuration.ServerName}", Description = "The Alpaca JSON API Specification. You can find the Alpaca HTML Specification and the OmniSim only configuration specification in the drop down. Please note that the Alpaca API documentation on the ASCOM website is the canonical version. There are several issues with this auto generated version that will be resolved in future versions. This is currently provided only for testing.", Version = "v1" });
-                    c.SwaggerDoc("AlpacaSetup", new OpenApiInfo { Title = $"{DeviceManager.Configuration.ServerName}", Description = "Alpaca HTML Setup API - These are used to give the end user a GUI to configure device specific settings.", Version = "v1" });
-                    c.SwaggerDoc("OmniSim", new OpenApiInfo { Title = "OmniSim JSON API", Description="API configuration that is unique to the OmniSim. These are not part of the Alpaca Spec but are helpful to automate testing with the OmniSim.", Version = "v1" });
+                    c.SwaggerDoc("Alpaca", new OpenApiInfo { Title = $"Alpaca JSON API Specification", Description = "The Alpaca JSON API Specification. You can find the Alpaca HTML Specification and the OmniSim only configuration specification in the drop down. Please note that the Alpaca API documentation on the ASCOM website is the canonical version. There are several issues with this auto generated version that will be resolved in future versions. This is currently provided only for testing.", Version = "v1" });
+                    c.SwaggerDoc("AlpacaSetup", new OpenApiInfo { Title = $"Alpaca HTTP Configuration Specification", Description = "Alpaca HTML Setup API - These are used to give the end user a GUI to configure device specific settings.", Version = "v1" });
+                    c.SwaggerDoc("OmniSim", new OpenApiInfo { Title = "OmniSim JSON API", Description = "API configuration that is unique to the OmniSim. These are not part of the Alpaca Spec but are helpful to automate testing with the OmniSim. Note that these have not yet been fully stabilized, expect some changes.", Version = "v1" });
 
 
                     if (File.Exists(host_xml_file))
@@ -80,7 +80,8 @@ namespace ASCOM.Alpaca.Razor
             if (DeviceManager.Configuration.RunSwagger)
             {
                 app.UseSwagger();
-                app.UseSwaggerUI(c => {
+                app.UseSwaggerUI(c =>
+                {
                     c.SwaggerEndpoint("/swagger/Alpaca/swagger.json",
                                  $"Alpaca JSON Endpoints - v1");
                     c.SwaggerEndpoint("/swagger/AlpacaSetup/swagger.json",
