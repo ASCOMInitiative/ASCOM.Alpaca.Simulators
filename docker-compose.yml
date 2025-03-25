@@ -4,4 +4,6 @@ services:
         build: .
         ports:
             - "80:32323"
+            - "32323:32323"
+            - "32227:32227/udp"
         command: ["dotnet", "ascom.alpaca.simulators.dll", "--urls=http://*:32323"]
