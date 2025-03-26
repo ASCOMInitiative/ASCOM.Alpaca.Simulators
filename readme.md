@@ -1,8 +1,8 @@
 # ASCOM Alpaca Simulators
 ## About
-ASCOM Alpaca Simulators (sometimes called the OmniSim) is a combined set of simulators for all Alpaca device types. The goal is to be as compliant as possible with the Alpaca specification. By default it starts on localhost:32323. The port may change as it nears release.
+ASCOM Alpaca Simulators (sometimes called the OmniSim) is a combined set of simulators for all Alpaca device types. The goal is to be as compliant as possible with the Alpaca specification. By default it starts on localhost:32323.
 
-The simulators are direct ports from the ASCOM Platform simulators over to .Net Standard 2.0. Once complete they are meant to be fully compatible with the platform versions. The configuration (which is in progress) is achieved through a Blazor web UI.
+The simulators are direct ports from the ASCOM Platform simulators over to .Net 8+. Once complete they are meant to be fully compatible with the platform versions. The configuration is achieved through a Blazor web UI. As the simulators are modernized they also will get a JSON API for configuration.
 
 Most devices will have a Setup page for device settings and a Control page. The control page allows the device to run without a client, similar to the ASCOM Simulator handboxes.
 
@@ -33,6 +33,8 @@ docker compose -f docker-compose.yml up --build
 
 This will expose the ASCOM Alpaca Simulation API and Blazer web UI on http://localhost:80, or even simpler, localhost on any browser of your choice.
 
+Discovery is available on the host machine when running Docker.
+
 ## Roadmap
 Some future updates, not in order
 
@@ -48,4 +50,3 @@ Some future updates, not in order
 ## Feedback
 
 Feedback can be given to the ASCOM Developer forum or here on the Github page. For issues please include any relevant logs. Please note that this is not the appropriate place to request changes to the Alpaca protocols. This is an implementation of the protocols, not the protocols themselves.
-
