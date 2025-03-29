@@ -185,14 +185,17 @@
         {
             if (Connected)
             {
-                if (Device.CanSetShutter && Device.Altitude != -100000.0)
+                if (Device.CanSetShutter)
                 {
                     switch (Device.ShutterStatus)
                     {
                         case ShutterState.Open:
                             if (Device.CanSetAltitude)
                             {
-                                return Device.Altitude.ToString("0.0");
+                                if (Device.Altitude != -100000.0)
+                                    return Device.Altitude.ToString("0.0");
+                                else
+                                    return "----";
                             }
                             else
                             {
@@ -220,7 +223,7 @@
         {
             if (Connected)
             {
-                if (Device.Azimuth != -100000.0)
+                if (Device.CanSetAzimuth && Device.Azimuth != -100000.0)
                 {
                     return Device.Azimuth.ToString("000.0");
                 }
