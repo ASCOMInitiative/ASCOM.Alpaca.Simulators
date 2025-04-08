@@ -1,6 +1,5 @@
 using ASCOM.Common;
-using ASCOM.Simulators;
-using ASCOM.Tools;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
@@ -10,15 +9,10 @@ using System.IO.Pipes;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 using System.Text.Json;
-using System.Collections;
 using OmniSim.BaseDriver;
 
 namespace ASCOM.Alpaca.Simulators
@@ -28,8 +22,6 @@ namespace ASCOM.Alpaca.Simulators
         private static Guid ApplicationGUID = new Guid("{1389A00E-006F-4117-8930-EAFCAA7DC397}");
 
         private const string PipeGUID = "{2249563F-E844-4264-8956-73AC7A44BEA0}";
-
-
 
         public static void Main(string[] args)
         {
@@ -58,7 +50,6 @@ namespace ASCOM.Alpaca.Simulators
                             {
                                 foreach (var arg in args)
                                 {
-
                                     if (arg.Contains("--local-address"))
                                     {
                                         Console.WriteLine($"http://localhost:{ServerSettings.ServerPort}");
@@ -128,7 +119,6 @@ namespace ASCOM.Alpaca.Simulators
                                 ProcessArgs(new string[] { line }, true);
 
                                 writer.Flush();
-
                             }
                             catch (Exception ex)
                             {
@@ -138,7 +128,7 @@ namespace ASCOM.Alpaca.Simulators
                     });
 
                     // This is the first copy, process all args
-                    if(ProcessArgs(args, false))
+                    if (ProcessArgs(args, false))
                     {
                         //Exit if only one copy and command calls for exit
                         return;
@@ -226,7 +216,6 @@ namespace ASCOM.Alpaca.Simulators
 
             ServerSettings.CheckForUpdates();
 
-
             return new Task(() =>
             {
                 try
@@ -253,7 +242,6 @@ namespace ASCOM.Alpaca.Simulators
 #if ASCOM_COM
             OmniSim.LocalServer.Server.StartServer();
 #endif
-
 
                     CreateHostBuilder(args).Build().Run();
                 }
@@ -520,7 +508,6 @@ namespace ASCOM.Alpaca.Simulators
             if (!WindowsNative.IsWindowVisible(hWnd)) // Window is hidden
                 return ConsoleDisplayOption.NoConsole;
 
-            
             // Second check whether the window is minimised
             if (WindowsNative.IsIconic(hWnd)) // Window is minimised
                 return ConsoleDisplayOption.StartMinimized;
