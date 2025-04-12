@@ -218,7 +218,7 @@
     {
         get
         {
-            if (Connected)
+            if (Connected && Device.CanSetAzimuth)
             {
                 if (Device.Azimuth != -100000.0)
                 {
@@ -415,7 +415,7 @@
             {
                 if (Device.ShutterStatus == ShutterState.Open)
                 {
-                    ASCOM.Simulators.Hardware.HW_MoveShutter(ASCOM.Simulators.Hardware.g_dMaxAlt);
+                    Device.DomeHardware.MoveShutter(Device.DomeHardware.MaximumAltitude.Value);
                 }
             }
         }
@@ -434,7 +434,7 @@
             {
                 if (Device.ShutterStatus == ShutterState.Open)
                 {
-                    ASCOM.Simulators.Hardware.HW_MoveShutter(ASCOM.Simulators.Hardware.g_dMinAlt);
+                    Device.DomeHardware.MoveShutter(Device.DomeHardware.MinimumAltitude.Value);
                 }
             }
         }
@@ -451,7 +451,7 @@
         {
             if (Device.Connected)
             {
-                ASCOM.Simulators.Hardware.HW_Run(true);
+                Device.DomeHardware.Run(true);
             }
         }
         catch (Exception ex)
@@ -466,7 +466,7 @@
         {
             if (Device.Connected)
             {
-                ASCOM.Simulators.Hardware.HW_Run(false);
+                Device.DomeHardware.Run(false);
             }
         }
         catch (Exception ex)
@@ -481,7 +481,7 @@
         {
             if (Device.Connected)
             {
-                Device.SlewToAzimuth(ASCOM.Simulators.Hardware.AzScale(Device.Azimuth + ASCOM.Simulators.Hardware.g_dStepSize));
+                Device.SlewToAzimuth(ASCOM.Simulators.DomeHardware.AzScale(Device.Azimuth + 5));
             }
         }
         catch (Exception ex)
@@ -496,7 +496,7 @@
         {
             if (Device.Connected)
             {
-                Device.SlewToAzimuth(ASCOM.Simulators.Hardware.AzScale(Device.Azimuth - ASCOM.Simulators.Hardware.g_dStepSize));
+                Device.SlewToAzimuth(ASCOM.Simulators.DomeHardware.AzScale(Device.Azimuth - 5));
             }
         }
         catch (Exception ex)

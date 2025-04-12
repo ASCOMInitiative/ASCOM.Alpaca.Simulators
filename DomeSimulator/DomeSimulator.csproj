@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OmniSim.BaseDriver\OmniSim.BaseDriver.csproj" />
     <ProjectReference Include="..\OmniSim.Tools\OmniSim.Tools.csproj" />
   </ItemGroup>
 
