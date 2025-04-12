@@ -29,6 +29,7 @@ namespace OmniSim.BaseDriver
         public Setting(string key, string description, T default_value) : this(key, description)
         {
             DefaultValue = default_value;
+            Value = default_value;
         }
 
     }
