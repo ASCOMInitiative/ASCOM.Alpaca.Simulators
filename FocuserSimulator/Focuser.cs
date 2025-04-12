@@ -724,25 +724,25 @@ namespace ASCOM.Simulators
         /// </summary>
         public override void LoadSettings()
         {
-            this.AbsoluteSetting.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.AbsoluteSetting), CultureInfo.InvariantCulture);
-            this.MaxIncrementSetting.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.MaxIncrementSetting), CultureInfo.InvariantCulture);
-            this.MaxStepSetting.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.MaxStepSetting), CultureInfo.InvariantCulture);
-            this.PositionSetting.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.PositionSetting), CultureInfo.InvariantCulture);
+            this.AbsoluteSetting.Value = this.Profile.GetSettingBoolReturningDefault(this.AbsoluteSetting);
+            this.MaxIncrementSetting.Value = this.Profile.GetSettingIntReturningDefault(this.MaxIncrementSetting);
+            this.MaxStepSetting.Value = this.Profile.GetSettingIntReturningDefault(this.MaxStepSetting);
+            this.PositionSetting.Value = this.Profile.GetSettingIntReturningDefault(this.PositionSetting);
             this.target = this.PositionSetting.Value;
-            this.StepSizeSetting.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.StepSizeSetting), CultureInfo.InvariantCulture);
-            this.TempCompSetting.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.TempCompSetting), CultureInfo.InvariantCulture);
-            this.TempCompAvailableSetting.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.TempCompAvailableSetting), CultureInfo.InvariantCulture);
-            this.TemperatureSetting.Value = Convert.ToDouble(this.Profile.GetSettingReturningDefault(this.TemperatureSetting), CultureInfo.InvariantCulture);
-            this.CanHalt.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.CanHalt), CultureInfo.InvariantCulture);
-            this.CanStepSize.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.CanStepSize), CultureInfo.InvariantCulture);
-            this.Synchronous.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.Synchronous), CultureInfo.InvariantCulture);
-            this.TempMax.Value = Convert.ToDouble(this.Profile.GetSettingReturningDefault(this.TempMax), CultureInfo.InvariantCulture);
-            this.TempMin.Value = Convert.ToDouble(this.Profile.GetSettingReturningDefault(this.TempMin), CultureInfo.InvariantCulture);
-            this.TempPeriod.Value = Convert.ToDouble(this.Profile.GetSettingReturningDefault(this.TempPeriod), CultureInfo.InvariantCulture);
-            this.TempProbe.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.TempProbe), CultureInfo.InvariantCulture);
-            this.TempSteps.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.TempSteps), CultureInfo.InvariantCulture);
-            this.SettleTime.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.SettleTime), CultureInfo.InvariantCulture);
-            this.InterfaceVersionSetting.Value = Convert.ToInt16(this.Profile.GetSettingReturningDefault(this.InterfaceVersionSetting), CultureInfo.InvariantCulture);
+            this.StepSizeSetting.Value = this.Profile.GetSettingIntReturningDefault(this.StepSizeSetting);
+            this.TempCompSetting.Value = this.Profile.GetSettingBoolReturningDefault(this.TempCompSetting);
+            this.TempCompAvailableSetting.Value = this.Profile.GetSettingBoolReturningDefault(this.TempCompAvailableSetting);
+            this.TemperatureSetting.Value = this.Profile.GetSettingDoubleReturningDefault(this.TemperatureSetting);
+            this.CanHalt.Value = this.Profile.GetSettingBoolReturningDefault(this.CanHalt);
+            this.CanStepSize.Value = this.Profile.GetSettingBoolReturningDefault(this.CanStepSize);
+            this.Synchronous.Value = this.Profile.GetSettingBoolReturningDefault(this.Synchronous);
+            this.TempMax.Value = this.Profile.GetSettingDoubleReturningDefault(this.TempMax);
+            this.TempMin.Value = this.Profile.GetSettingDoubleReturningDefault(this.TempMin);
+            this.TempPeriod.Value = this.Profile.GetSettingDoubleReturningDefault(this.TempPeriod);
+            this.TempProbe.Value = this.Profile.GetSettingBoolReturningDefault(this.TempProbe);
+            this.TempSteps.Value = this.Profile.GetSettingIntReturningDefault(this.TempSteps);
+            this.SettleTime.Value = this.Profile.GetSettingIntReturningDefault(this.SettleTime);
+            this.InterfaceVersionSetting.Value =this.Profile.GetSettingShortReturningDefault(this.InterfaceVersionSetting);
         }
 
         /// <summary>

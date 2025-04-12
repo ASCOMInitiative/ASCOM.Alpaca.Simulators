@@ -53,7 +53,11 @@ namespace OmniSim.BaseDriver
             }
             else if (value is double)
             {
-                return Convert.ToSingle(value).ToString(CultureInfo.InvariantCulture);
+                return Convert.ToDouble(value).ToString(CultureInfo.InvariantCulture);
+            }
+            else if (value is bool)
+            {
+                return Convert.ToBoolean(value).ToString(CultureInfo.InvariantCulture);
             }
             else
             {
@@ -61,9 +65,34 @@ namespace OmniSim.BaseDriver
             }
         }
 
-        public static string GetSettingReturningDefault<T>(this ASCOM.Common.Interfaces.IProfile Profile, Setting<T> Setting)
+        public static string GetSettingStringReturningDefault(this ASCOM.Common.Interfaces.IProfile Profile, Setting<string> Setting)
         {
             return Profile.GetValue(Setting.Key, Setting.DefaultValue.ToString());
+        }
+
+        public static float GetSettingFloatReturningDefault(this ASCOM.Common.Interfaces.IProfile Profile, Setting<float> Setting)
+        {
+            return Convert.ToSingle(Profile.GetValue(Setting.Key, Setting.DefaultValue.ToString()), CultureInfo.InvariantCulture);
+        }
+
+        public static double GetSettingDoubleReturningDefault(this ASCOM.Common.Interfaces.IProfile Profile, Setting<double> Setting)
+        {
+            return Convert.ToDouble(Profile.GetValue(Setting.Key, Setting.DefaultValue.ToString()), CultureInfo.InvariantCulture);
+        }
+
+        public static bool GetSettingBoolReturningDefault(this ASCOM.Common.Interfaces.IProfile Profile, Setting<bool> Setting)
+        {
+            return Convert.ToBoolean(Profile.GetValue(Setting.Key, Setting.DefaultValue.ToString()), CultureInfo.InvariantCulture);
+        }
+
+        public static int GetSettingIntReturningDefault(this ASCOM.Common.Interfaces.IProfile Profile, Setting<int> Setting)
+        {
+            return Convert.ToInt32(Profile.GetValue(Setting.Key, Setting.DefaultValue.ToString()), CultureInfo.InvariantCulture);
+        }
+
+        public static short GetSettingShortReturningDefault(this ASCOM.Common.Interfaces.IProfile Profile, Setting<short> Setting)
+        {
+            return Convert.ToInt16(Profile.GetValue(Setting.Key, Setting.DefaultValue.ToString()), CultureInfo.InvariantCulture);
         }
     }
 }
