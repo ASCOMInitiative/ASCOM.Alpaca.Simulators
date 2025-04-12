@@ -405,6 +405,7 @@
         /// </summary>
         public override void Connect()
         {
+            base.ConnectTimer.Interval = RotatorHardware.ConnectDelay.Value;
             this.RotatorHardware.Connected = true;
             base.Connect();
         }

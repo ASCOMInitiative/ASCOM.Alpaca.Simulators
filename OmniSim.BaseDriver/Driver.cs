@@ -33,7 +33,7 @@ namespace OmniSim.BaseDriver
 
         public bool IsConnected { get; set; } = false;
 
-        internal Timer ConnectTimer = new();
+        public Timer ConnectTimer = new();
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {

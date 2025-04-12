@@ -40,6 +40,11 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
+        /// Gets the delay for the connect timer
+        /// </summary>
+        public Setting<short> ConnectDelay { get; } = new Setting<short>("ConnectDelay", "The delay to be used for Connect() in milliseconds, allowed values are 1-30000", 1500);
+
+        /// <summary>
         /// Gets the stored interface version to use.
         /// </summary>
         public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-4", 4);

@@ -216,6 +216,15 @@ namespace ASCOM.Simulators
         #endregion IFilterWheelV3 members
 
         /// <summary>
+        /// Connects to the hardware.
+        /// </summary>
+        public override void Connect()
+        {
+            base.ConnectTimer.Interval = FilterWheelHardware.ConnectDelay.Value;
+            base.Connect();
+        }
+
+        /// <summary>
         /// Load settings.
         /// </summary>
         public override void LoadSettings()

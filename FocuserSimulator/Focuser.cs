@@ -157,6 +157,11 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
+        /// Gets the delay for the connect timer
+        /// </summary>
+        public Setting<short> ConnectDelay { get; } = new Setting<short>("ConnectDelay", "The delay to be used for Connect() in milliseconds, allowed values are 1-30000", 1500);
+
+        /// <summary>
         /// Gets a value indicating whether the focuser can halt.
         /// </summary>
         public Setting<bool> CanHalt { get; } = new Setting<bool>("CanHalt", "True if the focuser can halt", true);
@@ -619,6 +624,15 @@ namespace ASCOM.Simulators
 
                     this.motorState = MotorState.Moving;
                 }, DeviceType, MemberNames.Move, "Command");
+        }
+
+        /// <summary>
+        /// Connects to the hardware.
+        /// </summary>
+        public override void Connect()
+        {
+            base.ConnectTimer.Interval = ConnectDelay.Value;
+            base.Connect();
         }
 
         /// <summary>
