@@ -314,18 +314,18 @@
                 }
 
                 // Read the hardware & driver config
-                this.Slots.Value = this.settingsProfile.GetSettingIntReturningDefault(this.Slots);
+                this.Slots.Value = this.settingsProfile.GetSettingReturningDefault(this.Slots);
                 if (this.Slots.Value < 1 || this.Slots.Value > 8)
                 {
                     this.Slots.Value = 6;
                 }
 
                 this.position = 0;
-                this.FilterChangeTimeInterval.Value = Convert.ToInt32(this.settingsProfile.GetSettingIntReturningDefault(this.FilterChangeTimeInterval));
-                this.InterfaceVersion.Value = Convert.ToInt16(this.settingsProfile.GetSettingShortReturningDefault(this.InterfaceVersion));
-                this.ImplementsNames.Value = Convert.ToBoolean(this.settingsProfile.GetSettingBoolReturningDefault(this.ImplementsNames));
-                this.ImplementsOffsets.Value = Convert.ToBoolean(this.settingsProfile.GetSettingBoolReturningDefault(this.ImplementsOffsets));
-                this.PreemptMoves.Value = Convert.ToBoolean(this.settingsProfile.GetSettingBoolReturningDefault(this.PreemptMoves));
+                this.FilterChangeTimeInterval.Value = Convert.ToInt32(this.settingsProfile.GetSettingReturningDefault(this.FilterChangeTimeInterval));
+                this.InterfaceVersion.Value = Convert.ToInt16(this.settingsProfile.GetSettingReturningDefault(this.InterfaceVersion));
+                this.ImplementsNames.Value = Convert.ToBoolean(this.settingsProfile.GetSettingReturningDefault(this.ImplementsNames));
+                this.ImplementsOffsets.Value = Convert.ToBoolean(this.settingsProfile.GetSettingReturningDefault(this.ImplementsOffsets));
+                this.PreemptMoves.Value = Convert.ToBoolean(this.settingsProfile.GetSettingReturningDefault(this.PreemptMoves));
                 for (int i = 0; i <= 7; i++)
                 {
                     this.AllFilterNames[i] = this.settingsProfile.GetValue($"FilterNames {i}");

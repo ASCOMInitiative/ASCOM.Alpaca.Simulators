@@ -738,25 +738,25 @@ namespace ASCOM.Simulators
         /// </summary>
         public override void LoadSettings()
         {
-            this.AbsoluteSetting.Value = this.Profile.GetSettingBoolReturningDefault(this.AbsoluteSetting);
-            this.MaxIncrementSetting.Value = this.Profile.GetSettingIntReturningDefault(this.MaxIncrementSetting);
-            this.MaxStepSetting.Value = this.Profile.GetSettingIntReturningDefault(this.MaxStepSetting);
-            this.PositionSetting.Value = this.Profile.GetSettingIntReturningDefault(this.PositionSetting);
+            this.AbsoluteSetting.Value = this.Profile.GetSettingReturningDefault(this.AbsoluteSetting);
+            this.MaxIncrementSetting.Value = this.Profile.GetSettingReturningDefault(this.MaxIncrementSetting);
+            this.MaxStepSetting.Value = this.Profile.GetSettingReturningDefault(this.MaxStepSetting);
+            this.PositionSetting.Value = this.Profile.GetSettingReturningDefault(this.PositionSetting);
             this.target = this.PositionSetting.Value;
-            this.StepSizeSetting.Value = this.Profile.GetSettingIntReturningDefault(this.StepSizeSetting);
-            this.TempCompSetting.Value = this.Profile.GetSettingBoolReturningDefault(this.TempCompSetting);
-            this.TempCompAvailableSetting.Value = this.Profile.GetSettingBoolReturningDefault(this.TempCompAvailableSetting);
-            this.TemperatureSetting.Value = this.Profile.GetSettingDoubleReturningDefault(this.TemperatureSetting);
-            this.CanHalt.Value = this.Profile.GetSettingBoolReturningDefault(this.CanHalt);
-            this.CanStepSize.Value = this.Profile.GetSettingBoolReturningDefault(this.CanStepSize);
-            this.Synchronous.Value = this.Profile.GetSettingBoolReturningDefault(this.Synchronous);
-            this.TempMax.Value = this.Profile.GetSettingDoubleReturningDefault(this.TempMax);
-            this.TempMin.Value = this.Profile.GetSettingDoubleReturningDefault(this.TempMin);
-            this.TempPeriod.Value = this.Profile.GetSettingDoubleReturningDefault(this.TempPeriod);
-            this.TempProbe.Value = this.Profile.GetSettingBoolReturningDefault(this.TempProbe);
-            this.TempSteps.Value = this.Profile.GetSettingIntReturningDefault(this.TempSteps);
-            this.SettleTime.Value = this.Profile.GetSettingIntReturningDefault(this.SettleTime);
-            this.InterfaceVersionSetting.Value =this.Profile.GetSettingShortReturningDefault(this.InterfaceVersionSetting);
+            this.StepSizeSetting.Value = this.Profile.GetSettingReturningDefault(this.StepSizeSetting);
+            this.TempCompSetting.Value = this.Profile.GetSettingReturningDefault(this.TempCompSetting);
+            this.TempCompAvailableSetting.Value = this.Profile.GetSettingReturningDefault(this.TempCompAvailableSetting);
+            this.TemperatureSetting.Value = this.Profile.GetSettingReturningDefault(this.TemperatureSetting);
+            this.CanHalt.Value = this.Profile.GetSettingReturningDefault(this.CanHalt);
+            this.CanStepSize.Value = this.Profile.GetSettingReturningDefault(this.CanStepSize);
+            this.Synchronous.Value = this.Profile.GetSettingReturningDefault(this.Synchronous);
+            this.TempMax.Value = this.Profile.GetSettingReturningDefault(this.TempMax);
+            this.TempMin.Value = this.Profile.GetSettingReturningDefault(this.TempMin);
+            this.TempPeriod.Value = this.Profile.GetSettingReturningDefault(this.TempPeriod);
+            this.TempProbe.Value = this.Profile.GetSettingReturningDefault(this.TempProbe);
+            this.TempSteps.Value = this.Profile.GetSettingReturningDefault(this.TempSteps);
+            this.SettleTime.Value = this.Profile.GetSettingReturningDefault(this.SettleTime);
+            this.InterfaceVersionSetting.Value =this.Profile.GetSettingReturningDefault(this.InterfaceVersionSetting);
         }
 
         /// <summary>

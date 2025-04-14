@@ -132,8 +132,10 @@
         /// </summary>
         public Setting<double> OCDelay { get; } = new Setting<double>("OCDelay", "Delay time in seconds for Open / Close", 3);
 
+        /// <summary>
+        /// Gets the stored shutter state.
+        /// </summary>
         public Setting<string> ShutterStateSetting { get; } = new Setting<string>("ShutterState", "The stored shutter state.", "1");
-
 
         // Dome Capabilities
 
@@ -185,30 +187,30 @@
         internal void LoadConfig()
         {
             OCProgress = 0;
-            OCDelay.Value = Profile.GetSettingDoubleReturningDefault(OCDelay);
-            ParkPosition.Value = Profile.GetSettingDoubleReturningDefault(ParkPosition);
-            ParkPosition.Value = Profile.GetSettingDoubleReturningDefault(ParkPosition);
-            AltitudeRate.Value = Profile.GetSettingDoubleReturningDefault(AltitudeRate);
-            AzimuthRate.Value = Profile.GetSettingDoubleReturningDefault(AzimuthRate);
-            MaximumAltitude.Value = Profile.GetSettingDoubleReturningDefault(MaximumAltitude);
-            MinimumAltitude.Value = Profile.GetSettingDoubleReturningDefault(MinimumAltitude);
-            StartWithShutterError.Value = Profile.GetSettingBoolReturningDefault(StartWithShutterError);
-            InterfaceVersionSetting.Value = Profile.GetSettingShortReturningDefault(InterfaceVersionSetting);
+            OCDelay.Value = Profile.GetSettingReturningDefault(OCDelay);
+            ParkPosition.Value = Profile.GetSettingReturningDefault(ParkPosition);
+            ParkPosition.Value = Profile.GetSettingReturningDefault(ParkPosition);
+            AltitudeRate.Value = Profile.GetSettingReturningDefault(AltitudeRate);
+            AzimuthRate.Value = Profile.GetSettingReturningDefault(AzimuthRate);
+            MaximumAltitude.Value = Profile.GetSettingReturningDefault(MaximumAltitude);
+            MinimumAltitude.Value = Profile.GetSettingReturningDefault(MinimumAltitude);
+            StartWithShutterError.Value = Profile.GetSettingReturningDefault(StartWithShutterError);
+            InterfaceVersionSetting.Value = Profile.GetSettingReturningDefault(InterfaceVersionSetting);
 
-            SlewingTrueWhenOpenOrClose.Value = Profile.GetSettingBoolReturningDefault(SlewingTrueWhenOpenOrClose);
-            StandardAtHome.Value = Profile.GetSettingBoolReturningDefault(StandardAtHome);
-            StandardAtPark.Value = Profile.GetSettingBoolReturningDefault(StandardAtPark);
+            SlewingTrueWhenOpenOrClose.Value = Profile.GetSettingReturningDefault(SlewingTrueWhenOpenOrClose);
+            StandardAtHome.Value = Profile.GetSettingReturningDefault(StandardAtHome);
+            StandardAtPark.Value = Profile.GetSettingReturningDefault(StandardAtPark);
 
-            CanFindHome.Value = Profile.GetSettingBoolReturningDefault(CanFindHome);
-            CanPark.Value = Profile.GetSettingBoolReturningDefault(CanPark);
-            CanSetAltitude.Value = Profile.GetSettingBoolReturningDefault(CanSetAltitude);
-            CanSetAzimuth.Value = Profile.GetSettingBoolReturningDefault(CanSetAzimuth);
-            CanSetPark.Value = Profile.GetSettingBoolReturningDefault(CanSetPark);
-            CanSetShutter.Value = Profile.GetSettingBoolReturningDefault(CanSetShutter);
-            CanSyncAzimuth.Value = Profile.GetSettingBoolReturningDefault(CanSyncAzimuth);
+            CanFindHome.Value = Profile.GetSettingReturningDefault(CanFindHome);
+            CanPark.Value = Profile.GetSettingReturningDefault(CanPark);
+            CanSetAltitude.Value = Profile.GetSettingReturningDefault(CanSetAltitude);
+            CanSetAzimuth.Value = Profile.GetSettingReturningDefault(CanSetAzimuth);
+            CanSetPark.Value = Profile.GetSettingReturningDefault(CanSetPark);
+            CanSetShutter.Value = Profile.GetSettingReturningDefault(CanSetShutter);
+            CanSyncAzimuth.Value = Profile.GetSettingReturningDefault(CanSyncAzimuth);
 
-            DomeAzimuth.Value = Profile.GetSettingDoubleReturningDefault(DomeAzimuth);
-            DomeAltitude.Value =  Profile.GetSettingDoubleReturningDefault(DomeAltitude);
+            DomeAzimuth.Value = Profile.GetSettingReturningDefault(DomeAzimuth);
+            DomeAltitude.Value =  Profile.GetSettingReturningDefault(DomeAltitude);
 
             if (DomeAltitude.Value < MinimumAltitude.Value)
                 DomeAltitude.Value = MinimumAltitude.Value;
@@ -223,7 +225,7 @@
                 ShutterState = ShutterState.Error;
             else
             {
-                string ret = Profile.GetSettingStringReturningDefault(ShutterStateSetting);       // ShutterClosed
+                string ret = Profile.GetSettingReturningDefault(ShutterStateSetting);       // ShutterClosed
                 ShutterState = (ShutterState)Enum.Parse(typeof(ShutterState), ret.ToString());
             }
 

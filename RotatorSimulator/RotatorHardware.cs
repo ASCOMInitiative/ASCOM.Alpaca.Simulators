@@ -293,13 +293,13 @@ namespace ASCOM.Simulators
         /// </summary>
         internal void LoadProfile()
         {
-            this.Position.Value = this.profile.GetSettingFloatReturningDefault(this.Position);
+            this.Position.Value = this.profile.GetSettingReturningDefault(this.Position);
             this.targetPosition = this.Position.Value;
-            this.RotationRate.Value = this.profile.GetSettingDoubleReturningDefault(this.RotationRate);
-            this.CanReverse.Value = this.profile.GetSettingBoolReturningDefault(this.CanReverse);
-            this.Reverse.Value = this.profile.GetSettingBoolReturningDefault(this.Reverse);
-            this.SyncOffset.Value = this.profile.GetSettingFloatReturningDefault(this.SyncOffset);
-            this.InterfaceVersionSetting.Value = this.profile.GetSettingShortReturningDefault(this.InterfaceVersionSetting);
+            this.RotationRate.Value = this.profile.GetSettingReturningDefault(this.RotationRate);
+            this.CanReverse.Value = this.profile.GetSettingReturningDefault(this.CanReverse);
+            this.Reverse.Value = this.profile.GetSettingReturningDefault(this.Reverse);
+            this.SyncOffset.Value = this.profile.GetSettingReturningDefault(this.SyncOffset);
+            this.InterfaceVersionSetting.Value = this.profile.GetSettingReturningDefault(this.InterfaceVersionSetting);
         }
 
         /// <summary>
