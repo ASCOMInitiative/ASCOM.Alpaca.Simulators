@@ -14,6 +14,8 @@ namespace ASCOM.Simulators
     {
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
+        private const string CheckConnectedFailureError = "Dome simulator is not connected";
+
         private ILogger Logger;
         private IProfile Profile;
         internal DomeHardware DomeHardware;
@@ -41,6 +43,7 @@ namespace ASCOM.Simulators
                     var uniqueid = Guid.NewGuid().ToString();
                     profile.WriteValue(UNIQUE_ID_PROFILE_NAME, uniqueid);
                 }
+
                 UniqueID = profile.GetValue(UNIQUE_ID_PROFILE_NAME);
             }
             catch (Exception ex)
@@ -78,7 +81,10 @@ namespace ASCOM.Simulators
         private void check_Az(double Az)
         {
             if (Az == DomeHardware.INVALID_COORDINATE)
+            {
                 throw new InvalidValueException("Azimuth", "Invalid Coordinate", "0 to 360 degrees");
+            }
+
             if (Az >= 360.0 | Az < 0.0)
             {
                 throw new InvalidValueException("Azimuth", Az.ToString(), "0 to 360.0 degrees");
@@ -87,7 +93,7 @@ namespace ASCOM.Simulators
 
         public void AbortSlew()
         {
-            CheckConnected("Dome simulator is not connected");
+            CheckConnected(CheckConnectedFailureError);
             DomeHardware.Halt();
         }
 
@@ -107,7 +113,7 @@ namespace ASCOM.Simulators
                 if (!DomeHardware.CanSetAltitude.Value)
                     throw new PropertyNotImplementedException("Altitude", false);
 
-                CheckConnected("Dome simulator is not connected");
+                CheckConnected(CheckConnectedFailureError);
 
                 if (DomeHardware.ShutterState == ShutterState.Error)
                     LogMessage("Altitude", "Shutter in ErrorState");
@@ -122,7 +128,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                CheckConnected("Dome simulator is not connected");
+                CheckConnected(CheckConnectedFailureError);
                 return DomeHardware.AtHome;
             }
         }
@@ -131,7 +137,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                CheckConnected("Dome simulator is not connected");
+                CheckConnected(CheckConnectedFailureError);
                 return DomeHardware.AtPark;
             }
         }
@@ -143,7 +149,7 @@ namespace ASCOM.Simulators
                 if (!DomeHardware.CanSetAzimuth.Value)
                     throw new PropertyNotImplementedException("Azimuth", false);
 
-                CheckConnected("Dome simulator is not connected");
+                CheckConnected(CheckConnectedFailureError);
                 return DomeHardware.DomeAzimuth.Value;
             }
         }
@@ -219,7 +225,7 @@ namespace ASCOM.Simulators
                 throw new MethodNotImplementedException("CloseShutter");
             }
 
-            CheckConnected("Dome simulator is not connected");
+            CheckConnected(CheckConnectedFailureError);
             DomeHardware.CloseShutter();
         }
 
@@ -283,7 +289,7 @@ namespace ASCOM.Simulators
                 throw new MethodNotImplementedException("FindHome");
             }
 
-            CheckConnected("Dome simulator is not connected");
+            CheckConnected(CheckConnectedFailureError);
             if (!DomeHardware.g_bAtHome)
                 DomeHardware.FindHome();
         }
@@ -307,7 +313,7 @@ namespace ASCOM.Simulators
                 throw new MethodNotImplementedException("OpenShutter");
             }
 
-            CheckConnected("Dome simulator is not connected");
+            CheckConnected(CheckConnectedFailureError);
 
             if (DomeHardware.ShutterState == ShutterState.Error)
                 throw new InvalidOperationException("Shutter failed to open");
@@ -322,7 +328,7 @@ namespace ASCOM.Simulators
                 throw new MethodNotImplementedException("Park");
             }
 
-            CheckConnected("Dome simulator is not connected");
+            CheckConnected(CheckConnectedFailureError);
             if (!DomeHardware.g_bAtPark)
                 DomeHardware.Park();
         }
@@ -334,7 +340,7 @@ namespace ASCOM.Simulators
                 throw new MethodNotImplementedException("Park");
             }
 
-            CheckConnected("Dome simulator is not connected");
+            CheckConnected(CheckConnectedFailureError);
             DomeHardware.ParkPosition.Value = DomeHardware.DomeAzimuth.Value;
 
             if (!DomeHardware.StandardAtPark.Value)
@@ -350,7 +356,7 @@ namespace ASCOM.Simulators
                 if (!DomeHardware.CanSetShutter.Value)
                     throw new PropertyNotImplementedException("ShutterStatus", false);
 
-                CheckConnected("Dome simulator is not connected");
+                CheckConnected(CheckConnectedFailureError);
                 return DomeHardware.ShutterState;
             }
         }
@@ -372,7 +378,7 @@ namespace ASCOM.Simulators
         {
             get
             {
-                CheckConnected("Dome simulator is not connected");
+                CheckConnected(CheckConnectedFailureError);
 
                 return DomeHardware.IsSlewing;
             }
@@ -385,7 +391,7 @@ namespace ASCOM.Simulators
                 throw new MethodNotImplementedException("SlewToAltitude");
             }
 
-            CheckConnected("Dome simulator is not connected");
+            CheckConnected(CheckConnectedFailureError);
 
             if (DomeHardware.ShutterState == ShutterState.Error)
                 LogMessage("Altitude", "Shutter in ErrorState");
@@ -404,7 +410,7 @@ namespace ASCOM.Simulators
                 throw new MethodNotImplementedException("SlewToAzimuth");
             }
 
-            CheckConnected("Dome simulator is not connected");
+            CheckConnected(CheckConnectedFailureError);
             check_Az(Azimuth);
             DomeHardware.Move(Azimuth);
         }
@@ -416,7 +422,7 @@ namespace ASCOM.Simulators
                 throw new MethodNotImplementedException("SyncToAzimuth");
             }
 
-            CheckConnected("Dome simulator is not connected");
+            CheckConnected(CheckConnectedFailureError);
             check_Az(Azimuth);
             DomeHardware.Sync(Azimuth);
         }
