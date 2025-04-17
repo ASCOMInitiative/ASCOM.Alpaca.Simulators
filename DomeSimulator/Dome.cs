@@ -93,8 +93,12 @@ namespace ASCOM.Simulators
 
         public void AbortSlew()
         {
-            CheckConnected(CheckConnectedFailureError);
-            DomeHardware.Halt();
+            this.ProcessCommand(
+            () =>
+            {
+                CheckConnected(CheckConnectedFailureError);
+                DomeHardware.Halt();
+            }, DeviceType, MemberNames.AbortSlew, "Command");
         }
 
         /// <summary>
@@ -110,17 +114,22 @@ namespace ASCOM.Simulators
         {
             get
             {
-                if (!DomeHardware.CanSetAltitude.Value)
-                    throw new PropertyNotImplementedException("Altitude", false);
+                return this.ProcessCommand(
+                () =>
+                {
+                    if (!DomeHardware.CanSetAltitude.Value)
+                        throw new PropertyNotImplementedException("Altitude", false);
 
-                CheckConnected(CheckConnectedFailureError);
+                    CheckConnected(CheckConnectedFailureError);
 
-                if (DomeHardware.ShutterState == ShutterState.Error)
-                    LogMessage("Altitude", "Shutter in ErrorState");
-                if (DomeHardware.ShutterState != ShutterState.Open)
-                    LogMessage("Altitude", "Shutter not Open");
+                    if (DomeHardware.ShutterState == ShutterState.Error)
+                        LogMessage("Altitude", "Shutter in ErrorState");
+                    if (DomeHardware.ShutterState != ShutterState.Open)
+                        LogMessage("Altitude", "Shutter not Open");
 
-                return DomeHardware.DomeAltitude.Value;
+                    return DomeHardware.DomeAltitude.Value;
+                }, DeviceType, MemberNames.Altitude, "Get");
+
             }
         }
 
@@ -128,8 +137,13 @@ namespace ASCOM.Simulators
         {
             get
             {
-                CheckConnected(CheckConnectedFailureError);
-                return DomeHardware.AtHome;
+                return this.ProcessCommand(
+                () =>
+                {
+                    CheckConnected(CheckConnectedFailureError);
+                    return DomeHardware.AtHome;
+                }, DeviceType, MemberNames.AtHome, "Get");
+
             }
         }
 
@@ -137,8 +151,13 @@ namespace ASCOM.Simulators
         {
             get
             {
-                CheckConnected(CheckConnectedFailureError);
-                return DomeHardware.AtPark;
+                return this.ProcessCommand(
+                () =>
+                {
+                    CheckConnected(CheckConnectedFailureError);
+                    return DomeHardware.AtPark;
+                }, DeviceType, MemberNames.AtPark, "Get");
+
             }
         }
 
