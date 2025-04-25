@@ -32,6 +32,11 @@ namespace OmniSim.BaseDriver
             Value = default_value;
         }
 
+        public override string ToString()
+        {
+            return SettingsExtensions.CultureSafeString(this.Value);
+        }
+
     }
 
     public static class SettingsExtensions
@@ -46,7 +51,7 @@ namespace OmniSim.BaseDriver
             Profile.WriteValue(Setting.Key, CultureSafeString(Setting.DefaultValue));
         }
 
-        private static string CultureSafeString<T>(T value)
+        internal static string CultureSafeString<T>(T value)
         {
             if (value is float)
             {

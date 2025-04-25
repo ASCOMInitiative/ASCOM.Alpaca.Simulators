@@ -29,8 +29,6 @@ namespace ASCOM.Simulators
 
             LoadConfig();
 
-            LogMessage($"New dome {deviceNumber}", "Log started");
-
             DeviceNumber = deviceNumber;
 
             //This should be replaced by the next bit of code but is semi-unique as a default.
@@ -53,6 +51,11 @@ namespace ASCOM.Simulators
 
             logger.LogInformation($"Dome {deviceNumber} - UUID of {UniqueID}");
         }
+
+        /// <summary>
+        /// Gets the device type value for this driver.
+        /// </summary>
+        public override DeviceTypes DeviceType => DeviceTypes.Dome;
 
         #region IDomeV2 members
 
@@ -123,13 +126,17 @@ namespace ASCOM.Simulators
                     CheckConnected(CheckConnectedFailureError);
 
                     if (DomeHardware.ShutterState == ShutterState.Error)
-                        LogMessage("Altitude", "Shutter in ErrorState");
+                    {
+                        throw new DriverException("Shutter in ErrorState");
+                    }
+
                     if (DomeHardware.ShutterState != ShutterState.Open)
-                        LogMessage("Altitude", "Shutter not Open");
+                    {
+                        throw new DriverException("Shutter not Open");
+                    }
 
                     return DomeHardware.DomeAltitude.Value;
                 }, DeviceType, MemberNames.Altitude, "Get");
-
             }
         }
 
@@ -143,7 +150,6 @@ namespace ASCOM.Simulators
                     CheckConnected(CheckConnectedFailureError);
                     return DomeHardware.AtHome;
                 }, DeviceType, MemberNames.AtHome, "Get");
-
             }
         }
 
@@ -157,7 +163,6 @@ namespace ASCOM.Simulators
                     CheckConnected(CheckConnectedFailureError);
                     return DomeHardware.AtPark;
                 }, DeviceType, MemberNames.AtPark, "Get");
-
             }
         }
 
@@ -165,11 +170,17 @@ namespace ASCOM.Simulators
         {
             get
             {
-                if (!DomeHardware.CanSetAzimuth.Value)
-                    throw new PropertyNotImplementedException("Azimuth", false);
+                return this.ProcessCommand(
+                () =>
+                {
+                    if (!DomeHardware.CanSetAzimuth.Value)
+                    {
+                        throw new PropertyNotImplementedException("Azimuth", false);
+                    }
 
-                CheckConnected(CheckConnectedFailureError);
-                return DomeHardware.DomeAzimuth.Value;
+                    CheckConnected(CheckConnectedFailureError);
+                    return DomeHardware.DomeAzimuth.Value;
+                }, DeviceType, MemberNames.Azimuth, "Get");
             }
         }
 
@@ -177,7 +188,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return DomeHardware.CanFindHome.Value;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanFindHome.Value;
+                }, DeviceType, MemberNames.CanFindHome, "Get");
             }
         }
 
@@ -185,7 +200,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return DomeHardware.CanPark.Value;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanPark.Value;
+                }, DeviceType, MemberNames.CanPark, "Get");
             }
         }
 
@@ -193,7 +212,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return DomeHardware.CanSetAltitude.Value;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanSetAltitude.Value;
+                }, DeviceType, MemberNames.CanSetAltitude, "Get");
             }
         }
 
@@ -201,7 +224,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return DomeHardware.CanSetAzimuth.Value;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanSetAzimuth.Value;
+                }, DeviceType, MemberNames.CanSetAzimuth, "Get");
             }
         }
 
@@ -209,7 +236,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return DomeHardware.CanSetPark.Value;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanSetPark.Value;
+                }, DeviceType, MemberNames.CanSetPark, "Get");
             }
         }
 
@@ -217,7 +248,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return DomeHardware.CanSetShutter.Value;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanSetShutter.Value;
+                }, DeviceType, MemberNames.CanSetShutter, "Get");
             }
         }
 
@@ -225,7 +260,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return false;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return false;
+                }, DeviceType, MemberNames.CanSlave, "Get");
             }
         }
 
@@ -233,19 +272,27 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return DomeHardware.CanSyncAzimuth.Value;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanSyncAzimuth.Value;
+                }, DeviceType, MemberNames.CanSyncAzimuth, "Get");
             }
         }
 
         public void CloseShutter()
         {
-            if (!DomeHardware.CanSetShutter.Value)
-            {
-                throw new MethodNotImplementedException("CloseShutter");
-            }
+            this.ProcessCommand(
+                () =>
+                {
+                    if (!DomeHardware.CanSetShutter.Value)
+                    {
+                        throw new MethodNotImplementedException("CloseShutter");
+                    }
 
-            CheckConnected(CheckConnectedFailureError);
-            DomeHardware.CloseShutter();
+                    CheckConnected(CheckConnectedFailureError);
+                    DomeHardware.CloseShutter();
+                }, DeviceType, MemberNames.CloseShutter, "Command");
         }
 
         /// <summary>
@@ -303,14 +350,18 @@ namespace ASCOM.Simulators
 
         public void FindHome()
         {
-            if (!DomeHardware.CanFindHome.Value)
-            {
-                throw new MethodNotImplementedException("FindHome");
-            }
+            this.ProcessCommand(
+                () =>
+                {
+                    if (!DomeHardware.CanFindHome.Value)
+                    {
+                        throw new MethodNotImplementedException("FindHome");
+                    }
 
-            CheckConnected(CheckConnectedFailureError);
-            if (!DomeHardware.g_bAtHome)
-                DomeHardware.FindHome();
+                    CheckConnected(CheckConnectedFailureError);
+                    if (!DomeHardware.g_bAtHome)
+                        DomeHardware.FindHome();
+                }, DeviceType, MemberNames.FindHome, "Command");
         }
 
         public string Name
@@ -327,56 +378,75 @@ namespace ASCOM.Simulators
 
         public void OpenShutter()
         {
-            if (!DomeHardware.CanSetShutter.Value)
-            {
-                throw new MethodNotImplementedException("OpenShutter");
-            }
+            this.ProcessCommand(
+                () =>
+                {
+                    if (!DomeHardware.CanSetShutter.Value)
+                    {
+                        throw new MethodNotImplementedException("OpenShutter");
+                    }
 
-            CheckConnected(CheckConnectedFailureError);
+                    CheckConnected(CheckConnectedFailureError);
 
-            if (DomeHardware.ShutterState == ShutterState.Error)
-                throw new InvalidOperationException("Shutter failed to open");
+                    if (DomeHardware.ShutterState == ShutterState.Error)
+                        throw new InvalidOperationException("Shutter failed to open");
 
-            DomeHardware.OpenShutter();
+                    DomeHardware.OpenShutter();
+                }, DeviceType, MemberNames.OpenShutter, "Command");
         }
 
         public void Park()
         {
-            if (!DomeHardware.CanPark.Value)
-            {
-                throw new MethodNotImplementedException("Park");
-            }
+            this.ProcessCommand(
+                () =>
+                {
+                    if (!DomeHardware.CanPark.Value)
+                    {
+                        throw new MethodNotImplementedException("Park");
+                    }
 
-            CheckConnected(CheckConnectedFailureError);
-            if (!DomeHardware.g_bAtPark)
-                DomeHardware.Park();
+                    CheckConnected(CheckConnectedFailureError);
+                    if (!DomeHardware.g_bAtPark)
+                        DomeHardware.Park();
+                }, DeviceType, MemberNames.Park, "Command");
+
         }
 
         public void SetPark()
         {
-            if (!DomeHardware.CanSetPark.Value)
-            {
-                throw new MethodNotImplementedException("Park");
-            }
+            this.ProcessCommand(
+                () =>
+                {
+                    if (!DomeHardware.CanSetPark.Value)
+                    {
+                        throw new MethodNotImplementedException("Park");
+                    }
 
-            CheckConnected(CheckConnectedFailureError);
-            DomeHardware.ParkPosition.Value = DomeHardware.DomeAzimuth.Value;
+                    CheckConnected(CheckConnectedFailureError);
+                    DomeHardware.ParkPosition.Value = DomeHardware.DomeAzimuth.Value;
 
-            if (!DomeHardware.StandardAtPark.Value)
-            {
-                DomeHardware.g_bAtPark = true;
-            }
+                    if (!DomeHardware.StandardAtPark.Value)
+                    {
+                        DomeHardware.g_bAtPark = true;
+                    }
+                }, DeviceType, MemberNames.SetPark, "Command");
         }
 
         public ShutterState ShutterStatus
         {
             get
             {
-                if (!DomeHardware.CanSetShutter.Value)
-                    throw new PropertyNotImplementedException("ShutterStatus", false);
 
-                CheckConnected(CheckConnectedFailureError);
-                return DomeHardware.ShutterState;
+                return this.ProcessCommand(
+                () =>
+                {
+
+                    if (!DomeHardware.CanSetShutter.Value)
+                        throw new PropertyNotImplementedException("ShutterStatus", false);
+
+                    CheckConnected(CheckConnectedFailureError);
+                    return DomeHardware.ShutterState;
+                }, DeviceType, MemberNames.ShutterStatus, "Get");
             }
         }
 
@@ -384,12 +454,25 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return false;
+
+                return this.ProcessCommand(
+                () =>
+                {
+
+                    return false;
+                }, DeviceType, MemberNames.Slaved, "Get");
             }
+
             set
             {
-                if (value)
-                    throw new PropertyNotImplementedException("Slaved", true);
+                ProcessCommand(
+                () =>
+                {
+                    if (value)
+                    {
+                        throw new PropertyNotImplementedException("Slaved", true);
+                    }
+                }, DeviceType, MemberNames.Slaved, "Set");
             }
         }
 
@@ -397,53 +480,78 @@ namespace ASCOM.Simulators
         {
             get
             {
-                CheckConnected(CheckConnectedFailureError);
+                return this.ProcessCommand(
+                () =>
+                {
+                    CheckConnected(CheckConnectedFailureError);
 
-                return DomeHardware.IsSlewing;
+                    return DomeHardware.IsSlewing;
+                }, DeviceType, MemberNames.Slewing, "Command");
             }
         }
 
         public void SlewToAltitude(double Altitude)
         {
-            if (!DomeHardware.CanSetAltitude.Value)
-            {
-                throw new MethodNotImplementedException("SlewToAltitude");
-            }
+            this.ProcessCommand(
+                () =>
+                {
+                    if (!DomeHardware.CanSetAltitude.Value)
+                    {
+                        throw new MethodNotImplementedException("SlewToAltitude");
+                    }
 
-            CheckConnected(CheckConnectedFailureError);
+                    if (DomeHardware.ShutterState == ShutterState.Error)
+                    {
+                        throw new DriverException("Shutter in ErrorState");
+                    }
 
-            if (DomeHardware.ShutterState == ShutterState.Error)
-                LogMessage("Altitude", "Shutter in ErrorState");
-            if (DomeHardware.ShutterState != ShutterState.Open)
-                LogMessage("Altitude", "Shutter not Open");
-            if (Altitude < DomeHardware.MinimumAltitude.Value | Altitude > DomeHardware.MaximumAltitude.Value)
-                throw new InvalidValueException("SlewToAltitude", Altitude.ToString(), DomeHardware.MinimumAltitude.ToString() + " to " + DomeHardware.MaximumAltitude.ToString());
+                    if (DomeHardware.ShutterState != ShutterState.Open)
+                    {
+                        throw new DriverException("Shutter not Open");
+                    }
 
-            DomeHardware.MoveShutter(Altitude);
+                    if (Altitude < DomeHardware.MinimumAltitude.Value | Altitude > DomeHardware.MaximumAltitude.Value)
+                    {
+                        throw new InvalidValueException("SlewToAltitude", Altitude.ToString(), DomeHardware.MinimumAltitude.Value.ToString() + " to " + DomeHardware.MaximumAltitude.Value.ToString());
+                    }
+
+                    CheckConnected(CheckConnectedFailureError);
+
+                    DomeHardware.MoveShutter(Altitude);
+                }, DeviceType, MemberNames.SlewToAltitude, "Command");
         }
 
         public void SlewToAzimuth(double Azimuth)
         {
-            if (!DomeHardware.CanSetAzimuth.Value)
-            {
-                throw new MethodNotImplementedException("SlewToAzimuth");
-            }
+            this.ProcessCommand(
+                () =>
+                {
+                    if (!DomeHardware.CanSetAzimuth.Value)
+                    {
+                        throw new MethodNotImplementedException("SlewToAzimuth");
+                    }
 
-            CheckConnected(CheckConnectedFailureError);
-            check_Az(Azimuth);
-            DomeHardware.Move(Azimuth);
+                    CheckConnected(CheckConnectedFailureError);
+                    check_Az(Azimuth);
+                    DomeHardware.Move(Azimuth);
+                }, DeviceType, MemberNames.SlewToAzimuth, "Command");
         }
 
         public void SyncToAzimuth(double Azimuth)
         {
-            if (!DomeHardware.CanSyncAzimuth.Value)
-            {
-                throw new MethodNotImplementedException("SyncToAzimuth");
-            }
+            this.ProcessCommand(
+                () =>
+                {
 
-            CheckConnected(CheckConnectedFailureError);
-            check_Az(Azimuth);
-            DomeHardware.Sync(Azimuth);
+                    if (!DomeHardware.CanSyncAzimuth.Value)
+                    {
+                        throw new MethodNotImplementedException("SyncToAzimuth");
+                    }
+
+                    CheckConnected(CheckConnectedFailureError);
+                    check_Az(Azimuth);
+                    DomeHardware.Sync(Azimuth);
+                }, DeviceType, MemberNames.SyncToAzimuth, "Command");
         }
 
         #endregion IDomeV2 members
@@ -457,28 +565,24 @@ namespace ASCOM.Simulators
         {
             get
             {
-                // Create an array list to hold the IStateValue entries
-                List<StateValue> deviceState = new List<StateValue>();
+                return this.ProcessCommand(
+                () =>
+                {
+                    // Create an array list to hold the IStateValue entries
+                    List<StateValue> deviceState = new List<StateValue>();
 
-                try { deviceState.Add(new StateValue(nameof(IDomeV3.Altitude), Altitude)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IDomeV3.AtHome), AtHome)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IDomeV3.AtPark), AtPark)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IDomeV3.Azimuth), Azimuth)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IDomeV3.ShutterStatus), ShutterStatus)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IDomeV3.Slewing), Slewing)); } catch { }
-                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IDomeV3.Altitude), Altitude)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IDomeV3.AtHome), AtHome)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IDomeV3.AtPark), AtPark)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IDomeV3.Azimuth), Azimuth)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IDomeV3.ShutterStatus), ShutterStatus)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IDomeV3.Slewing), Slewing)); } catch { }
+                    try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
-                return deviceState;
+                    return deviceState;
+                }, DeviceType, MemberNames.DeviceState, "Get");
             }
         }
-
-        public override DeviceTypes DeviceType => DeviceTypes.Dome;
-
         #endregion IDomeV3 members
-
-        private void LogMessage(string message, string details)
-        {
-            Logger.LogVerbose(message + " - " + details);
-        }
     }
 }
