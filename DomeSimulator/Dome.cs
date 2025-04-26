@@ -127,12 +127,12 @@ namespace ASCOM.Simulators
 
                     if (DomeHardware.ShutterState == ShutterState.Error)
                     {
-                        throw new DriverException("Shutter in ErrorState");
+                        Logger.LogWarning("Shutter in ErrorState");
                     }
 
                     if (DomeHardware.ShutterState != ShutterState.Open)
                     {
-                        throw new DriverException("Shutter not Open");
+                        Logger.LogWarning("Shutter not Open");
                     }
 
                     return DomeHardware.DomeAltitude.Value;
@@ -502,12 +502,12 @@ namespace ASCOM.Simulators
 
                     if (DomeHardware.ShutterState == ShutterState.Error)
                     {
-                        throw new DriverException("Shutter in ErrorState");
+                        Logger.LogWarning("Shutter in ErrorState");
                     }
 
                     if (DomeHardware.ShutterState != ShutterState.Open)
                     {
-                        throw new DriverException("Shutter not Open");
+                        Logger.LogWarning("Shutter not Open");
                     }
 
                     if (Altitude < DomeHardware.MinimumAltitude.Value | Altitude > DomeHardware.MaximumAltitude.Value)
