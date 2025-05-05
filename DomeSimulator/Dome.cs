@@ -20,6 +20,8 @@ namespace ASCOM.Simulators
         private IProfile Profile;
         internal DomeHardware DomeHardware;
 
+        public override string DeviceName { get => Name; }
+
         public Dome(int deviceNumber, ILogger logger, IProfile profile) : base(deviceNumber, logger, profile)
         {
             Logger = logger;
@@ -59,24 +61,35 @@ namespace ASCOM.Simulators
 
         #region IDomeV2 members
 
+        /// <summary>
+        /// Load the stored config for this driver.
+        /// </summary>
         public void LoadConfig()
         {
             DomeHardware.LoadConfig();
         }
 
+        /// <summary>
+        /// Save the current config.
+        /// </summary>
         public void SaveConfig()
         {
             DomeHardware.SaveConfig();
         }
 
-        public override string DeviceName { get => Name; }
-
-        public void ResetSettings()
+        /// <summary>
+        /// Reset settings to default.
+        /// </summary>
+        public new void ResetSettings()
         {
             Profile.Clear();
         }
 
-        public string GetXMLProfile()
+        /// <summary>
+        /// Gets the current profile in XML format. This is not guaranteed to be compatible across versions.
+        /// </summary>
+        /// <returns>An XML encoded copy of the profile.</returns>
+        public new string GetXMLProfile()
         {
             return Profile.GetProfile();
         }
