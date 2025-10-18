@@ -30,6 +30,14 @@ namespace ASCOM.Alpaca.Simulators
             DeviceManager.LoadFilterWheel(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
+        internal static void LoadFilterWheels()
+        {
+            for (int i = 0; i < ServerSettings.NumberOfFilterWheels; i++)
+            {
+                LoadFilterWheel(i);
+            }
+        }
+
         internal static void LoadFocuser(int DeviceID)
         {
             var dev = new ASCOM.Simulators.Focuser(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("Focuser", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Focuser, (uint)DeviceID));

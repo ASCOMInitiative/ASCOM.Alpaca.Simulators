@@ -121,6 +121,13 @@
         <div class="grid-item-left">
             <input type="checkbox" @bind="PreventRemoteDisconnects">
         </div>
+        <p>Note: reducing the number of drivers requires a restart to apply</p>
+        <div class="grid-item-right">
+            <span>Number of FilterWheels:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="number" @bind="NFilterWheels" min="1" max="4" style="width:20ch;">
+        </div>
         <div class="grid-item-right">
         </div>
         <div class="grid-item-right">
@@ -308,6 +315,12 @@
         get;
         set;
     } = ServerSettings.DiscoveryPort;
+
+    UInt16 NFilterWheels
+    {
+        get;
+        set;
+    } = ServerSettings.NumberOfFilterWheels;
 
     bool StrictAPIMode
     {
@@ -523,6 +536,8 @@
         try
         {
             ServerSettings.PreventRemoteDisconnects = PreventRemoteDisconnects;
+            ServerSettings.NumberOfFilterWheels = NFilterWheels;
+            DriverManager.LoadFilterWheels();
 
             DisplaySuccess("Driver Settings Saved");
         }

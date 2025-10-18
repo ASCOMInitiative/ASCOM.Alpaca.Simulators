@@ -211,8 +211,7 @@ namespace ASCOM.Alpaca.Simulators
             DriverManager.LoadCamera(0);
             DriverManager.LoadCoverCalibrator(0);
             DriverManager.LoadDome(0);
-            DriverManager.LoadFilterWheel(0);
-            DriverManager.LoadFilterWheel(1);
+            DriverManager.LoadFilterWheels();
             DriverManager.LoadFocuser(0);
             DriverManager.LoadFocuser(1);
             DriverManager.LoadObservingConditions(0);
@@ -318,7 +317,7 @@ namespace ASCOM.Alpaca.Simulators
                     DriverManager.LoadCamera(0);
                     DriverManager.LoadCoverCalibrator(0);
                     DriverManager.LoadDome(0);
-                    DriverManager.LoadFilterWheel(0);
+                    DriverManager.LoadFilterWheels();
                     DriverManager.LoadFocuser(0);
                     DriverManager.LoadObservingConditions(0);
                     DriverManager.LoadRotator(0);

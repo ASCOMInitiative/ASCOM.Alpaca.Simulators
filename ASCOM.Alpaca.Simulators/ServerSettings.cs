@@ -432,6 +432,28 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        #region Driver Creation Settings
+        internal static ushort NumberOfFilterWheels
+        {
+            get
+            {
+                if (ushort.TryParse(Profile.GetValue("NumberOfFilterWheels", 1.ToString()), out ushort result))
+                {
+                    if(result > 4)
+                    {
+                        return 4;
+                    }
+                    return result;
+                }
+                return 1;
+            }
+            set
+            {
+                Profile.WriteValue("NumberOfFilterWheels", value.ToString());
+            }
+        }
+        #endregion
+
         #region SSL Settings
 
         internal static bool UseSSL
