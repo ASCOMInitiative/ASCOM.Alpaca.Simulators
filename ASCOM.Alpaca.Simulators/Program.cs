@@ -1,19 +1,22 @@
 using ASCOM.Common;
+using H.NotifyIcon.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
+using OmniSim.BaseDriver;
 using System;
 using System.Diagnostics;
-using System.IO.Pipes;
+using System.Drawing;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Text.Json;
-using OmniSim.BaseDriver;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -136,6 +139,46 @@ namespace ASCOM.Alpaca.Simulators
 
                     // Set console visibility (Windows only)
                     ShowConsole(ServerSettings.ConsoleDisplay);
+
+                    TrayIconWithContextMenu trayIcon;
+
+                    // Show the tray icon
+                    try
+                    {
+                        if (OperatingSystem.IsWindows())
+                        {
+                            var icon = Icon.ExtractAssociatedIcon(System.Environment.ProcessPath);
+                            trayIcon = new TrayIconWithContextMenu
+                            {
+                                Icon = icon.Handle,
+                                ToolTip = "ASCOM OmniSim",
+                            };
+
+
+                            trayIcon.ContextMenu = new PopupMenu
+                            {
+                                Items =
+    {
+        new PopupMenuItem("Show Browser UI", (_, _) => StartBrowser(ServerSettings.ServerPort)),
+        new PopupMenuSeparator(),
+        new PopupMenuItem("Show Console", (_, _) => ShowConsole(ConsoleDisplayOption.StartNormally)),
+        new PopupMenuItem("Hide Console", (_, _) => ShowConsole(ConsoleDisplayOption.NoConsole)),
+        new PopupMenuSeparator(),
+        new PopupMenuItem("Exit", (_, _) =>
+        {
+            trayIcon.Dispose();
+            Startup.Lifetime.StopApplication();
+        }),
+    },
+                            };
+                            trayIcon.Create();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.LogError(ex.Message);
+                        Console.WriteLine(ex.Message);
+                    }
 
                     var BlazorTask = InitServers(args);
 
