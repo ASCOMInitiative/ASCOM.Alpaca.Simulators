@@ -138,7 +138,7 @@ namespace ASCOM.Alpaca.Simulators
                     }
 
                     // Set console visibility (Windows only)
-                    ShowConsole(ServerSettings.ConsoleDisplay);
+                    ShowConsole(ServerSettings.ConsoleDisplayDefault);
 
                     TrayIconWithContextMenu trayIcon;
 

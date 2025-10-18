@@ -352,19 +352,19 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ConsoleDisplayOption ConsoleDisplay
+        internal static ConsoleDisplayOption ConsoleDisplayDefault
         {
             get
             {
-                if (Enum.TryParse(Profile.GetValue("ConsoleDisplay", ConsoleDisplayOption.StartMinimized.ToString()), out ConsoleDisplayOption result))
+                if (Enum.TryParse(Profile.GetValue("ConsoleDisplayDefault", ConsoleDisplayOption.NoConsole.ToString()), out ConsoleDisplayOption result))
                 {
                     return result;
                 }
-                return ConsoleDisplayOption.StartMinimized;
+                return ConsoleDisplayOption.NoConsole;
             }
             set
             {
-                Profile.WriteValue("ConsoleDisplay", value.ToString());
+                Profile.WriteValue("ConsoleDisplayDefault", value.ToString());
             }
         }
 

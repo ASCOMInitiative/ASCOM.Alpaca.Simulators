@@ -343,7 +343,7 @@
     {
         get;
         set;
-    } = ServerSettings.ConsoleDisplay;
+    } = ServerSettings.ConsoleDisplayDefault;
 
     bool EnableShutdown
     {
@@ -496,10 +496,10 @@
 
             ServerSettings.AutoStartBrowser = StartBrowser;
 
-            if (ServerSettings.ConsoleDisplay != ConsoleDisplay)
+            if (ServerSettings.ConsoleDisplayDefault != ConsoleDisplay)
             {
                 Program.ShowConsole(ConsoleDisplay);
-                ServerSettings.ConsoleDisplay = ConsoleDisplay;
+                ServerSettings.ConsoleDisplayDefault = ConsoleDisplay;
             }
 
             ServerSettings.RunInStrictAlpacaMode = StrictAPIMode;
