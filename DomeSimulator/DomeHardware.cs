@@ -1,11 +1,10 @@
 ﻿namespace ASCOM.Simulators
 {
-    using System;
-    using System.Timers;
-
     using ASCOM.Common.DeviceInterfaces;
     using ASCOM.Common.Interfaces;
     using OmniSim.BaseDriver;
+    using System;
+    using System.Timers;
 
     /// <summary>
     /// The directions and states the dome can move in.
@@ -40,30 +39,71 @@
         /// <summary>
         /// Slew to the home position.
         /// </summary>
-        SlewHome = 4
+        SlewHome = 4,
     }
 
+    /// <summary>
+    /// The Dome Hardware simulation class
+    /// </summary>
     public class DomeHardware
     {
-        private IProfile Profile;
+        /// <summary>
+        /// Constant Value for bad dome position
+        /// </summary>
+        public const double InvalidCoordinate = -100000.0;
 
-        public const double INVALID_COORDINATE = -100000.0;
+        private readonly Timer timer = new Timer(100)
+        {
+            AutoReset = true,
+        };
 
-        public double TIMER_INTERVAL { get; set; } = 0.25;        // seconds per tick
-        public double PARK_HOME_TOL { get; set; } = 1.0;           // Tolerance (deg) for Park/Home position
+        /// <summary>
+        /// Seconds per tick.
+        /// </summary>
+        private const double TimerInterval = 0.25;
 
+        /// <summary>
+        /// Tolerance (deg) for Park/Home position.
+        /// </summary>
+        private const double ParkHomeTolerance = 1.0;
 
+        private readonly IProfile settingsProfile;
 
-        public double TargetAltitude { get; set; }               // Target Alt
-        public double TargetAzimuth { get; set; }                // Target Az
-        public double OCProgress { get; set; }              // Target Az
+        /// <summary>
+        /// Gets or Sets the Target Altitude.
+        /// </summary>
+        public double TargetAltitude { get; set; }
 
-        public bool g_bAtHome { get; set; }                 // Home state
-        public bool g_bAtPark { get; set; }                 // Park state
-        public ShutterState ShutterState { get; set; }      // shutter status
+        /// <summary>
+        /// Gets or Sets the Target Azimuth.
+        /// </summary>
+        public double TargetAzimuth { get; set; }
 
+        /// <summary>
+        /// Gets or Sets the Open Close Progress.
+        /// </summary>
+        public double OCProgress { get; set; }
 
-        public Going Slewing { get; set; }                  // Move in progress
+        /// <summary>
+        /// Gets or sets the Home State (ToDo maybe remove?).
+        /// </summary>
+        public bool CommandAtHome { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Park State (ToDo maybe remove?).
+        /// </summary>
+        public bool CommandAtPark { get; set; }
+
+        /// <summary>
+        /// Gets or Sets the Shutter State.
+        /// </summary>
+        public ShutterState ShutterState { get; set; }
+
+        /// <summary>
+        /// Gets or Sets the Slewing State.
+        /// </summary>
+        public Going Slewing { get; set; }
+
 
         // State Variables
 
@@ -80,12 +120,12 @@
         /// <summary>
         /// Gets the current dome altitude.
         /// </summary>
-        public Setting<double> DomeAltitude { get; } = new Setting<double>("DomeAltitude", "The saved dome altitude", INVALID_COORDINATE);
+        public Setting<double> DomeAltitude { get; } = new Setting<double>("DomeAltitude", "The saved dome altitude", InvalidCoordinate);
 
         /// <summary>
         /// Gets the current dome azimuth.
         /// </summary>
-        public Setting<double> DomeAzimuth { get; } = new Setting<double>("DomeAzimuth", "The saved dome azimuth", INVALID_COORDINATE);
+        public Setting<double> DomeAzimuth { get; } = new Setting<double>("DomeAzimuth", "The saved dome azimuth", InvalidCoordinate);
 
         /// <summary>
         /// Gets the maximum altitude in degrees.
@@ -184,99 +224,122 @@
         /// </summary>
         public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-3", 3);
 
+        /// <summary>
+        /// Load settings from the Profile Storage.
+        /// </summary>
         internal void LoadConfig()
         {
             OCProgress = 0;
-            OCDelay.Value = Profile.GetSettingReturningDefault(OCDelay);
-            ParkPosition.Value = Profile.GetSettingReturningDefault(ParkPosition);
-            ParkPosition.Value = Profile.GetSettingReturningDefault(ParkPosition);
-            AltitudeRate.Value = Profile.GetSettingReturningDefault(AltitudeRate);
-            AzimuthRate.Value = Profile.GetSettingReturningDefault(AzimuthRate);
-            MaximumAltitude.Value = Profile.GetSettingReturningDefault(MaximumAltitude);
-            MinimumAltitude.Value = Profile.GetSettingReturningDefault(MinimumAltitude);
-            StartWithShutterError.Value = Profile.GetSettingReturningDefault(StartWithShutterError);
-            InterfaceVersionSetting.Value = Profile.GetSettingReturningDefault(InterfaceVersionSetting);
+            OCDelay.Value = settingsProfile.GetSettingReturningDefault(OCDelay);
+            ParkPosition.Value = settingsProfile.GetSettingReturningDefault(ParkPosition);
+            ParkPosition.Value = settingsProfile.GetSettingReturningDefault(ParkPosition);
+            AltitudeRate.Value = settingsProfile.GetSettingReturningDefault(AltitudeRate);
+            AzimuthRate.Value = settingsProfile.GetSettingReturningDefault(AzimuthRate);
+            MaximumAltitude.Value = settingsProfile.GetSettingReturningDefault(MaximumAltitude);
+            MinimumAltitude.Value = settingsProfile.GetSettingReturningDefault(MinimumAltitude);
+            StartWithShutterError.Value = settingsProfile.GetSettingReturningDefault(StartWithShutterError);
+            InterfaceVersionSetting.Value = settingsProfile.GetSettingReturningDefault(InterfaceVersionSetting);
 
-            SlewingTrueWhenOpenOrClose.Value = Profile.GetSettingReturningDefault(SlewingTrueWhenOpenOrClose);
-            StandardAtHome.Value = Profile.GetSettingReturningDefault(StandardAtHome);
-            StandardAtPark.Value = Profile.GetSettingReturningDefault(StandardAtPark);
+            SlewingTrueWhenOpenOrClose.Value = settingsProfile.GetSettingReturningDefault(SlewingTrueWhenOpenOrClose);
+            StandardAtHome.Value = settingsProfile.GetSettingReturningDefault(StandardAtHome);
+            StandardAtPark.Value = settingsProfile.GetSettingReturningDefault(StandardAtPark);
 
-            CanFindHome.Value = Profile.GetSettingReturningDefault(CanFindHome);
-            CanPark.Value = Profile.GetSettingReturningDefault(CanPark);
-            CanSetAltitude.Value = Profile.GetSettingReturningDefault(CanSetAltitude);
-            CanSetAzimuth.Value = Profile.GetSettingReturningDefault(CanSetAzimuth);
-            CanSetPark.Value = Profile.GetSettingReturningDefault(CanSetPark);
-            CanSetShutter.Value = Profile.GetSettingReturningDefault(CanSetShutter);
-            CanSyncAzimuth.Value = Profile.GetSettingReturningDefault(CanSyncAzimuth);
+            CanFindHome.Value = settingsProfile.GetSettingReturningDefault(CanFindHome);
+            CanPark.Value = settingsProfile.GetSettingReturningDefault(CanPark);
+            CanSetAltitude.Value = settingsProfile.GetSettingReturningDefault(CanSetAltitude);
+            CanSetAzimuth.Value = settingsProfile.GetSettingReturningDefault(CanSetAzimuth);
+            CanSetPark.Value = settingsProfile.GetSettingReturningDefault(CanSetPark);
+            CanSetShutter.Value = settingsProfile.GetSettingReturningDefault(CanSetShutter);
+            CanSyncAzimuth.Value = settingsProfile.GetSettingReturningDefault(CanSyncAzimuth);
 
-            DomeAzimuth.Value = Profile.GetSettingReturningDefault(DomeAzimuth);
-            DomeAltitude.Value =  Profile.GetSettingReturningDefault(DomeAltitude);
+            DomeAzimuth.Value = settingsProfile.GetSettingReturningDefault(DomeAzimuth);
+            DomeAltitude.Value = settingsProfile.GetSettingReturningDefault(DomeAltitude);
 
             if (DomeAltitude.Value < MinimumAltitude.Value)
+            {
                 DomeAltitude.Value = MinimumAltitude.Value;
+            }
+
             if (DomeAltitude.Value > MaximumAltitude.Value)
+            {
                 DomeAltitude.Value = MaximumAltitude.Value;
+            }
+
             if (DomeAzimuth.Value < 0 | DomeAzimuth.Value >= 360)
+            {
                 DomeAzimuth.Value = ParkPosition.Value;
+            }
+
             TargetAltitude = DomeAltitude.Value;
             TargetAzimuth = DomeAzimuth.Value;
 
             if (StartWithShutterError.Value)
+            {
                 ShutterState = ShutterState.Error;
+            }
             else
             {
-                string ret = Profile.GetSettingReturningDefault(ShutterStateSetting);       // ShutterClosed
+                // ShutterClosed
+                string ret = settingsProfile.GetSettingReturningDefault(ShutterStateSetting);
                 ShutterState = (ShutterState)Enum.Parse(typeof(ShutterState), ret.ToString());
             }
 
             Slewing = Going.SlewNowhere;
-            g_bAtPark = AtPark;                   // its OK to wake up parked
+            // its OK to wake up parked
+            CommandAtPark = AtPark;
+
+            // Standard: home is set by home() method, never wake up homed!
             if (StandardAtHome.Value)
-                g_bAtHome = false;                   // Standard: home is set by home() method, never wake up homed!
+            {
+                CommandAtHome = false;
+            }
             else
-                g_bAtHome = AtHome;// Non standard, position, OK to wake up homed
+            {
+                CommandAtHome = AtHome;// Non standard, position, OK to wake up homed
+            }
         }
 
+        /// <summary>
+        /// Save all settings to the Profile
+        /// </summary>
         internal void SaveConfig()
         {
-            Profile.SetSetting(OCDelay);
-            Profile.SetSetting(ParkPosition);
-            Profile.SetSetting(HomePosition);
-            Profile.SetSetting(AltitudeRate);
-            Profile.SetSetting(AzimuthRate);
-            Profile.SetSetting(MaximumAltitude);
-            Profile.SetSetting(MinimumAltitude);
-            Profile.SetSetting(StartWithShutterError);
-            Profile.SetSetting(InterfaceVersionSetting);
-            Profile.SetSetting(SlewingTrueWhenOpenOrClose);
-            Profile.SetSetting(StandardAtHome);
-            Profile.SetSetting(StandardAtPark);
+            settingsProfile.SetSetting(OCDelay);
+            settingsProfile.SetSetting(ParkPosition);
+            settingsProfile.SetSetting(HomePosition);
+            settingsProfile.SetSetting(AltitudeRate);
+            settingsProfile.SetSetting(AzimuthRate);
+            settingsProfile.SetSetting(MaximumAltitude);
+            settingsProfile.SetSetting(MinimumAltitude);
+            settingsProfile.SetSetting(StartWithShutterError);
+            settingsProfile.SetSetting(InterfaceVersionSetting);
+            settingsProfile.SetSetting(SlewingTrueWhenOpenOrClose);
+            settingsProfile.SetSetting(StandardAtHome);
+            settingsProfile.SetSetting(StandardAtPark);
 
-            Profile.SetSetting(DomeAzimuth);
-            Profile.SetSetting(DomeAltitude);
+            settingsProfile.SetSetting(DomeAzimuth);
+            settingsProfile.SetSetting(DomeAltitude);
 
             ShutterStateSetting.Value = System.Convert.ToString(ShutterState);
 
-            Profile.SetSetting(ShutterStateSetting);
+            settingsProfile.SetSetting(ShutterStateSetting);
 
-            Profile.SetSetting(CanFindHome);
-            Profile.SetSetting(CanPark);
-            Profile.SetSetting(CanSetAltitude);
-            Profile.SetSetting(CanSetAzimuth);
-            Profile.SetSetting(CanSetPark);
-            Profile.SetSetting(CanSetShutter);
-            Profile.SetSetting(CanSyncAzimuth);
+            settingsProfile.SetSetting(CanFindHome);
+            settingsProfile.SetSetting(CanPark);
+            settingsProfile.SetSetting(CanSetAltitude);
+            settingsProfile.SetSetting(CanSetAzimuth);
+            settingsProfile.SetSetting(CanSetPark);
+            settingsProfile.SetSetting(CanSetShutter);
+            settingsProfile.SetSetting(CanSyncAzimuth);
         }
 
-
-        private readonly Timer timer = new Timer(100)
-        {
-            AutoReset = true,
-        };
-
+        /// <summary>
+        /// Create a Dome object with the provided profile.
+        /// </summary>
+        /// <param name="profile"></param>
         public DomeHardware(IProfile profile)
         {
-            Profile = profile;
+            settingsProfile = profile;
             timer.Elapsed += OnTimedEvent;
             timer.Start();
         }
@@ -314,7 +377,7 @@
                     distanceFromPark = 360 - distanceFromPark;
                 }
 
-                return distanceFromPark < PARK_HOME_TOL;
+                return distanceFromPark < ParkHomeTolerance;
             }
         }
 
@@ -331,7 +394,7 @@
                     distanceFromHome = 360 - distanceFromHome;
                 }
 
-                return distanceFromHome < PARK_HOME_TOL;
+                return distanceFromHome < ParkHomeTolerance;
             }
         }
 
@@ -374,8 +437,8 @@
         /// </summary>
         public void FindHome()
         {
-            g_bAtHome = false;
-            g_bAtPark = false;
+            CommandAtHome = false;
+            CommandAtPark = false;
             TargetAzimuth = HomePosition.Value;
             Slewing = Going.SlewHome;
         }
@@ -391,12 +454,12 @@
             // clear home / park (state is fragile in standard)
             if (StandardAtPark.Value)
             {
-                g_bAtPark = false;
+                CommandAtPark = false;
             }
 
             if (StandardAtHome.Value)
             {
-                g_bAtHome = false;
+                CommandAtHome = false;
             }
 
             // If the shutter is in motion, then cause it to jam
@@ -413,8 +476,8 @@
         /// <param name="azimuth">The target azimuth.</param>
         public void Move(double azimuth)
         {
-            g_bAtHome = false;
-            g_bAtPark = false;
+            CommandAtHome = false;
+            CommandAtPark = false;
             TargetAzimuth = azimuth;
             Slewing = Going.SlewSomewhere;
         }
@@ -474,8 +537,8 @@
         /// </summary>
         public void Park()
         {
-            g_bAtHome = false;
-            g_bAtPark = false;
+            CommandAtHome = false;
+            CommandAtPark = false;
             TargetAzimuth = ParkPosition.Value;
             Slewing = Going.SlewPark;
         }
@@ -486,8 +549,8 @@
         /// <param name="clockwise">True for clockwise.</param>
         public void Run(bool clockwise)
         {
-            g_bAtHome = false;
-            g_bAtPark = false;
+            CommandAtHome = false;
+            CommandAtPark = false;
             Slewing = clockwise ? Going.SlewCW : Going.SlewCCW;
         }
 
@@ -505,23 +568,23 @@
             if (StandardAtHome.Value)
             {
                 // Fragile (standard)
-                g_bAtHome = false;
+                CommandAtHome = false;
             }
             else
             {
                 // Position (non-standard)
-                g_bAtHome = AtHome;
+                CommandAtHome = AtHome;
             }
 
             if (StandardAtPark.Value)
             {
                 // Fragile (standard)
-                g_bAtPark = false;
+                CommandAtPark = false;
             }
             else
             {
                 // Position (non-standard)
-                g_bAtPark = AtPark;
+                CommandAtPark = AtPark;
             }
         }
 
@@ -533,7 +596,7 @@
             // Azimuth slew simulation
             if (Slewing != Going.SlewNowhere)
             {
-                slew = AzimuthRate.Value * TIMER_INTERVAL;
+                slew = AzimuthRate.Value * TimerInterval;
                 if (Slewing > Going.SlewCW)
                 {
                     distance = TargetAzimuth - DomeAzimuth.Value;
@@ -569,13 +632,13 @@
                         if (Slewing == Going.SlewHome)
                         {
                             // Fragile (standard)
-                            g_bAtHome = true;
+                            CommandAtHome = true;
                         }
                     }
                     else
                     {
                         // Position (non-standard)
-                        g_bAtHome = AtHome;
+                        CommandAtHome = AtHome;
                     }
 
                     if (StandardAtPark.Value)
@@ -583,13 +646,13 @@
                         if (Slewing == Going.SlewPark)
                         {
                             // Fragile (standard)
-                            g_bAtPark = true;
+                            CommandAtPark = true;
                         }
                     }
                     else
                     {
                         // Position (non-standard)
-                        g_bAtPark = AtPark;
+                        CommandAtPark = AtPark;
                     }
 
                     Slewing = Going.SlewNowhere;
@@ -603,7 +666,7 @@
             // shutter altitude control simulation
             if (DomeAltitude.Value != TargetAltitude)
             {
-                slew = AltitudeRate.Value * TIMER_INTERVAL;
+                slew = AltitudeRate.Value * TimerInterval;
                 distance = TargetAltitude - DomeAltitude.Value;
                 if (distance < 0)
                 {
@@ -624,7 +687,7 @@
             // shutter open/close simulation
             if (OCProgress > 0)
             {
-                OCProgress = OCProgress - TIMER_INTERVAL;
+                OCProgress = OCProgress - TimerInterval;
                 if (OCProgress <= 0)
                 {
                     if (ShutterState == ShutterState.Opening)

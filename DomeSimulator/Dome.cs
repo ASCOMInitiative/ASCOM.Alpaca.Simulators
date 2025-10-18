@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -96,7 +96,7 @@ namespace ASCOM.Simulators
 
         private void check_Az(double Az)
         {
-            if (Az == DomeHardware.INVALID_COORDINATE)
+            if (Az == DomeHardware.InvalidCoordinate)
             {
                 throw new InvalidValueException("Azimuth", "Invalid Coordinate", "0 to 360 degrees");
             }
@@ -372,7 +372,7 @@ namespace ASCOM.Simulators
                     }
 
                     CheckConnected(CheckConnectedFailureError);
-                    if (!DomeHardware.g_bAtHome)
+                    if (!DomeHardware.CommandAtHome)
                         DomeHardware.FindHome();
                 }, DeviceType, MemberNames.FindHome, "Command");
         }
@@ -419,7 +419,7 @@ namespace ASCOM.Simulators
                     }
 
                     CheckConnected(CheckConnectedFailureError);
-                    if (!DomeHardware.g_bAtPark)
+                    if (!DomeHardware.CommandAtPark)
                         DomeHardware.Park();
                 }, DeviceType, MemberNames.Park, "Command");
 
@@ -440,7 +440,7 @@ namespace ASCOM.Simulators
 
                     if (!DomeHardware.StandardAtPark.Value)
                     {
-                        DomeHardware.g_bAtPark = true;
+                        DomeHardware.CommandAtPark = true;
                     }
                 }, DeviceType, MemberNames.SetPark, "Command");
         }
