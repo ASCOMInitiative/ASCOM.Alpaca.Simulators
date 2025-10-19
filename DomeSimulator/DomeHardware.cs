@@ -334,6 +334,14 @@
         }
 
         /// <summary>
+        /// Used only for reflection
+        /// </summary>
+        public DomeHardware()
+        {
+
+        }
+
+        /// <summary>
         /// Create a Dome object with the provided profile.
         /// </summary>
         /// <param name="profile"></param>

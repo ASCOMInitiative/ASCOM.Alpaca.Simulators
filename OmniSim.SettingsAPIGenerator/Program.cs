@@ -30,6 +30,20 @@ namespace OmniSim.SettingsAPIGenerator
             {
                 writetext.Write(rotatorAPI);
             }
+
+            var domeAPI = BuildSettingsAPI(typeof(ASCOM.Simulators.DomeHardware), "Dome", "((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware");
+
+            using (StreamWriter writetext = File.CreateText("../../../../ASCOM.Alpaca.Simulators/Controllers/DomeSettingsController.cs"))
+            {
+                writetext.Write(domeAPI);
+            }
+
+            var smAPI = BuildSettingsAPI(typeof(ASCOM.Simulators.SafetyMonitor), "SafetyMonitor", "((DeviceManager.GetSafetyMonitor(DeviceNumber) as ASCOM.Simulators.SafetyMonitor))");
+
+            using (StreamWriter writetext = File.CreateText("../../../../ASCOM.Alpaca.Simulators/Controllers/SafetyMonitorSettingsController.cs"))
+            {
+                writetext.Write(smAPI);
+            }
         }
 
         private static string BuildSettingsAPI(Type DriverType, string DeviceType, string AccessString)
