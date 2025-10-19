@@ -11,7 +11,6 @@ namespace ASCOM.Simulators
     using ASCOM.Common.DeviceInterfaces;
     using ASCOM.Common.Interfaces;
     using OmniSim.BaseDriver;
-    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     /// <summary>
     /// Motor states.

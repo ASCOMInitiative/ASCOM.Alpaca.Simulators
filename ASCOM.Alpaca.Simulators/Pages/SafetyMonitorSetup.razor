@@ -13,7 +13,7 @@
     else
     {
         <fieldset>
-            <legend>SafetyMonitor Settings</legend>
+            <legend>SafetyMonitor @InstanceID Settings</legend>
             <div class="grid-container-two">
                 <div class="grid-item-left">
                     <svg width="30" height="30">
@@ -22,6 +22,9 @@
                     <button @onclick="Connect">@ConnectText</button>
                 </div>
                 <div class="grid-item-right">
+                    <ErrorBoundary>
+                        <LogLevelControl Driver="@(Device as OmniSim.BaseDriver.Driver)" />
+                    </ErrorBoundary>
                 </div>
             </div>
 
@@ -155,7 +158,8 @@
         }
         set
         {
-            Device.SetIsSafeProfile(value);
+            Device.IsSafeSetting.Value = value;
+            Device.SaveProfileSettings();
         }
     }
 
