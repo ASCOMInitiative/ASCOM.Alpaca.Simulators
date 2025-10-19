@@ -12,6 +12,18 @@
     }
     else
     {
+        if (InstanceID == 0)
+        {
+            <h3>
+                Cover Calibrator Setup
+            </h3>
+        }
+        else
+        {
+            <h3>
+                Cover Calibrator @InstanceID Setup
+            </h3>
+        }
         @if (Device.Connected)
         {
             <fieldset>

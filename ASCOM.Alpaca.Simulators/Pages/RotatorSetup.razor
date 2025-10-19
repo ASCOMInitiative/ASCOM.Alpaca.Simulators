@@ -10,6 +10,19 @@
     }
     else
     {
+        if (InstanceID == 0)
+        {
+            <h3>
+                Rotator Setup
+            </h3>
+        }
+        else
+        {
+            <h3>
+                Rotator @InstanceID Setup
+            </h3>
+        }
+
         @if (Device.Connected)
         {
             <fieldset>

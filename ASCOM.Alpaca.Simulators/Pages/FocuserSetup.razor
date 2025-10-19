@@ -10,6 +10,19 @@
     }
     else
     {
+        if (InstanceID == 0)
+        {
+            <h3>
+                Focuser Setup
+            </h3>
+        }
+        else
+        {
+            <h3>
+                Focuser @InstanceID Setup
+            </h3>
+        }
+
         @if (Device.IsConnected)
         {
             <fieldset>
