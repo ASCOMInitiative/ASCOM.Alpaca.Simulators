@@ -215,7 +215,7 @@ namespace ASCOM.Alpaca.Simulators
             DriverManager.LoadFocusers();
             DriverManager.LoadObservingConditions(0);
             DriverManager.LoadRotators();
-            DriverManager.LoadSafetyMonitor(0);
+            DriverManager.LoadSafetyMonitors();
             DriverManager.LoadSwitch(0);
             DriverManager.LoadTelescope(0);
 
@@ -319,7 +319,7 @@ namespace ASCOM.Alpaca.Simulators
                     DriverManager.LoadFocusers();
                     DriverManager.LoadObservingConditions(0);
                     DriverManager.LoadRotators();
-                    DriverManager.LoadSafetyMonitor(0);
+                    DriverManager.LoadSafetyMonitors();
                     DriverManager.LoadSwitch(0);
                     DriverManager.LoadTelescope(0);
 

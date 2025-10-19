@@ -86,6 +86,14 @@ namespace ASCOM.Alpaca.Simulators
             DeviceManager.LoadSafetyMonitor(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
+        internal static void LoadSafetyMonitors()
+        {
+            for (int i = 0; i < ServerSettings.NumberOfSafetyMonitors; i++)
+            {
+                LoadSafetyMonitor(i);
+            }
+        }
+
         internal static void LoadSwitch(int DeviceID)
         {
             var dev = new ASCOM.Simulators.Switch(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Switch, (uint)DeviceID));

@@ -13,7 +13,14 @@
     else
     {
         <fieldset>
-            <legend>SafetyMonitor @InstanceID Settings</legend>
+            @if (InstanceID == 0)
+            {
+                <legend>Safety Monitor</legend>
+            }
+            else
+            {
+                <legend>Safety Monitor @InstanceID</legend>
+            }
             <div class="grid-container-two">
                 <div class="grid-item-left">
                     <svg width="30" height="30">

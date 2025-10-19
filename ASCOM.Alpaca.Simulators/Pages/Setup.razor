@@ -147,6 +147,12 @@
             <input type="number" @bind="NRotators" min="1" max="4" style="width:20ch;">
         </div>
         <div class="grid-item-right">
+            <span>Number of Safety Monitors:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="number" @bind="NSafetyMonitors" min="1" max="4" style="width:20ch;">
+        </div>
+        <div class="grid-item-right">
             <button @onclick="SaveDriverSettings" style="min-width:12ch; vertical-align:middle;">Save</button>
         </div>
     </div>
@@ -355,6 +361,12 @@
         get;
         set;
     } = ServerSettings.NumberOfRotators;
+
+    UInt16 NSafetyMonitors
+    {
+        get;
+        set;
+    } = ServerSettings.NumberOfSafetyMonitors;
 
     bool StrictAPIMode
     {
@@ -582,6 +594,9 @@
 
             ServerSettings.NumberOfRotators = NRotators;
             DriverManager.LoadRotators();
+
+            ServerSettings.NumberOfSafetyMonitors = NSafetyMonitors;
+            DriverManager.LoadSafetyMonitors();
 
             DisplaySuccess("Driver Settings Saved");
         }
