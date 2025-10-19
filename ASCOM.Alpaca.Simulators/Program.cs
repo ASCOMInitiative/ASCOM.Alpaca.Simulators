@@ -342,7 +342,7 @@ namespace ASCOM.Alpaca.Simulators
             if (args?.Any(str => str.Contains("--set-no-browser")) ?? false)
             {
                 WriteAndLog("Turning off auto start browser");
-                ServerSettings.AutoStartBrowser = false;
+                ServerSettings.StartBrowserAtStart = false;
                 WriteAndLog("Auto start browser is off");
                 return true;
             }

@@ -396,7 +396,7 @@
     {
         get;
         set;
-    } = ServerSettings.AutoStartBrowser;
+    } = ServerSettings.StartBrowserAtStart;
 
     ConsoleDisplayOption ConsoleDisplay
     {
@@ -553,7 +553,7 @@
 
             ServerSettings.Location = Location;
 
-            ServerSettings.AutoStartBrowser = StartBrowser;
+            ServerSettings.StartBrowserAtStart = StartBrowser;
 
             if (ServerSettings.ConsoleDisplayDefault != ConsoleDisplay)
             {

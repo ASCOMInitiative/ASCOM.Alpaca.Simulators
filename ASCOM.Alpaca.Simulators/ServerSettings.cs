@@ -165,11 +165,11 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static bool AutoStartBrowser
+        internal static bool StartBrowserAtStart
         {
             get
             {
-                if (bool.TryParse(Profile.GetValue("AutoStartBrowser", false.ToString()), out bool result))
+                if (bool.TryParse(Profile.GetValue("StartBrowserAtStart", false.ToString()), out bool result))
                 {
                     return result;
                 }
@@ -177,7 +177,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             set
             {
-                Profile.WriteValue("AutoStartBrowser", value.ToString());
+                Profile.WriteValue("StartBrowserAtStart", value.ToString());
             }
         }
 
