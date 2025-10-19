@@ -14,6 +14,7 @@ This project uses awesome open source projects. You can find a list here in alph
 * .Net 8.0 and Asp.Net Core - .NET Foundation and Contributors - MIT License
 * ASCOM Cross Platform Libraries - ASCOM Initiative - MIT License
 * Blazored.Toast - Chris Sainty - MIT License
+* H.NotifyIcon - havendv - MIT License
 * Microsoft.AspNetCore.Authorization - Microsoft - Apache 2.0
 * Microsoft.AspNetCore.Identity - Microsoft - Apache 2.0
 * Microsoft.VisualBasic - Microsoft - MIT License
