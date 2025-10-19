@@ -1,0 +1,30 @@
+name: ConformU
+
+on: [push, pull_request]
+
+jobs:
+  conformu:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        device: [telescope, dome, camera, rotator, focuser, observingconditions, filterwheel, switch, safetymonitor, covercalibrator]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Download and unpack ConformU
+      run: mkdir ~/conformu && curl -L https://github.com/ASCOMInitiative/ConformU/releases/download/v4.1.0/conformu.linux-x64.tar.xz | tar -xJ -C ~/conformu
+    - name: Build simulators
+      run: dotnet build
+      working-directory: ASCOM.Alpaca.Simulators
+    - name: Start simulators server
+      run: |
+        dotnet run &
+        npx wait-on http://localhost:32323/
+      working-directory: ASCOM.Alpaca.Simulators
+    # Execute those sequentially to avoid blowing up number of job combinations even further.
+    - name: Run conformance test
+      run: ~/conformu/conformu conformance http://localhost:32323/api/v1/${{ matrix.device }}/0
+    - name: Run protocol test
+      run: ~/conformu/conformu alpacaprotocol http://localhost:32323/api/v1/${{ matrix.device }}/0
