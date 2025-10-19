@@ -13,7 +13,14 @@
     else
     {
         <fieldset>
-            <legend>Telescope</legend>
+            @if (InstanceID == 0)
+            {
+                <legend>Telescope</legend>
+            }
+            else
+            {
+                <legend>Telescope @InstanceID</legend>
+            }
             <div class="grid-container-two">
 
                 <div class="grid-item-left">

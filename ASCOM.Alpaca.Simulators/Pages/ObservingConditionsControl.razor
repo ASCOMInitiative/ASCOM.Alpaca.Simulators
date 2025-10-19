@@ -12,7 +12,14 @@
     else
     {
         <fieldset>
-            <legend>ObservingConditions</legend>
+            @if (InstanceID == 0)
+            {
+                <legend>Observing Conditions</legend>
+            }
+            else
+            {
+                <legend>Observing Conditions @InstanceID</legend>
+            }
             <div class="grid-container-two">
 
                 <div class="grid-item-left">
