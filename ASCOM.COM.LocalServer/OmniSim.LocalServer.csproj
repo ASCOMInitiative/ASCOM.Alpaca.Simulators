@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASCOM.Com.Components" Version="2.0.9" />
+    <PackageReference Include="ASCOM.Com.Components" Version="2.2.0" />
     <PackageReference Include="ASCOM.DeviceInterfaces" Version="7.0.0" />
-    <PackageReference Include="ASCOM.Tools" Version="2.0.9" />
+    <PackageReference Include="ASCOM.Tools" Version="2.2.0" />
   </ItemGroup>
 
 </Project>

@@ -165,11 +165,11 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static bool AutoStartBrowser
+        internal static bool StartBrowserAtStart
         {
             get
             {
-                if (bool.TryParse(Profile.GetValue("AutoStartBrowser", false.ToString()), out bool result))
+                if (bool.TryParse(Profile.GetValue("StartBrowserAtStart", false.ToString()), out bool result))
                 {
                     return result;
                 }
@@ -177,7 +177,7 @@ namespace ASCOM.Alpaca.Simulators
             }
             set
             {
-                Profile.WriteValue("AutoStartBrowser", value.ToString());
+                Profile.WriteValue("StartBrowserAtStart", value.ToString());
             }
         }
 
@@ -352,19 +352,19 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
-        internal static ConsoleDisplayOption ConsoleDisplay
+        internal static ConsoleDisplayOption ConsoleDisplayDefault
         {
             get
             {
-                if (Enum.TryParse(Profile.GetValue("ConsoleDisplay", ConsoleDisplayOption.StartMinimized.ToString()), out ConsoleDisplayOption result))
+                if (Enum.TryParse(Profile.GetValue("ConsoleDisplayDefault", ConsoleDisplayOption.NoConsole.ToString()), out ConsoleDisplayOption result))
                 {
                     return result;
                 }
-                return ConsoleDisplayOption.StartMinimized;
+                return ConsoleDisplayOption.NoConsole;
             }
             set
             {
-                Profile.WriteValue("ConsoleDisplay", value.ToString());
+                Profile.WriteValue("ConsoleDisplayDefault", value.ToString());
             }
         }
 
@@ -431,6 +431,208 @@ namespace ASCOM.Alpaca.Simulators
                 Profile.WriteValue("RunInStrictAlpacaMode", value.ToString());
             }
         }
+
+        #region Driver Creation Settings
+        internal static ushort NumberOfCameras
+        {
+            get
+            {
+                if (ushort.TryParse(Profile.GetValue("NumberOfCameras", 1.ToString()), out ushort result))
+                {
+                    if(result > 4)
+                    {
+                        return 4;
+                    }
+                    return result;
+                }
+                return 1;
+            }
+            set
+            {
+                Profile.WriteValue("NumberOfCameras", value.ToString());
+            }
+        }
+
+        internal static ushort NumberOfCoverCalibrators
+        {
+            get
+            {
+                if (ushort.TryParse(Profile.GetValue("NumberOfCoverCalibrators", 1.ToString()), out ushort result))
+                {
+                    if (result > 4)
+                    {
+                        return 4;
+                    }
+                    return result;
+                }
+                return 1;
+            }
+            set
+            {
+                Profile.WriteValue("NumberOfCoverCalibrators", value.ToString());
+            }
+        }
+
+        internal static ushort NumberOfDomes
+        {
+            get
+            {
+                if (ushort.TryParse(Profile.GetValue("NumberOfDomes", 1.ToString()), out ushort result))
+                {
+                    if (result > 4)
+                    {
+                        return 4;
+                    }
+                    return result;
+                }
+                return 1;
+            }
+            set
+            {
+                Profile.WriteValue("NumberOfDomes", value.ToString());
+            }
+        }
+
+        internal static ushort NumberOfFilterWheels
+        {
+            get
+            {
+                if (ushort.TryParse(Profile.GetValue("NumberOfFilterWheels", 1.ToString()), out ushort result))
+                {
+                    if (result > 4)
+                    {
+                        return 4;
+                    }
+                    return result;
+                }
+                return 1;
+            }
+            set
+            {
+                Profile.WriteValue("NumberOfFilterWheels", value.ToString());
+            }
+        }
+
+        internal static ushort NumberOfFocusers
+        {
+            get
+            {
+                if (ushort.TryParse(Profile.GetValue("NumberOFocusers", 1.ToString()), out ushort result))
+                {
+                    if (result > 4)
+                    {
+                        return 4;
+                    }
+                    return result;
+                }
+                return 1;
+            }
+            set
+            {
+                Profile.WriteValue("NumberOFocusers", value.ToString());
+            }
+        }
+
+        internal static ushort NumberOfObservingConditions
+        {
+            get
+            {
+                if (ushort.TryParse(Profile.GetValue("NumberOfObservingConditions", 1.ToString()), out ushort result))
+                {
+                    if (result > 4)
+                    {
+                        return 4;
+                    }
+                    return result;
+                }
+                return 1;
+            }
+            set
+            {
+                Profile.WriteValue("NumberOfObservingConditions", value.ToString());
+            }
+        }
+
+        internal static ushort NumberOfRotators
+        {
+            get
+            {
+                if (ushort.TryParse(Profile.GetValue("NumberOfRotators", 1.ToString()), out ushort result))
+                {
+                    if (result > 4)
+                    {
+                        return 4;
+                    }
+                    return result;
+                }
+                return 1;
+            }
+            set
+            {
+                Profile.WriteValue("NumberOfRotators", value.ToString());
+            }
+        }
+
+        internal static ushort NumberOfSafetyMonitors
+        {
+            get
+            {
+                if (ushort.TryParse(Profile.GetValue("NumberOfSafetyMonitors", 1.ToString()), out ushort result))
+                {
+                    if (result > 4)
+                    {
+                        return 4;
+                    }
+                    return result;
+                }
+                return 1;
+            }
+            set
+            {
+                Profile.WriteValue("NumberOfSafetyMonitors", value.ToString());
+            }
+        }
+
+        internal static ushort NumberOfSwitches
+        {
+            get
+            {
+                if (ushort.TryParse(Profile.GetValue("NumberOfSwitches", 1.ToString()), out ushort result))
+                {
+                    if (result > 4)
+                    {
+                        return 4;
+                    }
+                    return result;
+                }
+                return 1;
+            }
+            set
+            {
+                Profile.WriteValue("NumberOfSwitches", value.ToString());
+            }
+        }
+
+        internal static ushort NumberOfTelescopes
+        {
+            get
+            {
+                if (ushort.TryParse(Profile.GetValue("NumberOfTelescopes", 1.ToString()), out ushort result))
+                {
+                    if (result > 4)
+                    {
+                        return 4;
+                    }
+                    return result;
+                }
+                return 1;
+            }
+            set
+            {
+                Profile.WriteValue("NumberOfTelescopes", value.ToString());
+            }
+        }
+        #endregion
 
         #region SSL Settings
 

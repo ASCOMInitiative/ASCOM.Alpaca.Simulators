@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASCOM.AstrometryTools" Version="2.0.9" />
-    <PackageReference Include="ASCOM.Common.Components" Version="2.0.9" />
+    <PackageReference Include="ASCOM.AstrometryTools" Version="2.2.0" />
+    <PackageReference Include="ASCOM.Common.Components" Version="2.2.0" />
     <PackageReference Include="ASCOM.Exception.Library" Version="7.0.1" />
   </ItemGroup>
 

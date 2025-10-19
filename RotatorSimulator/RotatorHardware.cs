@@ -40,6 +40,11 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
+        /// Gets the delay for the connect timer
+        /// </summary>
+        public Setting<short> ConnectDelay { get; } = new Setting<short>("ConnectDelay", "The delay to be used for Connect() in milliseconds, allowed values are 1-30000", 1500);
+
+        /// <summary>
         /// Gets the stored interface version to use.
         /// </summary>
         public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-4", 4);
@@ -288,13 +293,13 @@ namespace ASCOM.Simulators
         /// </summary>
         internal void LoadProfile()
         {
-            this.Position.Value = Convert.ToSingle(this.profile.GetSettingReturningDefault(this.Position), CultureInfo.InvariantCulture);
+            this.Position.Value = this.profile.GetSettingReturningDefault(this.Position);
             this.targetPosition = this.Position.Value;
-            this.RotationRate.Value = Convert.ToSingle(this.profile.GetSettingReturningDefault(this.RotationRate), CultureInfo.InvariantCulture);
-            this.CanReverse.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.CanReverse));
-            this.Reverse.Value = Convert.ToBoolean(this.profile.GetSettingReturningDefault(this.Reverse));
-            this.SyncOffset.Value = Convert.ToSingle(this.profile.GetSettingReturningDefault(this.SyncOffset), CultureInfo.InvariantCulture);
-            this.InterfaceVersionSetting.Value = Convert.ToInt16(this.profile.GetSettingReturningDefault(this.InterfaceVersionSetting), CultureInfo.InvariantCulture);
+            this.RotationRate.Value = this.profile.GetSettingReturningDefault(this.RotationRate);
+            this.CanReverse.Value = this.profile.GetSettingReturningDefault(this.CanReverse);
+            this.Reverse.Value = this.profile.GetSettingReturningDefault(this.Reverse);
+            this.SyncOffset.Value = this.profile.GetSettingReturningDefault(this.SyncOffset);
+            this.InterfaceVersionSetting.Value = this.profile.GetSettingReturningDefault(this.InterfaceVersionSetting);
         }
 
         /// <summary>

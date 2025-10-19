@@ -12,6 +12,19 @@
     }
     else
     {
+        if (InstanceID == 0)
+        {
+            <h3>
+                Camera Setup
+            </h3>
+        }
+        else
+        {
+            <h3>
+                Camera @InstanceID Setup
+            </h3>
+        }
+
         @if (Device.Connected)
         {
             <fieldset>

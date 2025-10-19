@@ -13,7 +13,14 @@
     else
     {
         <fieldset>
-            <legend>Cover Calibrator</legend>
+            @if (InstanceID == 0)
+            {
+                <legend>Cover Calibrator</legend>
+            }
+            else
+            {
+                <legend>Cover Calibrator @InstanceID</legend>
+            }
             <div class="grid-container-two">
 
                 <div class="grid-item-left">

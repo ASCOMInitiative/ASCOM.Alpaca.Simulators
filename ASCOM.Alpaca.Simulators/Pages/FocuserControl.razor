@@ -12,7 +12,14 @@
     else
     {
         <fieldset>
-            <legend>Focuser</legend>
+            @if (InstanceID == 0)
+            {
+                <legend>Focuser</legend>
+            }
+            else
+            {
+                <legend>Focuser @InstanceID</legend>
+            }
             <div class="grid-container-two">
 
                 <div class="grid-item-left">

@@ -17,13 +17,13 @@ namespace ASCOM.Alpaca.Simulators
     [ServiceFilter(typeof(AuthorizationFilter))]
     [ApiController]
     [Route("simulator/v1/")]
-    public class FocuserSettingsController : ProcessBaseController
+    public class DomeSettingsController : ProcessBaseController
     {
         /// <summary>
-        /// OmniSim Only - The ASCOM Interface Version, allowed values are 1-4
+        /// OmniSim Only - The altitude rate in degrees per second
         /// </summary>
         /// <remarks>
-        /// <para>The ASCOM Interface Version, allowed values are 1-4</para>
+        /// <para>The altitude rate in degrees per second</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
         /// <param name="ClientID">Client's unique ID.</param>
@@ -34,22 +34,22 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/interfaceversion")]
-        public ActionResult<ASCOM.Common.Alpaca.IntResponse> InterfaceVersion(
+        [Route("dome/{DeviceNumber}/altituderate")]
+        public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> AltitudeRate(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).InterfaceVersionSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.AltitudeRate.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
-        /// OmniSim Only - The ASCOM Interface Version, allowed values are 1-4
+        /// OmniSim Only - The altitude rate in degrees per second
         /// </summary>
         /// <remarks>
-        /// <para>The ASCOM Interface Version, allowed values are 1-4</para>
+        /// <para>The altitude rate in degrees per second</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="InterfaceVersion">The ASCOM Interface Version, allowed values are 1-4</param>
+        /// <param name="AltitudeRate">The altitude rate in degrees per second</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -58,14 +58,974 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/interfaceversion")]
-        public ActionResult<Response> InterfaceVersion(
+        [Route("dome/{DeviceNumber}/altituderate")]
+        public ActionResult<Response> AltitudeRate(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("The ASCOM Interface Version, allowed values are 1-4")] System.Int16 InterfaceVersion,
+            [Required][FromForm][SwaggerSchema("The altitude rate in degrees per second")] System.Double AltitudeRate,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).InterfaceVersionSetting.Value = InterfaceVersion; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"InterfaceVersion={InterfaceVersion}");
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.AltitudeRate.Value = AltitudeRate; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"AltitudeRate={AltitudeRate}");
+        }
+        /// <summary>
+        /// OmniSim Only - The azimuth rate in degrees per second
+        /// </summary>
+        /// <remarks>
+        /// <para>The azimuth rate in degrees per second</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/azimuthrate")]
+        public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> AzimuthRate(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.AzimuthRate.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - The azimuth rate in degrees per second
+        /// </summary>
+        /// <remarks>
+        /// <para>The azimuth rate in degrees per second</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="AzimuthRate">The azimuth rate in degrees per second</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/azimuthrate")]
+        public ActionResult<Response> AzimuthRate(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("The azimuth rate in degrees per second")] System.Double AzimuthRate,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.AzimuthRate.Value = AzimuthRate; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"AzimuthRate={AzimuthRate}");
+        }
+        /// <summary>
+        /// OmniSim Only - The saved dome altitude
+        /// </summary>
+        /// <remarks>
+        /// <para>The saved dome altitude</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/domealtitude")]
+        public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> DomeAltitude(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.DomeAltitude.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - The saved dome altitude
+        /// </summary>
+        /// <remarks>
+        /// <para>The saved dome altitude</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="DomeAltitude">The saved dome altitude</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/domealtitude")]
+        public ActionResult<Response> DomeAltitude(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("The saved dome altitude")] System.Double DomeAltitude,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.DomeAltitude.Value = DomeAltitude; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"DomeAltitude={DomeAltitude}");
+        }
+        /// <summary>
+        /// OmniSim Only - The saved dome azimuth
+        /// </summary>
+        /// <remarks>
+        /// <para>The saved dome azimuth</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/domeazimuth")]
+        public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> DomeAzimuth(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.DomeAzimuth.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - The saved dome azimuth
+        /// </summary>
+        /// <remarks>
+        /// <para>The saved dome azimuth</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="DomeAzimuth">The saved dome azimuth</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/domeazimuth")]
+        public ActionResult<Response> DomeAzimuth(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("The saved dome azimuth")] System.Double DomeAzimuth,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.DomeAzimuth.Value = DomeAzimuth; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"DomeAzimuth={DomeAzimuth}");
+        }
+        /// <summary>
+        /// OmniSim Only - The minimum altitude in degrees
+        /// </summary>
+        /// <remarks>
+        /// <para>The minimum altitude in degrees</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/minimumaltitude")]
+        public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> MinimumAltitude(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.MinimumAltitude.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - The minimum altitude in degrees
+        /// </summary>
+        /// <remarks>
+        /// <para>The minimum altitude in degrees</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="MinimumAltitude">The minimum altitude in degrees</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/minimumaltitude")]
+        public ActionResult<Response> MinimumAltitude(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("The minimum altitude in degrees")] System.Double MinimumAltitude,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.MinimumAltitude.Value = MinimumAltitude; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"MinimumAltitude={MinimumAltitude}");
+        }
+        /// <summary>
+        /// OmniSim Only - The maximum altitude in degrees
+        /// </summary>
+        /// <remarks>
+        /// <para>The maximum altitude in degrees</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/maximumaltitude")]
+        public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> MaximumAltitude(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.MaximumAltitude.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - The maximum altitude in degrees
+        /// </summary>
+        /// <remarks>
+        /// <para>The maximum altitude in degrees</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="MaximumAltitude">The maximum altitude in degrees</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/maximumaltitude")]
+        public ActionResult<Response> MaximumAltitude(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("The maximum altitude in degrees")] System.Double MaximumAltitude,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.MaximumAltitude.Value = MaximumAltitude; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"MaximumAltitude={MaximumAltitude}");
+        }
+        /// <summary>
+        /// OmniSim Only - Start with a shutter error (legacy, non-standard)
+        /// </summary>
+        /// <remarks>
+        /// <para>Start with a shutter error (legacy, non-standard)</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/startwithshuttererror")]
+        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> StartWithShutterError(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.StartWithShutterError.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - Start with a shutter error (legacy, non-standard)
+        /// </summary>
+        /// <remarks>
+        /// <para>Start with a shutter error (legacy, non-standard)</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="StartWithShutterError">Start with a shutter error (legacy, non-standard)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/startwithshuttererror")]
+        public ActionResult<Response> StartWithShutterError(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("Start with a shutter error (legacy, non-standard)")] System.Boolean StartWithShutterError,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.StartWithShutterError.Value = StartWithShutterError; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"StartWithShutterError={StartWithShutterError}");
+        }
+        /// <summary>
+        /// OmniSim Only - False (non-std) means AtHome true whenever az = home
+        /// </summary>
+        /// <remarks>
+        /// <para>False (non-std) means AtHome true whenever az = home</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/standardathome")]
+        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> StandardAtHome(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.StandardAtHome.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - False (non-std) means AtHome true whenever az = home
+        /// </summary>
+        /// <remarks>
+        /// <para>False (non-std) means AtHome true whenever az = home</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="StandardAtHome">False (non-std) means AtHome true whenever az = home</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/standardathome")]
+        public ActionResult<Response> StandardAtHome(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("False (non-std) means AtHome true whenever az = home")] System.Boolean StandardAtHome,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.StandardAtHome.Value = StandardAtHome; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"StandardAtHome={StandardAtHome}");
+        }
+        /// <summary>
+        /// OmniSim Only - False (non-std) means AtPark true whenever az = home
+        /// </summary>
+        /// <remarks>
+        /// <para>False (non-std) means AtPark true whenever az = home</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/standardatpark")]
+        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> StandardAtPark(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.StandardAtPark.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - False (non-std) means AtPark true whenever az = home
+        /// </summary>
+        /// <remarks>
+        /// <para>False (non-std) means AtPark true whenever az = home</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="StandardAtPark">False (non-std) means AtPark true whenever az = home</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/standardatpark")]
+        public ActionResult<Response> StandardAtPark(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("False (non-std) means AtPark true whenever az = home")] System.Boolean StandardAtPark,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.StandardAtPark.Value = StandardAtPark; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"StandardAtPark={StandardAtPark}");
+        }
+        /// <summary>
+        /// OmniSim Only - Slewing true when shutter opening/closing
+        /// </summary>
+        /// <remarks>
+        /// <para>Slewing true when shutter opening/closing</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/slewingtruewhenopenorclose")]
+        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> SlewingTrueWhenOpenOrClose(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.SlewingTrueWhenOpenOrClose.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - Slewing true when shutter opening/closing
+        /// </summary>
+        /// <remarks>
+        /// <para>Slewing true when shutter opening/closing</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="SlewingTrueWhenOpenOrClose">Slewing true when shutter opening/closing</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/slewingtruewhenopenorclose")]
+        public ActionResult<Response> SlewingTrueWhenOpenOrClose(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("Slewing true when shutter opening/closing")] System.Boolean SlewingTrueWhenOpenOrClose,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.SlewingTrueWhenOpenOrClose.Value = SlewingTrueWhenOpenOrClose; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"SlewingTrueWhenOpenOrClose={SlewingTrueWhenOpenOrClose}");
+        }
+        /// <summary>
+        /// OmniSim Only - The dome park position
+        /// </summary>
+        /// <remarks>
+        /// <para>The dome park position</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/parkposition")]
+        public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> ParkPosition(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.ParkPosition.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - The dome park position
+        /// </summary>
+        /// <remarks>
+        /// <para>The dome park position</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ParkPosition">The dome park position</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/parkposition")]
+        public ActionResult<Response> ParkPosition(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("The dome park position")] System.Double ParkPosition,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.ParkPosition.Value = ParkPosition; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"ParkPosition={ParkPosition}");
+        }
+        /// <summary>
+        /// OmniSim Only - The dome home position
+        /// </summary>
+        /// <remarks>
+        /// <para>The dome home position</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/homeposition")]
+        public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> HomePosition(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.HomePosition.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - The dome home position
+        /// </summary>
+        /// <remarks>
+        /// <para>The dome home position</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="HomePosition">The dome home position</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/homeposition")]
+        public ActionResult<Response> HomePosition(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("The dome home position")] System.Double HomePosition,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.HomePosition.Value = HomePosition; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"HomePosition={HomePosition}");
+        }
+        /// <summary>
+        /// OmniSim Only - Delay time in seconds for Open / Close
+        /// </summary>
+        /// <remarks>
+        /// <para>Delay time in seconds for Open / Close</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/ocdelay")]
+        public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> OCDelay(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.OCDelay.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - Delay time in seconds for Open / Close
+        /// </summary>
+        /// <remarks>
+        /// <para>Delay time in seconds for Open / Close</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="OCDelay">Delay time in seconds for Open / Close</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/ocdelay")]
+        public ActionResult<Response> OCDelay(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("Delay time in seconds for Open / Close")] System.Double OCDelay,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.OCDelay.Value = OCDelay; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"OCDelay={OCDelay}");
+        }
+        /// <summary>
+        /// OmniSim Only - The stored shutter state.
+        /// </summary>
+        /// <remarks>
+        /// <para>The stored shutter state.</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/shutterstate")]
+        public ActionResult<ASCOM.Common.Alpaca.StringResponse> ShutterState(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.ShutterStateSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - The stored shutter state.
+        /// </summary>
+        /// <remarks>
+        /// <para>The stored shutter state.</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ShutterState">The stored shutter state.</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/shutterstate")]
+        public ActionResult<Response> ShutterState(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("The stored shutter state.")] System.String ShutterState,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.ShutterStateSetting.Value = ShutterState; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"ShutterState={ShutterState}");
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can find home
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can find home</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/canfindhome")]
+        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> CanFindHome(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanFindHome.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can find home
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can find home</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="CanFindHome">True if the dome can find home</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/canfindhome")]
+        public ActionResult<Response> CanFindHome(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("True if the dome can find home")] System.Boolean CanFindHome,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanFindHome.Value = CanFindHome; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"CanFindHome={CanFindHome}");
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can park
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can park</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/canpark")]
+        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> CanPark(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanPark.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can park
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can park</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="CanPark">True if the dome can park</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/canpark")]
+        public ActionResult<Response> CanPark(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("True if the dome can park")] System.Boolean CanPark,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanPark.Value = CanPark; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"CanPark={CanPark}");
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can set it's altitude
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can set it's altitude</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/cansetaltitude")]
+        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> CanSetAltitude(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanSetAltitude.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can set it's altitude
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can set it's altitude</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="CanSetAltitude">True if the dome can set it's altitude</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/cansetaltitude")]
+        public ActionResult<Response> CanSetAltitude(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("True if the dome can set it's altitude")] System.Boolean CanSetAltitude,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanSetAltitude.Value = CanSetAltitude; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"CanSetAltitude={CanSetAltitude}");
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can set it's azimuth
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can set it's azimuth</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/cansetazimuth")]
+        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> CanSetAzimuth(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanSetAzimuth.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can set it's azimuth
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can set it's azimuth</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="CanSetAzimuth">True if the dome can set it's azimuth</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/cansetazimuth")]
+        public ActionResult<Response> CanSetAzimuth(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("True if the dome can set it's azimuth")] System.Boolean CanSetAzimuth,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanSetAzimuth.Value = CanSetAzimuth; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"CanSetAzimuth={CanSetAzimuth}");
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can set the park position
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can set the park position</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/cansetpark")]
+        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> CanSetPark(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanSetPark.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can set the park position
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can set the park position</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="CanSetPark">True if the dome can set the park position</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/cansetpark")]
+        public ActionResult<Response> CanSetPark(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("True if the dome can set the park position")] System.Boolean CanSetPark,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanSetPark.Value = CanSetPark; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"CanSetPark={CanSetPark}");
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can set the shutter
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can set the shutter</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/cansetshutter")]
+        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> CanSetShutter(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanSetShutter.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can set the shutter
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can set the shutter</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="CanSetShutter">True if the dome can set the shutter</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/cansetshutter")]
+        public ActionResult<Response> CanSetShutter(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("True if the dome can set the shutter")] System.Boolean CanSetShutter,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanSetShutter.Value = CanSetShutter; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"CanSetShutter={CanSetShutter}");
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can sync azimuth
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can sync azimuth</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/cansyncazimuth")]
+        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> CanSyncAzimuth(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanSyncAzimuth.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+        }
+        /// <summary>
+        /// OmniSim Only - True if the dome can sync azimuth
+        /// </summary>
+        /// <remarks>
+        /// <para>True if the dome can sync azimuth</para>
+        /// </remarks>
+        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
+        /// <param name="CanSyncAzimuth">True if the dome can sync azimuth</param>
+        /// <param name="ClientID">Client's unique ID.</param>
+        /// <param name="ClientTransactionID">Client's transaction ID.</param>
+        /// <response code="200">Transaction complete or exception</response>
+        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
+        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
+        [HttpPut]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiExplorerSettings(GroupName = "OmniSim")]
+        [Route("dome/{DeviceNumber}/cansyncazimuth")]
+        public ActionResult<Response> CanSyncAzimuth(
+            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
+            [Required][FromForm][SwaggerSchema("True if the dome can sync azimuth")] System.Boolean CanSyncAzimuth,
+            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
+            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
+        {
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.CanSyncAzimuth.Value = CanSyncAzimuth; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"CanSyncAzimuth={CanSyncAzimuth}");
         }
         /// <summary>
         /// OmniSim Only - The delay to be used for Connect() in milliseconds, allowed values are 1-30000
@@ -82,13 +1042,13 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/connectdelay")]
+        [Route("dome/{DeviceNumber}/connectdelay")]
         public ActionResult<ASCOM.Common.Alpaca.IntResponse> ConnectDelay(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).ConnectDelay.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.ConnectDelay.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
         /// OmniSim Only - The delay to be used for Connect() in milliseconds, allowed values are 1-30000
@@ -106,20 +1066,20 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/connectdelay")]
+        [Route("dome/{DeviceNumber}/connectdelay")]
         public ActionResult<Response> ConnectDelay(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [Required][FromForm][SwaggerSchema("The delay to be used for Connect() in milliseconds, allowed values are 1-30000")] System.Int16 ConnectDelay,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).ConnectDelay.Value = ConnectDelay; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"ConnectDelay={ConnectDelay}");
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.ConnectDelay.Value = ConnectDelay; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"ConnectDelay={ConnectDelay}");
         }
         /// <summary>
-        /// OmniSim Only - True if the focuser can halt
+        /// OmniSim Only - The ASCOM Interface Version, allowed values are 1-3
         /// </summary>
         /// <remarks>
-        /// <para>True if the focuser can halt</para>
+        /// <para>The ASCOM Interface Version, allowed values are 1-3</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
         /// <param name="ClientID">Client's unique ID.</param>
@@ -130,22 +1090,22 @@ namespace ASCOM.Alpaca.Simulators
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/canhalt")]
-        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> CanHalt(
+        [Route("dome/{DeviceNumber}/interfaceversion")]
+        public ActionResult<ASCOM.Common.Alpaca.IntResponse> InterfaceVersion(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
             [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).CanHalt.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
+            return ProcessRequest(() => ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.InterfaceVersionSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
         }
         /// <summary>
-        /// OmniSim Only - True if the focuser can halt
+        /// OmniSim Only - The ASCOM Interface Version, allowed values are 1-3
         /// </summary>
         /// <remarks>
-        /// <para>True if the focuser can halt</para>
+        /// <para>The ASCOM Interface Version, allowed values are 1-3</para>
         /// </remarks>
         /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="CanHalt">True if the focuser can halt</param>
+        /// <param name="InterfaceVersion">The ASCOM Interface Version, allowed values are 1-3</param>
         /// <param name="ClientID">Client's unique ID.</param>
         /// <param name="ClientTransactionID">Client's transaction ID.</param>
         /// <response code="200">Transaction complete or exception</response>
@@ -154,782 +1114,14 @@ namespace ASCOM.Alpaca.Simulators
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/canhalt")]
-        public ActionResult<Response> CanHalt(
+        [Route("dome/{DeviceNumber}/interfaceversion")]
+        public ActionResult<Response> InterfaceVersion(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("True if the focuser can halt")] System.Boolean CanHalt,
+            [Required][FromForm][SwaggerSchema("The ASCOM Interface Version, allowed values are 1-3")] System.Int16 InterfaceVersion,
             [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
             [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
         {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).CanHalt.Value = CanHalt; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"CanHalt={CanHalt}");
-        }
-        /// <summary>
-        /// OmniSim Only - True if the driver has a temperature probe
-        /// </summary>
-        /// <remarks>
-        /// <para>True if the driver has a temperature probe</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempprobe")]
-        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> TempProbe(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempProbe.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - True if the driver has a temperature probe
-        /// </summary>
-        /// <remarks>
-        /// <para>True if the driver has a temperature probe</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="TempProbe">True if the driver has a temperature probe</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempprobe")]
-        public ActionResult<Response> TempProbe(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("True if the driver has a temperature probe")] System.Boolean TempProbe,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempProbe.Value = TempProbe; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"TempProbe={TempProbe}");
-        }
-        /// <summary>
-        /// OmniSim Only - True if the focuser moves are synchronous
-        /// </summary>
-        /// <remarks>
-        /// <para>True if the focuser moves are synchronous</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/synchronous")]
-        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> Synchronous(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).Synchronous.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - True if the focuser moves are synchronous
-        /// </summary>
-        /// <remarks>
-        /// <para>True if the focuser moves are synchronous</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="Synchronous">True if the focuser moves are synchronous</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/synchronous")]
-        public ActionResult<Response> Synchronous(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("True if the focuser moves are synchronous")] System.Boolean Synchronous,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).Synchronous.Value = Synchronous; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Synchronous={Synchronous}");
-        }
-        /// <summary>
-        /// OmniSim Only - True if the driver can report step size
-        /// </summary>
-        /// <remarks>
-        /// <para>True if the driver can report step size</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/canstepsize")]
-        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> CanStepSize(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).CanStepSize.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - True if the driver can report step size
-        /// </summary>
-        /// <remarks>
-        /// <para>True if the driver can report step size</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="CanStepSize">True if the driver can report step size</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/canstepsize")]
-        public ActionResult<Response> CanStepSize(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("True if the driver can report step size")] System.Boolean CanStepSize,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).CanStepSize.Value = CanStepSize; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"CanStepSize={CanStepSize}");
-        }
-        /// <summary>
-        /// OmniSim Only - Maximum simulated temperature
-        /// </summary>
-        /// <remarks>
-        /// <para>Maximum simulated temperature</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempmax")]
-        public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> TempMax(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempMax.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - Maximum simulated temperature
-        /// </summary>
-        /// <remarks>
-        /// <para>Maximum simulated temperature</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="TempMax">Maximum simulated temperature</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempmax")]
-        public ActionResult<Response> TempMax(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Maximum simulated temperature")] System.Double TempMax,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempMax.Value = TempMax; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"TempMax={TempMax}");
-        }
-        /// <summary>
-        /// OmniSim Only - Minimum simulated temperature
-        /// </summary>
-        /// <remarks>
-        /// <para>Minimum simulated temperature</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempmin")]
-        public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> TempMin(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempMin.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - Minimum simulated temperature
-        /// </summary>
-        /// <remarks>
-        /// <para>Minimum simulated temperature</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="TempMin">Minimum simulated temperature</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempmin")]
-        public ActionResult<Response> TempMin(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Minimum simulated temperature")] System.Double TempMin,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempMin.Value = TempMin; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"TempMin={TempMin}");
-        }
-        /// <summary>
-        /// OmniSim Only - Period to use for temperature changes (seconds)
-        /// </summary>
-        /// <remarks>
-        /// <para>Period to use for temperature changes (seconds)</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempperiod")]
-        public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> TempPeriod(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempPeriod.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - Period to use for temperature changes (seconds)
-        /// </summary>
-        /// <remarks>
-        /// <para>Period to use for temperature changes (seconds)</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="TempPeriod">Period to use for temperature changes (seconds)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempperiod")]
-        public ActionResult<Response> TempPeriod(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Period to use for temperature changes (seconds)")] System.Double TempPeriod,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempPeriod.Value = TempPeriod; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"TempPeriod={TempPeriod}");
-        }
-        /// <summary>
-        /// OmniSim Only - How many steps per temp comp action
-        /// </summary>
-        /// <remarks>
-        /// <para>How many steps per temp comp action</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempsteps")]
-        public ActionResult<ASCOM.Common.Alpaca.IntResponse> TempSteps(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempSteps.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - How many steps per temp comp action
-        /// </summary>
-        /// <remarks>
-        /// <para>How many steps per temp comp action</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="TempSteps">How many steps per temp comp action</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempsteps")]
-        public ActionResult<Response> TempSteps(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("How many steps per temp comp action")] System.Int32 TempSteps,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempSteps.Value = TempSteps; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"TempSteps={TempSteps}");
-        }
-        /// <summary>
-        /// OmniSim Only - Move settle time
-        /// </summary>
-        /// <remarks>
-        /// <para>Move settle time</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/settletime")]
-        public ActionResult<ASCOM.Common.Alpaca.IntResponse> SettleTime(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).SettleTime.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - Move settle time
-        /// </summary>
-        /// <remarks>
-        /// <para>Move settle time</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="SettleTime">Move settle time</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/settletime")]
-        public ActionResult<Response> SettleTime(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Move settle time")] System.Int32 SettleTime,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).SettleTime.Value = SettleTime; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"SettleTime={SettleTime}");
-        }
-        /// <summary>
-        /// OmniSim Only - True if the focuser is an absolute focuser
-        /// </summary>
-        /// <remarks>
-        /// <para>True if the focuser is an absolute focuser</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/absolute")]
-        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> Absolute(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).AbsoluteSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - True if the focuser is an absolute focuser
-        /// </summary>
-        /// <remarks>
-        /// <para>True if the focuser is an absolute focuser</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="Absolute">True if the focuser is an absolute focuser</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/absolute")]
-        public ActionResult<Response> Absolute(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("True if the focuser is an absolute focuser")] System.Boolean Absolute,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).AbsoluteSetting.Value = Absolute; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Absolute={Absolute}");
-        }
-        /// <summary>
-        /// OmniSim Only - The Maximum Increment for moves
-        /// </summary>
-        /// <remarks>
-        /// <para>The Maximum Increment for moves</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/maxincrement")]
-        public ActionResult<ASCOM.Common.Alpaca.IntResponse> MaxIncrement(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).MaxIncrementSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - The Maximum Increment for moves
-        /// </summary>
-        /// <remarks>
-        /// <para>The Maximum Increment for moves</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="MaxIncrement">The Maximum Increment for moves</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/maxincrement")]
-        public ActionResult<Response> MaxIncrement(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("The Maximum Increment for moves")] System.Int32 MaxIncrement,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).MaxIncrementSetting.Value = MaxIncrement; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"MaxIncrement={MaxIncrement}");
-        }
-        /// <summary>
-        /// OmniSim Only - The Max Step for moves
-        /// </summary>
-        /// <remarks>
-        /// <para>The Max Step for moves</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/maxstep")]
-        public ActionResult<ASCOM.Common.Alpaca.IntResponse> MaxStep(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).MaxStepSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - The Max Step for moves
-        /// </summary>
-        /// <remarks>
-        /// <para>The Max Step for moves</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="MaxStep">The Max Step for moves</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/maxstep")]
-        public ActionResult<Response> MaxStep(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("The Max Step for moves")] System.Int32 MaxStep,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).MaxStepSetting.Value = MaxStep; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"MaxStep={MaxStep}");
-        }
-        /// <summary>
-        /// OmniSim Only - The starting position
-        /// </summary>
-        /// <remarks>
-        /// <para>The starting position</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/position")]
-        public ActionResult<ASCOM.Common.Alpaca.IntResponse> Position(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).PositionSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - The starting position
-        /// </summary>
-        /// <remarks>
-        /// <para>The starting position</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="Position">The starting position</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/position")]
-        public ActionResult<Response> Position(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("The starting position")] System.Int32 Position,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).PositionSetting.Value = Position; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Position={Position}");
-        }
-        /// <summary>
-        /// OmniSim Only - The focuser step size (microns)
-        /// </summary>
-        /// <remarks>
-        /// <para>The focuser step size (microns)</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/stepsize")]
-        public ActionResult<ASCOM.Common.Alpaca.IntResponse> StepSize(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).StepSizeSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - The focuser step size (microns)
-        /// </summary>
-        /// <remarks>
-        /// <para>The focuser step size (microns)</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="StepSize">The focuser step size (microns)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/stepsize")]
-        public ActionResult<Response> StepSize(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("The focuser step size (microns)")] System.Int32 StepSize,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).StepSizeSetting.Value = StepSize; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"StepSize={StepSize}");
-        }
-        /// <summary>
-        /// OmniSim Only - Temp Comp State
-        /// </summary>
-        /// <remarks>
-        /// <para>Temp Comp State</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempcomp")]
-        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> TempComp(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempCompSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - Temp Comp State
-        /// </summary>
-        /// <remarks>
-        /// <para>Temp Comp State</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="TempComp">Temp Comp State</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempcomp")]
-        public ActionResult<Response> TempComp(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Temp Comp State")] System.Boolean TempComp,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempCompSetting.Value = TempComp; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"TempComp={TempComp}");
-        }
-        /// <summary>
-        /// OmniSim Only - True if the driver supports temp comp
-        /// </summary>
-        /// <remarks>
-        /// <para>True if the driver supports temp comp</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempcompavailable")]
-        public ActionResult<ASCOM.Common.Alpaca.BoolResponse> TempCompAvailable(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempCompAvailableSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - True if the driver supports temp comp
-        /// </summary>
-        /// <remarks>
-        /// <para>True if the driver supports temp comp</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="TempCompAvailable">True if the driver supports temp comp</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/tempcompavailable")]
-        public ActionResult<Response> TempCompAvailable(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("True if the driver supports temp comp")] System.Boolean TempCompAvailable,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TempCompAvailableSetting.Value = TempCompAvailable; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"TempCompAvailable={TempCompAvailable}");
-        }
-        /// <summary>
-        /// OmniSim Only - Starting Temperature
-        /// </summary>
-        /// <remarks>
-        /// <para>Starting Temperature</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpGet]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/temperature")]
-        public ActionResult<ASCOM.Common.Alpaca.DoubleResponse> Temperature(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TemperatureSetting.Value, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID);
-        }
-        /// <summary>
-        /// OmniSim Only - Starting Temperature
-        /// </summary>
-        /// <remarks>
-        /// <para>Starting Temperature</para>
-        /// </remarks>
-        /// <param name="DeviceNumber">Zero based device number as set on the server (A uint32 with a range of 0 to 4294967295)</param>
-        /// <param name="Temperature">Starting Temperature</param>
-        /// <param name="ClientID">Client's unique ID.</param>
-        /// <param name="ClientTransactionID">Client's transaction ID.</param>
-        /// <response code="200">Transaction complete or exception</response>
-        /// <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
-        /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
-        [HttpPut]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ApiExplorerSettings(GroupName = "OmniSim")]
-        [Route("focuser/{DeviceNumber}/temperature")]
-        public ActionResult<Response> Temperature(
-            [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
-            [Required][FromForm][SwaggerSchema("Starting Temperature")] System.Double Temperature,
-            [FromForm][SwaggerSchema(Strings.ClientIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientID = 0,
-            [FromForm][SwaggerSchema(Strings.ClientTransactionIDDescription, Format = "uint32")][Range(0, 4294967295)] uint ClientTransactionID = 0)
-        {
-            return ProcessRequest(() => { (DeviceManager.GetFocuser(DeviceNumber) as ASCOM.Simulators.Focuser).TemperatureSetting.Value = Temperature; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Temperature={Temperature}");
+            return ProcessRequest(() => { ((DeviceManager.GetDome(DeviceNumber) as ASCOM.Simulators.Dome)).DomeHardware.InterfaceVersionSetting.Value = InterfaceVersion; }, DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"InterfaceVersion={InterfaceVersion}");
         }
 }
 }

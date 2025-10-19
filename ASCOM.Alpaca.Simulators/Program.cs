@@ -1,25 +1,22 @@
 using ASCOM.Common;
-using ASCOM.Simulators;
-using ASCOM.Tools;
+using H.NotifyIcon.Core;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
+using OmniSim.BaseDriver;
 using System;
 using System.Diagnostics;
-using System.IO.Pipes;
+using System.Drawing;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Net;
-using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
-using System.Text.Json;
-using System.Collections;
-using OmniSim.BaseDriver;
 
 namespace ASCOM.Alpaca.Simulators
 {
@@ -28,8 +25,6 @@ namespace ASCOM.Alpaca.Simulators
         private static Guid ApplicationGUID = new Guid("{1389A00E-006F-4117-8930-EAFCAA7DC397}");
 
         private const string PipeGUID = "{2249563F-E844-4264-8956-73AC7A44BEA0}";
-
-
 
         public static void Main(string[] args)
         {
@@ -58,7 +53,6 @@ namespace ASCOM.Alpaca.Simulators
                             {
                                 foreach (var arg in args)
                                 {
-
                                     if (arg.Contains("--local-address"))
                                     {
                                         Console.WriteLine($"http://localhost:{ServerSettings.ServerPort}");
@@ -128,7 +122,6 @@ namespace ASCOM.Alpaca.Simulators
                                 ProcessArgs(new string[] { line }, true);
 
                                 writer.Flush();
-
                             }
                             catch (Exception ex)
                             {
@@ -138,14 +131,54 @@ namespace ASCOM.Alpaca.Simulators
                     });
 
                     // This is the first copy, process all args
-                    if(ProcessArgs(args, false))
+                    if (ProcessArgs(args, false))
                     {
                         //Exit if only one copy and command calls for exit
                         return;
                     }
 
                     // Set console visibility (Windows only)
-                    ShowConsole(ServerSettings.ConsoleDisplay);
+                    ShowConsole(ServerSettings.ConsoleDisplayDefault);
+
+                    TrayIconWithContextMenu trayIcon;
+
+                    // Show the tray icon
+                    try
+                    {
+                        if (OperatingSystem.IsWindows())
+                        {
+                            var icon = Icon.ExtractAssociatedIcon(System.Environment.ProcessPath);
+                            trayIcon = new TrayIconWithContextMenu
+                            {
+                                Icon = icon.Handle,
+                                ToolTip = "ASCOM OmniSim",
+                            };
+
+
+                            trayIcon.ContextMenu = new PopupMenu
+                            {
+                                Items =
+    {
+        new PopupMenuItem("Show Browser UI", (_, _) => StartBrowser(ServerSettings.ServerPort)),
+        new PopupMenuSeparator(),
+        new PopupMenuItem("Show Console", (_, _) => ShowConsole(ConsoleDisplayOption.StartNormally)),
+        new PopupMenuItem("Hide Console", (_, _) => ShowConsole(ConsoleDisplayOption.NoConsole)),
+        new PopupMenuSeparator(),
+        new PopupMenuItem("Exit", (_, _) =>
+        {
+            trayIcon.Dispose();
+            Startup.Lifetime.StopApplication();
+        }),
+    },
+                            };
+                            trayIcon.Create();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.LogError(ex.Message);
+                        Console.WriteLine(ex.Message);
+                    }
 
                     var BlazorTask = InitServers(args);
 
@@ -177,15 +210,12 @@ namespace ASCOM.Alpaca.Simulators
             //Load devices
             DriverManager.LoadCamera(0);
             DriverManager.LoadCoverCalibrator(0);
-            DriverManager.LoadDome(0);
-            DriverManager.LoadFilterWheel(0);
-            DriverManager.LoadFilterWheel(1);
-            DriverManager.LoadFocuser(0);
-            DriverManager.LoadFocuser(1);
+            DriverManager.LoadDomes();
+            DriverManager.LoadFilterWheels();
+            DriverManager.LoadFocusers();
             DriverManager.LoadObservingConditions(0);
-            DriverManager.LoadRotator(0);
-            DriverManager.LoadRotator(1);
-            DriverManager.LoadSafetyMonitor(0);
+            DriverManager.LoadRotators();
+            DriverManager.LoadSafetyMonitors();
             DriverManager.LoadSwitch(0);
             DriverManager.LoadTelescope(0);
 
@@ -226,7 +256,6 @@ namespace ASCOM.Alpaca.Simulators
 
             ServerSettings.CheckForUpdates();
 
-
             return new Task(() =>
             {
                 try
@@ -253,7 +282,6 @@ namespace ASCOM.Alpaca.Simulators
 #if ASCOM_COM
             OmniSim.LocalServer.Server.StartServer();
 #endif
-
 
                     CreateHostBuilder(args).Build().Run();
                 }
@@ -286,12 +314,12 @@ namespace ASCOM.Alpaca.Simulators
                     //Load devices
                     DriverManager.LoadCamera(0);
                     DriverManager.LoadCoverCalibrator(0);
-                    DriverManager.LoadDome(0);
-                    DriverManager.LoadFilterWheel(0);
-                    DriverManager.LoadFocuser(0);
+                    DriverManager.LoadDomes();
+                    DriverManager.LoadFilterWheels();
+                    DriverManager.LoadFocusers();
                     DriverManager.LoadObservingConditions(0);
-                    DriverManager.LoadRotator(0);
-                    DriverManager.LoadSafetyMonitor(0);
+                    DriverManager.LoadRotators();
+                    DriverManager.LoadSafetyMonitors();
                     DriverManager.LoadSwitch(0);
                     DriverManager.LoadTelescope(0);
 
@@ -314,7 +342,7 @@ namespace ASCOM.Alpaca.Simulators
             if (args?.Any(str => str.Contains("--set-no-browser")) ?? false)
             {
                 WriteAndLog("Turning off auto start browser");
-                ServerSettings.AutoStartBrowser = false;
+                ServerSettings.StartBrowserAtStart = false;
                 WriteAndLog("Auto start browser is off");
                 return true;
             }
@@ -520,7 +548,6 @@ namespace ASCOM.Alpaca.Simulators
             if (!WindowsNative.IsWindowVisible(hWnd)) // Window is hidden
                 return ConsoleDisplayOption.NoConsole;
 
-            
             // Second check whether the window is minimised
             if (WindowsNative.IsIconic(hWnd)) // Window is minimised
                 return ConsoleDisplayOption.StartMinimized;

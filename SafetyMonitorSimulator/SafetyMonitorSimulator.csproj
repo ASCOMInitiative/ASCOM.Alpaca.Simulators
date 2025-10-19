@@ -5,11 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASCOM.Common.Components" Version="2.0.9" />
+    <PackageReference Include="ASCOM.Common.Components" Version="2.2.0" />
     <PackageReference Include="ASCOM.Exception.Library" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OmniSim.BaseDriver\OmniSim.BaseDriver.csproj" />
     <ProjectReference Include="..\OmniSim.Tools\OmniSim.Tools.csproj" />
   </ItemGroup>
 

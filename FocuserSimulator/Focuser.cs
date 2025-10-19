@@ -11,7 +11,6 @@ namespace ASCOM.Simulators
     using ASCOM.Common.DeviceInterfaces;
     using ASCOM.Common.Interfaces;
     using OmniSim.BaseDriver;
-    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     /// <summary>
     /// Motor states.
@@ -155,6 +154,11 @@ namespace ASCOM.Simulators
                 return this.InterfaceVersionSetting.Value;
             }
         }
+
+        /// <summary>
+        /// Gets the delay for the connect timer
+        /// </summary>
+        public Setting<short> ConnectDelay { get; } = new Setting<short>("ConnectDelay", "The delay to be used for Connect() in milliseconds, allowed values are 1-30000", 1500);
 
         /// <summary>
         /// Gets a value indicating whether the focuser can halt.
@@ -622,6 +626,15 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
+        /// Connects to the hardware.
+        /// </summary>
+        public override void Connect()
+        {
+            base.ConnectTimer.Interval = ConnectDelay.Value;
+            base.Connect();
+        }
+
+        /// <summary>
         /// Ticks 10 times a second, updating the focuser position and IsMoving properties.
         /// </summary>
         private void MoveTimer_Tick(object source, System.Timers.ElapsedEventArgs e)
@@ -724,25 +737,25 @@ namespace ASCOM.Simulators
         /// </summary>
         public override void LoadSettings()
         {
-            this.AbsoluteSetting.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.AbsoluteSetting), CultureInfo.InvariantCulture);
-            this.MaxIncrementSetting.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.MaxIncrementSetting), CultureInfo.InvariantCulture);
-            this.MaxStepSetting.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.MaxStepSetting), CultureInfo.InvariantCulture);
-            this.PositionSetting.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.PositionSetting), CultureInfo.InvariantCulture);
+            this.AbsoluteSetting.Value = this.Profile.GetSettingReturningDefault(this.AbsoluteSetting);
+            this.MaxIncrementSetting.Value = this.Profile.GetSettingReturningDefault(this.MaxIncrementSetting);
+            this.MaxStepSetting.Value = this.Profile.GetSettingReturningDefault(this.MaxStepSetting);
+            this.PositionSetting.Value = this.Profile.GetSettingReturningDefault(this.PositionSetting);
             this.target = this.PositionSetting.Value;
-            this.StepSizeSetting.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.StepSizeSetting), CultureInfo.InvariantCulture);
-            this.TempCompSetting.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.TempCompSetting), CultureInfo.InvariantCulture);
-            this.TempCompAvailableSetting.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.TempCompAvailableSetting), CultureInfo.InvariantCulture);
-            this.TemperatureSetting.Value = Convert.ToDouble(this.Profile.GetSettingReturningDefault(this.TemperatureSetting), CultureInfo.InvariantCulture);
-            this.CanHalt.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.CanHalt), CultureInfo.InvariantCulture);
-            this.CanStepSize.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.CanStepSize), CultureInfo.InvariantCulture);
-            this.Synchronous.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.Synchronous), CultureInfo.InvariantCulture);
-            this.TempMax.Value = Convert.ToDouble(this.Profile.GetSettingReturningDefault(this.TempMax), CultureInfo.InvariantCulture);
-            this.TempMin.Value = Convert.ToDouble(this.Profile.GetSettingReturningDefault(this.TempMin), CultureInfo.InvariantCulture);
-            this.TempPeriod.Value = Convert.ToDouble(this.Profile.GetSettingReturningDefault(this.TempPeriod), CultureInfo.InvariantCulture);
-            this.TempProbe.Value = Convert.ToBoolean(this.Profile.GetSettingReturningDefault(this.TempProbe), CultureInfo.InvariantCulture);
-            this.TempSteps.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.TempSteps), CultureInfo.InvariantCulture);
-            this.SettleTime.Value = Convert.ToInt32(this.Profile.GetSettingReturningDefault(this.SettleTime), CultureInfo.InvariantCulture);
-            this.InterfaceVersionSetting.Value = Convert.ToInt16(this.Profile.GetSettingReturningDefault(this.InterfaceVersionSetting), CultureInfo.InvariantCulture);
+            this.StepSizeSetting.Value = this.Profile.GetSettingReturningDefault(this.StepSizeSetting);
+            this.TempCompSetting.Value = this.Profile.GetSettingReturningDefault(this.TempCompSetting);
+            this.TempCompAvailableSetting.Value = this.Profile.GetSettingReturningDefault(this.TempCompAvailableSetting);
+            this.TemperatureSetting.Value = this.Profile.GetSettingReturningDefault(this.TemperatureSetting);
+            this.CanHalt.Value = this.Profile.GetSettingReturningDefault(this.CanHalt);
+            this.CanStepSize.Value = this.Profile.GetSettingReturningDefault(this.CanStepSize);
+            this.Synchronous.Value = this.Profile.GetSettingReturningDefault(this.Synchronous);
+            this.TempMax.Value = this.Profile.GetSettingReturningDefault(this.TempMax);
+            this.TempMin.Value = this.Profile.GetSettingReturningDefault(this.TempMin);
+            this.TempPeriod.Value = this.Profile.GetSettingReturningDefault(this.TempPeriod);
+            this.TempProbe.Value = this.Profile.GetSettingReturningDefault(this.TempProbe);
+            this.TempSteps.Value = this.Profile.GetSettingReturningDefault(this.TempSteps);
+            this.SettleTime.Value = this.Profile.GetSettingReturningDefault(this.SettleTime);
+            this.InterfaceVersionSetting.Value =this.Profile.GetSettingReturningDefault(this.InterfaceVersionSetting);
         }
 
         /// <summary>

@@ -10,6 +10,18 @@
     }
     else
     {
+        if (InstanceID == 0)
+        {
+            <h3>
+                Dome Setup
+            </h3>
+        }
+        else
+        {
+            <h3>
+                Dome @InstanceID Setup
+            </h3>
+        }
         @if (Device.Connected)
         {
             <fieldset>
@@ -152,43 +164,41 @@
         {
             var temp = Device.InterfaceVersion;
 
-            ShutterSlewRate = ASCOM.Simulators.Hardware.g_dAltRate;
+            ShutterSlewRate = Device.DomeHardware.AltitudeRate.Value;
 
-            ShutterOpenCloseTime = ASCOM.Simulators.Hardware.g_dOCDelay;
+            ShutterOpenCloseTime = Device.DomeHardware.OCDelay.Value;
 
-            ShutterMaximumAltitude = ASCOM.Simulators.Hardware.g_dMaxAlt;
+            ShutterMaximumAltitude = Device.DomeHardware.MaximumAltitude.Value;
 
-            ShutterMinimumAltitude = ASCOM.Simulators.Hardware.g_dMinAlt;
+            ShutterMinimumAltitude = Device.DomeHardware.MinimumAltitude.Value;
 
-            AzimuthSlewRate = ASCOM.Simulators.Hardware.g_dAzRate;
+            AzimuthSlewRate = Device.DomeHardware.AzimuthRate.Value;
 
-            AzimuthStepSize = ASCOM.Simulators.Hardware.g_dStepSize;
+            AzimuthPark = Device.DomeHardware.ParkPosition.Value;
 
-            AzimuthPark = ASCOM.Simulators.Hardware.g_dSetPark;
+            AzimuthHome = Device.DomeHardware.HomePosition.Value;
 
-            AzimuthHome = ASCOM.Simulators.Hardware.g_dSetHome;
+            CanFindHome = Device.DomeHardware.CanFindHome.Value;
 
-            CanFindHome = ASCOM.Simulators.Hardware.g_bCanFindHome;
+            CanPark = Device.DomeHardware.CanPark.Value;
 
-            CanPark = ASCOM.Simulators.Hardware.g_bCanPark;
+            CanSlewAltitude = Device.DomeHardware.CanSetAltitude.Value;
 
-            CanSlewAltitude = ASCOM.Simulators.Hardware.g_bCanSetAltitude;
+            CanSlewAzimuth = Device.DomeHardware.CanSetAzimuth.Value;
 
-            CanSlewAzimuth = ASCOM.Simulators.Hardware.g_bCanSetAzimuth;
+            CanOpenCloseShutter = Device.DomeHardware.CanSetShutter.Value;
 
-            CanOpenCloseShutter = ASCOM.Simulators.Hardware.g_bCanSetShutter;
+            CanSetPark = Device.DomeHardware.CanSetPark.Value;
 
-            CanSetPark = ASCOM.Simulators.Hardware.g_bCanSetPark;
+            CanSyncAzimuth = Device.DomeHardware.CanSyncAzimuth.Value;
 
-            CanSyncAzimuth = ASCOM.Simulators.Hardware.g_bCanSyncAzimuth;
+            AtHomeWithoutFindHome = !Device.DomeHardware.StandardAtHome.Value;
 
-            AtHomeWithoutFindHome = !ASCOM.Simulators.Hardware.g_bStandardAtHome;
+            AtParkWithoutPark = !Device.DomeHardware.StandardAtPark.Value;
 
-            AtParkWithoutPark = !ASCOM.Simulators.Hardware.g_bStandardAtPark;
+            StartUpWithShutterError = Device.DomeHardware.StartWithShutterError.Value;
 
-            StartUpWithShutterError = ASCOM.Simulators.Hardware.g_bStartShutterError;
-
-            SlewingOnOpenClose = ASCOM.Simulators.Hardware.g_bSlewingOpenClose;
+            SlewingOnOpenClose = Device.DomeHardware.SlewingTrueWhenOpenOrClose.Value;
         }
 
         base.OnInitialized();
@@ -411,43 +421,41 @@
                 return;
             }
 
-            ASCOM.Simulators.Hardware.g_dAltRate = ShutterSlewRate;
+            Device.DomeHardware.AltitudeRate.Value = ShutterSlewRate;
 
-            ASCOM.Simulators.Hardware.g_dOCDelay = ShutterOpenCloseTime;
+            Device.DomeHardware.OCDelay.Value = ShutterOpenCloseTime;
 
-            ASCOM.Simulators.Hardware.g_dMaxAlt = ShutterMaximumAltitude;
+            Device.DomeHardware.MaximumAltitude.Value = ShutterMaximumAltitude;
 
-            ASCOM.Simulators.Hardware.g_dMinAlt = ShutterMinimumAltitude;
+            Device.DomeHardware.MinimumAltitude.Value = ShutterMinimumAltitude;
 
-            ASCOM.Simulators.Hardware.g_dAzRate = AzimuthSlewRate;
+            Device.DomeHardware.AzimuthRate.Value = AzimuthSlewRate;
 
-            ASCOM.Simulators.Hardware.g_dStepSize = AzimuthStepSize;
+            Device.DomeHardware.ParkPosition.Value = AzimuthPark;
 
-            ASCOM.Simulators.Hardware.g_dSetPark = AzimuthPark;
+            Device.DomeHardware.HomePosition.Value = AzimuthHome;
 
-            ASCOM.Simulators.Hardware.g_dSetHome = AzimuthHome;
+            Device.DomeHardware.CanFindHome.Value = CanFindHome;
 
-            ASCOM.Simulators.Hardware.g_bCanFindHome = CanFindHome;
+            Device.DomeHardware.CanPark.Value = CanPark;
 
-            ASCOM.Simulators.Hardware.g_bCanPark = CanPark;
+            Device.DomeHardware.CanSetAltitude.Value = CanSlewAltitude;
 
-            ASCOM.Simulators.Hardware.g_bCanSetAltitude = CanSlewAltitude;
+            Device.DomeHardware.CanSetAzimuth.Value = CanSlewAzimuth;
 
-            ASCOM.Simulators.Hardware.g_bCanSetAzimuth = CanSlewAzimuth;
+            Device.DomeHardware.CanSetShutter.Value = CanOpenCloseShutter;
 
-            ASCOM.Simulators.Hardware.g_bCanSetShutter = CanOpenCloseShutter;
+            Device.DomeHardware.CanSetPark.Value = CanSetPark;
 
-            ASCOM.Simulators.Hardware.g_bCanSetPark = CanSetPark;
+            Device.DomeHardware.CanSyncAzimuth.Value = CanSyncAzimuth;
 
-            ASCOM.Simulators.Hardware.g_bCanSyncAzimuth = CanSyncAzimuth;
+            Device.DomeHardware.StandardAtHome.Value = AtHomeWithoutFindHome;
 
-            ASCOM.Simulators.Hardware.g_bStandardAtHome = !AtHomeWithoutFindHome;
+            Device.DomeHardware.StandardAtPark.Value = AtParkWithoutPark;
 
-            ASCOM.Simulators.Hardware.g_bStandardAtPark = !AtParkWithoutPark;
+            Device.DomeHardware.StartWithShutterError.Value = StartUpWithShutterError;
 
-            ASCOM.Simulators.Hardware.g_bStartShutterError = StartUpWithShutterError;
-
-            ASCOM.Simulators.Hardware.g_bSlewingOpenClose = SlewingOnOpenClose;
+            Device.DomeHardware.SlewingTrueWhenOpenOrClose.Value = SlewingOnOpenClose;
 
             Device.SaveConfig();
 

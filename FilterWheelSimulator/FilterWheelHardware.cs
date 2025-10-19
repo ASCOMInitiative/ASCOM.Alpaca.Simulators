@@ -110,6 +110,11 @@
         public Setting<short> InterfaceVersion { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-3", 3);
 
         /// <summary>
+        /// Gets the delay for the connect timer
+        /// </summary>
+        public Setting<short> ConnectDelay { get; } = new Setting<short>("ConnectDelay", "The delay to be used for Connect() in milliseconds, allowed values are 1-30000", 1500);
+
+        /// <summary>
         /// Gets or sets the Array of filter name strings.
         /// </summary>
         public string[] AllFilterNames { get; set; }
@@ -309,7 +314,7 @@
                 }
 
                 // Read the hardware & driver config
-                this.Slots.Value = Convert.ToInt16(this.settingsProfile.GetSettingReturningDefault(this.Slots));
+                this.Slots.Value = this.settingsProfile.GetSettingReturningDefault(this.Slots);
                 if (this.Slots.Value < 1 || this.Slots.Value > 8)
                 {
                     this.Slots.Value = 6;

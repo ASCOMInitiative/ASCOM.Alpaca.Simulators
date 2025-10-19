@@ -24,16 +24,40 @@ namespace ASCOM.Alpaca.Simulators
             DeviceManager.LoadDome(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
+        internal static void LoadDomes()
+        {
+            for (int i = 0; i < ServerSettings.NumberOfDomes; i++)
+            {
+                LoadDome(i);
+            }
+        }
+
         internal static void LoadFilterWheel(int DeviceID)
         {
             var dev = new ASCOM.Simulators.FilterWheel(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("FilterWheel", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.FilterWheel, (uint)DeviceID));
             DeviceManager.LoadFilterWheel(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
+        internal static void LoadFilterWheels()
+        {
+            for (int i = 0; i < ServerSettings.NumberOfFilterWheels; i++)
+            {
+                LoadFilterWheel(i);
+            }
+        }
+
         internal static void LoadFocuser(int DeviceID)
         {
             var dev = new ASCOM.Simulators.Focuser(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("Focuser", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Focuser, (uint)DeviceID));
             DeviceManager.LoadFocuser(DeviceID, dev, dev.DeviceName, dev.UniqueID);
+        }
+
+        internal static void LoadFocusers()
+        {
+            for (int i = 0; i < ServerSettings.NumberOfFocusers; i++)
+            {
+                LoadFocuser(i);
+            }
         }
 
         internal static void LoadObservingConditions(int DeviceID)
@@ -48,10 +72,26 @@ namespace ASCOM.Alpaca.Simulators
             DeviceManager.LoadRotator(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
+        internal static void LoadRotators()
+        {
+            for (int i = 0; i < ServerSettings.NumberOfRotators; i++)
+            {
+                LoadRotator(i);
+            }
+        }
+
         internal static void LoadSafetyMonitor(int DeviceID)
         {
             var dev = new ASCOM.Simulators.SafetyMonitor(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.SafetyMonitor, (uint)DeviceID));
             DeviceManager.LoadSafetyMonitor(DeviceID, dev, dev.DeviceName, dev.UniqueID);
+        }
+
+        internal static void LoadSafetyMonitors()
+        {
+            for (int i = 0; i < ServerSettings.NumberOfSafetyMonitors; i++)
+            {
+                LoadSafetyMonitor(i);
+            }
         }
 
         internal static void LoadSwitch(int DeviceID)

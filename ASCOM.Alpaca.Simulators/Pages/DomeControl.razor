@@ -13,7 +13,14 @@
     else
     {
         <fieldset>
-            <legend>Dome</legend>
+            @if(InstanceID == 0)
+            {
+                <legend>Dome</legend>
+            }
+            else
+            {
+                <legend>Dome @InstanceID</legend>
+            }
             <div class="grid-container-two">
                 <div class="grid-item-left">
                     <svg width="30" height="30">
@@ -22,6 +29,9 @@
                     <button @onclick="Connect">@ConnectText</button>
                 </div>
                 <div class="grid-item-right">
+                    <ErrorBoundary>
+                        <LogLevelControl Driver="@(Device as OmniSim.BaseDriver.Driver)" />
+                    </ErrorBoundary>
                     <button @onclick="Setup">Setup</button>
                 </div>
             </div>
@@ -218,7 +228,7 @@
     {
         get
         {
-            if (Connected)
+            if (Connected && Device.CanSetAzimuth)
             {
                 if (Device.Azimuth != -100000.0)
                 {
@@ -415,7 +425,7 @@
             {
                 if (Device.ShutterStatus == ShutterState.Open)
                 {
-                    ASCOM.Simulators.Hardware.HW_MoveShutter(ASCOM.Simulators.Hardware.g_dMaxAlt);
+                    Device.DomeHardware.MoveShutter(Device.DomeHardware.MaximumAltitude.Value);
                 }
             }
         }
@@ -434,7 +444,7 @@
             {
                 if (Device.ShutterStatus == ShutterState.Open)
                 {
-                    ASCOM.Simulators.Hardware.HW_MoveShutter(ASCOM.Simulators.Hardware.g_dMinAlt);
+                    Device.DomeHardware.MoveShutter(Device.DomeHardware.MinimumAltitude.Value);
                 }
             }
         }
@@ -451,7 +461,7 @@
         {
             if (Device.Connected)
             {
-                ASCOM.Simulators.Hardware.HW_Run(true);
+                Device.DomeHardware.Run(true);
             }
         }
         catch (Exception ex)
@@ -466,7 +476,7 @@
         {
             if (Device.Connected)
             {
-                ASCOM.Simulators.Hardware.HW_Run(false);
+                Device.DomeHardware.Run(false);
             }
         }
         catch (Exception ex)
@@ -481,7 +491,7 @@
         {
             if (Device.Connected)
             {
-                Device.SlewToAzimuth(ASCOM.Simulators.Hardware.AzScale(Device.Azimuth + ASCOM.Simulators.Hardware.g_dStepSize));
+                Device.SlewToAzimuth(ASCOM.Simulators.DomeHardware.AzScale(Device.Azimuth + 5));
             }
         }
         catch (Exception ex)
@@ -496,7 +506,7 @@
         {
             if (Device.Connected)
             {
-                Device.SlewToAzimuth(ASCOM.Simulators.Hardware.AzScale(Device.Azimuth - ASCOM.Simulators.Hardware.g_dStepSize));
+                Device.SlewToAzimuth(ASCOM.Simulators.DomeHardware.AzScale(Device.Azimuth - 5));
             }
         }
         catch (Exception ex)

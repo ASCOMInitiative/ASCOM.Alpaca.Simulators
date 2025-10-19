@@ -1,53 +1,35 @@
-﻿// tabs=4
-// --------------------------------------------------------------------------------
-//
-// ASCOM Dome driver for DomeSimulator
-//
-// Description:	A port of the VB6 ASCOM Dome simulator to VB.Net.
-// Converted and built in Visual Studio 2008.
-//
-//
-//
-// Implements:	ASCOM Dome interface version: 5.1.0
-// Author:		Robert Turner <rbturner@charter.net>
-//
-// Edit Log:
-//
-// Date			Who	Version	Description
-// -----------	---	-----	-------------------------------------------------------
-// 22-Jun-2009	rbt	1.0.0	Initial edit, from Dome template
-// --------------------------------------------------------------------------------
-//
-// Your driver's ID is ASCOM.Simulator.Dome
-//
-// The Guid attribute sets the CLSID for ASCOM.DomeWheelSimulator.Dome
-// The ClassInterface/None attribute prevents an empty interface called
-// _Dome from being created and used as the [default] interface
-//
-using ASCOM.Common;
-using ASCOM.Common.DeviceInterfaces;
-using ASCOM.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+
+using ASCOM.Common;
+using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 
 namespace ASCOM.Simulators
 {
-    public class Dome : IDomeV3, IDisposable, IAlpacaDevice, ISimulation
+    public class Dome : OmniSim.BaseDriver.Driver, IDomeV3, IAlpacaDevice, ISimulation
     {
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
+        private const string CheckConnectedFailureError = "Dome simulator is not connected";
+
         private ILogger Logger;
         private IProfile Profile;
+        internal DomeHardware DomeHardware;
 
-        public Dome(int deviceNumber, ILogger logger, IProfile profile)
+        public override string DeviceName { get => Name; }
+
+        public Dome(int deviceNumber, ILogger logger, IProfile profile) : base(deviceNumber, logger, profile)
         {
             Logger = logger;
             Profile = profile;
 
-            LogMessage($"New dome {deviceNumber}", "Log started");
+            DomeHardware = new DomeHardware(Profile);
+
+            LoadConfig();
 
             DeviceNumber = deviceNumber;
 
@@ -61,6 +43,7 @@ namespace ASCOM.Simulators
                     var uniqueid = Guid.NewGuid().ToString();
                     profile.WriteValue(UNIQUE_ID_PROFILE_NAME, uniqueid);
                 }
+
                 UniqueID = profile.GetValue(UNIQUE_ID_PROFILE_NAME);
             }
             catch (Exception ex)
@@ -69,206 +52,104 @@ namespace ASCOM.Simulators
             }
 
             logger.LogInformation($"Dome {deviceNumber} - UUID of {UniqueID}");
-
-            LoadConfig();
-
-            LogMessage("New", "Starting thread");
-
-            LogMessage("New", "New completed OK");
         }
+
+        /// <summary>
+        /// Gets the device type value for this driver.
+        /// </summary>
+        public override DeviceTypes DeviceType => DeviceTypes.Dome;
 
         #region IDomeV2 members
 
-        public string DeviceName { get => Name; }
-        public int DeviceNumber { get; private set; }
-        public string UniqueID { get; private set; }
-
-        internal void LoadConfig()
+        /// <summary>
+        /// Load the stored config for this driver.
+        /// </summary>
+        public void LoadConfig()
         {
-            Hardware.g_dOCProgress = 0;
-            Hardware.g_dOCDelay = 0;
-
-            Hardware.g_dOCDelay = System.Convert.ToDouble(Profile.GetValue("OCDelay", "3"));
-            Hardware.g_dSetPark = System.Convert.ToDouble(Profile.GetValue("SetPark", "180"));
-            Hardware.g_dSetHome = System.Convert.ToDouble(Profile.GetValue("SetHome", "0"));
-            Hardware.g_dAltRate = System.Convert.ToDouble(Profile.GetValue("AltRate", "30"));
-            Hardware.g_dAzRate = System.Convert.ToDouble(Profile.GetValue("AzRate", "15"));
-            Hardware.g_dStepSize = System.Convert.ToDouble(Profile.GetValue("StepSize", "5"));
-            Hardware.g_dMaxAlt = System.Convert.ToDouble(Profile.GetValue("MaxAlt", "90"));
-            Hardware.g_dMinAlt = System.Convert.ToDouble(Profile.GetValue("MinAlt", "0"));
-            Hardware.g_bStartShutterError = System.Convert.ToBoolean(Profile.GetValue("StartShutterError", "False"));
-            Hardware.g_bSlewingOpenClose = System.Convert.ToBoolean(Profile.GetValue("SlewingOpenClose", "False"));
-            Hardware.g_bStandardAtHome = !System.Convert.ToBoolean(Profile.GetValue("NonFragileAtHome", "False"));
-            Hardware.g_bStandardAtPark = !System.Convert.ToBoolean(Profile.GetValue("NonFragileAtPark", "False"));
-
-            // Get Can capabilities
-            Hardware.g_bCanFindHome = System.Convert.ToBoolean(Profile.GetValue("CanFindHome", "True"));
-            Hardware.g_bCanPark = System.Convert.ToBoolean(Profile.GetValue("CanPark", "True"));
-            Hardware.g_bCanSetAltitude = System.Convert.ToBoolean(Profile.GetValue("CanSetAltitude", "True"));
-            Hardware.g_bCanSetAzimuth = System.Convert.ToBoolean(Profile.GetValue("CanSetAzimuth", "True"));
-            Hardware.g_bCanSetPark = System.Convert.ToBoolean(Profile.GetValue("CanSetPark", "True"));
-            Hardware.g_bCanSetShutter = System.Convert.ToBoolean(Profile.GetValue("CanSetShutter", "True"));
-            Hardware.g_bCanSyncAzimuth = System.Convert.ToBoolean(Profile.GetValue("CanSyncAzimuth", "True"));
-
-            // Get Conform test variables, these should always be set to False for correct production behaviour
-            Hardware.g_bConformInvertedCanBehaviour = System.Convert.ToBoolean(Profile.GetValue("InvertedCanBehaviour", "False"));
-            Hardware.g_bConformReturnWrongException = System.Convert.ToBoolean(Profile.GetValue("ReturnWrongException", "False"));
-
-            // get and range dome state
-            Hardware.g_dDomeAz = System.Convert.ToDouble(Profile.GetValue("DomeAz", System.Convert.ToString(Hardware.INVALID_COORDINATE)));
-            Hardware.g_dDomeAlt = System.Convert.ToDouble(Profile.GetValue("DomeAlt", System.Convert.ToString(Hardware.INVALID_COORDINATE)));
-            if (Hardware.g_dDomeAlt < Hardware.g_dMinAlt)
-                Hardware.g_dDomeAlt = Hardware.g_dMinAlt;
-            if (Hardware.g_dDomeAlt > Hardware.g_dMaxAlt)
-                Hardware.g_dDomeAlt = Hardware.g_dMaxAlt;
-            if (Hardware.g_dDomeAz < 0 | Hardware.g_dDomeAz >= 360)
-                Hardware.g_dDomeAz = Hardware.g_dSetPark;
-            Hardware.g_dTargetAlt = Hardware.g_dDomeAlt;
-            Hardware.g_dTargetAz = Hardware.g_dDomeAz;
-
-            if (Hardware.g_bStartShutterError)
-                Hardware.g_eShutterState = ShutterState.Error;
-            else
-            {
-                string ret = Profile.GetValue("ShutterState", "1");       // ShutterClosed
-                Hardware.g_eShutterState = (ShutterState)Enum.Parse(typeof(ShutterState), ret);
-            }
-
-            Hardware.g_eSlewing = Going.slewNowhere;
-            Hardware.g_bAtPark = Hardware.HW_AtPark;                   // its OK to wake up parked
-            if (Hardware.g_bStandardAtHome)
-                Hardware.g_bAtHome = false;                   // Standard: home is set by home() method, never wake up homed!
-            else
-                Hardware.g_bAtHome = Hardware.HW_AtHome;// Non standard, position, OK to wake up homed
+            DomeHardware.LoadConfig();
         }
 
-        public void ResetSettings()
+        /// <summary>
+        /// Save the current config.
+        /// </summary>
+        public void SaveConfig()
+        {
+            DomeHardware.SaveConfig();
+        }
+
+        /// <summary>
+        /// Reset settings to default.
+        /// </summary>
+        public new void ResetSettings()
         {
             Profile.Clear();
         }
 
-        public string GetXMLProfile()
+        /// <summary>
+        /// Gets the current profile in XML format. This is not guaranteed to be compatible across versions.
+        /// </summary>
+        /// <returns>An XML encoded copy of the profile.</returns>
+        public new string GetXMLProfile()
         {
             return Profile.GetProfile();
         }
 
-        internal void SaveConfig()
+        private void check_Az(double Az)
         {
-            Profile.WriteValue("OCDelay", System.Convert.ToString(Hardware.g_dOCDelay));
-            Profile.WriteValue("SetPark", System.Convert.ToString(Hardware.g_dSetPark));
-            Profile.WriteValue("SetHome", System.Convert.ToString(Hardware.g_dSetHome));
-            Profile.WriteValue("AltRate", System.Convert.ToString(Hardware.g_dAltRate));
-            Profile.WriteValue("AzRate", System.Convert.ToString(Hardware.g_dAzRate));
-            Profile.WriteValue("StepSize", System.Convert.ToString(Hardware.g_dStepSize));
-            Profile.WriteValue("MaxAlt", System.Convert.ToString(Hardware.g_dMaxAlt));
-            Profile.WriteValue("MinAlt", System.Convert.ToString(Hardware.g_dMinAlt));
-            Profile.WriteValue("StartShutterError", System.Convert.ToString(Hardware.g_bStartShutterError));
-            Profile.WriteValue("SlewingOpenClose", System.Convert.ToString(Hardware.g_bSlewingOpenClose));
-            Profile.WriteValue("NonFragileAtHome", System.Convert.ToString(!Hardware.g_bStandardAtHome));
-            Profile.WriteValue("NonFragileAtPark", System.Convert.ToString(!Hardware.g_bStandardAtPark));
-
-            Profile.WriteValue("DomeAz", System.Convert.ToString(Hardware.g_dDomeAz));
-            Profile.WriteValue("DomeAlt", System.Convert.ToString(Hardware.g_dDomeAlt));
-
-            Profile.WriteValue("ShutterState", System.Convert.ToString(Hardware.g_eShutterState));
-
-            Profile.WriteValue("CanFindHome", System.Convert.ToString(Hardware.g_bCanFindHome));
-            Profile.WriteValue("CanPark", System.Convert.ToString(Hardware.g_bCanPark));
-            Profile.WriteValue("CanSetAltitude", System.Convert.ToString(Hardware.g_bCanSetAltitude));
-            Profile.WriteValue("CanSetAzimuth", System.Convert.ToString(Hardware.g_bCanSetAzimuth));
-            Profile.WriteValue("CanSetPark", System.Convert.ToString(Hardware.g_bCanSetPark));
-            Profile.WriteValue("CanSetShutter", System.Convert.ToString(Hardware.g_bCanSetShutter));
-            Profile.WriteValue("CanSyncAzimuth", System.Convert.ToString(Hardware.g_bCanSyncAzimuth));
-        }
-
-        private bool disposedValue; // To detect redundant calls
-
-        // IDisposable
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposedValue)
+            if (Az == DomeHardware.InvalidCoordinate)
             {
-                if (disposing)
-                {
-                }
-            }
-            this.disposedValue = true;
-        }
-
-        // TODO: override Finalize() only if Dispose(ByVal disposing As Boolean) above has code to free unmanaged resources.
-        // Protected Overrides Sub Finalize()
-        // ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
-        // Dispose(False)
-        // MyBase.Finalize()
-        // End Sub
-
-        // This code added by Visual Basic to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private static void check_connected()
-        {
-            if (!Hardware.g_bConnected)
-                throw new NotConnectedException("Dome simulator is not connected");
-        }
-
-        private static void check_Az(double Az)
-        {
-            if (Az == Hardware.INVALID_COORDINATE)
                 throw new InvalidValueException("Azimuth", "Invalid Coordinate", "0 to 360 degrees");
+            }
+
             if (Az >= 360.0 | Az < 0.0)
             {
                 throw new InvalidValueException("Azimuth", Az.ToString(), "0 to 360.0 degrees");
             }
         }
 
-        public string Action(string ActionName, string ActionParameters)
-        {
-            throw new MethodNotImplementedException("Action");
-        }
-
-        public IList<string> SupportedActions
-        {
-            get
-            {
-                return new List<string>();
-            }
-        }
-
-        public string DriverVersion
-        {
-            get
-            {
-                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                return $"{version.Major}.{version.Minor}";
-            }
-        }
-
         public void AbortSlew()
         {
-            check_connected();
-            Hardware.HW_Halt();
+            this.ProcessCommand(
+            () =>
+            {
+                CheckConnected(CheckConnectedFailureError);
+                DomeHardware.Halt();
+            }, DeviceType, MemberNames.AbortSlew, "Command");
+        }
+
+        /// <summary>
+        /// Connects to the hardware.
+        /// </summary>
+        public override void Connect()
+        {
+            base.ConnectTimer.Interval = DomeHardware.ConnectDelay.Value;
+            base.Connect();
         }
 
         public double Altitude
         {
             get
             {
-                if (!Hardware.g_bCanSetAltitude)
-                    throw new PropertyNotImplementedException("Altitude", false);
+                return this.ProcessCommand(
+                () =>
+                {
+                    if (!DomeHardware.CanSetAltitude.Value)
+                        throw new PropertyNotImplementedException("Altitude", false);
 
-                check_connected();
+                    CheckConnected(CheckConnectedFailureError);
 
-                if (Hardware.g_eShutterState == ShutterState.Error)
-                    LogMessage("Altitude", "Shutter in ErrorState");
-                if (Hardware.g_eShutterState != ShutterState.Open)
-                    LogMessage("Altitude", "Shutter not Open");
+                    if (DomeHardware.ShutterState == ShutterState.Error)
+                    {
+                        Logger.LogWarning("Shutter in ErrorState");
+                    }
 
-                return Hardware.g_dDomeAlt;
+                    if (DomeHardware.ShutterState != ShutterState.Open)
+                    {
+                        Logger.LogWarning("Shutter not Open");
+                    }
+
+                    return DomeHardware.DomeAltitude.Value;
+                }, DeviceType, MemberNames.Altitude, "Get");
             }
         }
 
@@ -276,8 +157,12 @@ namespace ASCOM.Simulators
         {
             get
             {
-                check_connected();
-                return Hardware.g_bAtHome;
+                return this.ProcessCommand(
+                () =>
+                {
+                    CheckConnected(CheckConnectedFailureError);
+                    return DomeHardware.AtHome;
+                }, DeviceType, MemberNames.AtHome, "Get");
             }
         }
 
@@ -285,8 +170,12 @@ namespace ASCOM.Simulators
         {
             get
             {
-                check_connected();
-                return Hardware.g_bAtPark;
+                return this.ProcessCommand(
+                () =>
+                {
+                    CheckConnected(CheckConnectedFailureError);
+                    return DomeHardware.AtPark;
+                }, DeviceType, MemberNames.AtPark, "Get");
             }
         }
 
@@ -294,11 +183,17 @@ namespace ASCOM.Simulators
         {
             get
             {
-                if (!Hardware.g_bCanSetAzimuth)
-                    throw new PropertyNotImplementedException("Azimuth", false);
+                return this.ProcessCommand(
+                () =>
+                {
+                    if (!DomeHardware.CanSetAzimuth.Value)
+                    {
+                        throw new PropertyNotImplementedException("Azimuth", false);
+                    }
 
-                check_connected();
-                return Hardware.g_dDomeAz;
+                    CheckConnected(CheckConnectedFailureError);
+                    return DomeHardware.DomeAzimuth.Value;
+                }, DeviceType, MemberNames.Azimuth, "Get");
             }
         }
 
@@ -306,7 +201,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return Hardware.g_bCanFindHome;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanFindHome.Value;
+                }, DeviceType, MemberNames.CanFindHome, "Get");
             }
         }
 
@@ -314,7 +213,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return Hardware.g_bCanPark;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanPark.Value;
+                }, DeviceType, MemberNames.CanPark, "Get");
             }
         }
 
@@ -322,7 +225,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return Hardware.g_bCanSetAltitude;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanSetAltitude.Value;
+                }, DeviceType, MemberNames.CanSetAltitude, "Get");
             }
         }
 
@@ -330,7 +237,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return Hardware.g_bCanSetAzimuth;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanSetAzimuth.Value;
+                }, DeviceType, MemberNames.CanSetAzimuth, "Get");
             }
         }
 
@@ -338,7 +249,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return Hardware.g_bCanSetPark;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanSetPark.Value;
+                }, DeviceType, MemberNames.CanSetPark, "Get");
             }
         }
 
@@ -346,7 +261,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return Hardware.g_bCanSetShutter;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanSetShutter.Value;
+                }, DeviceType, MemberNames.CanSetShutter, "Get");
             }
         }
 
@@ -354,7 +273,11 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return false;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return false;
+                }, DeviceType, MemberNames.CanSlave, "Get");
             }
         }
 
@@ -362,234 +285,181 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return Hardware.g_bCanSyncAzimuth;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return DomeHardware.CanSyncAzimuth.Value;
+                }, DeviceType, MemberNames.CanSyncAzimuth, "Get");
             }
         }
 
         public void CloseShutter()
         {
-            if (Hardware.g_bConformInvertedCanBehaviour)
-            {
-                if (Hardware.g_bCanSetShutter)
+            this.ProcessCommand(
+                () =>
                 {
-                    if (Hardware.g_bConformReturnWrongException)
-                        throw new System.NotImplementedException("CloseShutter");
-                    else
+                    if (!DomeHardware.CanSetShutter.Value)
+                    {
                         throw new MethodNotImplementedException("CloseShutter");
-                }
-            }
-            else if (!Hardware.g_bCanSetShutter)
-            {
-                if (Hardware.g_bConformReturnWrongException)
-                    throw new System.NotImplementedException("CloseShutter");
-                else
-                    throw new MethodNotImplementedException("CloseShutter");
-            }
+                    }
 
-            check_connected();
-            Hardware.HW_CloseShutter();
+                    CheckConnected(CheckConnectedFailureError);
+                    DomeHardware.CloseShutter();
+                }, DeviceType, MemberNames.CloseShutter, "Command");
         }
 
-        public void CommandBlind(string Command, bool Raw = false)
-        {
-            throw new MethodNotImplementedException("CommandBlind");
-        }
-
-        public bool CommandBool(string Command, bool Raw = false)
-        {
-            throw new MethodNotImplementedException("CommandBool");
-        }
-
-        public string CommandString(string Command, bool Raw = false)
-        {
-            throw new MethodNotImplementedException("CommandString");
-        }
-
-        public bool Connected
+        /// <summary>
+        /// Gets the ASCOM Driver Description.
+        /// </summary>
+        public override string Description
         {
             get
             {
-                return Hardware.g_bConnected;
-            }
-
-            set
-            {
-                try
+                return this.ProcessCommand(
+                () =>
                 {
-                    LogMessage("Connected", string.Format("Connected set: {0}", value));
+                    return "ASCOM Dome Simulator .NET";
+                }, DeviceType, MemberNames.Description, "Get");
+            }
+        }
 
-                    Hardware.g_bConnected = value;
-                    // Hardware.g_timer.Enabled = value
-
-                    LogMessage("Connected", "Starting thread");
-                }
-                catch (Exception ex)
+        /// <summary>
+        /// Gets the ASCOM Driver DriverInfo.
+        /// </summary>
+        public override string DriverInfo
+        {
+            get
+            {
+                return this.ProcessCommand(
+                () =>
                 {
-                    LogMessage("Connected Set", "Exception: " + ex.ToString());
-                }
+                    return "ASCOM OmniSim Dome simulation";
+                }, DeviceType, MemberNames.DriverInfo, "Get");
             }
         }
 
-        public string Description
+        /// <summary>
+        /// Gets the ASCOM Driver Interface Version.
+        /// </summary>
+        public override short InterfaceVersion
         {
             get
             {
-                return Hardware.INSTRUMENT_DESCRIPTION;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.DomeHardware.InterfaceVersionSetting.Value;
+                }, DeviceType, MemberNames.InterfaceVersion, "Get");
             }
         }
 
-        public string DriverInfo
+        public override short SafeInterfaceVersion
         {
             get
             {
-                return "ASCOM Platform 6 Dome Simulator in VB.NET";
+                return this.DomeHardware.InterfaceVersionSetting.Value;
             }
         }
 
         public void FindHome()
         {
-            if (Hardware.g_bConformInvertedCanBehaviour)
-            {
-                if (Hardware.g_bCanFindHome)
+            this.ProcessCommand(
+                () =>
                 {
-                    if (Hardware.g_bConformReturnWrongException)
-                        throw new System.NotImplementedException("FindHome");
-                    else
+                    if (!DomeHardware.CanFindHome.Value)
+                    {
                         throw new MethodNotImplementedException("FindHome");
-                }
-            }
-            else if (!Hardware.g_bCanFindHome)
-            {
-                if (Hardware.g_bConformReturnWrongException)
-                    throw new System.NotImplementedException("FindHome");
-                else
-                    throw new MethodNotImplementedException("FindHome");
-            }
+                    }
 
-            check_connected();
-            if (!Hardware.g_bAtHome)
-                Hardware.HW_FindHome();
-        }
-
-        public short InterfaceVersion
-        {
-            get
-            {
-                return 3;
-            }
+                    CheckConnected(CheckConnectedFailureError);
+                    if (!DomeHardware.CommandAtHome)
+                        DomeHardware.FindHome();
+                }, DeviceType, MemberNames.FindHome, "Command");
         }
 
         public string Name
         {
             get
             {
-                return Hardware.INSTRUMENT_NAME;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return "Alpaca Dome Simulator";
+                }, DeviceType, MemberNames.Name, "Get");
             }
         }
 
         public void OpenShutter()
         {
-            if (Hardware.g_bConformInvertedCanBehaviour)
-            {
-                if (Hardware.g_bCanSetShutter)
+            this.ProcessCommand(
+                () =>
                 {
-                    if (Hardware.g_bConformReturnWrongException)
-                        throw new System.NotImplementedException("OpenShutter");
-                    else
+                    if (!DomeHardware.CanSetShutter.Value)
+                    {
                         throw new MethodNotImplementedException("OpenShutter");
-                }
-            }
-            else if (!Hardware.g_bCanSetShutter)
-            {
-                if (Hardware.g_bConformReturnWrongException)
-                    throw new System.NotImplementedException("OpenShutter");
-                else
-                    throw new MethodNotImplementedException("OpenShutter");
-            }
+                    }
 
-            if (Hardware.g_bConformInvertedCanBehaviour)
-            {
-                if (Hardware.g_bCanSetShutter)
-                    throw new MethodNotImplementedException("OpenShutter"); // Invert normal behaviour to make sure that Conform detects this as an error
-            }
-            else if (!Hardware.g_bCanSetShutter)
-                throw new MethodNotImplementedException("OpenShutter");// Normal behaviour
+                    CheckConnected(CheckConnectedFailureError);
 
-            check_connected();
+                    if (DomeHardware.ShutterState == ShutterState.Error)
+                        throw new InvalidOperationException("Shutter failed to open");
 
-            if (Hardware.g_eShutterState == ShutterState.Error)
-                throw new InvalidOperationException("Shutter failed to open");
-
-            Hardware.HW_OpenShutter();
+                    DomeHardware.OpenShutter();
+                }, DeviceType, MemberNames.OpenShutter, "Command");
         }
 
         public void Park()
         {
-            if (Hardware.g_bConformInvertedCanBehaviour)
-            {
-                if (Hardware.g_bCanPark)
+            this.ProcessCommand(
+                () =>
                 {
-                    if (Hardware.g_bConformReturnWrongException)
-                        throw new System.NotImplementedException("Park");
-                    else
+                    if (!DomeHardware.CanPark.Value)
+                    {
                         throw new MethodNotImplementedException("Park");
-                }
-            }
-            else if (!Hardware.g_bCanPark)
-            {
-                if (Hardware.g_bConformReturnWrongException)
-                    throw new System.NotImplementedException("Park");
-                else
-                    throw new MethodNotImplementedException("Park");
-            }
+                    }
 
-            check_connected();
-            if (!Hardware.g_bAtPark)
-                Hardware.HW_Park();
+                    CheckConnected(CheckConnectedFailureError);
+                    if (!DomeHardware.CommandAtPark)
+                        DomeHardware.Park();
+                }, DeviceType, MemberNames.Park, "Command");
+
         }
 
         public void SetPark()
         {
-            if (Hardware.g_bConformInvertedCanBehaviour)
-            {
-                if (Hardware.g_bCanSetPark)
+            this.ProcessCommand(
+                () =>
                 {
-                    if (Hardware.g_bConformReturnWrongException)
-                        throw new System.NotImplementedException("SetPark");
-                    else
-                        throw new MethodNotImplementedException("SetPark");
-                }
-            }
-            else if (!Hardware.g_bCanSetPark)
-            {
-                if (Hardware.g_bConformReturnWrongException)
-                    throw new System.NotImplementedException("Park");
-                else
-                    throw new MethodNotImplementedException("Park");
-            }
+                    if (!DomeHardware.CanSetPark.Value)
+                    {
+                        throw new MethodNotImplementedException("Park");
+                    }
 
-            check_connected();
-            Hardware.g_dSetPark = Hardware.g_dDomeAz;
+                    CheckConnected(CheckConnectedFailureError);
+                    DomeHardware.ParkPosition.Value = DomeHardware.DomeAzimuth.Value;
 
-            if (!Hardware.g_bStandardAtPark)
-            {
-                Hardware.g_bAtPark = true;
-            }
-        }
-
-        public void SetupDialog()
-        {
+                    if (!DomeHardware.StandardAtPark.Value)
+                    {
+                        DomeHardware.CommandAtPark = true;
+                    }
+                }, DeviceType, MemberNames.SetPark, "Command");
         }
 
         public ShutterState ShutterStatus
         {
             get
             {
-                if (!Hardware.g_bCanSetShutter)
-                    throw new PropertyNotImplementedException("ShutterStatus", false);
 
-                check_connected();
-                return Hardware.g_eShutterState;
+                return this.ProcessCommand(
+                () =>
+                {
+
+                    if (!DomeHardware.CanSetShutter.Value)
+                        throw new PropertyNotImplementedException("ShutterStatus", false);
+
+                    CheckConnected(CheckConnectedFailureError);
+                    return DomeHardware.ShutterState;
+                }, DeviceType, MemberNames.ShutterStatus, "Get");
             }
         }
 
@@ -597,12 +467,25 @@ namespace ASCOM.Simulators
         {
             get
             {
-                return false;
+
+                return this.ProcessCommand(
+                () =>
+                {
+
+                    return false;
+                }, DeviceType, MemberNames.Slaved, "Get");
             }
+
             set
             {
-                if (value)
-                    throw new PropertyNotImplementedException("Slaved", true);
+                ProcessCommand(
+                () =>
+                {
+                    if (value)
+                    {
+                        throw new PropertyNotImplementedException("Slaved", true);
+                    }
+                }, DeviceType, MemberNames.Slaved, "Set");
             }
         }
 
@@ -610,114 +493,83 @@ namespace ASCOM.Simulators
         {
             get
             {
-                check_connected();
+                return this.ProcessCommand(
+                () =>
+                {
+                    CheckConnected(CheckConnectedFailureError);
 
-                return Hardware.HW_Slewing;
+                    return DomeHardware.IsSlewing;
+                }, DeviceType, MemberNames.Slewing, "Command");
             }
         }
 
         public void SlewToAltitude(double Altitude)
         {
-            if (Hardware.g_bConformInvertedCanBehaviour)
-            {
-                if (Hardware.g_bCanSetAltitude)
+            this.ProcessCommand(
+                () =>
                 {
-                    if (Hardware.g_bConformReturnWrongException)
-                        throw new System.NotImplementedException("SlewToAltitude");
-                    else
+                    if (!DomeHardware.CanSetAltitude.Value)
+                    {
                         throw new MethodNotImplementedException("SlewToAltitude");
-                }
-            }
-            else if (!Hardware.g_bCanSetAltitude)
-            {
-                if (Hardware.g_bConformReturnWrongException)
-                    throw new System.NotImplementedException("SlewToAltitude");
-                else
-                    throw new MethodNotImplementedException("SlewToAltitude");
-            }
+                    }
 
-            check_connected();
+                    if (DomeHardware.ShutterState == ShutterState.Error)
+                    {
+                        Logger.LogWarning("Shutter in ErrorState");
+                    }
 
-            if (Hardware.g_eShutterState == ShutterState.Error)
-                LogMessage("Altitude", "Shutter in ErrorState");
-            if (Hardware.g_eShutterState != ShutterState.Open)
-                LogMessage("Altitude", "Shutter not Open");
-            if (Altitude < Hardware.g_dMinAlt | Altitude > Hardware.g_dMaxAlt)
-                throw new InvalidValueException("SlewToAltitude", Altitude.ToString(), Hardware.g_dMinAlt.ToString() + " to " + Hardware.g_dMaxAlt.ToString());
+                    if (DomeHardware.ShutterState != ShutterState.Open)
+                    {
+                        Logger.LogWarning("Shutter not Open");
+                    }
 
-            Hardware.HW_MoveShutter(Altitude);
+                    if (Altitude < DomeHardware.MinimumAltitude.Value | Altitude > DomeHardware.MaximumAltitude.Value)
+                    {
+                        throw new InvalidValueException("SlewToAltitude", Altitude.ToString(), DomeHardware.MinimumAltitude.Value.ToString() + " to " + DomeHardware.MaximumAltitude.Value.ToString());
+                    }
+
+                    CheckConnected(CheckConnectedFailureError);
+
+                    DomeHardware.MoveShutter(Altitude);
+                }, DeviceType, MemberNames.SlewToAltitude, "Command");
         }
 
         public void SlewToAzimuth(double Azimuth)
         {
-            if (Hardware.g_bConformInvertedCanBehaviour)
-            {
-                if (Hardware.g_bCanSetAzimuth)
+            this.ProcessCommand(
+                () =>
                 {
-                    if (Hardware.g_bConformReturnWrongException)
-                        throw new System.NotImplementedException("SlewToAzimuth");
-                    else
+                    if (!DomeHardware.CanSetAzimuth.Value)
+                    {
                         throw new MethodNotImplementedException("SlewToAzimuth");
-                }
-            }
-            else if (!Hardware.g_bCanSetAzimuth)
-            {
-                if (Hardware.g_bConformReturnWrongException)
-                    throw new System.NotImplementedException("SlewToAzimuth");
-                else
-                    throw new MethodNotImplementedException("SlewToAzimuth");
-            }
+                    }
 
-            check_connected();
-            check_Az(Azimuth);
-            Hardware.HW_Move(Azimuth);
+                    CheckConnected(CheckConnectedFailureError);
+                    check_Az(Azimuth);
+                    DomeHardware.Move(Azimuth);
+                }, DeviceType, MemberNames.SlewToAzimuth, "Command");
         }
 
         public void SyncToAzimuth(double Azimuth)
         {
-            if (Hardware.g_bConformInvertedCanBehaviour)
-            {
-                if (Hardware.g_bCanSyncAzimuth)
+            this.ProcessCommand(
+                () =>
                 {
-                    if (Hardware.g_bConformReturnWrongException)
-                        throw new System.NotImplementedException("SyncToAzimuth");
-                    else
+
+                    if (!DomeHardware.CanSyncAzimuth.Value)
+                    {
                         throw new MethodNotImplementedException("SyncToAzimuth");
-                }
-            }
-            else if (!Hardware.g_bCanSyncAzimuth)
-            {
-                if (Hardware.g_bConformReturnWrongException)
-                    throw new System.NotImplementedException("SyncToAzimuth");
-                else
-                    throw new MethodNotImplementedException("SyncToAzimuth");
-            }
+                    }
 
-            check_connected();
-            check_Az(Azimuth);
-            Hardware.HW_Sync(Azimuth);
+                    CheckConnected(CheckConnectedFailureError);
+                    check_Az(Azimuth);
+                    DomeHardware.Sync(Azimuth);
+                }, DeviceType, MemberNames.SyncToAzimuth, "Command");
         }
 
-#endregion
+        #endregion IDomeV2 members
 
-#region IDomeV3 members
-        public void Connect()
-        {
-            Connected = true;
-        }
-
-        public void Disconnect()
-        {
-            Connected = false;
-        }
-
-        public bool Connecting
-        {
-            get
-            {
-                return false;
-            }
-        }
+        #region IDomeV3 members
 
         /// <summary>
         /// Return the device's operational state in one call
@@ -726,25 +578,24 @@ namespace ASCOM.Simulators
         {
             get
             {
-                // Create an array list to hold the IStateValue entries
-                List<StateValue> deviceState = new List<StateValue>();
+                return this.ProcessCommand(
+                () =>
+                {
+                    // Create an array list to hold the IStateValue entries
+                    List<StateValue> deviceState = new List<StateValue>();
 
-                try { deviceState.Add(new StateValue(nameof(IDomeV3.Altitude), Altitude)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IDomeV3.AtHome), AtHome)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IDomeV3.AtPark), AtPark)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IDomeV3.Azimuth), Azimuth)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IDomeV3.ShutterStatus), ShutterStatus)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IDomeV3.Slewing), Slewing)); } catch { }
-                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IDomeV3.Altitude), Altitude)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IDomeV3.AtHome), AtHome)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IDomeV3.AtPark), AtPark)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IDomeV3.Azimuth), Azimuth)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IDomeV3.ShutterStatus), ShutterStatus)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IDomeV3.Slewing), Slewing)); } catch { }
+                    try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
-                return deviceState;
+                    return deviceState;
+                }, DeviceType, MemberNames.DeviceState, "Get");
             }
         }
-#endregion
-
-        private void LogMessage(string message, string details)
-        {
-            Logger.LogVerbose(message + " - " + details);
-        }
+        #endregion IDomeV3 members
     }
 }

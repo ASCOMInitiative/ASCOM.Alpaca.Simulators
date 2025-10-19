@@ -5,6 +5,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+using OmniSim.BaseDriver;
+
 namespace ASCOM.Simulators
 {
     //
@@ -20,7 +22,7 @@ namespace ASCOM.Simulators
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
 
-    public class SafetyMonitor : ISafetyMonitorV3, IDisposable, IAlpacaDevice, ISimulation
+    public class SafetyMonitor : OmniSim.BaseDriver.Driver, ISafetyMonitorV3, IDisposable, IAlpacaDevice, ISimulation
     {
         #region Constants
 
@@ -41,50 +43,30 @@ namespace ASCOM.Simulators
         /// </summary>
         private const string driverInfo = "SafetyMonitor Simulator Drivers";
 
-        /// <summary>
-        /// Driver interface version
-        /// </summary>
-        private const short interfaceVersion = 3;
-
-        /// <summary>
-        /// ASCOM DeviceID (COM ProgID) for this driver.
-        /// The DeviceID is used by ASCOM applications to load the driver at runtime.
-        /// </summary>
-        private const string sCsDriverId = "ASCOM.Simulator.SafetyMonitor";
-
-        /// <summary>
-        /// Driver description that displays in the ASCOM Chooser.
-        /// </summary>
-        private const string sCsDriverDescription = "ASCOM Simulator SafetyMonitor Driver";
-
-        private static bool _isSafe;
-
-        private ILogger Logger;
-        private IProfile Profile;
-
-#endregion Constants
+        #endregion Constants
 
         #region ISafetyMonitor Public Members
 
         //
         // PUBLIC COM INTERFACE ISafetyMonitor IMPLEMENTATION
         //
+        public SafetyMonitor()
+        {
+
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SafetyMonitor"/> class.
         /// Must be public for COM registration.
         /// </summary>
         public SafetyMonitor(int deviceNumber, ILogger logger, IProfile profile)
+            : base(deviceNumber, logger, profile)
         {
             Profile = profile;
-            Logger = logger;
 
             DeviceNumber = deviceNumber;
 
-            if (CheckSafetyMonitorKeyValue())
-            {
-                GetProfileSetting();
-            }
+            LoadSettings();
 
             //This should be replaced by the next bit of code but is semi-unique as a default.
             UniqueID = Name + deviceNumber.ToString();
@@ -106,72 +88,93 @@ namespace ASCOM.Simulators
             logger.LogInformation($"SafetyMonitor {deviceNumber} - UUID of {UniqueID}");
         }
 
-        public string DeviceName { get => Name; }
-        public int DeviceNumber { get; private set; }
-        public string UniqueID { get; private set; }
+        public override string DeviceName { get => Name; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="SafetyMonitor"/> is connected.
+        /// Gets the delay for the connect timer
         /// </summary>
-        /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-        public bool Connected { get; set; }
+        public Setting<short> ConnectDelay { get; } = new Setting<short>("ConnectDelay", "The delay to be used for Connect() in milliseconds, allowed values are 1-30000", 1500);
 
         /// <summary>
-        /// Gets the description.
+        /// Gets the stored interface version to use.
         /// </summary>
-        /// <value>The description.</value>
-        public string Description
-        {
-            get { return description; }
-        }
+        public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-3", 3);
 
         /// <summary>
-        /// Gets the driver info.
+        /// Gets the stored interface version to use.
         /// </summary>
-        /// <value>The driver info.</value>
-        public string DriverInfo
-        {
-            get { return driverInfo; }
-        }
+        public Setting<bool> IsSafeSetting { get; } = new Setting<bool>("IsSafeSetting", "If the Safety Monitor returns IsSafe as true or false", true);
 
         /// <summary>
-        /// Gets the driver version.
+        /// Gets the ASCOM Driver Description.
         /// </summary>
-        /// <value>The driver version.</value>
-        public string DriverVersion
+        public override string Name
         {
             get
             {
-                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                return $"{version.Major}.{version.Minor}";
+                return this.ProcessCommand(
+                () =>
+                {
+                    return name;
+                }, DeviceType, MemberNames.Name, "Get");
             }
         }
 
         /// <summary>
-        /// Gets the interface version.
+        /// Gets the ASCOM Driver Description.
         /// </summary>
-        /// <value>The interface version.</value>
-        public short InterfaceVersion
+        public override string Description
         {
-            get { return interfaceVersion; }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return description;
+                }, DeviceType, MemberNames.Description, "Get");
+            }
         }
 
         /// <summary>
-        /// Gets the name.
+        /// Gets the ASCOM Driver DriverInfo.
         /// </summary>
-        /// <value>The name.</value>
-        public string Name
+        public override string DriverInfo
         {
-            get { return name; }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return driverInfo;
+                }, DeviceType, MemberNames.DriverInfo, "Get");
+            }
         }
 
-        public void Dispose()
+        /// <summary>
+        /// Gets the ASCOM Driver Interface Version.
+        /// </summary>
+        public override short InterfaceVersion
         {
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.InterfaceVersionSetting.Value;
+                }, DeviceType, MemberNames.InterfaceVersion, "Get");
+            }
         }
 
-        void IDisposable.Dispose()
+
+        /// <summary>
+        /// Gets an interface version for V1 drivers that would throw on a InterfaceVersion Call.
+        /// </summary>
+        public override short SafeInterfaceVersion
         {
-            Dispose();
+            get
+            {
+                return this.InterfaceVersionSetting.Value;
+            }
         }
 
         /// <summary>
@@ -182,159 +185,70 @@ namespace ASCOM.Simulators
         {
             get
             {
-                if (!Connected)
+                return this.ProcessCommand(
+                () =>
                 {
-                    throw new NotConnectedException("As of 2025/02 Safety Monitors should throw when not connected.");
-                }
-                return _isSafe;
+                    if (!Connected)
+                    {
+                        throw new NotConnectedException("As of 2025/02 Safety Monitors should throw when not connected.");
+                    }
+                    return IsSafeSetting.Value;
+                }, DeviceType, MemberNames.IsSafe, "Get");
             }
         }
 
-        /// <summary>
-        /// Invokes the specified device-specific action.
-        /// </summary>
-        public string Action(string actionName, string actionParameters)
-        {
-            throw new MethodNotImplementedException("Action");
-        }
-
-        /// <summary>
-        /// Transmits an arbitrary string to the device and does
-        /// not wait for a response. Optionally, protocol framing
-        /// characters may be added to the string before transmission.
-        /// </summary>
-        public void CommandBlind(string command, bool raw)
-        {
-            throw new MethodNotImplementedException("CommandBlind");
-        }
-
-        /// <summary>
-        /// Transmits an arbitrary string to the device and waits
-        /// for a boolean response. Optionally, protocol framing
-        /// characters may be added to the string before transmission.
-        /// </summary>
-        public bool CommandBool(string command, bool raw)
-        {
-            throw new MethodNotImplementedException("CommandBool");
-        }
-
-        /// <summary>
-        /// Transmits an arbitrary string to the device and waits
-        /// for a string response. Optionally, protocol framing
-        /// characters may be added to the string before transmission.
-        /// </summary>
-        public string CommandString(string command, bool raw)
-        {
-            throw new MethodNotImplementedException("CommandString");
-        }
-
-        /// <summary>
-        /// Gets the supported actions.
-        /// </summary>
-        public IList<string> SupportedActions
-        {
-            // no supported actions, return empty array
-            get { return new List<string>(); }
-        }
-
+        
         #endregion ISafetyMonitor Public Members
 
-#region ISafetyMonitorV3 members
-        public void Connect()
-        {
-            Connected = true;
-        }
+        #region ISafetyMonitorV3 members
 
-        public void Disconnect()
-        {
-            Connected = false;
-        }
-
-        public bool Connecting
+        public override List<StateValue> DeviceState
         {
             get
             {
-                return false;
+                return this.ProcessCommand(
+                () =>
+                {
+                    List<StateValue> deviceState = new List<StateValue>();
+                                try { deviceState.Add(new StateValue(nameof(ISafetyMonitorV3.IsSafe), IsSafe)); } catch { }
+                                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                                return deviceState;
+                }, DeviceType, MemberNames.DeviceState, "Get");
             }
         }
 
-        public List<StateValue> DeviceState
+        public override DeviceTypes DeviceType => DeviceTypes.SafetyMonitor;
+
+        /// <summary>
+        /// Connects to the hardware.
+        /// </summary>
+        public override void Connect()
         {
-            get
-            {
-                List<StateValue> deviceState = new List<StateValue>();
-                try { deviceState.Add(new StateValue(nameof(ISafetyMonitorV3.IsSafe), IsSafe)); } catch { }
-                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
-
-                return deviceState;
-            }
+            base.ConnectTimer.Interval = ConnectDelay.Value;
+            base.Connect();
         }
-#endregion
+
+        #endregion ISafetyMonitorV3 members
 
         #region SafetyMonitor Private Members
 
         /// <summary>
-        /// Validates the profile key and the value
+        /// Load the profile values.
         /// </summary>
-        private bool CheckSafetyMonitorKeyValue()
+        public override void LoadSettings()
         {
-            string s = Profile.GetValue("SafetyMonitor", "false").ToUpperInvariant();
-            if (s != "TRUE" & s != "FALSE")
-            {
-                //found something wrong, delete evertyhing
-                DeleteProfileSettings();
-            }
-            return true;
+            this.IsSafeSetting.Value = this.Profile.GetSettingReturningDefault(this.IsSafeSetting);
+            this.InterfaceVersionSetting.Value = this.Profile.GetSettingReturningDefault(this.InterfaceVersionSetting);
         }
 
         /// <summary>
-        /// Loads a specific setting from the profile
+        /// Save profile values.
         /// </summary>
-        private void GetProfileSetting()
+        public void SaveProfileSettings()
         {
-            string s = Profile.GetValue("SafetyMonitor", false.ToString());
-
-            if (bool.TryParse(s, out bool res))
-            {
-                _isSafe = res;
-            }
-            else
-            {
-                // A bad value is not very safe now is it?
-                _isSafe = false;
-            }
-        }
-
-        /// <summary>
-        /// Used to set the IsSafe value in the profile. Public so the settings UI has access.
-        /// </summary>
-        /// <param name="value">If the driver should report safe</param>
-        public void SetIsSafeProfile(bool value)
-        {
-            Profile.WriteValue("SafetyMonitor", value.ToString());
-
-            _isSafe = value;
-        }
-
-        /// <summary>
-        /// Reset settings to default.
-        /// </summary>
-        public void ResetSettings()
-        {
-            Profile.Clear();
-        }
-
-        public string GetXMLProfile()
-        {
-            return Profile.GetProfile();
-        }
-
-        /// <summary>
-        /// Delete all settings io the profile for this driver ID
-        /// </summary>
-        private void DeleteProfileSettings()
-        {
-            Profile.Clear();
+            this.Profile.SetSetting(this.IsSafeSetting);
+            this.Profile.SetSetting(this.InterfaceVersionSetting);
         }
 
         #endregion SafetyMonitor Private Members

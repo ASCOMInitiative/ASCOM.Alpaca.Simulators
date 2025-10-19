@@ -9,65 +9,86 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="control/v1/camera/0/" Match="NavLinkMatch.All">
-                <span class="oi oi-camera-slr" aria-hidden="true"></span> Camera
-            </NavLink>
+            @foreach (var key in ASCOM.Alpaca.DeviceManager.Cameras)
+            {
+                <NavLink class="nav-link" href=@GetSetupURL("camera", key.Key) Match="NavLinkMatch.All">
+                    <span class="oi oi-camera-slr" aria-hidden="true"></span> @GetDisplayName("Camera", key.Key)
+                </NavLink>
+            }
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="/control/v1/covercalibrator/0/" Match="NavLinkMatch.All">
-                <span class="oi oi-contrast" aria-hidden="true"></span> CoverCalibrator
-            </NavLink>
+            @foreach (var key in ASCOM.Alpaca.DeviceManager.CoverCalibrators)
+            {
+                <NavLink class="nav-link" href=@GetSetupURL("covercalibrator", key.Key) Match="NavLinkMatch.All">
+                    <span class="oi oi-contrast" aria-hidden="true"></span> @GetDisplayName("CoverCalibrator", key.Key)
+                </NavLink>
+            }
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="control/v1/dome/0/" Match="NavLinkMatch.All">
-                <span class="oi oi-aperture" aria-hidden="true"></span> Dome
-            </NavLink>
+            @foreach (var key in ASCOM.Alpaca.DeviceManager.Domes)
+            {
+                <NavLink class="nav-link" href=@GetSetupURL("dome", key.Key) Match="NavLinkMatch.All">
+                    <span class="oi oi-aperture" aria-hidden="true"></span> @GetDisplayName("Dome", key.Key)
+                </NavLink>
+            }
         </li>
         <li class="nav-item px-3">
 
-            @foreach (var key in ASCOM.Alpaca.DeviceManager.Focusers)
+            @foreach (var key in ASCOM.Alpaca.DeviceManager.FilterWheels)
             {
                 <NavLink class="nav-link" href=@GetSetupURL("filterwheel", key.Key) Match="NavLinkMatch.All">
-                    <span class="oi oi-sun" aria-hidden="true"></span> Filter Wheel - @key.Key
+                    <span class="oi oi-sun" aria-hidden="true"></span> @GetDisplayName("Filter Wheel", key.Key)
                 </NavLink>
             }
         </li>
         <li class="nav-item px-3">
 
-            @foreach(var key in ASCOM.Alpaca.DeviceManager.Focusers)
-            {
-                <NavLink class="nav-link" href=@GetSetupURL("focuser", key.Key) Match="NavLinkMatch.All">
-                    <span class="oi oi-elevator" aria-hidden="true"></span> Focuser - @key.Key
-                </NavLink>
-            }
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="control/v1/observingconditions/0/" Match="NavLinkMatch.All">
-                <span class="oi oi-cloudy" aria-hidden="true"></span> ObservingConditions
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
             @foreach (var key in ASCOM.Alpaca.DeviceManager.Focusers)
             {
-                <NavLink class="nav-link" href=@GetSetupURL("rotator", key.Key) Match="NavLinkMatch.All">
-                    <span class="oi oi-elevator" aria-hidden="true"></span> Rotator - @key.Key
+                <NavLink class="nav-link" href=@GetSetupURL("focuser", key.Key) Match="NavLinkMatch.All">
+                    <span class="oi oi-elevator" aria-hidden="true"></span> @GetDisplayName("Focuser", key.Key)
                 </NavLink>
             }
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="setup/v1/safetymonitor/0/setup" Match="NavLinkMatch.All">
-                <span class="oi oi-ban" aria-hidden="true"></span> SafetyMonitor
-            </NavLink>
+            @foreach (var key in ASCOM.Alpaca.DeviceManager.ObservingConditions)
+            {
+                <NavLink class="nav-link" href=@GetSetupURL("observingconditions", key.Key) Match="NavLinkMatch.All">
+                    <span class="oi oi-cloudy" aria-hidden="true"></span> @GetDisplayName("ObservingConditions", key.Key)
+                </NavLink>
+            }
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="control/v1/switch/0/" Match="NavLinkMatch.All">
-                <span class="oi oi-circle-check" aria-hidden="true"></span> Switch
-            </NavLink>
+            @foreach (var key in ASCOM.Alpaca.DeviceManager.Rotators)
+            {
+                <NavLink class="nav-link" href=@GetSetupURL("rotator", key.Key) Match="NavLinkMatch.All">
+                    <span class="oi oi-loop-circular" aria-hidden="true"></span> @GetDisplayName("Rotator", key.Key)
+                </NavLink>
+            }
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="control/v1/telescope/0/" Match="NavLinkMatch.All">
-                <span class="oi oi-star" aria-hidden="true"></span> Telescope
-            </NavLink>
+            @foreach (var key in ASCOM.Alpaca.DeviceManager.SafetyMonitors)
+            {
+                <NavLink class="nav-link" href=@GetSetupURL("safetymonitor", key.Key) Match="NavLinkMatch.All">
+                    <span class="oi oi-ban" aria-hidden="true"></span> @GetDisplayName("SafetyMonitor", key.Key)
+                </NavLink>
+            }
+        </li>
+        <li class="nav-item px-3">
+            @foreach (var key in ASCOM.Alpaca.DeviceManager.Switches)
+            {
+                <NavLink class="nav-link" href=@GetSetupURL("switch", key.Key) Match="NavLinkMatch.All">
+                    <span class="oi oi-circle-check" aria-hidden="true"></span> @GetDisplayName("Switch", key.Key)
+                </NavLink>
+            }
+        </li>
+        <li class="nav-item px-3">
+            @foreach (var key in ASCOM.Alpaca.DeviceManager.Telescopes)
+            {
+                <NavLink class="nav-link" href=@GetSetupURL("Telescope", key.Key) Match="NavLinkMatch.All">
+                    <span class="oi oi-star" aria-hidden="true"></span> @GetDisplayName("Telescope", key.Key)
+                </NavLink>
+            }
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="setup" Match="NavLinkMatch.All">
@@ -113,6 +134,15 @@
     string GetSetupURL(string dev, int index)
     {
         return $"control/v1/{dev}/{index}/";
+    }
+
+    string GetDisplayName(string dev, int index)
+    {
+        if(index == 0)
+        {
+            return dev;
+        }
+        return $"{dev} - {index}";
     }
 
     void Shutdown()

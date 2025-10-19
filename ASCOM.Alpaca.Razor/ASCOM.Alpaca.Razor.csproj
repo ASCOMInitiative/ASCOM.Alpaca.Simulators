@@ -16,12 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASCOM.Alpaca.Device" Version="2.0.9" />
-    <PackageReference Include="ASCOM.Common.Components" Version="2.0.9" />
+    <PackageReference Include="ASCOM.Alpaca.Device" Version="2.2.0" />
+    <PackageReference Include="ASCOM.Common.Components" Version="2.2.0" />
     <PackageReference Include="ASCOM.Exception.Library" Version="7.0.1" />
-    <PackageReference Include="ASCOM.Tools" Version="2.0.9" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="8.0.0" />
+    <PackageReference Include="ASCOM.Tools" Version="2.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.6" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="ASCOM.Exception.Library" Version="7.0.1" />
-    <PackageReference Include="ASCOM.Tools" Version="2.0.9" />
+    <PackageReference Include="ASCOM.Tools" Version="2.2.0" />
   </ItemGroup>
 
 </Project>

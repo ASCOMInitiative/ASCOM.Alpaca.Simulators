@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -6,7 +6,7 @@
 		<Authors>Daniel Van Noord</Authors>
 		<Description>A full set of ASCOM Simulators exposing the Alpaca Controller Interfaces</Description>
 		<ApplicationIcon>favicon.ico</ApplicationIcon>
-		<Copyright>2021-23 Daniel Van Noord</Copyright>
+		<Copyright>2021-25 Daniel Van Noord</Copyright>
 		<AssemblyName>ascom.alpaca.simulators</AssemblyName>
 		<TrimMode>partial</TrimMode>
 		<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
@@ -31,16 +31,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ASCOM.Alpaca.Device" Version="2.0.9" />
-		<PackageReference Include="ASCOM.Common.Components" Version="2.0.9" />
+		<PackageReference Include="ASCOM.Alpaca.Device" Version="2.2.0" />
+		<PackageReference Include="ASCOM.Common.Components" Version="2.2.0" />
 		<PackageReference Include="ASCOM.DeviceInterfaces" Version="7.0.0" />
 		<PackageReference Include="ASCOM.Exception.Library" Version="7.0.1" />
-		<PackageReference Include="ASCOM.Tools" Version="2.0.9" />
+		<PackageReference Include="ASCOM.Tools" Version="2.2.0" />
 		<PackageReference Include="Blazored.Toast" Version="4.2.1" />
+		<PackageReference Include="H.NotifyIcon" Version="2.3.1" />
 		<PackageReference Include="LetsMake.GithubUpdateChecker" Version="0.1.0-rc2" />
-		<PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="4.0.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="8.0.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="8.0.0" />
+		<PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="4.3.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.6" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -98,6 +99,12 @@
 		<TrimmerRootAssembly Include="System.Runtime.InteropServices" />
 		<TrimmerRootAssembly Include="System.Runtime" />
 		<ProjectReference Include="..\ASCOM.COM.LocalServer\OmniSim.LocalServer.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="favicon.ico">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
   <Target Name="CopyCustomContent" AfterTargets="AfterBuild" Condition="$(DefineConstants.Contains('ASCOM_COM'))">

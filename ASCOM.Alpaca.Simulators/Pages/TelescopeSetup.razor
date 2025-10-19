@@ -11,6 +11,19 @@
     }
     else
     {
+        if (InstanceID == 0)
+        {
+            <h3>
+                Telescope Setup
+            </h3>
+        }
+        else
+        {
+            <h3>
+                Telescope @InstanceID Setup
+            </h3>
+        }
+
         @if (Device.Connected)
         {
             <fieldset>

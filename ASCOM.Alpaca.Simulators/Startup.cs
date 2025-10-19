@@ -88,7 +88,7 @@ namespace ASCOM.Alpaca.Simulators
 
                 try
                 {
-                    if (ServerSettings.AutoStartBrowser) //AutoStart Browser
+                    if (ServerSettings.StartBrowserAtStart) //AutoStart Browser
                     {
                         Program.StartBrowser(ServerSettings.ServerPort);
                     }

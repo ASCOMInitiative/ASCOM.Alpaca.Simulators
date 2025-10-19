@@ -31,14 +31,16 @@ namespace OmniSim.BaseDriver
             set;
         }
 
+        public bool IsConnecting { get; set; } = false;
+
         public bool IsConnected { get; set; } = false;
 
-        internal Timer ConnectTimer = new();
+        public Timer ConnectTimer = new();
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
             IsConnected = true;
-            Connecting = false;
+            IsConnecting = false;
         }
 
         public ILogger TraceLogger; // ASCOM Trace Logger component
@@ -146,7 +148,13 @@ namespace OmniSim.BaseDriver
 
         #region ASCOM Methods
 
-        public bool Connecting { get; set; } = false;
+        public virtual bool Connecting
+        {
+            get
+            {
+                return ProcessCommand(() => IsConnecting, DeviceType, MemberNames.Connecting, "Get");
+            }
+        }
 
         public virtual List<StateValue> DeviceState => throw new ASCOM.NotImplementedException();
 
@@ -162,14 +170,8 @@ namespace OmniSim.BaseDriver
                 {
                     if (value == IsConnected) return; // We are already in the required state so ignore the request
 
-                    if (value)
-                    {
-                        IsConnected = true;
-                    }
-                    else
-                    {
-                        IsConnected = false;
-                    }
+                    IsConnected = value;
+
                 }, DeviceType, MemberNames.Connected, "Set");
             }
         }
@@ -251,7 +253,7 @@ namespace OmniSim.BaseDriver
             {
                 if (IsConnected) return;
 
-                Connecting = true;
+                IsConnecting = true;
 
                 ConnectTimer.Start();
             }, DeviceType, MemberNames.Connect, "Called");

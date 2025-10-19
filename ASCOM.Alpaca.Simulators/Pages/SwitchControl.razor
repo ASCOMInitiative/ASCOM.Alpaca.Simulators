@@ -12,7 +12,14 @@
     else
     {
         <fieldset>
-            <legend>Switch</legend>
+            @if (InstanceID == 0)
+            {
+                <legend>Switch</legend>
+            }
+            else
+            {
+                <legend>Switch @InstanceID</legend>
+            }
             <div class="grid-container-two">
 
                 <div class="grid-item-left">
