@@ -24,6 +24,14 @@ namespace ASCOM.Alpaca.Simulators
             DeviceManager.LoadDome(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
+        internal static void LoadDomes()
+        {
+            for (int i = 0; i < ServerSettings.NumberOfDomes; i++)
+            {
+                LoadDome(i);
+            }
+        }
+
         internal static void LoadFilterWheel(int DeviceID)
         {
             var dev = new ASCOM.Simulators.FilterWheel(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("FilterWheel", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.FilterWheel, (uint)DeviceID));
@@ -44,6 +52,14 @@ namespace ASCOM.Alpaca.Simulators
             DeviceManager.LoadFocuser(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
+        internal static void LoadFocusers()
+        {
+            for (int i = 0; i < ServerSettings.NumberOfFocusers; i++)
+            {
+                LoadFocuser(i);
+            }
+        }
+
         internal static void LoadObservingConditions(int DeviceID)
         {
             var dev = new ASCOM.Simulators.ObservingConditions(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.ObservingCondition, (uint)DeviceID));
@@ -54,6 +70,14 @@ namespace ASCOM.Alpaca.Simulators
         {
             var dev = new ASCOM.Simulators.Rotator(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("Rotator", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Rotator, (uint)DeviceID));
             DeviceManager.LoadRotator(DeviceID, dev, dev.DeviceName, dev.UniqueID);
+        }
+
+        internal static void LoadRotators()
+        {
+            for (int i = 0; i < ServerSettings.NumberOfRotators; i++)
+            {
+                LoadRotator(i);
+            }
         }
 
         internal static void LoadSafetyMonitor(int DeviceID)

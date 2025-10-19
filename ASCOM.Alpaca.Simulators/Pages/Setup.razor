@@ -114,6 +114,7 @@
 
 <fieldset>
     <legend>Driver Settings</legend>
+    <p>Note: reducing the number of drivers requires a restart to apply</p>
     <div class="grid-container-two">
         <div class="grid-item-right">
             <span>Prevent Disconnects:</span>
@@ -121,14 +122,29 @@
         <div class="grid-item-left">
             <input type="checkbox" @bind="PreventRemoteDisconnects">
         </div>
-        <p>Note: reducing the number of drivers requires a restart to apply</p>
         <div class="grid-item-right">
-            <span>Number of FilterWheels:</span>
+            <span>Number of Domes:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="number" @bind="NDomes" min="1" max="4" style="width:20ch;">
+        </div>
+        <div class="grid-item-right">
+            <span>Number of Filter Wheels:</span>
         </div>
         <div class="grid-item-left">
             <input type="number" @bind="NFilterWheels" min="1" max="4" style="width:20ch;">
         </div>
         <div class="grid-item-right">
+            <span>Number of Focusers:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="number" @bind="NFocusers" min="1" max="4" style="width:20ch;">
+        </div>
+        <div class="grid-item-right">
+            <span>Number of Rotators:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="number" @bind="NRotators" min="1" max="4" style="width:20ch;">
         </div>
         <div class="grid-item-right">
             <button @onclick="SaveDriverSettings" style="min-width:12ch; vertical-align:middle;">Save</button>
@@ -316,11 +332,29 @@
         set;
     } = ServerSettings.DiscoveryPort;
 
+    UInt16 NDomes
+    {
+        get;
+        set;
+    } = ServerSettings.NumberOfDomes;
+
     UInt16 NFilterWheels
     {
         get;
         set;
     } = ServerSettings.NumberOfFilterWheels;
+
+    UInt16 NFocusers
+    {
+        get;
+        set;
+    } = ServerSettings.NumberOfFocusers;
+
+    UInt16 NRotators
+    {
+        get;
+        set;
+    } = ServerSettings.NumberOfRotators;
 
     bool StrictAPIMode
     {
@@ -536,8 +570,18 @@
         try
         {
             ServerSettings.PreventRemoteDisconnects = PreventRemoteDisconnects;
+
+            ServerSettings.NumberOfDomes = NDomes;
+            DriverManager.LoadDomes();
+
             ServerSettings.NumberOfFilterWheels = NFilterWheels;
             DriverManager.LoadFilterWheels();
+
+            ServerSettings.NumberOfFocusers = NFocusers;
+            DriverManager.LoadFocusers();
+
+            ServerSettings.NumberOfRotators = NRotators;
+            DriverManager.LoadRotators();
 
             DisplaySuccess("Driver Settings Saved");
         }
