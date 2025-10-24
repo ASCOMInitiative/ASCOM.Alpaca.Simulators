@@ -226,7 +226,11 @@ namespace OmniSim.LocalServer
 
             // Process command line arguments e.g. to Register/Unregister drivers, ending the program if required.
             TL.LogMessage("Main", $"Processing command-line arguments");
-            if (!ProcessArguments(args)) return;
+            if (!ProcessArguments(args))
+            {
+                TL.LogMessage("Main", $"Arguments processed, ending process.");
+                return;
+            }
 
             // Initialize variables.
             TL.LogMessage("Main", $"Initialising variables");
@@ -454,23 +458,23 @@ namespace OmniSim.LocalServer
                 // Iterate over the types identifying those which are drivers
                 foreach (Type type in types)
                 {
-                    TL.LogMessage("PopulateListOfAscomDrivers", $"Found type: {type.Name}");
+                    // TL.LogMessage("PopulateListOfAscomDrivers", $"Found type: {type.Name}");
 
                     // Check to see if this type has the ServedClassName attribute, which indicates that this is a driver class.
                     object[] attrbutes = type.GetCustomAttributes(typeof(ASCOM.ServedClassNameAttribute), false);
                     if (attrbutes.Length > 0) // There is a ServedClassName attribute on this class so it is a driver
                     {
-                        TL.LogMessage("PopulateListOfAscomDrivers", $"  {type.Name} is a driver assembly");
+                        //TL.LogMessage("PopulateListOfAscomDrivers", $"  {type.Name} is a driver assembly");
                         driverTypes.Add(type); // Add the driver type to the list
                     }
                 }
                 TL.BlankLine();
 
                 // Log discovered drivers
-                TL.LogMessage("PopulateListOfAscomDrivers", $"Found {driverTypes.Count} drivers");
+                TL.LogMessage("PopulateListOfAscomDrivers", $"Found {driverTypes.Count} drivers in assembly {so.GetName().Name}");
                 foreach (Type type in driverTypes)
                 {
-                    TL.LogMessage("PopulateListOfAscomDrivers", $"Found Driver : {type.Name}");
+                    TL.LogMessage("PopulateListOfAscomDrivers", $"Found Driver: {type.Name}");
                 }
                 TL.BlankLine();
             }
@@ -614,7 +618,7 @@ namespace OmniSim.LocalServer
                     string clsId = Marshal.GenerateGuidForType(driverType).ToString("B");
                     string progId = Marshal.GenerateProgIdForType(driverType);
                     string deviceType = driverType.Name; // Generate device type from the Class name
-                    TL.LogMessage("RegisterObjects", $"Assembly title: {assemblyTitle}, ASsembly description: {assemblyDescription}, CLSID: {clsId}, ProgID: {progId}, Device type: {deviceType}");
+                    TL.LogMessage("RegisterObjects", $"Assembly title: {assemblyTitle}, Assembly description: {assemblyDescription}, CLSID: {clsId}, ProgID: {progId}, Device type: {deviceType}");
 
                     using (RegistryKey clsIdKey = Registry.ClassesRoot.CreateSubKey($"CLSID\\{clsId}"))
                     {
@@ -769,17 +773,17 @@ namespace OmniSim.LocalServer
             processStartInfo.Verb = "runas";
             try
             {
-                TL.LogMessage("IsAdministrator", $"Starting elevated process");
+                TL.LogMessage("ElevateCOMProxy", $"Starting elevated COMProxy process");
                 Process.Start(processStartInfo);
             }
             catch (System.ComponentModel.Win32Exception e)
             {
-                TL.LogMessage("IsAdministrator", $"{e.Message} The OmniSim Proxy was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.");
+                TL.LogMessage("ElevateCOMProxy", $"{e.Message} The OmniSim Proxy was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.");
                 NativeMethods.MessageBox(System.IntPtr.Zero, $"{e.Message} The OmniSim was not " + (argument == "/register" ? "registered" : "unregistered") + " because you did not allow it.", "OmniSim COM", 0);
             }
             catch (Exception ex)
             {
-                TL.LogMessage("IsAdministrator", $"Exception: {ex}");
+                TL.LogMessage("ElevateCOMProxy", $"Exception: {ex}");
                 NativeMethods.MessageBox(System.IntPtr.Zero, ex.ToString(), "OmniSim COM", 0);
             }
             return;

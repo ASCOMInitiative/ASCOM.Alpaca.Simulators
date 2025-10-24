@@ -275,7 +275,7 @@ namespace ASCOM.Alpaca.Simulators
 
             if (!OmniSim.LocalServer.Server.ProcessAllArguments(args))
             {
-                return;
+                Environment.Exit(0);
             }
 #endif
 
