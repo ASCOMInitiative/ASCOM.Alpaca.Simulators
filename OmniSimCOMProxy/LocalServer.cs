@@ -66,11 +66,11 @@ namespace ASCOM.LocalServer
         static void Main(string[] args)
         {
             // Create a trace logger for the local server.
-            TL = new TraceLogger("OmniSim.LocalServer",false)
+            TL = new TraceLogger("OmniSim.COMProxy",false)
             {
                 Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
-            TL.LogMessage("Main", $"Server started");
+            TL.LogMessage("Main", $"COMProxy Server started");
 
             // Load driver COM assemblies and get types, ending the program if something goes wrong.
             TL.LogMessage("Main", $"Loading drivers");
@@ -78,7 +78,11 @@ namespace ASCOM.LocalServer
 
             // Process command line arguments e.g. to Register/Unregister drivers, ending the program if required.
             TL.LogMessage("Main", $"Processing command-line arguments");
-            if (!ProcessArguments(args)) return;
+            if (!ProcessArguments(args))
+            {
+                TL.LogMessage("Main", $"COMProxy arguments processed, ending process.");
+                return;
+            }
 
             // Initialize variables.
             TL.LogMessage("Main", $"Initialising variables");
@@ -310,23 +314,23 @@ namespace ASCOM.LocalServer
                 // Iterate over the types identifying those which are drivers
                 foreach (Type type in types)
                 {
-                    TL.LogMessage("PopulateListOfAscomDrivers", $"Found type: {type.Name}");
+                    //TL.LogMessage("PopulateListOfAscomDrivers", $"Found type: {type.Name}");
 
                     // Check to see if this type has the ServedClassName attribute, which indicates that this is a driver class.
                     object[] attrbutes = type.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
                     if (attrbutes.Length > 0) // There is a ServedClassName attribute on this class so it is a driver
                     {
-                        TL.LogMessage("PopulateListOfAscomDrivers", $"  {type.Name} is a driver assembly");
+                        //TL.LogMessage("PopulateListOfAscomDrivers", $"  {type.Name} is a driver assembly");
                         driverTypes.Add(type); // Add the driver type to the list
                     }
                 }
                 TL.BlankLine();
 
                 // Log discovered drivers
-                TL.LogMessage("PopulateListOfAscomDrivers", $"Found {driverTypes.Count} drivers");
+                TL.LogMessage("PopulateListOfAscomDrivers", $"Found {driverTypes.Count} drivers in assembly {Assembly.GetExecutingAssembly().GetName().Name}");
                 foreach (Type type in driverTypes)
                 {
-                    TL.LogMessage("PopulateListOfAscomDrivers", $"Found Driver : {type.Name}");
+                    TL.LogMessage("PopulateListOfAscomDrivers", $"Found Driver: {type.Name}");
                 }
                 TL.BlankLine();
             }
