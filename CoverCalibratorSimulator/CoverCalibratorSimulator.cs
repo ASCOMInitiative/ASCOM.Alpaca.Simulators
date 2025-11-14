@@ -88,7 +88,7 @@ namespace ASCOM.Simulators
         /// <param name="deviceNumber">The instance number of this driver. If there is only one this should be 0</param>
         /// <param name="logger">The logger instance to use</param>
         /// <param name="profile">A profile to store settings</param>
-        public CoverCalibratorSimulator(int deviceNumber, ILogger logger, IProfile profile)
+        public CoverCalibratorSimulator(int deviceNumber, ILogger logger, IProfile profile) : base(deviceNumber, logger, profile)
         {
             try
             {
@@ -572,6 +572,29 @@ namespace ASCOM.Simulators
             Profile.SetSetting(CoverOpeningTime);
             Profile.SetSetting(CoverStateInitialisation);
             Profile.SetSetting(CalibratorStateInitialisation);
+
+            //Use the new settings
+            if (CalibratorStablisationTime.Value > 0.0)
+            {
+                calibratorTimer.Interval = Convert.ToInt32(CalibratorStablisationTime.Value * 1000.0);
+            }
+
+            if (CoverOpeningTime.Value > 0.0)
+            {
+                coverTimer.Interval = Convert.ToInt32(CoverOpeningTime.Value * 1000.0);
+            }
+
+            calibratorState = CalibratorStatus.Off;
+            if (Enum.TryParse<CalibratorStatus>(CalibratorStateInitialisation.Value, out CalibratorStatus state))
+            {
+                calibratorState = state;
+            }
+
+            coverState = CoverStatus.Closed;
+            if (Enum.TryParse<CoverStatus>(CoverStateInitialisation.Value, out CoverStatus coverstatus))
+            {
+                coverState = coverstatus;
+            }
         }
 
         /// <summary>

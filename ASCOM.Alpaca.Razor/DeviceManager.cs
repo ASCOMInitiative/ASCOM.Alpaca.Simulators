@@ -66,7 +66,7 @@ namespace ASCOM.Alpaca
             //Remove if the simulated instance already exists
             CoverCalibrators.Remove(DeviceID);
             //Add the new instance
-            CoverCalibrators.Add(0, Device);
+            CoverCalibrators.Add(DeviceID, Device);
 
             AlpacaDevices.Remove(AlpacaDevices.FirstOrDefault(a => a.UniqueID == UniqueID));
             AlpacaDevices.Add(new AlpacaConfiguredDevice(AlpacaName, "CoverCalibrator", DeviceID, UniqueID));

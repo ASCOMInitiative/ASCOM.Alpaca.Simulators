@@ -123,6 +123,12 @@
             <input type="checkbox" @bind="PreventRemoteDisconnects">
         </div>
         <div class="grid-item-right">
+            <span>Number of CoverCalibrators:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="number" @bind="NCoverCalibrators" min="1" max="4" style="width:20ch;">
+        </div>
+        <div class="grid-item-right">
             <span>Number of Domes:</span>
         </div>
         <div class="grid-item-left">
@@ -337,6 +343,12 @@
         get;
         set;
     } = ServerSettings.DiscoveryPort;
+
+    UInt16 NCoverCalibrators
+    {
+        get;
+        set;
+    } = ServerSettings.NumberOfCoverCalibrators;
 
     UInt16 NDomes
     {
@@ -582,6 +594,9 @@
         try
         {
             ServerSettings.PreventRemoteDisconnects = PreventRemoteDisconnects;
+
+            ServerSettings.NumberOfCoverCalibrators = NCoverCalibrators;
+            DriverManager.LoadCoverCalibrators();
 
             ServerSettings.NumberOfDomes = NDomes;
             DriverManager.LoadDomes();

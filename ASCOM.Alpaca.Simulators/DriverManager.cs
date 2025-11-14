@@ -12,6 +12,14 @@ namespace ASCOM.Alpaca.Simulators
             DeviceManager.LoadCamera(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
+        internal static void LoadCoverCalibrators()
+        {
+            for (int i = 0; i < ServerSettings.NumberOfCoverCalibrators; i++)
+            {
+                LoadCoverCalibrator(i);
+            }
+        }
+
         internal static void LoadCoverCalibrator(int DeviceID)
         {
             var dev = new ASCOM.Simulators.CoverCalibratorSimulator(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.CoverCalibrator, (uint)DeviceID));
