@@ -1,6 +1,7 @@
 using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
+using OmniSim.BaseDriver;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,10 +12,10 @@ namespace ASCOM.Simulators
     /// <summary>
     /// ASCOM CoverCalibrator Driver for Simulator.
     /// </summary>
-    public class CoverCalibratorSimulator : ICoverCalibratorV2, IAlpacaDevice, ISimulation
+    public class CoverCalibratorSimulator : OmniSim.BaseDriver.Driver, ICoverCalibratorV2, IAlpacaDevice, ISimulation
     {
         // Private simulator constants
-        private const string DRIVER_DESCRIPTION = "Alpaca CoverCalibrator Simulator"; // Driver description that displays in the ASCOM Chooser.
+        private const string SafeName = "Alpaca CoverCalibrator Simulator"; // Driver description that displays in the ASCOM Chooser.
 
         public const double SYNCHRONOUS_BEHAVIOUR_LIMIT = 0.5; // Threshold (seconds) above which state changes will be handled asynchronously
 
@@ -38,14 +39,24 @@ namespace ASCOM.Simulators
             return Profile.GetProfile();
         }
 
+        /// <summary>
+        /// Name of the Driver.
+        /// </summary>
+        public override string DeviceName { get { return $"{SafeName} - {DeviceNumber}"; } }
+
+        /// <summary>
+        /// Gets what device this this driver exposes.
+        /// </summary>
+        public override DeviceTypes DeviceType { get; } = DeviceTypes.CoverCalibrator;
+
+        /// <summary>
+        /// Gets the stored interface version to use.
+        /// </summary>
+        public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-2", 2);
+
         // Persistence constants
         private const string TRACE_STATE_PROFILE_NAME = "Trace State"; private const bool TRACE_STATE_DEFAULT = false;
 
-        private const string MAX_BRIGHTNESS_PROFILE_NAME = "Maximum Brightness"; private const string MAX_BRIGHTNESS_DEFAULT = "100"; // Number of different brightness states
-        private const string CALIBRATOR_STABILISATION_TIME_PROFILE_NAME = "Calibrator Stabilisation Time"; private const double CALIBRATOR_STABLISATION_TIME_DEFAULT = 2.0; // Seconds
-        private const string CALIBRATOR_INITIALISATION_STATE_PROFILE_NAME = "Calibrator Initialisation State"; private const CalibratorStatus CALIBRATOR_INITIALISATION_STATE_DEFAULT = CalibratorStatus.Off;
-        private const string COVER_OPENING_TIME_PROFILE_NAME = "Cover Opening Time"; private const double COVER_OPENING_TIME_DEFAULT = 5.0; // Seconds
-        private const string COVER_INITIALISATION_STATE_PROFILE_NAME = "Cover Initialisation State"; private const CoverStatus COVER_INITIALISATION_STATE_DEFAULT = CoverStatus.Closed;
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
         // Simulator state variables
@@ -57,12 +68,11 @@ namespace ASCOM.Simulators
         private CalibratorStatus targetCalibratorStatus; // The final calibrator status at the end of the current asynchronous command
 
         // User configuration variables
-        public CalibratorStatus CalibratorStateInitialisationValue;
+        /*public CalibratorStatus CalibratorStateInitialisationValue;
 
         public CoverStatus CoverStateInitialisationValue;
-        public int MaxBrightnessValue;
         public double CoverOpeningTimeValue;
-        public double CalibratorStablisationTimeValue;
+        public double CalibratorStablisationTimeValue;*/
 
         // Simulator components
         internal ILogger TL; // ASCOM Trace Logger component
@@ -93,7 +103,7 @@ namespace ASCOM.Simulators
                 TL.LogInformation($"CoverCalibrator {deviceNumber} - Starting initialisation");
 
                 //This should be replaced by the next bit of code but is semi-unique as a default.
-                UniqueID = DRIVER_DESCRIPTION + deviceNumber.ToString();
+                UniqueID = SafeName + deviceNumber.ToString();
                 //Create a Unique ID if it does not exist
                 try
                 {
@@ -113,17 +123,17 @@ namespace ASCOM.Simulators
 
                 // Initialise remaining components
                 calibratorTimer = new System.Timers.Timer();
-                if (CalibratorStablisationTimeValue > 0.0)
+                if (CalibratorStablisationTime.Value > 0.0)
                 {
-                    calibratorTimer.Interval = Convert.ToInt32(CalibratorStablisationTimeValue * 1000.0); // Set the timer interval in milliseconds from the stabilisation time in seconds
+                    calibratorTimer.Interval = Convert.ToInt32(CalibratorStablisationTime.Value * 1000.0); // Set the timer interval in milliseconds from the stabilisation time in seconds
                 }
                 calibratorTimer.Elapsed += CalibratorTimer_Tick;
                 TL.LogInformation($"CoverCalibrator {deviceNumber} - Set calibrator timer to: {calibratorTimer.Interval}ms.");
 
                 coverTimer = new System.Timers.Timer();
-                if (CoverOpeningTimeValue > 0.0)
+                if (CoverOpeningTime.Value > 0.0)
                 {
-                    coverTimer.Interval = Convert.ToInt32(CoverOpeningTimeValue * 1000.0); // Set the timer interval in milliseconds from the opening time in seconds
+                    coverTimer.Interval = Convert.ToInt32(CoverOpeningTime.Value * 1000.0); // Set the timer interval in milliseconds from the opening time in seconds
                 }
                 coverTimer.Elapsed += CoverTimer_Tick;
                 TL.LogInformation($"CoverCalibrator {deviceNumber} - Set cover timer to: {coverTimer.Interval}ms.");
@@ -131,8 +141,18 @@ namespace ASCOM.Simulators
                 // Initialise internal start-up values
                 IsConnected = false; // Initialise connected to false
                 brightnessValue = 0; // Set calibrator brightness to 0 i.e. off
-                coverState = CoverStateInitialisationValue; // Set the cover state as set by the user
-                calibratorState = CalibratorStateInitialisationValue; // Set the calibration state as set by the user
+
+                calibratorState = CalibratorStatus.Off;
+                if (Enum.TryParse<CalibratorStatus>(CalibratorStateInitialisation.Value, out CalibratorStatus state))
+                {
+                    calibratorState = state;
+                }
+
+                coverState = CoverStatus.Closed;
+                if (Enum.TryParse<CoverStatus>(CoverStateInitialisation.Value, out CoverStatus coverstatus))
+                {
+                    coverState = coverstatus;
+                }
 
                 TL.LogInformation($"CoverCalibrator {deviceNumber} - Completed initialisation");
             }
@@ -166,120 +186,81 @@ namespace ASCOM.Simulators
             TL.LogVerbose($"CoverCalibrator {DeviceNumber} - End of cover asynchronous event - cover state is now: {coverState}.");
         }
 
+        /// <summary>
+        /// Gets an interface version for V1 drivers that would throw on a InterfaceVersion Call.
+        /// </summary>
+        public override short SafeInterfaceVersion
+        {
+            get
+            {
+                return this.InterfaceVersionSetting.Value;
+            }
+        }
+
         #region Common properties and methods.
 
-        public IList<string> SupportedActions
+        /// <summary>
+        /// Gets the ASCOM Driver Description.
+        /// </summary>
+        public override string Description
         {
             get
             {
-                TL.LogVerbose($"CoverCalibrator {DeviceNumber} - SupportedActions - Returning empty list");
-                return new List<string>();
-            }
-        }
-
-        public string Action(string actionName, string actionParameters)
-        {
-            LogVerbose("", "Action {0}, parameters {1} not implemented", actionName, actionParameters);
-            throw new ASCOM.ActionNotImplementedException(actionName);
-        }
-
-        public void CommandBlind(string command, bool raw)
-        {
-            CheckConnected("CommandBlind");
-            throw new ASCOM.MethodNotImplementedException("CommandBlind");
-        }
-
-        public bool CommandBool(string command, bool raw)
-        {
-            CheckConnected("CommandBool");
-            throw new ASCOM.MethodNotImplementedException("CommandBool");
-        }
-
-        public string CommandString(string command, bool raw)
-        {
-            CheckConnected("CommandString");
-            throw new ASCOM.MethodNotImplementedException("CommandString");
-        }
-
-        public void Dispose()
-        {
-            //Do not cleanup the tracelogger or profile. This is handled at a higher level.
-        }
-
-        public bool Connected
-        {
-            get
-            {
-                LogVerbose("Connected", "Get {0}", IsConnected);
-                return IsConnected;
-            }
-            set
-            {
-                LogVerbose("Connected", "Set {0}", value);
-                if (value == IsConnected) return; // We are already in the required state so ignore the request
-
-                if (value)
+                return this.ProcessCommand(
+                () =>
                 {
-                    IsConnected = true;
-                }
-                else
+                    return "A simulator for the ASCOM Focuser API usable with Alpaca and COM";
+                }, DeviceType, MemberNames.Description, "Get");
+            }
+        }
+
+        /// <summary>
+        /// Gets the ASCOM Driver DriverInfo.
+        /// </summary>
+        public override string DriverInfo
+        {
+            get
+            {
+                return this.ProcessCommand(
+                () =>
                 {
-                    IsConnected = false;
-                }
+                    return "ASCOM focuser simulator";
+                }, DeviceType, MemberNames.DriverInfo, "Get");
             }
         }
 
-        public string Description
+        /// <summary>
+        /// Gets the ASCOM Driver Interface Version.
+        /// </summary>
+        public override short InterfaceVersion
         {
             get
             {
-                LogVerbose("Description Get", DRIVER_DESCRIPTION);
-                return DRIVER_DESCRIPTION;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.InterfaceVersionSetting.Value;
+                }, DeviceType, MemberNames.InterfaceVersion, "Get");
             }
         }
 
-        public string DriverInfo
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        public override string Name
         {
             get
             {
-                string driverInfo = $"CoverCalibrator driver version: {Assembly.GetExecutingAssembly().GetName().Version}.";
-                LogVerbose("DriverInfo Get", driverInfo);
-                return driverInfo;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return SafeName;
+                }, DeviceType, MemberNames.Name, "Get");
             }
         }
 
-        public string DriverVersion
-        {
-            get
-            {
-                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                string driverVersion = $"{version.Major}.{version.Minor}";
-                LogVerbose("DriverVersion Get", driverVersion);
-                return driverVersion;
-            }
-        }
-
-        public short InterfaceVersion
-        {
-            // set by the driver wizard
-            get
-            {
-                LogVerbose("InterfaceVersion Get", "2");
-                return 2;
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                string name = "Alpaca Cover Calibrator Simulator";
-                LogVerbose("Name Get", name);
-                return name;
-            }
-        }
-
-#endregion Common properties and methods.
+        #endregion Common properties and methods.
 
         #region ICoverCalibrator Implementation
 
@@ -312,11 +293,11 @@ namespace ASCOM.Simulators
 
             if (!IsConnected) throw new NotConnectedException("The simulator is not connected, the OpenCover method is not available.");
 
-            if (CoverOpeningTimeValue <= SYNCHRONOUS_BEHAVIOUR_LIMIT) // Synchronous behaviour
+            if (CoverOpeningTime.Value <= SYNCHRONOUS_BEHAVIOUR_LIMIT) // Synchronous behaviour
             {
                 coverState = CoverStatus.Moving;
-                WaitFor(CoverOpeningTimeValue);
-                LogVerbose("OpenCover", $"Cover opened synchronously in {CoverOpeningTimeValue} seconds.");
+                WaitFor(CoverOpeningTime.Value);
+                LogVerbose("OpenCover", $"Cover opened synchronously in {CoverOpeningTime.Value} seconds.");
                 coverState = CoverStatus.Open;
             }
             else
@@ -324,7 +305,7 @@ namespace ASCOM.Simulators
                 coverState = CoverStatus.Moving;
                 targetCoverState = CoverStatus.Open;
                 coverTimer.Start();
-                LogVerbose("OpenCover", $"Starting asynchronous cover opening for {CoverOpeningTimeValue} seconds.");
+                LogVerbose("OpenCover", $"Starting asynchronous cover opening for {CoverOpeningTime.Value} seconds.");
             }
         }
 
@@ -337,11 +318,11 @@ namespace ASCOM.Simulators
 
             if (!IsConnected) throw new NotConnectedException("The simulator is not connected, the CloseCover method is not available.");
 
-            if (CoverOpeningTimeValue <= SYNCHRONOUS_BEHAVIOUR_LIMIT) // Synchronous behaviour
+            if (CoverOpeningTime.Value <= SYNCHRONOUS_BEHAVIOUR_LIMIT) // Synchronous behaviour
             {
                 coverState = CoverStatus.Moving;
-                WaitFor(CoverOpeningTimeValue);
-                LogVerbose("CloseCover", $"Cover closed synchronously in {CoverOpeningTimeValue} seconds.");
+                WaitFor(CoverOpeningTime.Value);
+                LogVerbose("CloseCover", $"Cover closed synchronously in {CoverOpeningTime.Value} seconds.");
                 coverState = CoverStatus.Closed;
             }
             else
@@ -349,7 +330,7 @@ namespace ASCOM.Simulators
                 coverState = CoverStatus.Moving;
                 targetCoverState = CoverStatus.Closed;
                 coverTimer.Start();
-                LogVerbose("CloseCover", $"Starting asynchronous cover closing for {CoverOpeningTimeValue} seconds.");
+                LogVerbose("CloseCover", $"Starting asynchronous cover closing for {CoverOpeningTime.Value} seconds.");
             }
         }
 
@@ -362,7 +343,7 @@ namespace ASCOM.Simulators
 
             if (!IsConnected) throw new NotConnectedException("The simulator is not connected, the HaltCover method is not available.");
 
-            if (CoverOpeningTimeValue <= SYNCHRONOUS_BEHAVIOUR_LIMIT) throw new MethodNotImplementedException("Cover movement methods are synchronous and cannot be interrupted.");
+            if (CoverOpeningTime.Value <= SYNCHRONOUS_BEHAVIOUR_LIMIT) throw new MethodNotImplementedException("Cover movement methods are synchronous and cannot be interrupted.");
 
             coverTimer.Stop();
             coverState = CoverStatus.Unknown;
@@ -417,8 +398,8 @@ namespace ASCOM.Simulators
 
                 if (!IsConnected) throw new NotConnectedException("The simulator is not connected, the MaxBrightness property is not available.");
 
-                LogVerbose("MaxBrightness Get", MaxBrightnessValue.ToString());
-                return MaxBrightnessValue;
+                LogVerbose("MaxBrightness Get", MaximumBrightness.Value.ToString());
+                return MaximumBrightness.Value;
             }
         }
 
@@ -432,15 +413,15 @@ namespace ASCOM.Simulators
 
             if (!IsConnected) throw new NotConnectedException("The simulator is not connected, the CalibratorOn method is not available.");
 
-            if ((Brightness < 0) | (Brightness > MaxBrightnessValue)) throw new InvalidValueException("CalibratorOn", Brightness.ToString(), $"0 to {MaxBrightnessValue}");
+            if ((Brightness < 0) | (Brightness > MaximumBrightness.Value)) throw new InvalidValueException("CalibratorOn", Brightness.ToString(), $"0 to {MaximumBrightness.Value}");
 
             brightnessValue = Brightness; // Set the assigned brightness
 
-            if (CalibratorStablisationTimeValue <= SYNCHRONOUS_BEHAVIOUR_LIMIT) // Synchronous behaviour
+            if (CalibratorStablisationTime.Value <= SYNCHRONOUS_BEHAVIOUR_LIMIT) // Synchronous behaviour
             {
                 calibratorState = CalibratorStatus.NotReady;
-                WaitFor(CalibratorStablisationTimeValue);
-                LogVerbose("CalibratorOn", $"Calibrator turned on synchronously in {CalibratorStablisationTimeValue} seconds.");
+                WaitFor(CalibratorStablisationTime.Value);
+                LogVerbose("CalibratorOn", $"Calibrator turned on synchronously in {CalibratorStablisationTime} seconds.");
                 calibratorState = CalibratorStatus.Ready;
             }
             else // Asynchronous behaviour
@@ -448,7 +429,7 @@ namespace ASCOM.Simulators
                 calibratorState = CalibratorStatus.NotReady;
                 targetCalibratorStatus = CalibratorStatus.Ready;
                 calibratorTimer.Start();
-                LogVerbose("CalibratorOn", $"Starting asynchronous calibrator turn on for {CalibratorStablisationTimeValue} seconds.");
+                LogVerbose("CalibratorOn", $"Starting asynchronous calibrator turn on for {CalibratorStablisationTime} seconds.");
             }
         }
 
@@ -463,11 +444,11 @@ namespace ASCOM.Simulators
 
             brightnessValue = 0; // Set the brightness to zero per the ASCOM specification
 
-            if (CalibratorStablisationTimeValue <= SYNCHRONOUS_BEHAVIOUR_LIMIT) // Synchronous behaviour
+            if (CalibratorStablisationTime.Value <= SYNCHRONOUS_BEHAVIOUR_LIMIT) // Synchronous behaviour
             {
                 calibratorState = CalibratorStatus.NotReady;
-                WaitFor(CalibratorStablisationTimeValue);
-                LogVerbose("CalibratorOff", $"Calibrator turned off synchronously in {CalibratorStablisationTimeValue} seconds.");
+                WaitFor(CalibratorStablisationTime.Value);
+                LogVerbose("CalibratorOff", $"Calibrator turned off synchronously in {CalibratorStablisationTime} seconds.");
                 calibratorState = CalibratorStatus.Off;
             }
             else // Asynchronous behaviour
@@ -475,29 +456,20 @@ namespace ASCOM.Simulators
                 calibratorState = CalibratorStatus.NotReady;
                 targetCalibratorStatus = CalibratorStatus.Off;
                 calibratorTimer.Start();
-                LogVerbose("CalibratorOff", $"Starting asynchronous calibrator turn off for {CalibratorStablisationTimeValue} seconds.");
+                LogVerbose("CalibratorOff", $"Starting asynchronous calibrator turn off for {CalibratorStablisationTime} seconds.");
             }
         }
 
         #endregion ICoverCalibrator Implementation
 
-#region ICoverCalibratorV2 implementation
-        public void Connect()
+        #region ICoverCalibratorV2 implementation
+        /// <summary>
+        /// Connects to the hardware.
+        /// </summary>
+        public override void Connect()
         {
-            Connected = true;
-        }
-
-        public void Disconnect()
-        {
-            Connected = false;
-        }
-
-        public bool Connecting
-        {
-            get
-            {
-                return false;
-            }
+            base.ConnectTimer.Interval = ConnectDelay.Value;
+            base.Connect();
         }
 
         /// <summary>
@@ -536,55 +508,57 @@ namespace ASCOM.Simulators
                 return CoverState == CoverStatus.Moving;
             }
         }
-#endregion
-
+        #endregion
 
         #region Alpaca Information
 
-        public string DeviceName { get => DRIVER_DESCRIPTION; }
         public string UniqueID { get; private set; }
 
         #endregion Alpaca Information
 
         #region Private properties and methods
 
-        // here are some useful properties and methods that can be used as required
-        // to help with driver development
-
         /// <summary>
-        /// Returns true if there is a valid connection to the driver hardware
+        /// Gets the delay for the connect timer.
         /// </summary>
-        private bool IsConnected { get; set; }
+        public Setting<short> ConnectDelay { get; } = new Setting<short>("ConnectDelay", "The delay to be used for Connect() in milliseconds, allowed values are 1-30000", 1500);
 
         /// <summary>
-        /// Use this function to throw an exception if we aren't connected to the hardware
+        /// Gets a value.
         /// </summary>
-        /// <param name="message"></param>
-        private void CheckConnected(string message)
-        {
-            if (!IsConnected)
-            {
-                throw new NotConnectedException(message);
-            }
-        }
+        public Setting<int> MaximumBrightness { get; } = new Setting<int>("Maximum Brightness", "Max Brightness Range 1-2147483647 default (100)", 100);
 
         /// <summary>
-        /// Read the device configuration from the ASCOM Profile store
+        /// Gets a value.
+        /// </summary>
+        public Setting<double> CalibratorStablisationTime { get; } = new Setting<double>("Calibrator Stabilisation Time", "Max Brightness Range 1-100.0 default (2.0)", 2.0);
+
+        /// <summary>
+        /// Gets a value.
+        /// </summary>
+        public Setting<double> CoverOpeningTime { get; } = new Setting<double>("Cover Opening Time", "Cover Opening Time 1-100.0 default (5.0)", 5.0);
+
+        /// <summary>
+        /// Gets a value.
+        /// </summary>
+        public Setting<string> CalibratorStateInitialisation { get; } = new Setting<string>("Calibrator Initialisation State", "Calibrator Initialisation State, allowed values (NotPresent = 0, Off = 1, NotReady = 2, Ready = 3, Unknown = 4, Error = 5) default Off", CalibratorStatus.Off.ToString());
+
+        /// <summary>
+        /// Gets a value.
+        /// </summary>
+        public Setting<string> CoverStateInitialisation { get; } = new Setting<string>("Cover Initialisation State", "Cover Initialisation State, allowed values (NotPresent = 0, Closed = 1, Moving = 2, Open = 3, Unknown = 4, Error = 5) default Off", CoverStatus.Closed.ToString());
+
+        /// <summary>
+        /// Read the device configuration from the ASCOM Profile store.
         /// </summary>
         internal void ReadProfile()
         {
             var temp = Profile.GetValue(TRACE_STATE_PROFILE_NAME, TRACE_STATE_DEFAULT.ToString());
-            MaxBrightnessValue = Convert.ToInt32(Profile.GetValue(MAX_BRIGHTNESS_PROFILE_NAME, MAX_BRIGHTNESS_DEFAULT));
-            CalibratorStablisationTimeValue = Convert.ToDouble(Profile.GetValue(CALIBRATOR_STABILISATION_TIME_PROFILE_NAME, CALIBRATOR_STABLISATION_TIME_DEFAULT.ToString()));
-            if (!Enum.TryParse<CalibratorStatus>(Profile.GetValue(CALIBRATOR_INITIALISATION_STATE_PROFILE_NAME, CALIBRATOR_INITIALISATION_STATE_DEFAULT.ToString()), out CalibratorStateInitialisationValue))
-            {
-                CalibratorStateInitialisationValue = CALIBRATOR_INITIALISATION_STATE_DEFAULT;
-            }
-            CoverOpeningTimeValue = Convert.ToDouble(Profile.GetValue(COVER_OPENING_TIME_PROFILE_NAME, COVER_OPENING_TIME_DEFAULT.ToString()));
-            if (!Enum.TryParse<CoverStatus>(Profile.GetValue(COVER_INITIALISATION_STATE_PROFILE_NAME, COVER_INITIALISATION_STATE_DEFAULT.ToString()), out CoverStateInitialisationValue))
-            {
-                CoverStateInitialisationValue = COVER_INITIALISATION_STATE_DEFAULT;
-            }
+            this.MaximumBrightness.Value = this.Profile.GetSettingReturningDefault(this.MaximumBrightness);
+            this.CalibratorStablisationTime.Value = this.Profile.GetSettingReturningDefault(this.CalibratorStablisationTime);
+            this.CoverOpeningTime.Value = this.Profile.GetSettingReturningDefault(this.CoverOpeningTime);
+            this.CalibratorStateInitialisation.Value = this.Profile.GetSettingReturningDefault(this.CalibratorStateInitialisation);
+            this.CoverStateInitialisation.Value = this.Profile.GetSettingReturningDefault(this.CoverStateInitialisation);
         }
 
         /// <summary>
@@ -592,11 +566,12 @@ namespace ASCOM.Simulators
         /// </summary>
         public void WriteProfile()
         {
-            Profile.WriteValue(MAX_BRIGHTNESS_PROFILE_NAME, MaxBrightnessValue.ToString());
-            Profile.WriteValue(CALIBRATOR_STABILISATION_TIME_PROFILE_NAME, CalibratorStablisationTimeValue.ToString());
-            Profile.WriteValue(CALIBRATOR_INITIALISATION_STATE_PROFILE_NAME, CalibratorStateInitialisationValue.ToString());
-            Profile.WriteValue(COVER_OPENING_TIME_PROFILE_NAME, CoverOpeningTimeValue.ToString());
-            Profile.WriteValue(COVER_INITIALISATION_STATE_PROFILE_NAME, CoverStateInitialisationValue.ToString());
+            Profile.SetSetting(ConnectDelay);
+            Profile.SetSetting(MaximumBrightness);
+            Profile.SetSetting(CalibratorStablisationTime);
+            Profile.SetSetting(CoverOpeningTime);
+            Profile.SetSetting(CoverStateInitialisation);
+            Profile.SetSetting(CalibratorStateInitialisation);
         }
 
         /// <summary>

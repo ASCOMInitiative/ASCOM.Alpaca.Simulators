@@ -131,13 +131,13 @@
     {
         get
         {
-            return Device.MaxBrightnessValue;
+            return Device.MaximumBrightness.Value;
         }
         set
         {
             if (MaxBrightness > 0)
             {
-                Device.MaxBrightnessValue = value;
+                Device.MaximumBrightness.Value = value;
             }
             else
             {
@@ -150,13 +150,13 @@
     {
         get
         {
-            return Device.CalibratorStablisationTimeValue;
+            return Device.CalibratorStablisationTime.Value;
         }
         set
         {
             if (value >= 0)
             {
-                Device.CalibratorStablisationTimeValue = value;
+                Device.CalibratorStablisationTime.Value = value;
             }
             else
             {
@@ -165,15 +165,15 @@
         }
     }
 
-    public CalibratorStatus CalStatus
+    public string CalStatus
     {
         get
         {
-            return Device.CalibratorStateInitialisationValue;
+            return Device.CalibratorStateInitialisation.Value;
         }
         set
         {
-            Device.CalibratorStateInitialisationValue = value;
+            Device.CalibratorStateInitialisation.Value = value;
         }
     }
 
@@ -181,13 +181,13 @@
     {
         get
         {
-            return Device.CoverOpeningTimeValue;
+            return Device.CoverOpeningTime.Value;
         }
         set
         {
             if (value >= 0)
             {
-                Device.CoverOpeningTimeValue = value;
+                Device.CoverOpeningTime.Value = value;
             }
             else
             {
@@ -196,15 +196,15 @@
         }
     }
 
-    public CoverStatus CoverStatus
+    public string CoverStatus
     {
         get
         {
-            return Device.CoverStateInitialisationValue;
+            return Device.CoverStateInitialisation.Value;
         }
         set
         {
-            Device.CoverStateInitialisationValue = value;
+            Device.CoverStateInitialisation.Value = value;
         }
     }
 
