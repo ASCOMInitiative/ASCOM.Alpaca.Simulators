@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Collections.Generic;
@@ -70,7 +70,7 @@ namespace ASCOM.Alpaca.Razor
 
                     c.EnableAnnotations();
                     c.SchemaFilter<SwaggerExcludeFilter>();
-                    c.MapType<uint>(() => new OpenApiSchema { Type = "integer", Format = "uint32", Minimum = 0, Maximum = 4294967295 });
+                    c.MapType<uint>(() => new OpenApiSchema { Type = JsonSchemaType.Integer, Format = "uint32", Minimum = "0", Maximum = "4294967295" });
                 });
             }
         }

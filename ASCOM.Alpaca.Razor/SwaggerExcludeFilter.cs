@@ -1,4 +1,4 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
 
@@ -6,7 +6,7 @@ namespace ASCOM.Alpaca
 {
     public class SwaggerExcludeFilter : ISchemaFilter
     {
-        public void Apply(OpenApiSchema schema, SchemaFilterContext schemaRegistry)
+        public void Apply(IOpenApiSchema schema, SchemaFilterContext schemaRegistry)
         {
             if (schema?.Properties == null || schemaRegistry.Type == null)
                 return;
