@@ -337,8 +337,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                //Only supports 1 camera right now, in the future use DeviceNumber instead.
-                DriverManager.LoadCamera(0);
+                DriverManager.LoadCamera(Convert.ToInt32(DeviceNumber));
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting Camera {DeviceNumber} to a clean state.");
         }
@@ -362,8 +361,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                //Only supports 1 right now, in the future use DeviceNumber instead.
-                DriverManager.LoadCoverCalibrator(0);
+                DriverManager.LoadCoverCalibrator(Convert.ToInt32(DeviceNumber));
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting CoverCalibrator {DeviceNumber} to a clean state.");
         }
@@ -387,8 +385,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                //Only supports 1 right now, in the future use DeviceNumber instead.
-                DriverManager.LoadDome(0);
+                DriverManager.LoadDome(Convert.ToInt32(DeviceNumber));
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting Dome {DeviceNumber} to a clean state.");
         }
@@ -412,8 +409,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                //Only supports 1 right now, in the future use DeviceNumber instead.
-                DriverManager.LoadFilterWheel(0);
+                DriverManager.LoadFilterWheel(Convert.ToInt32(DeviceNumber));
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting FilterWheel {DeviceNumber} to a clean state.");
         }
@@ -437,8 +433,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                //Only supports 1 right now, in the future use DeviceNumber instead.
-                DriverManager.LoadFocuser(0);
+                DriverManager.LoadFocuser(Convert.ToInt32(DeviceNumber));
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting Focuser {DeviceNumber} to a clean state.");
         }
@@ -462,8 +457,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                //Only supports 1 right now, in the future use DeviceNumber instead.
-                DriverManager.LoadObservingConditions(0);
+                DriverManager.LoadObservingConditions(Convert.ToInt32(DeviceNumber));
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting ObservingConditions {DeviceNumber} to a clean state.");
         }
@@ -487,8 +481,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                //Only supports 1 right now, in the future use DeviceNumber instead.
-                DriverManager.LoadRotator(0);
+                DriverManager.LoadRotator(Convert.ToInt32(DeviceNumber));
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting Rotator {DeviceNumber} to a clean state.");
         }
@@ -512,8 +505,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                //Only supports 1 right now, in the future use DeviceNumber instead.
-                DriverManager.LoadSafetyMonitor(0);
+                DriverManager.LoadSafetyMonitor(Convert.ToInt32(DeviceNumber));
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting SafetyMonitor {DeviceNumber} to a clean state.");
         }
@@ -537,8 +529,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                //Only supports 1 right now, in the future use DeviceNumber instead.
-                DriverManager.LoadSwitch(0);
+                DriverManager.LoadSwitch(Convert.ToInt32(DeviceNumber));
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting Switch {DeviceNumber} to a clean state.");
         }
@@ -562,8 +553,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                //Only supports 1 right now, in the future use DeviceNumber instead.
-                DriverManager.LoadTelescope(0);
+                DriverManager.LoadTelescope(Convert.ToInt32(DeviceNumber));
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Restarting Telescope {DeviceNumber} to a clean state.");
         }
