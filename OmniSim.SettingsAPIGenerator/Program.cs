@@ -1,4 +1,4 @@
-﻿using ASCOM.Alpaca;
+using ASCOM.Alpaca;
 using ASCOM.Common.Alpaca;
 using OmniSim.BaseDriver;
 using System.Text;
@@ -43,6 +43,13 @@ namespace OmniSim.SettingsAPIGenerator
             using (StreamWriter writetext = File.CreateText("../../../../ASCOM.Alpaca.Simulators/Controllers/SafetyMonitorSettingsController.cs"))
             {
                 writetext.Write(smAPI);
+            }
+
+            var ccAPI = BuildSettingsAPI(typeof(ASCOM.Simulators.CoverCalibratorSimulator), "CoverCalibratorSimulator", "((DeviceManager.GetCoverCalibrator(DeviceNumber) as ASCOM.Simulators.CoverCalibratorSimulator))");
+
+            using (StreamWriter writetext = File.CreateText("../../../../ASCOM.Alpaca.Simulators/Controllers/CoverCalibratorSettingsController.cs"))
+            {
+                writetext.Write(ccAPI);
             }
         }
 
