@@ -19,13 +19,14 @@
 using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
+using OmniSim.BaseDriver;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 
@@ -42,7 +43,7 @@ namespace ASCOM.Simulators
     /// <summary>
     /// ASCOM Switch Driver for Simulator.
     /// </summary>
-    public class Switch : ISwitchV3, IDisposable, IAlpacaDevice, ISimulation
+    public class Switch : OmniSim.BaseDriver.Driver, ISwitchV3, IDisposable, IAlpacaDevice, ISimulation
     {
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
@@ -53,7 +54,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
         /// </summary>
-        private static string driverDescription = "ASCOM SwitchV2 Simulator Driver.";
+        private static string driverDescription = "ASCOM Switch Simulator.";
 
         internal static string traceStateProfileName = "Trace Level";
         internal static string traceStateDefault = "false";
@@ -91,7 +92,7 @@ namespace ASCOM.Simulators
         /// Initializes a new instance of the <see cref="Simulator"/> class.
         /// Must be public for COM registration.
         /// </summary>
-        public Switch(int deviceNumber, ILogger logger, IProfile profile)
+        public Switch(int deviceNumber, ILogger logger, IProfile profile) : base(deviceNumber, logger, profile)
         {
             tl = logger;
             Profile = profile;
@@ -127,9 +128,37 @@ namespace ASCOM.Simulators
             LogMessage("Switch", "Completed initialisation");
         }
 
-        public string DeviceName { get => Name; }
-        public int DeviceNumber { get; private set; }
-        public string UniqueID { get; private set; }
+        /// <summary>
+        /// Gets what device this this driver exposes.
+        /// </summary>
+        public override DeviceTypes DeviceType { get; } = DeviceTypes.Switch;
+
+        /// <summary>
+        /// Gets the stored interface version to use.
+        /// </summary>
+        public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-2", 2);
+
+        /// <summary>
+        /// Gets an interface version for V1 drivers that would throw on a InterfaceVersion Call.
+        /// </summary>
+        public override short SafeInterfaceVersion
+        {
+            get
+            {
+                return this.InterfaceVersionSetting.Value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the Driver.
+        /// </summary>
+        public override string DeviceName
+        {
+            get
+            {
+                return $"{driverDescription} - {DeviceNumber}";
+            }
+        }
 
         //
         // PUBLIC COM INTERFACE ISwitchV2 IMPLEMENTATION
@@ -169,102 +198,69 @@ namespace ASCOM.Simulators
             }
         }
 
-        public void CommandBlind(string command, bool raw)
-        {
-            throw new ASCOM.MethodNotImplementedException("CommandBlind");
-        }
 
-        public bool CommandBool(string command, bool raw)
-        {
-            throw new ASCOM.MethodNotImplementedException("CommandBool");
-        }
-
-        public string CommandString(string command, bool raw)
-        {
-            throw new ASCOM.MethodNotImplementedException("CommandString");
-        }
-
-        public void Dispose()
-        {
-        }
-
-        public bool Connected
+        /// <summary>
+        /// Gets the ASCOM Driver Description.
+        /// </summary>
+        public override string Description
         {
             get
             {
-                LogMessage("Connected Get", IsConnected.ToString());
-                return IsConnected;
-            }
-            set
-            {
-                LogMessage("Connected Set", value.ToString());
-                if (value == IsConnected)
-                    return;
-
-                if (value)
+                return this.ProcessCommand(
+                () =>
                 {
-                    connectedState = true;
-                    // TODO connect to the device
-                }
-                else
+                    return "A simulator for the ASCOM Focuser API usable with Alpaca and COM";
+                }, DeviceType, MemberNames.Description, "Get");
+            }
+        }
+
+        /// <summary>
+        /// Gets the ASCOM Driver DriverInfo.
+        /// </summary>
+        public override string DriverInfo
+        {
+            get
+            {
+                return this.ProcessCommand(
+                () =>
                 {
-                    connectedState = false;
-                    // TODO disconnect from the device
-                }
+                    return "ASCOM focuser simulator";
+                }, DeviceType, MemberNames.DriverInfo, "Get");
             }
         }
 
-        public string Description
-        {
-            // TODO customise this device description
-            get
-            {
-                LogMessage("Description Get", driverDescription);
-                return driverDescription;
-            }
-        }
-
-        public string DriverInfo
+        /// <summary>
+        /// Gets the ASCOM Driver Interface Version.
+        /// </summary>
+        public override short InterfaceVersion
         {
             get
             {
-                FileVersionInfo FV = Process.GetCurrentProcess().MainModule.FileVersionInfo; //Get the name of the executable without path or file extension
-                string driverInfo = "Switch V2 Simulator, version: " + FV.FileVersion;
-                LogMessage("DriverInfo Get", driverInfo);
-                return driverInfo;
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.InterfaceVersionSetting.Value;
+                }, DeviceType, MemberNames.InterfaceVersion, "Get");
             }
         }
 
-        public string DriverVersion
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        public override string Name
         {
             get
             {
-                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                return $"{version.Major}.{version.Minor}";
+                return this.ProcessCommand(
+                () =>
+                {
+                    return driverDescription;
+                }, DeviceType, MemberNames.Name, "Get");
             }
         }
 
-        public short InterfaceVersion
-        {
-            // set by the driver wizard
-            get
-            {
-                LogMessage("InterfaceVersion Get", "3");
-                return 3;
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                string name = "Alpaca Switch Simulator";
-                LogMessage("Name Get", name);
-                return name;
-            }
-        }
-
-#endregion Common properties and methods.
+        #endregion Common properties and methods.
 
         #region ISwitchV2 Implementation
 
@@ -482,31 +478,6 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Returns true if there is a valid connection to the driver hardware
-        /// </summary>
-        private bool IsConnected
-        {
-            get
-            {
-                // TODO check that the driver hardware connection exists and is connected to the hardware
-                // simulator has no hardware
-                return connectedState;
-            }
-        }
-
-        /// <summary>
-        /// Use this function to throw an exception if we aren't connected to the hardware
-        /// </summary>
-        /// <param name="message"></param>
-        private void CheckConnected(string message)
-        {
-            if (!IsConnected)
-            {
-                throw new ASCOM.NotConnectedException(message);
-            }
-        }
-
-        /// <summary>
         /// Read the device configuration from the ASCOM Profile store
         /// </summary>
         internal void ReadProfile()
@@ -541,16 +512,6 @@ namespace ASCOM.Simulators
             }
         }
 
-        public void ResetSettings()
-        {
-            Profile.Clear();
-        }
-
-        public string GetXMLProfile()
-        {
-            return Profile.GetProfile();
-        }
-
         /// <summary>
         /// Loads a default set of switches.
         /// </summary>
@@ -571,23 +532,6 @@ namespace ASCOM.Simulators
         #endregion Private properties and methods
 
         #region ISwitchV3 implementation
-        public void Connect()
-        {
-            Connected = true;
-        }
-
-        public void Disconnect()
-        {
-            Connected = false;
-        }
-
-        public bool Connecting
-        {
-            get
-            {
-                return false;
-            }
-        }
 
         public List<StateValue> DeviceState
         {
@@ -654,7 +598,6 @@ namespace ASCOM.Simulators
                     LogMessage("SetAsyncValue", $"Waiting for previous task to complete: {e.Message}\r\n{e}");
                 }
                 LogMessage("SetAsyncValue", $"Finished waiting for task to complete. Wait duration: {sw.ElapsedMilliseconds}ms.");
-
 
                 //Thread.Sleep(100); // Wait for a short while for cancellation to happen
                 LogMessage("SetAsyncValue", $"After wait - cancellation token is none: {switches[id].CancellationToken == CancellationToken.None}, State change complete: {switches[id].StateChangeComplete}");
@@ -746,10 +689,10 @@ namespace ASCOM.Simulators
                     LogMessage("CancelAsync", $"Waiting for previous task to complete: {e.Message}\r\n{e}");
                 }
                 LogMessage("CancelAsync", $"Finished waiting for task to complete. Wait duration: {sw.ElapsedMilliseconds}ms.");
-
             }
         }
-        #endregion
+
+        #endregion ISwitchV3 implementation
 
         private void LogMessage(string source, string details)
         {
@@ -758,6 +701,5 @@ namespace ASCOM.Simulators
                 tl?.LogDebug(source + " - " + details);
             }
         }
-
     }
 }
