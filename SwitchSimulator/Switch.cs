@@ -45,11 +45,6 @@ namespace ASCOM.Simulators
     /// </summary>
     public class Switch : OmniSim.BaseDriver.Driver, ISwitchV3, IDisposable, IAlpacaDevice, ISimulation
     {
-        /// <summary>
-        /// ASCOM DeviceID (COM ProgID) for this driver.
-        /// The DeviceID is used by ASCOM applications to load the driver at runtime.
-        /// </summary>
-        internal static string driverID = "ASCOM.Simulator.Switch";
 
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
@@ -70,19 +65,14 @@ namespace ASCOM.Simulators
         private static bool exposeOCHState;
 
         /// <summary>
-        /// Private variable to hold the connected state
-        /// </summary>
-        private bool connectedState;
-
-        /// <summary>
         /// Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
         /// </summary>
-        private readonly ILogger tl;
+        private readonly ILogger traceLogger;
 
         /// <summary>
         ///
         /// </summary>
-        private readonly IProfile Profile;
+        private readonly IProfile profile;
 
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
 
@@ -94,17 +84,14 @@ namespace ASCOM.Simulators
         /// </summary>
         public Switch(int deviceNumber, ILogger logger, IProfile profile) : base(deviceNumber, logger, profile)
         {
-            tl = logger;
-            Profile = profile;
+            traceLogger = logger;
+            this.profile = profile;
 
             ReadProfile(); // Read device configuration from the ASCOM Profile store
 
             LogMessage($"New Switch {deviceNumber}", "Starting initialisation");
 
             DeviceNumber = deviceNumber;
-
-            connectedState = false; // Initialise connected to false
-                                    //TODO: Implement your additional construction here
 
             //This should be replaced by the next bit of code but is semi-unique as a default.
             UniqueID = Name + deviceNumber.ToString();
@@ -209,7 +196,7 @@ namespace ASCOM.Simulators
                 return this.ProcessCommand(
                 () =>
                 {
-                    return "A simulator for the ASCOM Focuser API usable with Alpaca and COM";
+                    return "A simulator for the ASCOM Switch API usable with Alpaca and COM";
                 }, DeviceType, MemberNames.Description, "Get");
             }
         }
@@ -224,7 +211,7 @@ namespace ASCOM.Simulators
                 return this.ProcessCommand(
                 () =>
                 {
-                    return "ASCOM focuser simulator";
+                    return driverDescription;
                 }, DeviceType, MemberNames.DriverInfo, "Get");
             }
         }
@@ -306,7 +293,7 @@ namespace ASCOM.Simulators
             //throw new MethodNotImplementedException("SetSwitchName");
             Validate("SetSwitchName", id);
             switches[id].Name = name;
-            switches[id].Save(Profile, id);
+            switches[id].Save(profile, id);
         }
 
         /// <summary>
@@ -482,15 +469,15 @@ namespace ASCOM.Simulators
         /// </summary>
         internal void ReadProfile()
         {
-            exposeOCHState = Convert.ToBoolean(Profile.GetValue(EXPOSE_OCHTAG_NAME, EXPOSE_OCHTAG_DEFAULT.ToString()));
+            exposeOCHState = Convert.ToBoolean(profile.GetValue(EXPOSE_OCHTAG_NAME, EXPOSE_OCHTAG_DEFAULT.ToString()));
 
             switches = new List<LocalSwitch>();
             int numSwitch;
-            if (int.TryParse(Profile.GetValue("NumSwitches", string.Empty), out numSwitch))
+            if (int.TryParse(profile.GetValue("NumSwitches", string.Empty), out numSwitch))
             {
                 for (short i = 0; i < numSwitch; i++)
                 {
-                    switches.Add(new LocalSwitch(Profile, i));
+                    switches.Add(new LocalSwitch(profile, i));
                 }
             }
             else
@@ -504,11 +491,11 @@ namespace ASCOM.Simulators
         /// </summary>
         internal void WriteProfile()
         {
-            Profile.WriteValue("NumSwitches", switches.Count.ToString());
+            profile.WriteValue("NumSwitches", switches.Count.ToString());
             int i = 0;
             foreach (var item in switches)
             {
-                item.Save(Profile, i++);
+                item.Save(profile, i++);
             }
         }
 
@@ -698,7 +685,7 @@ namespace ASCOM.Simulators
         {
             lock (loggerLockObject)
             {
-                tl?.LogDebug(source + " - " + details);
+                traceLogger?.LogDebug(source + " - " + details);
             }
         }
     }

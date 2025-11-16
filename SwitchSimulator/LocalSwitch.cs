@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Threading;
-using static System.Net.Mime.MediaTypeNames;
 using System.Diagnostics;
 
 namespace ASCOM.Simulators
@@ -209,29 +208,6 @@ namespace ASCOM.Simulators
         {
             return IsValid(this.Name, this.Maximum, this.Minimum, this.StepSize, this.Value, out reason);
         }
-
-        ///// <summary>
-        ///// Determines whether the specified row of cells contains a valid LocalSwitch definition.
-        ///// </summary>
-        ///// <param name="cells">The cells.</param>
-        ///// <param name="reason">The reason.</param>
-        ///// <returns>
-        /////   <c>true</c> if the specified cells is valid; otherwise, <c>false</c>.
-        ///// </returns>
-        //internal static bool IsValid(System.Windows.Forms.DataGridViewCellCollection cells, out string reason)
-        //{
-        //    var name = (string)cells["switchName"].Value;
-        //    var minimum = Convert.ToDouble(cells["colMin"].Value);
-        //    var maximum = Convert.ToDouble(cells["colMax"].Value);
-        //    var stepSize = Convert.ToDouble(cells["colStep"].Value);
-        //    var value = Convert.ToDouble(cells["colValue"].Value);
-        //    if (!IsValid(name, maximum, minimum, stepSize, value, out reason))
-        //    {
-        //        return false;
-        //    }
-        //    reason = string.Empty;
-        //    return true;
-        //}
 
         private static bool IsValid(string name, double max, double min, double step, double value, out string reason)
         {
