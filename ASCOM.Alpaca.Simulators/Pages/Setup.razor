@@ -159,6 +159,12 @@
             <input type="number" @bind="NSafetyMonitors" min="1" max="4" style="width:20ch;">
         </div>
         <div class="grid-item-right">
+            <span>Number of Switches:</span>
+        </div>
+        <div class="grid-item-left">
+            <input type="number" @bind="NSwitches" min="1" max="4" style="width:20ch;">
+        </div>
+        <div class="grid-item-right">
             <button @onclick="SaveDriverSettings" style="min-width:12ch; vertical-align:middle;">Save</button>
         </div>
     </div>
@@ -379,6 +385,12 @@
         get;
         set;
     } = ServerSettings.NumberOfSafetyMonitors;
+
+    UInt16 NSwitches
+    {
+        get;
+        set;
+    } = ServerSettings.NumberOfSwitches;
 
     bool StrictAPIMode
     {
@@ -612,6 +624,9 @@
 
             ServerSettings.NumberOfSafetyMonitors = NSafetyMonitors;
             DriverManager.LoadSafetyMonitors();
+
+            ServerSettings.NumberOfSwitches = NSwitches;
+            DriverManager.LoadSwitches();
 
             DisplaySuccess("Driver Settings Saved");
         }

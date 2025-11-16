@@ -102,6 +102,14 @@ namespace ASCOM.Alpaca.Simulators
             }
         }
 
+        internal static void LoadSwitches()
+        {
+            for (int i = 0; i < ServerSettings.NumberOfSwitches; i++)
+            {
+                LoadSwitch(i);
+            }
+        }
+
         internal static void LoadSwitch(int DeviceID)
         {
             var dev = new ASCOM.Simulators.Switch(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Switch, (uint)DeviceID));

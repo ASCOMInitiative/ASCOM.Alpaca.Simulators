@@ -220,7 +220,7 @@ namespace ASCOM.Alpaca.Simulators
             DriverManager.LoadObservingConditions(0);
             DriverManager.LoadRotators();
             DriverManager.LoadSafetyMonitors();
-            DriverManager.LoadSwitch(0);
+            DriverManager.LoadSwitches();
             DriverManager.LoadTelescope(0);
             Logging.LogInformation("Devices loaded OK.");
 
@@ -336,7 +336,7 @@ namespace ASCOM.Alpaca.Simulators
                     DriverManager.LoadObservingConditions(0);
                     DriverManager.LoadRotators();
                     DriverManager.LoadSafetyMonitors();
-                    DriverManager.LoadSwitch(0);
+                    DriverManager.LoadSwitches();
                     DriverManager.LoadTelescope(0);
 
                     WriteAndLog("Reseting stored settings");
