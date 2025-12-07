@@ -35,6 +35,18 @@ namespace ASCOM.Alpaca
             }
         }
 
+        internal static void LogInformation(string message)
+        {
+            try
+            {
+                Log.LogInformation(message);
+            }
+            catch
+            {
+                //Log should never throw.
+            }
+        }
+
         internal static void LogVerbose(string message)
         {
             try
