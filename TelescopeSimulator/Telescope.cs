@@ -26,10 +26,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
+
+[assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 namespace ASCOM.Simulators
 {
     //
@@ -41,14 +44,12 @@ namespace ASCOM.Simulators
     //
     public class Telescope : ITelescopeV4, IDisposable, IAlpacaDevice, ISimulation
     {
-        //
-        // Driver private data (rate collections)
-        //
-        private AxisRates[] m_AxisRates;
 
         private TrackingRates m_TrackingRates;
         private TrackingRatesSimple m_TrackingRatesSimple;
         private long objectId;
+
+        internal TelescopeHardware TelescopeHardware;
 
         private bool connecting;
 
@@ -73,6 +74,7 @@ namespace ASCOM.Simulators
         {
             try
             {
+                TelescopeHardware = new TelescopeHardware();
                 TelescopeHardware.TL = logger;
                 Logger = logger;
                 TelescopeHardware.s_Profile = profile;
@@ -80,10 +82,6 @@ namespace ASCOM.Simulators
                 DeviceNumber = deviceNumber;
 
                 TelescopeHardware.Init();
-                m_AxisRates = new AxisRates[3];
-                m_AxisRates[0] = new AxisRates(TelescopeAxis.Primary);
-                m_AxisRates[1] = new AxisRates(TelescopeAxis.Secondary);
-                m_AxisRates[2] = new AxisRates(TelescopeAxis.Tertiary);
                 m_TrackingRates = new TrackingRates();
                 m_TrackingRatesSimple = new TrackingRatesSimple();
 
@@ -283,16 +281,13 @@ namespace ASCOM.Simulators
             switch (Axis)
             {
                 case TelescopeAxis.Primary:
-                    //                    return m_AxisRates[0];
-                    return new AxisRates(TelescopeAxis.Primary);
+                    return new AxisRates(TelescopeAxis.Primary, TelescopeHardware.MaximumSlewRate);
 
                 case TelescopeAxis.Secondary:
-                    //                    return m_AxisRates[1];
-                    return new AxisRates(TelescopeAxis.Secondary);
+                    return new AxisRates(TelescopeAxis.Secondary, TelescopeHardware.MaximumSlewRate);
 
                 case TelescopeAxis.Tertiary:
-                    //                    return m_AxisRates[2];
-                    return new AxisRates(TelescopeAxis.Tertiary);
+                    return new AxisRates(TelescopeAxis.Tertiary, TelescopeHardware.MaximumSlewRate);
 
                 default:
                     return null;
@@ -1518,7 +1513,7 @@ namespace ASCOM.Simulators
             throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), ratesStr);
         }
 
-        private static void CheckRange(double value, double min, double max, string propertyOrMethod, string valueName)
+        private void CheckRange(double value, double min, double max, string propertyOrMethod, string valueName)
         {
             if (double.IsNaN(value))
             {
@@ -1532,7 +1527,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        private static void CheckRange(double value, double min, double max, string propertyOrMethod)
+        private void CheckRange(double value, double min, double max, string propertyOrMethod)
         {
             if (double.IsNaN(value))
             {
@@ -1546,7 +1541,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        private static void CheckVersionOne(string property)
+        private void CheckVersionOne(string property)
         {
             if (TelescopeHardware.VersionOneOnly)
             {
@@ -1555,7 +1550,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        private static void CheckCapability(bool capability, string method)
+        private void CheckCapability(bool capability, string method)
         {
             if (!capability)
             {
@@ -1564,7 +1559,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        private static void CheckCapability(bool capability, string property, bool setNotGet)
+        private void CheckCapability(bool capability, string property, bool setNotGet)
         {
             if (!capability)
             {
@@ -1573,7 +1568,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        private static void CheckParked(string property)
+        private void CheckParked(string property)
         {
             if (TelescopeHardware.AtPark)
             {
@@ -1587,7 +1582,7 @@ namespace ASCOM.Simulators
         /// </summary>
         /// <param name="raDecSlew">if set to <c>true</c> this is a Ra Dec slew if  <c>false</c> an Alt Az slew.</param>
         /// <param name="method">The method name.</param>
-        private static void CheckTracking(bool raDecSlew, string method)
+        private void CheckTracking(bool raDecSlew, string method)
         {
             if (raDecSlew != TelescopeHardware.Tracking)
             {
@@ -1603,14 +1598,6 @@ namespace ASCOM.Simulators
         public void Dispose()
         {
             Connected = false;
-            /*m_AxisRates[0].Dispose();
-            m_AxisRates[1].Dispose();
-            m_AxisRates[2].Dispose();
-            m_AxisRates = null;
-            m_TrackingRates.Dispose();
-            m_TrackingRates = null;
-            m_TrackingRatesSimple.Dispose();
-            m_TrackingRatesSimple = null;*/
         }
 
         #endregion IDisposable Members
@@ -1713,7 +1700,7 @@ namespace ASCOM.Simulators
         // Constructor - Internal prevents public creation
         // of instances. Returned by Telescope.AxisRates.
         //
-        internal AxisRates(TelescopeAxis Axis)
+        internal AxisRates(TelescopeAxis Axis, double maxRate)
         {
             m_axis = Axis;
             //
@@ -1726,7 +1713,6 @@ namespace ASCOM.Simulators
             // to the constructor. Thus we switch() below, and each case should
             // initialize the array for the rate for the selected axis.
             //
-            double maxRate = TelescopeHardware.MaximumSlewRate;
             switch (m_axis)
             {
                 case TelescopeAxis.Primary:

@@ -310,8 +310,7 @@ namespace ASCOM.Alpaca.Simulators
         {
             return ProcessRequest(() =>
             {
-                ASCOM.Simulators.TelescopeHardware.ClearProfile();
-                ASCOM.Simulators.TelescopeHardware.Init();
+                TelescopeAccess(DeviceNumber).ResetSettings();
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting Telescope {DeviceNumber} to default settings.");
         }

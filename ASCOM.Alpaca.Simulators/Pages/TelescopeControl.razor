@@ -188,7 +188,7 @@
         {
             if (Connected)
             {
-                return Utilities.HoursToHMS(ASCOM.Simulators.TelescopeHardware.SiderealTime);
+                return Utilities.HoursToHMS(Device.TelescopeHardware.SiderealTime);
             }
             return "00:00:00";
         }
@@ -200,7 +200,7 @@
         {
             if (Connected)
             {
-                return Utilities.HoursToHMS(ASCOM.Simulators.TelescopeHardware.RightAscension);
+                return Utilities.HoursToHMS(Device.TelescopeHardware.RightAscension);
             }
             return "00:00:00";
         }
@@ -212,7 +212,7 @@
         {
             if (Connected)
             {
-                return Utilities.DegreesToDMS(ASCOM.Simulators.TelescopeHardware.Declination);
+                return Utilities.DegreesToDMS(Device.TelescopeHardware.Declination);
             }
             return "+00:00:00";
         }
@@ -224,7 +224,7 @@
         {
             if (Connected)
             {
-                return Utilities.DegreesToDMS(ASCOM.Simulators.TelescopeHardware.Altitude);
+                return Utilities.DegreesToDMS(Device.TelescopeHardware.Altitude);
             }
             return "+00:00:00";
         }
@@ -236,7 +236,7 @@
         {
             if (Connected)
             {
-                return Utilities.DegreesToDMS(ASCOM.Simulators.TelescopeHardware.Azimuth);
+                return Utilities.DegreesToDMS(Device.TelescopeHardware.Azimuth);
             }
             return "000:00:00";
         }

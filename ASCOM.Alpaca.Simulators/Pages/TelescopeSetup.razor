@@ -330,113 +330,113 @@
             }
 
 
-            AutoUnpark = TelescopeHardware.AutoTrack;
+            AutoUnpark = Device.TelescopeHardware.AutoTrack;
 
-            NoCoordinates = TelescopeHardware.NoCoordinatesAtPark;
+            NoCoordinates = Device.TelescopeHardware.NoCoordinatesAtPark;
 
-            DisconnectOnPark = TelescopeHardware.DisconnectOnPark;
+            DisconnectOnPark = Device.TelescopeHardware.DisconnectOnPark;
 
-            SlewRate = TelescopeHardware.MaximumSlewRate;
+            SlewRate = Device.TelescopeHardware.MaximumSlewRate;
 
-            RefractionOn = TelescopeHardware.Refraction;
+            RefractionOn = Device.TelescopeHardware.Refraction;
 
-            LatitudeSign = Math.Sign(TelescopeHardware.Latitude);
+            LatitudeSign = Math.Sign(Device.TelescopeHardware.Latitude);
 
-            LatitudeDegrees = (int)Math.Abs(TelescopeHardware.Latitude);
+            LatitudeDegrees = (int)Math.Abs(Device.TelescopeHardware.Latitude);
 
-            LatitudeMinutes = double.Parse(Math.Abs((TelescopeHardware.Latitude - (int)TelescopeHardware.Latitude) * 60).ToString("00.000"));
+            LatitudeMinutes = double.Parse(Math.Abs((Device.TelescopeHardware.Latitude - (int)Device.TelescopeHardware.Latitude) * 60).ToString("00.000"));
 
-            LongitudeSign = Math.Sign(TelescopeHardware.Longitude);
+            LongitudeSign = Math.Sign(Device.TelescopeHardware.Longitude);
 
-            LongitudeDegrees = Math.Abs((int)TelescopeHardware.Longitude);
+            LongitudeDegrees = Math.Abs((int)Device.TelescopeHardware.Longitude);
 
-            LongitudeMinutes = double.Parse(Math.Abs((TelescopeHardware.Longitude - (int)TelescopeHardware.Longitude) * 60).ToString("00.000"));
+            LongitudeMinutes = double.Parse(Math.Abs((Device.TelescopeHardware.Longitude - (int)Device.TelescopeHardware.Longitude) * 60).ToString("00.000"));
 
-            Elevation = TelescopeHardware.Elevation;
+            Elevation = Device.TelescopeHardware.Elevation;
 
-            MountType = TelescopeHardware.AlignmentMode;
+            MountType = Device.TelescopeHardware.AlignmentMode;
 
-            Aperture = TelescopeHardware.ApertureDiameter;
+            Aperture = Device.TelescopeHardware.ApertureDiameter;
 
-            ApertureArea = TelescopeHardware.ApertureArea;
+            ApertureArea = Device.TelescopeHardware.ApertureArea;
 
-            FocalLength = TelescopeHardware.FocalLength;
+            FocalLength = Device.TelescopeHardware.FocalLength;
 
-            StartupMode = TelescopeHardware.StartUpMode;
+            StartupMode = Device.TelescopeHardware.StartUpMode;
 
-            StartupAzimuth = TelescopeHardware.StartCoordinates.X;
+            StartupAzimuth = Device.TelescopeHardware.StartCoordinates.X;
 
-            StartupAltitude = TelescopeHardware.StartCoordinates.Y;
+            StartupAltitude = Device.TelescopeHardware.StartCoordinates.Y;
 
-            ParkAzimuth = TelescopeHardware.ParkAzimuth;
+            ParkAzimuth = Device.TelescopeHardware.ParkAzimuth;
 
-            ParkAltitude = TelescopeHardware.ParkAltitude;
+            ParkAltitude = Device.TelescopeHardware.ParkAltitude;
 
-            HomeAzimuth = TelescopeHardware.HomePosition.X;
+            HomeAzimuth = Device.TelescopeHardware.HomePosition.X;
 
-            HomeAltitude = TelescopeHardware.HomePosition.Y;
+            HomeAltitude = Device.TelescopeHardware.HomePosition.Y;
 
-            AltAzCoordinates = TelescopeHardware.CanAltAz;
+            AltAzCoordinates = Device.TelescopeHardware.CanAltAz;
 
-            AltAzSlewing = TelescopeHardware.CanSlewAltAz;
+            AltAzSlewing = Device.TelescopeHardware.CanSlewAltAz;
 
-            AltAzSync = TelescopeHardware.CanSyncAltAz;
+            AltAzSync = Device.TelescopeHardware.CanSyncAltAz;
 
-            AltAzAsynchronous = TelescopeHardware.CanSlewAltAzAsync;
+            AltAzAsynchronous = Device.TelescopeHardware.CanSlewAltAzAsync;
 
-            EquatorialCoordinates = TelescopeHardware.CanEquatorial;
+            EquatorialCoordinates = Device.TelescopeHardware.CanEquatorial;
 
-            EquatorialSlewing = TelescopeHardware.CanSlew;
+            EquatorialSlewing = Device.TelescopeHardware.CanSlew;
 
-            EquatorialSync = TelescopeHardware.CanSync;
+            EquatorialSync = Device.TelescopeHardware.CanSync;
 
-            EquatorialAsynchronous = TelescopeHardware.CanSlewAsync;
+            EquatorialAsynchronous = Device.TelescopeHardware.CanSlewAsync;
 
-            FindHome = TelescopeHardware.CanFindHome;
+            FindHome = Device.TelescopeHardware.CanFindHome;
 
-            Parking = TelescopeHardware.CanPark;
+            Parking = Device.TelescopeHardware.CanPark;
 
-            SetParkPosition = TelescopeHardware.CanSetPark;
+            SetParkPosition = Device.TelescopeHardware.CanSetPark;
 
-            Unparking = TelescopeHardware.CanUnpark;
+            Unparking = Device.TelescopeHardware.CanUnpark;
 
-            NumberAxis = TelescopeHardware.NumberMoveAxis;
+            NumberAxis = Device.TelescopeHardware.NumberMoveAxis;
 
-            LatLongElev = TelescopeHardware.CanLatLongElev;
+            LatLongElev = Device.TelescopeHardware.CanLatLongElev;
 
-            Optics = TelescopeHardware.CanOptics;
+            Optics = Device.TelescopeHardware.CanOptics;
 
-            AlignmentMode = TelescopeHardware.CanAlignmentMode;
+            AlignmentMode = Device.TelescopeHardware.CanAlignmentMode;
 
-            SideOfPier = TelescopeHardware.CanPointingState;
+            SideOfPier = Device.TelescopeHardware.CanPointingState;
 
-            SetSideOfPier = TelescopeHardware.CanSetPointingState;
+            SetSideOfPier = Device.TelescopeHardware.CanSetPointingState;
 
-            DestinationSideOfPier = TelescopeHardware.CanDestinationSideofPier;
+            DestinationSideOfPier = Device.TelescopeHardware.CanDestinationSideofPier;
 
-            RefractionSupport = TelescopeHardware.CanDoesRefraction;
+            RefractionSupport = Device.TelescopeHardware.CanDoesRefraction;
 
-            EquatorialSystem = TelescopeHardware.EquatorialSystem;
+            EquatorialSystem = Device.TelescopeHardware.EquatorialSystem;
 
-            DateTimeOn = TelescopeHardware.CanDateTime;
+            DateTimeOn = Device.TelescopeHardware.CanDateTime;
 
-            SiderealTime = TelescopeHardware.CanSiderealTime;
+            SiderealTime = Device.TelescopeHardware.CanSiderealTime;
 
-            TrackingOnOff = TelescopeHardware.CanSetTracking;
+            TrackingOnOff = Device.TelescopeHardware.CanSetTracking;
 
-            TrackingRates = TelescopeHardware.CanTrackingRates;
+            TrackingRates = Device.TelescopeHardware.CanTrackingRates;
 
-            GuideRates = TelescopeHardware.CanSetGuideRates;
+            GuideRates = Device.TelescopeHardware.CanSetGuideRates;
 
-            PulseGuide = TelescopeHardware.CanPulseGuide;
+            PulseGuide = Device.TelescopeHardware.CanPulseGuide;
 
-            DualAxisPulseGuide = TelescopeHardware.CanDualAxisPulseGuide;
+            DualAxisPulseGuide = Device.TelescopeHardware.CanDualAxisPulseGuide;
 
-            RaDecRates = TelescopeHardware.CanSetEquatorialRates;
+            RaDecRates = Device.TelescopeHardware.CanSetEquatorialRates;
 
-            NoSyncMeridian = TelescopeHardware.NoSyncPastMeridian;
+            NoSyncMeridian = Device.TelescopeHardware.NoSyncPastMeridian;
 
-            Version1Interface = TelescopeHardware.VersionOneOnly;
+            Version1Interface = Device.TelescopeHardware.VersionOneOnly;
         }
 
         base.OnInitialized();
@@ -814,8 +814,8 @@
     {
         try
         {
-            TelescopeHardware.ClearProfile();
-            TelescopeHardware.Init();
+            Device.TelescopeHardware.ClearProfile();
+            Device.TelescopeHardware.Init();
             toastService.ShowSuccess("Settings Reset");
 
             var timer = new System.Threading.Timer(new System.Threading.TimerCallback(_ =>
@@ -935,107 +935,107 @@
                 return;
             }
 
-            TelescopeHardware.AutoTrack = AutoUnpark;
+            Device.TelescopeHardware.AutoTrack = AutoUnpark;
 
-            TelescopeHardware.NoCoordinatesAtPark = NoCoordinates;
+            Device.TelescopeHardware.NoCoordinatesAtPark = NoCoordinates;
 
-            TelescopeHardware.DisconnectOnPark = DisconnectOnPark; ;
+            Device.TelescopeHardware.DisconnectOnPark = DisconnectOnPark; ;
 
-            TelescopeHardware.MaximumSlewRate = SlewRate;
+            Device.TelescopeHardware.MaximumSlewRate = SlewRate;
 
-            TelescopeHardware.Refraction = RefractionOn; ;
+            Device.TelescopeHardware.Refraction = RefractionOn; ;
 
-            TelescopeHardware.Latitude = LatitudeSign * (LatitudeDegrees + LatitudeMinutes / 60);
+            Device.TelescopeHardware.Latitude = LatitudeSign * (LatitudeDegrees + LatitudeMinutes / 60);
 
-            TelescopeHardware.Longitude = LongitudeSign * (LongitudeDegrees + LongitudeMinutes / 60);
+            Device.TelescopeHardware.Longitude = LongitudeSign * (LongitudeDegrees + LongitudeMinutes / 60);
 
-            TelescopeHardware.Elevation = Elevation; ;
+            Device.TelescopeHardware.Elevation = Elevation; ;
 
-            TelescopeHardware.AlignmentMode = MountType;
+            Device.TelescopeHardware.AlignmentMode = MountType;
 
-            TelescopeHardware.ApertureDiameter = Aperture;
+            Device.TelescopeHardware.ApertureDiameter = Aperture;
 
-            TelescopeHardware.ApertureArea = ApertureArea;
+            Device.TelescopeHardware.ApertureArea = ApertureArea;
 
-            TelescopeHardware.FocalLength = FocalLength;
+            Device.TelescopeHardware.FocalLength = FocalLength;
 
-            TelescopeHardware.StartUpMode = StartupMode;
+            Device.TelescopeHardware.StartUpMode = StartupMode;
 
-            TelescopeHardware.StartCoordinates.X = StartupAzimuth;
+            Device.TelescopeHardware.StartCoordinates.X = StartupAzimuth;
 
-            TelescopeHardware.StartCoordinates.Y = StartupAltitude;
+            Device.TelescopeHardware.StartCoordinates.Y = StartupAltitude;
 
-            TelescopeHardware.ParkAzimuth = ParkAzimuth;
+            Device.TelescopeHardware.ParkAzimuth = ParkAzimuth;
 
-            TelescopeHardware.ParkAltitude = ParkAltitude;
+            Device.TelescopeHardware.ParkAltitude = ParkAltitude;
 
-            TelescopeHardware.HomePosition.X = HomeAzimuth;
+            Device.TelescopeHardware.HomePosition.X = HomeAzimuth;
 
-            TelescopeHardware.HomePosition.Y = HomeAltitude;
+            Device.TelescopeHardware.HomePosition.Y = HomeAltitude;
 
-            TelescopeHardware.CanAltAz = AltAzCoordinates;
+            Device.TelescopeHardware.CanAltAz = AltAzCoordinates;
 
-            TelescopeHardware.CanSlewAltAz = AltAzSlewing;
+            Device.TelescopeHardware.CanSlewAltAz = AltAzSlewing;
 
-            TelescopeHardware.CanSyncAltAz = AltAzSync;
+            Device.TelescopeHardware.CanSyncAltAz = AltAzSync;
 
-            TelescopeHardware.CanSlewAltAzAsync = AltAzAsynchronous;
+            Device.TelescopeHardware.CanSlewAltAzAsync = AltAzAsynchronous;
 
-            TelescopeHardware.CanEquatorial = EquatorialCoordinates;
+            Device.TelescopeHardware.CanEquatorial = EquatorialCoordinates;
 
-            TelescopeHardware.CanSlew = EquatorialSlewing;
+            Device.TelescopeHardware.CanSlew = EquatorialSlewing;
 
-            TelescopeHardware.CanSync = EquatorialSync;
+            Device.TelescopeHardware.CanSync = EquatorialSync;
 
-            TelescopeHardware.CanSlewAsync = EquatorialAsynchronous;
+            Device.TelescopeHardware.CanSlewAsync = EquatorialAsynchronous;
 
-            TelescopeHardware.CanFindHome = FindHome;
+            Device.TelescopeHardware.CanFindHome = FindHome;
 
-            TelescopeHardware.CanPark = Parking;
+            Device.TelescopeHardware.CanPark = Parking;
 
-            TelescopeHardware.CanSetPark = SetParkPosition;
+            Device.TelescopeHardware.CanSetPark = SetParkPosition;
 
-            TelescopeHardware.CanUnpark = Unparking;
+            Device.TelescopeHardware.CanUnpark = Unparking;
 
-            TelescopeHardware.NumberMoveAxis = NumberAxis;
+            Device.TelescopeHardware.NumberMoveAxis = NumberAxis;
 
-            TelescopeHardware.CanLatLongElev = LatLongElev;
+            Device.TelescopeHardware.CanLatLongElev = LatLongElev;
 
-            TelescopeHardware.CanOptics = Optics;
+            Device.TelescopeHardware.CanOptics = Optics;
 
-            TelescopeHardware.CanAlignmentMode = AlignmentMode;
+            Device.TelescopeHardware.CanAlignmentMode = AlignmentMode;
 
-            TelescopeHardware.CanPointingState = SideOfPier;
+            Device.TelescopeHardware.CanPointingState = SideOfPier;
 
-            TelescopeHardware.CanSetPointingState = SetSideOfPier;
+            Device.TelescopeHardware.CanSetPointingState = SetSideOfPier;
 
-            TelescopeHardware.CanDestinationSideofPier = DestinationSideOfPier;
+            Device.TelescopeHardware.CanDestinationSideofPier = DestinationSideOfPier;
 
-            TelescopeHardware.CanDoesRefraction = RefractionSupport;
+            Device.TelescopeHardware.CanDoesRefraction = RefractionSupport;
 
-            TelescopeHardware.EquatorialSystem = EquatorialSystem;
+            Device.TelescopeHardware.EquatorialSystem = EquatorialSystem;
 
-            TelescopeHardware.CanDateTime = DateTimeOn;
+            Device.TelescopeHardware.CanDateTime = DateTimeOn;
 
-            TelescopeHardware.CanSiderealTime = SiderealTime;
+            Device.TelescopeHardware.CanSiderealTime = SiderealTime;
 
-            TelescopeHardware.CanSetTracking = TrackingOnOff;
+            Device.TelescopeHardware.CanSetTracking = TrackingOnOff;
 
-            TelescopeHardware.CanTrackingRates = TrackingRates;
+            Device.TelescopeHardware.CanTrackingRates = TrackingRates;
 
-            TelescopeHardware.CanSetGuideRates = GuideRates;
+            Device.TelescopeHardware.CanSetGuideRates = GuideRates;
 
-            TelescopeHardware.CanPulseGuide = PulseGuide;
+            Device.TelescopeHardware.CanPulseGuide = PulseGuide;
 
-            TelescopeHardware.CanDualAxisPulseGuide = DualAxisPulseGuide;
+            Device.TelescopeHardware.CanDualAxisPulseGuide = DualAxisPulseGuide;
 
-            TelescopeHardware.CanSetEquatorialRates = RaDecRates;
+            Device.TelescopeHardware.CanSetEquatorialRates = RaDecRates;
 
-            TelescopeHardware.NoSyncPastMeridian = NoSyncMeridian;
+            Device.TelescopeHardware.NoSyncPastMeridian = NoSyncMeridian;
 
-            TelescopeHardware.VersionOneOnly = Version1Interface;
+            Device.TelescopeHardware.VersionOneOnly = Version1Interface;
 
-            TelescopeHardware.StoreHomeParkStart();
+            Device.TelescopeHardware.StoreHomeParkStart();
 
             toastService.ShowSuccess("Settings Saved");
         }

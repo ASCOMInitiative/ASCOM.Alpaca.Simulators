@@ -190,59 +190,6 @@ namespace ASCOM.Simulators
         }
 
         /// <summary>
-        /// Calculate Altitude and Azimuth From Ra/Dec and Site, ra in hours, the rest degrees
-        /// </summary>
-        /// <param name="rightAscension"></param>
-        /// <param name="declination"></param>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        /// <returns></returns>
-        //private static double CalculateAltitude(double rightAscension, double declination, double latitude, double longitude)
-        //{
-        //    double azimuth;
-        //    return CalculateAltAzm(rightAscension, declination, latitude, longitude, out azimuth);
-
-        //    //double lst = LocalSiderealTime(longitude * SharedResources.RAD_DEG); // Hours
-        //    //double ha = (lst - rightAscension * SharedResources.RAD_HRS) * SharedResources.HRS_RAD; //Radians
-
-        //    //double sh = Math.Sin(ha);
-        //    //double ch = Math.Cos(ha);
-        //    //double sd = Math.Sin(declination);
-        //    //double cd = Math.Cos(declination);
-        //    //double sl = Math.Sin(latitude);
-        //    //double cl = Math.Cos(latitude);
-
-        //    //double x = (sd * cl) - (ch * cd * sl);
-        //    //double y = -(sh * cd);
-        //    //double z = (ch * cd * cl) + (sd * sl);
-        //    //double r = Math.Sqrt((x * x) + (y * y));
-
-        //    //return RangeAlt(Math.Atan2(z, r) * SharedResources.RAD_DEG);
-        //}
-
-        //private static double CalculateAzimuth(double rightAscension, double declination, double latitude, double longitude)
-        //{
-        //    double azimuth;
-        //    CalculateAltAzm(rightAscension, declination, latitude, longitude, out azimuth);
-        //    return azimuth;
-
-        //    //double lst = LocalSiderealTime(longitude * SharedResources.RAD_DEG); // Hours
-        //    //double ha = (lst - rightAscension * SharedResources.RAD_HRS) * SharedResources.HRS_RAD;  // Radians
-
-        //    //double sh = Math.Sin(ha);
-        //    //double ch = Math.Cos(ha);
-        //    //double sd = Math.Sin(declination);
-        //    //double cd = Math.Cos(declination);
-        //    //double sl = Math.Sin(latitude);
-        //    //double cl = Math.Cos(latitude);
-
-        //    //double x =  (sd * cl) - (ch * cd * sl);
-        //    //double y = -(sh * cd);
-
-        //    //return RangeAzimuth(Math.Atan2(y, x) * SharedResources.RAD_DEG);
-        //}
-
-        /// <summary>
         /// calculate the altitude and azimuth at the current time, units are hours and degrees
         /// </summary>
         /// <param name="rightAscension">hours</param>
@@ -274,9 +221,8 @@ namespace ASCOM.Simulators
             return RangeAlt(Math.Atan2(z, r) * SharedResources.RAD_DEG);
         }
 
-        public static Vector CalculateAltAzm(double rightAscension, double declination, double latitude)
+        public static Vector CalculateAltAzm(double rightAscension, double declination, double latitude, double lst)
         {
-            double lst = TelescopeHardware.SiderealTime;      // Hours
             double ha = (lst - rightAscension) * SharedResources.HRS_RAD;  // Radians
             double dec = declination * SharedResources.DEG_RAD;
             double lat = latitude * SharedResources.DEG_RAD;

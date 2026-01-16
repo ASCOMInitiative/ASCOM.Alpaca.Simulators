@@ -235,13 +235,16 @@ namespace ASCOM.Alpaca.Simulators
                 }
             }
 
-            try
+            foreach (var dev in DeviceManager.Telescopes.Values)
             {
-                ASCOM.Simulators.TelescopeHardware.ClearProfile();
-            }
-            catch (Exception ex)
-            {
-                Logging.LogError($"Failed to reset Telescope settings with error: {ex.Message}");
+                try
+                {
+                    (dev as ASCOM.Simulators.Telescope)?.ResetSettings();
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogError($"Failed to reset Telescope settings with error: {ex.Message}");
+                }
             }
         }
     }
