@@ -1,23 +1,27 @@
 ﻿using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
+using OmniSim.BaseDriver;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
 namespace ASCOM.Simulators
 {
     /// <summary>
     /// ASCOM ObservingConditions Driver for Observing Conditions OCSimulator.
     /// </summary>
-    public class ObservingConditions : IObservingConditionsV2, IAlpacaDevice, ISimulation
+    public class ObservingConditions : OmniSim.BaseDriver.Driver, IObservingConditionsV2, IAlpacaDevice, ISimulation
     {
         #region Variables and Constants
 
         internal static ILogger TL; // Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
-        private bool clientIsConnected;
 
         private const string UNIQUE_ID_PROFILE_NAME = "UniqueID";
+
+        internal OCSimulator OCSimulator;
 
         #endregion Variables and Constants
 
@@ -27,10 +31,11 @@ namespace ASCOM.Simulators
         /// Initializes a new instance of the <see cref="OCSimulator"/> class.
         /// Must be public for COM registration.
         /// </summary>
-        public ObservingConditions(int deviceNumber, ILogger logger, IProfile profile)
+        public ObservingConditions(int deviceNumber, ILogger logger, IProfile profile) : base(deviceNumber, logger, profile)
         {
             try
             {
+                OCSimulator = new OCSimulator();
                 OCSimulator.driverProfile = profile;
                 OCSimulator.TL = logger;
                 OCSimulator.Init();
@@ -66,90 +71,139 @@ namespace ASCOM.Simulators
                 OCSimulator.LogMessage("ObservingConditions", ex.ToString());
             }
         }
+        /// <summary>
+        /// Name of the Driver.
+        /// </summary>
+        public override string DeviceName { get { return $"{OCSimulator.Name()} - {DeviceNumber}"; } }
 
-        public string DeviceName { get => Name; }
-        public int DeviceNumber { get; private set; }
-        public string UniqueID { get; private set; }
+        /// <summary>
+        /// Gets what device this this driver exposes.
+        /// </summary>
+        public override DeviceTypes DeviceType { get; } = DeviceTypes.Focuser;
+
+        /// <summary>
+        /// Gets the stored interface version to use.
+        /// </summary>
+        public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-4", 4);
+
+        /// <summary>
+        /// Gets an interface version for V1 drivers that would throw on a InterfaceVersion Call.
+        /// </summary>
+        public override short SafeInterfaceVersion
+        {
+            get
+            {
+                return this.InterfaceVersionSetting.Value;
+            }
+        }
 
         #endregion Class initialiser
 
         #region Common properties and methods.
 
-        /// <summary>
-        /// Displays the Setup Dialogue form.
-        /// If the user clicks the OK button to dismiss the form, then
-        /// the new settings are saved, otherwise the old values are reloaded.
-        /// THIS IS THE ONLY PLACE WHERE SHOWING USER INTERFACE IS ALLOWED!
-        /// </summary>
-        public void SetupDialog()
+        public override void Connect()
         {
+            if(!IsConnected)
+            {
+                OCSimulator.Connect();
+            }
+            base.Connect();
         }
 
-        public IList<string> SupportedActions
+        public override void Disconnect()
         {
-            get { return OCSimulator.SupportedActions(); }
+            if (IsConnected)
+            {
+                OCSimulator.Disconnect();
+            }
+            base.Disconnect();
         }
 
-        public string Action(string actionName, string actionParameters)
-        { return OCSimulator.Action(actionName, actionParameters); }
-
-        public void CommandBlind(string command, bool raw)
-        {
-            OCSimulator.CommandBlind(command, raw);
-        }
-
-        public bool CommandBool(string command, bool raw)
-        {
-            return OCSimulator.CommandBool(command, raw);
-        }
-
-        public string CommandString(string command, bool raw)
-        {
-            return OCSimulator.CommandString(command, raw);
-        }
-
-        public void Dispose()
-        {
-        }
-
-        public bool Connected
+        public override bool Connected
         {
             get
             {
-                //return OCSimulator.IsConnected();
-                return clientIsConnected;
+                return base.Connected;
             }
             set
             {
-                clientIsConnected = value;
-                if (value) OCSimulator.Connect();
-                else OCSimulator.Disconnect();
+                if (value)
+                {
+                    if (!IsConnected)
+                    {
+                        OCSimulator.Connect();
+                    }
+                }
+                else
+                {
+                    if (!IsConnected)
+                    {
+                        OCSimulator.Disconnect();
+                    }
+                }
+                base.Connected = value;
             }
         }
 
-        public string Description
+        /// <summary>
+        /// Gets the ASCOM Driver Description.
+        /// </summary>
+        public override string Description
         {
-            get { return OCSimulator.Description(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.Description();
+                }, DeviceType, MemberNames.Description, "Get");
+            }
         }
 
-        public string DriverInfo
+        /// <summary>
+        /// Gets the ASCOM Driver DriverInfo.
+        /// </summary>
+        public override string DriverInfo
         {
-            get { return OCSimulator.DriverInfo(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.DriverInfo();
+                }, DeviceType, MemberNames.DriverInfo, "Get");
+            }
         }
 
-        public string DriverVersion
+        /// <summary>
+        /// Gets the ASCOM Driver Interface Version.
+        /// </summary>
+        public override short InterfaceVersion
         {
-            get { return OCSimulator.DriverVersion(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return this.InterfaceVersionSetting.Value;
+                }, DeviceType, MemberNames.InterfaceVersion, "Get");
+            }
         }
 
-        public short InterfaceVersion
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        public override string Name
         {
-            get { return OCSimulator.InterfaceVersion(); }
-        }
-
-        public string Name
-        {
-            get { return OCSimulator.Name(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.Name();
+                }, DeviceType, MemberNames.Name, "Get");
+            }
         }
 
         #endregion Common properties and methods.
@@ -244,25 +298,7 @@ namespace ASCOM.Simulators
 
         #endregion ObservingConditions Implementation
 
-#region IObservingConditionsV2 implementation
-
-        public void Connect()
-        {
-            Connected = true;
-        }
-
-        public void Disconnect()
-        {
-            Connected = false;
-        }
-
-        public bool Connecting
-        {
-            get
-            {
-                return false;
-            }
-        }
+        #region IObservingConditionsV2 implementation
 
         /// <summary>
         /// Return the device's operational state in one call
@@ -293,22 +329,5 @@ namespace ASCOM.Simulators
             }
         }
 #endregion
-
-
-
-
-        #region ISimulation
-
-        public void ResetSettings()
-        {
-            OCSimulator.ClearProfile();
-        }
-
-        public string GetXMLProfile()
-        {
-            return OCSimulator.driverProfile.GetProfile();
-        }
-
-        #endregion ISimulation
     }
 }

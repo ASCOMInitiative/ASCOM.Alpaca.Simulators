@@ -129,13 +129,13 @@
         {
             var interfaceversion = Device.InterfaceVersion;
 
-            SensorQueryInterval = ASCOM.Simulators.OCSimulator.SensorQueryInterval;
+            SensorQueryInterval = Device.OCSimulator.SensorQueryInterval;
 
-            AveragePeriod = ASCOM.Simulators.OCSimulator.AveragePeriod;
+            AveragePeriod = Device.OCSimulator.AveragePeriod;
 
-            NumberOfReadings = ASCOM.Simulators.OCSimulator.NumberOfReadingsToAverage;
+            NumberOfReadings = Device.OCSimulator.NumberOfReadingsToAverage;
 
-            foreach (var sensor in ASCOM.Simulators.OCSimulator.Sensors)
+            foreach (var sensor in Device.OCSimulator.Sensors)
             {
                 Sensors.Add(sensor.Key, sensor.Value);
             }
@@ -210,7 +210,7 @@
         try
         {
             Device.ResetSettings();
-            ASCOM.Simulators.OCSimulator.Init();
+            Device.OCSimulator.Init();
             toastService.ShowSuccess("Settings Reset");
 
             var timer = new System.Threading.Timer(new System.Threading.TimerCallback(_ =>
@@ -272,29 +272,29 @@
                 return;
             }
 
-            ASCOM.Simulators.OCSimulator.SensorQueryInterval = SensorQueryInterval;
+            Device.OCSimulator.SensorQueryInterval = SensorQueryInterval;
 
-            ASCOM.Simulators.OCSimulator.AveragePeriod = AveragePeriod;
+            Device.OCSimulator.AveragePeriod = AveragePeriod;
 
-            ASCOM.Simulators.OCSimulator.NumberOfReadingsToAverage = NumberOfReadings;
+            Device.OCSimulator.NumberOfReadingsToAverage = NumberOfReadings;
 
             foreach (var sensor in Sensors)
             {
-                ASCOM.Simulators.OCSimulator.Sensors[sensor.Key].SimFromValue = sensor.Value.SimFromValue;
-                ASCOM.Simulators.OCSimulator.Sensors[sensor.Key].SimToValue = sensor.Value.SimToValue;
-                ASCOM.Simulators.OCSimulator.Sensors[sensor.Key].IsImplemented = sensor.Value.IsImplemented;
-                ASCOM.Simulators.OCSimulator.Sensors[sensor.Key].NotReadyDelay = sensor.Value.NotReadyDelay;
-                ASCOM.Simulators.OCSimulator.Sensors[sensor.Key].ValueCycleTime = sensor.Value.ValueCycleTime;
+                Device.OCSimulator.Sensors[sensor.Key].SimFromValue = sensor.Value.SimFromValue;
+                Device.OCSimulator.Sensors[sensor.Key].SimToValue = sensor.Value.SimToValue;
+                Device.OCSimulator.Sensors[sensor.Key].IsImplemented = sensor.Value.IsImplemented;
+                Device.OCSimulator.Sensors[sensor.Key].NotReadyDelay = sensor.Value.NotReadyDelay;
+                Device.OCSimulator.Sensors[sensor.Key].ValueCycleTime = sensor.Value.ValueCycleTime;
             }
 
 
-            ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].SimFromValue = ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].SimFromValue;
-            ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].SimToValue = ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].SimToValue;
-            ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].IsImplemented = ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].IsImplemented;
-            ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].NotReadyDelay = ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].NotReadyDelay;
-            ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].ValueCycleTime = ASCOM.Simulators.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].ValueCycleTime;
+            Device.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].SimFromValue = Device.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].SimFromValue;
+            Device.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].SimToValue = Device.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].SimToValue;
+            Device.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].IsImplemented = Device.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].IsImplemented;
+            Device.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].NotReadyDelay = Device.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].NotReadyDelay;
+            Device.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_DEWPOINT].ValueCycleTime = Device.OCSimulator.Sensors[ASCOM.Simulators.OCSimulator.PROPERTY_HUMIDITY].ValueCycleTime;
 
-            ASCOM.Simulators.OCSimulator.WriteProfile();
+            Device.OCSimulator.WriteProfile();
 
             toastService.ShowSuccess("Settings Saved");
         }

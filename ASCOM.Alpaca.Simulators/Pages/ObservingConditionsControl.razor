@@ -42,17 +42,17 @@
                     <th>Override</th>
                 </tr>
 
-                @foreach (var dev in ASCOM.Simulators.OCSimulator.Sensors)
+                @foreach (var dev in Device.OCSimulator.Sensors)
                 {
                     <tr>
                         <th>@dev.Value.SensorName</th>
                         @if (Connected)
                         {
 
-                            @if (ASCOM.Simulators.OCSimulator.Sensors[@dev.Value.SensorName].IsImplemented)
+                            @if (Device.OCSimulator.Sensors[@dev.Value.SensorName].IsImplemented)
                             {
                                 <th>
-                                    @ASCOM.Simulators.OCSimulator.GetSensorValue(@dev.Value.SensorName).ToString("0.000")
+                                    @Device.OCSimulator.GetSensorValue(@dev.Value.SensorName).ToString("0.000")
                                 </th>
                             }
                             else
@@ -210,7 +210,7 @@
     {
         try
         {
-            ASCOM.Simulators.OCSimulator.WriteProfile();
+            Device.OCSimulator.WriteProfile();
 
             toastService.ShowSuccess("Settings Saved");
         }

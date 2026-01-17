@@ -213,7 +213,6 @@ namespace ASCOM.Alpaca.Simulators
             return ProcessRequest(() =>
             {
                 ObservingConditionsAccess(DeviceNumber).ResetSettings();
-                ASCOM.Simulators.OCSimulator.Init();
             },
             DeviceManager.ServerTransactionID, ClientID, ClientTransactionID, $"Reseting ObservingConditions {DeviceNumber} to default settings.");
         }

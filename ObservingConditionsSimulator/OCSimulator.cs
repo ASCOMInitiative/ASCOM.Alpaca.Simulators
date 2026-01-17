@@ -8,7 +8,7 @@
 //
 // NOTES:
 //
-//	* ALL DECLARATIONS MUST BE STATIC HERE!! INSTANCES OF THIS CLASS MUST NEVER BE CREATED!
+//	* ALL DECLARATIONS MUST BE  HERE!! INSTANCES OF THIS CLASS MUST NEVER BE CREATED!
 //
 // Written by:	Bob Denny	29-May-2007
 // Modified by Chris Rowland and Peter Simpson to handle multiple hardware devices March 2011
@@ -83,19 +83,19 @@ namespace ASCOM.Simulators
         public const string OVERRIDE_VALUE_PROFILENAME = "Override Value"; // No default value, these are picked from the simulator "from" values
         public const string MINIMISE_ON_START_PROFILENAME = "Minimise On Start"; public const string MINIMISE_ON_START_DEFAULT = "True";
 
-        public static ILogger TL;
+        public ILogger TL;
 
-        public static bool DebugTraceState;
+        public bool DebugTraceState;
 
         // Setup dialogue configuration variables
-        public static bool TraceState;
+        public bool TraceState;
 
-        public static double SensorQueryInterval;
-        public static double AveragePeriod;
-        public static int NumberOfReadingsToAverage;
+        public double SensorQueryInterval;
+        public double AveragePeriod;
+        public int NumberOfReadingsToAverage;
 
         // Main dialogue configuration variables
-        public static bool MinimiseOnStart;
+        public bool MinimiseOnStart;
 
         // List of ObservingConditions properties that are dynamically simulated
         public static List<string> SimulatedProperties = new List<string> { // Array containing a list of properties that are calculated but excluding dew point, which is derived
@@ -196,8 +196,8 @@ namespace ASCOM.Simulators
         public static Dictionary<string, string> UnitString = new Dictionary<string, string>()
         {
             {PROPERTY_CLOUDCOVER, "Percent"},
-			{PROPERTY_DEWPOINT, "Celsius"},
-			{PROPERTY_HUMIDITY, "Percent"},
+            {PROPERTY_DEWPOINT, "Celsius"},
+            {PROPERTY_HUMIDITY, "Percent"},
             {PROPERTY_PRESSURE, "hPa"},
             {PROPERTY_RAINRATE, "mm/hr"},
             {PROPERTY_SKYBRIGHTNESS, "Lux"},
@@ -245,22 +245,22 @@ namespace ASCOM.Simulators
         private const string EXPOSE_OCHTAG_NAME = "Expose OCH Tag";
 
         private const bool EXPOSE_OCHTAG_DEFAULT = true;
-        private static bool exposeOCHState;
+        private bool exposeOCHState;
 
         // Miscellaneous variables
-        private static int uniqueClientNumber = 0; // Unique number that increments on each call to UniqueClientNumber
+        private int uniqueClientNumber = 0; // Unique number that increments on each call to UniqueClientNumber
 
-        private static readonly object connectLockObject = new object();
-        private static ConcurrentDictionary<long, bool> connectStates;
-        private static DateTime initialConnectionTime;
-        private static DateTime mostRecentUpdateTime;
-        private static System.Timers.Timer sensorQueryTimer;
-        private static System.Timers.Timer averagePeriodTimer;
+        private readonly object connectLockObject = new object();
+        private ConcurrentDictionary<long, bool> connectStates;
+        private DateTime initialConnectionTime;
+        private DateTime mostRecentUpdateTime;
+        private System.Timers.Timer sensorQueryTimer;
+        private System.Timers.Timer averagePeriodTimer;
 
         //Sensor information and devices
-        public static Dictionary<string, Sensor> Sensors = new Dictionary<string, Sensor>();
+        public Dictionary<string, Sensor> Sensors = new Dictionary<string, Sensor>();
 
-        internal static IProfile driverProfile
+        internal IProfile driverProfile
         {
             get;
             set;
@@ -271,13 +271,13 @@ namespace ASCOM.Simulators
         #region Initialiser
 
         /// <summary>
-        /// Static initialiser to set up the objects we need at run time
+        ///  initialiser to set up the objects we need at run time
         /// </summary>
-        static OCSimulator()
+        public OCSimulator()
         {
         }
 
-        internal static void Init()
+        internal void Init()
         {
             try
             {
@@ -326,52 +326,7 @@ namespace ASCOM.Simulators
 
         #region ASCOM Common Methods
 
-        public static string Action(string actionName, string actionParameters)
-        {
-            switch (actionName.ToUpperInvariant())
-            {
-                case OCH_TAG_UPPER_CASE when exposeOCHState:
-                    return "OCSimulator";
-
-                case OCH_TEST_WEATHER_REPORT_UPPER_CASE:
-                    return "The weather will be very nice today! Supplied parameters: " + actionParameters;
-
-                default:
-                    throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
-            }
-        }
-
-        public static void CommandBlind(string command)
-        {
-            throw new MethodNotImplementedException("CommandBlind");
-        }
-
-        public static void CommandBlind(string command, bool raw)
-        {
-            throw new MethodNotImplementedException("CommandBlind");
-        }
-
-        public static bool CommandBool(string command)
-        {
-            throw new MethodNotImplementedException("CommandBool");
-        }
-
-        public static bool CommandBool(string command, bool raw)
-        {
-            throw new MethodNotImplementedException("CommandBool");
-        }
-
-        public static string CommandString(string command)
-        {
-            throw new MethodNotImplementedException("CommandString");
-        }
-
-        public static string CommandString(string command, bool raw)
-        {
-            throw new MethodNotImplementedException("CommandString");
-        }
-
-        public static void Connect()
+        public void Connect()
         {
             if (DebugTraceState) LogMessage("Connect", "Acquiring connection lock");
             lock (connectLockObject) // Ensure that only one connection attempt can happen at a time
@@ -412,7 +367,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        public static void Disconnect()
+        public void Disconnect()
         {
             bool lastValue;
             bool successfullyRemoved = connectStates.TryRemove(1, out lastValue);
@@ -424,7 +379,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        public static string Description()
+        public string Description()
         {
             CheckConnected("Description");
 
@@ -432,7 +387,7 @@ namespace ASCOM.Simulators
             return DRIVER_DISPLAY_NAME;
         }
 
-        public static string DriverInfo()
+        public string DriverInfo()
         {
             CheckConnected("DriverInfo");
 
@@ -442,7 +397,7 @@ namespace ASCOM.Simulators
             return driverInfo;
         }
 
-        public static string DriverVersion()
+        public string DriverVersion()
         {
             CheckConnected("DriverVersion");
 
@@ -452,7 +407,7 @@ namespace ASCOM.Simulators
             return driverVersion;
         }
 
-        public static short InterfaceVersion()
+        public short InterfaceVersion()
         {
             short interfaceVersion = 2;
 
@@ -460,14 +415,14 @@ namespace ASCOM.Simulators
             return interfaceVersion;
         }
 
-        public static string Name()
+        public string Name()
         {
             string name = DRIVER_DISPLAY_NAME;
             LogMessage("Name", name);
             return name;
         }
 
-        public static IList<string> SupportedActions()
+        public IList<string> SupportedActions()
         {
             CheckConnected("SupportedActions");
 
@@ -487,7 +442,7 @@ namespace ASCOM.Simulators
 
         #region ASCOM ObservingConditions Methods
 
-        public static double AveragePeriodGet()
+        public double AveragePeriodGet()
         {
             CheckConnected("AveragePeriodGet");
 
@@ -495,7 +450,7 @@ namespace ASCOM.Simulators
             return AveragePeriod;
         }
 
-        public static void AveragePeriodSet(double value)
+        public void AveragePeriodSet(double value)
         {
             CheckConnected("AveragePeriodSet");
 
@@ -513,42 +468,42 @@ namespace ASCOM.Simulators
             }
         }
 
-        public static double CloudCover()
+        public double CloudCover()
         {
             double cloudCover = GetSensorValue(PROPERTY_CLOUDCOVER);
             LogMessage("CloudCover", cloudCover.ToString());
             return cloudCover;
         }
 
-        public static double DewPoint()
+        public double DewPoint()
         {
             double dewPoint = GetSensorValue(PROPERTY_DEWPOINT);
             LogMessage("DewPoint", dewPoint.ToString());
             return dewPoint;
         }
 
-        public static double Humidity()
+        public double Humidity()
         {
             double humidity = GetSensorValue(PROPERTY_HUMIDITY); ;
             LogMessage("Humidity", humidity.ToString());
             return humidity;
         }
 
-        public static double Pressure()
+        public double Pressure()
         {
             double pressure = GetSensorValue(PROPERTY_PRESSURE); ;
             LogMessage("Pressure", pressure.ToString());
             return pressure;
         }
 
-        public static double RainRate()
+        public double RainRate()
         {
             double rainRate = GetSensorValue(PROPERTY_RAINRATE); ;
             LogMessage("RainRate", rainRate.ToString());
             return rainRate;
         }
 
-        public static string SensorDescription(string PropertyName)
+        public string SensorDescription(string PropertyName)
         {
             CheckConnected("SensorDescription");
 
@@ -565,47 +520,47 @@ namespace ASCOM.Simulators
             }
         }
 
-        public static void Refresh()
+        public void Refresh()
         {
             // No action required for devices that are simulated
         }
 
-        public static double SkyBrightness()
+        public double SkyBrightness()
         {
             double skyBrightness = GetSensorValue(PROPERTY_SKYBRIGHTNESS); ;
             LogMessage("SkyBrightness", skyBrightness.ToString());
             return skyBrightness;
         }
 
-        public static double SkyQuality()
+        public double SkyQuality()
         {
             double skyQuality = GetSensorValue(PROPERTY_SKYQUALITY); ;
             LogMessage("SkyQuality", skyQuality.ToString());
             return skyQuality;
         }
 
-        public static double StarFWHM()
+        public double StarFWHM()
         {
             double starFWHM = GetSensorValue(PROPERTY_STARFWHM); ;
             LogMessage("StarFWHM", starFWHM.ToString());
             return starFWHM;
         }
 
-        public static double SkyTemperature()
+        public double SkyTemperature()
         {
             double skyTemperature = GetSensorValue(PROPERTY_SKYTEMPERATURE); ;
             LogMessage("SkyTemperature", skyTemperature.ToString());
             return skyTemperature;
         }
 
-        public static double Temperature()
+        public double Temperature()
         {
             double temperature = GetSensorValue(PROPERTY_TEMPERATURE); ;
             LogMessage("Temperature", temperature.ToString());
             return temperature;
         }
 
-        public static double TimeSinceLastUpdate(string PropertyName)
+        public double TimeSinceLastUpdate(string PropertyName)
         {
             CheckConnected("TimeSinceLastUpdate");
 
@@ -642,21 +597,21 @@ namespace ASCOM.Simulators
             }
         }
 
-        public static double WindDirection()
+        public double WindDirection()
         {
             double windDirection = GetSensorValue(PROPERTY_WINDDIRECTION); ;
             LogMessage("WindDirection", windDirection.ToString());
             return windDirection;
         }
 
-        public static double WindGust()
+        public double WindGust()
         {
             double windGust = GetSensorValue(PROPERTY_WINDGUST); ;
             LogMessage("WindGust", windGust.ToString());
             return windGust;
         }
 
-        public static double WindSpeed()
+        public double WindSpeed()
         {
             double windSpeed = GetSensorValue(PROPERTY_WINDSPEED); ;
             LogMessage("WindSpeed", windSpeed.ToString());
@@ -667,7 +622,7 @@ namespace ASCOM.Simulators
 
         #region Timer event handlers
 
-        private static void AveragePeriodTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void AveragePeriodTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             DateTime now = DateTime.Now;
             foreach (string Property in DriverProperties) //  SimulatedProperties)
@@ -688,7 +643,7 @@ namespace ASCOM.Simulators
             }
         }
 
-        private static void RefreshTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void RefreshTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             foreach (string Property in SimulatedProperties)
             {
@@ -786,7 +741,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Returns a unique client number to the calling instance
         /// </summary>
-        public static int GetUniqueClientNumber()
+        public int GetUniqueClientNumber()
         {
             Interlocked.Increment(ref uniqueClientNumber);
             LogMessage("UniqueClientNumber", "Generated new ID: " + uniqueClientNumber.ToString());
@@ -798,7 +753,7 @@ namespace ASCOM.Simulators
         /// </summary>
         /// <param name="PropertyName">Property name to test</param>
         /// <returns>Boolean true if the property name is valid</returns>
-        internal static bool IsValidProperty(string PropertyName)
+        internal bool IsValidProperty(string PropertyName)
         {
             return DriverProperties.Contains(PropertyName.Trim(), StringComparer.OrdinalIgnoreCase); // Make the test case insensitive as well as leading and trailing space insensitive
         }
@@ -808,7 +763,7 @@ namespace ASCOM.Simulators
         /// </summary>
         /// <param name="PropertyName">Name of the property to read</param>
         /// <returns>Double value read from device</returns>
-        internal static double GetSensorValue(string PropertyName)
+        internal double GetSensorValue(string PropertyName)
         {
             CheckConnected(PropertyName);
             if (Sensors[PropertyName].Override) // Override in effect so just return the specified value
@@ -872,7 +827,7 @@ namespace ASCOM.Simulators
         /// <param name="timevalue">The time value to test</param>
         /// <returns>Boolean value indicating whether a particular time value should be removed from the collection</returns>
         /// <remarks>Originally this was treating AveragePeriod as being in minutes, it now treats it as hours per the specification.</remarks>
-        private static bool TimeRemovePredicate(TimeValue timevalue)
+        private bool TimeRemovePredicate(TimeValue timevalue)
         {
             // Next line revised to treat AveragePeriod as being in hours per the interface specification, previously it was treating it as being in minutes. Peter Simpson 29th May 2019
             return DateTime.Now.Subtract(timevalue.ObservationTime).TotalHours > AveragePeriod;
@@ -881,7 +836,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Configure and enabled the average period timer
         /// </summary>
-        private static void ConfigureAveragePeriodTimer()
+        private void ConfigureAveragePeriodTimer()
         {
             if (averagePeriodTimer.Enabled) averagePeriodTimer.Stop();
             if (AveragePeriod > 0.0)
@@ -896,7 +851,7 @@ namespace ASCOM.Simulators
         /// Test whether the we are connected, if not throw a NotConnectedException
         /// </summary>
         /// <param name="MethodName">Name of the calling method</param>
-        private static void CheckConnected(string MethodName)
+        private void CheckConnected(string MethodName)
         {
             if (!IsHardwareConnected()) throw new NotConnectedException(MethodName + " - " + NOT_CONNECTED_MESSAGE);
         }
@@ -906,7 +861,7 @@ namespace ASCOM.Simulators
         /// </summary>
         /// <param name="clientNumber">Number of the client making the call</param>
         /// <returns>Boolean true if the hub is already connected</returns>
-        public static bool IsHardwareConnected()
+        public bool IsHardwareConnected()
         {
             if (DebugTraceState) LogMessage("IsHardwareConnected", "Number of connected devices: " + connectStates.Count + ", Returning: " + (connectStates.Count > 0).ToString());
             return connectStates.Count > 0;
@@ -917,7 +872,7 @@ namespace ASCOM.Simulators
         /// </summary>
         /// <param name="clientNumber">Number of the calling client</param>
         /// <returns></returns>
-        public static bool IsClientConnected()
+        public bool IsClientConnected()
         {
             LogMessage("IsClientConnected", "Number of connected devices: " + connectStates.Count + ", Returning: " + connectStates.ContainsKey(1).ToString());
 
@@ -927,7 +882,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Returns the number of connected clients
         /// </summary>
-        public static int ConnectionCount
+        public int ConnectionCount
         {
             get
             {
@@ -943,7 +898,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Read the device configuration from the ASCOM Profile store
         /// </summary>
-        public static void ReadProfile()
+        public void ReadProfile()
         {
             // Initialise the logging trace state from the Profile
             TraceState = Convert.ToBoolean(driverProfile.GetValue(TRACE_LEVEL_PROFILENAME, TRACE_LEVEL_DEFAULT), CultureInfo.InvariantCulture);
@@ -976,7 +931,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Write the device configuration to the  ASCOM  Profile store
         /// </summary>
-        public static void WriteProfile()
+        public void WriteProfile()
         {
             // Save the variable state to the Profile
             driverProfile.WriteValue(TRACE_LEVEL_PROFILENAME, TraceState.ToString(CultureInfo.InvariantCulture));
@@ -1000,24 +955,24 @@ namespace ASCOM.Simulators
             }
         }
 
-        internal static void ClearProfile()
+        internal void ClearProfile()
         {
             driverProfile.Clear();
         }
 
         #endregion Profile management
 
-        public static void LogMessage(string message)
+        public void LogMessage(string message)
         {
             TL.LogVerbose(message);
         }
 
-        public static void LogMessage(string message, string details)
+        public void LogMessage(string message, string details)
         {
             TL.LogVerbose(message + " - " + details);
         }
 
-        public static void LogMessage(string message, string details, object more)
+        public void LogMessage(string message, string details, object more)
         {
             TL.LogVerbose(message + " - " + details + " - " + more);
         }
@@ -1043,7 +998,7 @@ namespace ASCOM.Simulators
         ///<para>http://www.vaisala.com/Vaisala%20Documents/Application%20notes/Humidity_Conversion_Formulas_B210973EN-F.pdf </para>
 
         ///</remarks>
-        public static double Humidity2DewPoint(double RelativeHumidity, double AmbientTemperature)
+        public double Humidity2DewPoint(double RelativeHumidity, double AmbientTemperature)
         {
             // Formulae taken from Vaisala: http://www.vaisala.com/Vaisala%20Documents/Application%20notes/Humidity_Conversion_Formulas_B210973EN-F.pdf
             double Pws, Pw, Td;
