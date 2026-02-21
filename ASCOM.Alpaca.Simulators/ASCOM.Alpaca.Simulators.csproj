@@ -67,7 +67,7 @@
 
 	<PropertyGroup>
 		<DefineConstants Condition=" '$(AppImage)' == 'true' ">$(DefineConstants);BUNDLED</DefineConstants>
-		<DefineConstants>$(DefineConstants);ASCOM_COM</DefineConstants>
+		<DefineConstants>$(DefineConstants)</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup>
