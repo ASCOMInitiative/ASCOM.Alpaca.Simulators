@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASCOM.Common.Components" Version="2.2.1" />
-    <PackageReference Include="ASCOM.Exception.Library" Version="7.0.1" />
+    <PackageReference Include="ASCOM.Common.Components" Version="3.0.0" />
+    <PackageReference Include="ASCOM.Exception.Library" Version="7.1.2" />
   </ItemGroup>
 
   <ItemGroup>
