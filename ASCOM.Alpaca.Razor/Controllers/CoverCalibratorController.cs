@@ -172,6 +172,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/calibratoroff")]
         public ActionResult<Response> CalibratorOff(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
@@ -196,6 +197,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/calibratoron")]
         public ActionResult<Response> CalibratorOn(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
@@ -221,6 +223,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/closecover")]
         public ActionResult<Response> CloseCover(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
@@ -244,6 +247,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/haltcover")]
         public ActionResult<Response> HaltCover(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
@@ -267,6 +271,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/opencover")]
         public ActionResult<Response> OpenCover(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,

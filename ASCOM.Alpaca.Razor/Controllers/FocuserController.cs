@@ -196,6 +196,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/tempcomp")]
         public ActionResult<Response> TempComp(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
@@ -266,6 +267,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/halt")]
         public ActionResult<Response> Halt(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
@@ -290,6 +292,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/move")]
         public ActionResult<Response> Move(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,

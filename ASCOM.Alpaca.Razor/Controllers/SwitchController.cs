@@ -263,6 +263,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/setswitch")]
         public ActionResult<Response> SetSwitch(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
@@ -290,6 +291,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/setswitchname")]
         public ActionResult<Response> SetSwitchName(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
@@ -317,6 +319,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/setswitchvalue")]
         public ActionResult<Response> SetSwitchValue(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
@@ -390,6 +393,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/cancelasync")]
         public ActionResult<Response> CancelAsync(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
@@ -413,6 +417,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/setasync")]
         public ActionResult<Response> SetAsync(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
@@ -437,6 +442,7 @@ namespace ASCOM.Alpaca
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [Route("{DeviceNumber}/setasyncvalue")]
         public ActionResult<Response> SetAsyncValue(
             [Required][DefaultValue(0)][SwaggerSchema(Strings.DeviceIDDescription, Format = "uint32")][Range(0, 4294967295)] uint DeviceNumber,
