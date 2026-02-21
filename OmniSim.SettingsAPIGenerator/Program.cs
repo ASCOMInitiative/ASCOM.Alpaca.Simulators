@@ -72,8 +72,8 @@ namespace OmniSim.SettingsAPIGenerator
                 dynamic? setting = prop.GetValue(Activator.CreateInstance(DriverType));
                 if (setting != null)
                 {
-                    builder.AppendLine(GetSettingRaw(DeviceType, setting.Key, setting.Description, setting.Value.GetType().ToString(), GetResponseType(setting.Value.GetType()), $"{AccessString}.{prop.Name}.Value"));
-                    builder.AppendLine(PutSettingRaw(DeviceType, setting.Key, setting.Description, setting.Value.GetType().ToString(), $"{AccessString}.{prop.Name}.Value = {setting.Key};"));
+                    builder.AppendLine(GetSettingRaw(DeviceType, setting.Key.Replace(" ", string.Empty), setting.Description, setting.Value.GetType().ToString(), GetResponseType(setting.Value.GetType()), $"{AccessString}.{prop.Name}.Value"));
+                    builder.AppendLine(PutSettingRaw(DeviceType, setting.Key.Replace(" ", string.Empty), setting.Description, setting.Value.GetType().ToString(), $"{AccessString}.{prop.Name}.Value = {setting.Key.Replace(" ", string.Empty)};"));
                 }
             }
 
@@ -85,6 +85,8 @@ namespace OmniSim.SettingsAPIGenerator
 
             return res;
         }
+
+
 
         private static string GetResponseType(Type t)
         {
@@ -187,6 +189,7 @@ using System.Net.Mime;
                 $"        /// <response code=\"500\" examples=\"Error message describing why the command cannot be processed\">Server internal error, check error message</response>\r\n" +
                 $"        [HttpPut]\r\n" +
                 $"        [Produces(MediaTypeNames.Application.Json)]\r\n" +
+                $"        [Consumes(\"application/x-www-form-urlencoded\")]\r\n" +
                 $"        [ApiExplorerSettings(GroupName = \"OmniSim\")]\r\n" +
                 $"        [Route(\"{device.ToLower()}/{{DeviceNumber}}/{key.ToLower()}\")]\r\n" +
                 $"        public ActionResult<Response> {key}(\r\n" +

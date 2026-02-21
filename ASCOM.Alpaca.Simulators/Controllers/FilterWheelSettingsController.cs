@@ -57,6 +57,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [ApiExplorerSettings(GroupName = "OmniSim")]
         [Route("filterwheel/{DeviceNumber}/filterchangetimeinterval")]
         public ActionResult<Response> FilterChangeTimeInterval(
@@ -105,6 +106,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [ApiExplorerSettings(GroupName = "OmniSim")]
         [Route("filterwheel/{DeviceNumber}/implementsnames")]
         public ActionResult<Response> ImplementsNames(
@@ -153,6 +155,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [ApiExplorerSettings(GroupName = "OmniSim")]
         [Route("filterwheel/{DeviceNumber}/implementsoffsets")]
         public ActionResult<Response> ImplementsOffsets(
@@ -201,6 +204,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [ApiExplorerSettings(GroupName = "OmniSim")]
         [Route("filterwheel/{DeviceNumber}/preemptmoves")]
         public ActionResult<Response> PreemptMoves(
@@ -249,6 +253,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [ApiExplorerSettings(GroupName = "OmniSim")]
         [Route("filterwheel/{DeviceNumber}/slots")]
         public ActionResult<Response> Slots(
@@ -297,6 +302,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [ApiExplorerSettings(GroupName = "OmniSim")]
         [Route("filterwheel/{DeviceNumber}/interfaceversion")]
         public ActionResult<Response> InterfaceVersion(
@@ -345,6 +351,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [ApiExplorerSettings(GroupName = "OmniSim")]
         [Route("filterwheel/{DeviceNumber}/connectdelay")]
         public ActionResult<Response> ConnectDelay(

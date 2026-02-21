@@ -57,6 +57,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [ApiExplorerSettings(GroupName = "OmniSim")]
         [Route("safetymonitor/{DeviceNumber}/connectdelay")]
         public ActionResult<Response> ConnectDelay(
@@ -105,6 +106,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [ApiExplorerSettings(GroupName = "OmniSim")]
         [Route("safetymonitor/{DeviceNumber}/interfaceversion")]
         public ActionResult<Response> InterfaceVersion(
@@ -153,6 +155,7 @@ namespace ASCOM.Alpaca.Simulators
         /// <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         [HttpPut]
         [Produces(MediaTypeNames.Application.Json)]
+        [Consumes("application/x-www-form-urlencoded")]
         [ApiExplorerSettings(GroupName = "OmniSim")]
         [Route("safetymonitor/{DeviceNumber}/issafesetting")]
         public ActionResult<Response> IsSafeSetting(
