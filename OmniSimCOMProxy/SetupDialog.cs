@@ -31,5 +31,14 @@ namespace ASCOM.LocalServer
         {
             this.Close();
         }
+
+        private void SetupDialog_Load(object sender, EventArgs e)
+        {
+            // This is a workaround to ensure the form is shown if it is minimised or behind other windows
+            this.WindowState = FormWindowState.Minimized;
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+            this.Activate();
+        }
     }
 }

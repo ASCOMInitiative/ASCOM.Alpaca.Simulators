@@ -119,6 +119,9 @@
   </resheader>
   <data name="label1.Text" xml:space="preserve">
     <value>The Device Simulator is configured through the Alpaca Web UI by starting a browser and navigating to: http://localhost:32323 or clicking the link below
-Press the OK button when you have finished making changes through the Web UI.</value>
+
+Press the OK button after you have finished making changes through the Web UI.
+
+</value>
   </data>
 </root>

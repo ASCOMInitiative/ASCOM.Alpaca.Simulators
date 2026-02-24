@@ -40,14 +40,14 @@ namespace ASCOM.LocalServer
             // 
             this.label1.Location = new System.Drawing.Point(12, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(386, 60);
+            this.label1.Size = new System.Drawing.Size(407, 52);
             this.label1.TabIndex = 0;
             this.label1.Text = resources.GetString("label1.Text");
             // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(12, 70);
+            this.linkLabel1.Location = new System.Drawing.Point(12, 77);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(113, 13);
             this.linkLabel1.TabIndex = 1;
@@ -57,7 +57,8 @@ namespace ASCOM.LocalServer
             // 
             // buttonOk
             // 
-            this.buttonOk.Location = new System.Drawing.Point(323, 65);
+            this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOk.Location = new System.Drawing.Point(340, 72);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 23);
             this.buttonOk.TabIndex = 2;
@@ -69,13 +70,14 @@ namespace ASCOM.LocalServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(410, 103);
+            this.ClientSize = new System.Drawing.Size(427, 107);
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "SetupDialog";
             this.Text = "ASCOM OmniSim COM Proxy";
+            this.Load += new System.EventHandler(this.SetupDialog_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
