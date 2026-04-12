@@ -1818,7 +1818,7 @@ namespace ASCOM.Simulators
     public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator, IDisposable
     {
         private DriveRate[] m_TrackingRates;
-        private static int _pos = -1;
+        private int _pos = -1;
 
         //
         // Default constructor - Internal prevents public creation
@@ -1915,7 +1915,7 @@ namespace ASCOM.Simulators
     public class TrackingRatesSimple : ITrackingRates, IEnumerable, IEnumerator, IDisposable
     {
         private DriveRate[] m_TrackingRates;
-        private static int _pos = -1;
+        private int _pos = -1;
 
         //
         // Default constructor - Internal prevents public creation
