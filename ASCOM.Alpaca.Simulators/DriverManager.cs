@@ -7,7 +7,7 @@ namespace ASCOM.Alpaca.Simulators
     {
         internal static void LoadCamera(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.Camera(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Camera, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.Camera(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("Camera", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Camera, (uint)DeviceID));
 
             DeviceManager.LoadCamera(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
@@ -22,13 +22,13 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static void LoadCoverCalibrator(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.CoverCalibratorSimulator(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.CoverCalibrator, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.CoverCalibratorSimulator(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("CoverCalibrator", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.CoverCalibrator, (uint)DeviceID));
             DeviceManager.LoadCoverCalibrator(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
         internal static void LoadDome(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.Dome(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Dome, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.Dome(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("Dome", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Dome, (uint)DeviceID));
             DeviceManager.LoadDome(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
@@ -70,7 +70,7 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static void LoadObservingConditions(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.ObservingConditions(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.ObservingCondition, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.ObservingConditions(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("ObservingConditions", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.ObservingCondition, (uint)DeviceID));
             DeviceManager.LoadObservingConditions(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
@@ -90,7 +90,7 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static void LoadSafetyMonitor(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.SafetyMonitor(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.SafetyMonitor, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.SafetyMonitor(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("SafetyMonitor", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.SafetyMonitor, (uint)DeviceID));
             DeviceManager.LoadSafetyMonitor(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
@@ -112,13 +112,13 @@ namespace ASCOM.Alpaca.Simulators
 
         internal static void LoadSwitch(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.Switch(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Switch, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.Switch(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("Switch", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Switch, (uint)DeviceID));
             DeviceManager.LoadSwitch(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
         internal static void LoadTelescope(int DeviceID)
         {
-            var dev = new ASCOM.Simulators.Telescope(DeviceID, Logging.Log, new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Telescope, (uint)DeviceID));
+            var dev = new ASCOM.Simulators.Telescope(DeviceID, new OmniSim.Tools.DualLogger(ServerSettings.LogFileNameDevice("Telescope", DeviceID), Logging.Log), new XMLProfile(ServerSettings.SettingsFolderName, DeviceManager.Telescope, (uint)DeviceID));
             DeviceManager.LoadTelescope(DeviceID, dev, dev.DeviceName, dev.UniqueID);
         }
 
