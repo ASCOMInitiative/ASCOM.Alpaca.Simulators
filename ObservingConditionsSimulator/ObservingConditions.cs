@@ -84,7 +84,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Gets the stored interface version to use.
         /// </summary>
-        public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-4", 4);
+        public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-2", 2);
 
         /// <summary>
         /// Gets an interface version for V1 drivers that would throw on a InterfaceVersion Call.
