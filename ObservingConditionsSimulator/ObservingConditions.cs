@@ -1,4 +1,4 @@
-﻿using ASCOM.Common;
+using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
 using OmniSim.BaseDriver;
@@ -64,6 +64,11 @@ namespace ASCOM.Simulators
 
                 logger.LogInformation($"ObservingConditions {deviceNumber} - UUID of {UniqueID}");
 
+                if (DeviceCapabilities.LatestInterface[DeviceType] < InterfaceVersionSetting.Value)
+                {
+                    InterfaceVersionSetting.Value = DeviceCapabilities.LatestInterface[DeviceType];
+                }
+
                 OCSimulator.LogMessage("ObservingConditions", "Completed initialisation");
             }
             catch (Exception ex)
@@ -71,15 +76,17 @@ namespace ASCOM.Simulators
                 OCSimulator.LogMessage("ObservingConditions", ex.ToString());
             }
         }
+
         /// <summary>
         /// Name of the Driver.
         /// </summary>
-        public override string DeviceName { get { return $"{OCSimulator.Name()} - {DeviceNumber}"; } }
+        public override string DeviceName
+        { get { return $"{OCSimulator.Name()} - {DeviceNumber}"; } }
 
         /// <summary>
         /// Gets what device this this driver exposes.
         /// </summary>
-        public override DeviceTypes DeviceType { get; } = DeviceTypes.Focuser;
+        public override DeviceTypes DeviceType { get; } = DeviceTypes.ObservingConditions;
 
         /// <summary>
         /// Gets the stored interface version to use.
