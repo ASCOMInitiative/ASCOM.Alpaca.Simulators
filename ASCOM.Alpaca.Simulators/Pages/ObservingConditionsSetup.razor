@@ -33,6 +33,15 @@
         <fieldset disabled="@Device.Connected">
             <legend>General Settings</legend>
 
+            <label for="interfaceVersion">Simulation Interface Version:</label>
+
+            <select name="interfaceVersion" id="interfaceVersion" @bind="InterfaceVersion">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+
+            <br>
+
             <label for="SensorQueryInterval">Sensor Query Interval (seconds)</label>
             <input type="number" id="SensorQueryInterval" min="0" max="300" step="1" @bind="SensorQueryInterval">
             <br>
@@ -127,7 +136,7 @@
     {
         if (InstanceExists)
         {
-            var interfaceversion = Device.InterfaceVersion;
+            InterfaceVersion = Device.InterfaceVersion;
 
             SensorQueryInterval = Device.OCSimulator.SensorQueryInterval;
 
@@ -203,6 +212,11 @@
         set;
     }
 
+    short InterfaceVersion
+    {
+        get;
+        set;
+    }
     #endregion
 
     public void Reset()
@@ -277,6 +291,8 @@
             Device.OCSimulator.AveragePeriod = AveragePeriod;
 
             Device.OCSimulator.NumberOfReadingsToAverage = NumberOfReadings;
+
+            Device.InterfaceVersionSetting.Value = InterfaceVersion;
 
             foreach (var sensor in Sensors)
             {

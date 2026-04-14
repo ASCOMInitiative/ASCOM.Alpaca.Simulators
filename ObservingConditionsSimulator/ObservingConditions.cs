@@ -1,4 +1,4 @@
-using ASCOM.Common;
+﻿using ASCOM.Common;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Common.Interfaces;
 using OmniSim.BaseDriver;
@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("ASCOM.Alpaca.Simulators")]
+
 namespace ASCOM.Simulators
 {
     /// <summary>
@@ -110,7 +111,7 @@ namespace ASCOM.Simulators
 
         public override void Connect()
         {
-            if(!IsConnected)
+            if (!IsConnected)
             {
                 OCSimulator.Connect();
             }
@@ -219,91 +220,208 @@ namespace ASCOM.Simulators
 
         public double AveragePeriod
         {
-            get { return OCSimulator.AveragePeriodGet(); }
-            set { OCSimulator.AveragePeriodSet(value); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.AveragePeriodGet();
+                }, DeviceType, MemberNames.AveragePeriod, "Get");
+            }
+            set
+            {
+                this.ProcessCommand(
+                () =>
+                {
+                    OCSimulator.AveragePeriodSet(value);
+                }, DeviceType, MemberNames.AveragePeriod, "Set");
+            }
         }
 
         public double CloudCover
         {
-            get { return OCSimulator.CloudCover(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.CloudCover();
+                }, DeviceType, MemberNames.CloudCover, "Get");
+            }
         }
 
         public double DewPoint
         {
-            get { return OCSimulator.DewPoint(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.DewPoint();
+                }, DeviceType, MemberNames.DewPoint, "Get");
+            }
         }
 
         public double Humidity
         {
-            get { return OCSimulator.Humidity(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.Humidity();
+                }, DeviceType, MemberNames.Humidity, "Get");
+            }
         }
 
         public double Pressure
         {
-            get { return OCSimulator.Pressure(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.Pressure();
+                }, DeviceType, MemberNames.Pressure, "Get");
+            }
         }
 
         public double RainRate
         {
-            get { return OCSimulator.RainRate(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.RainRate();
+                }, DeviceType, MemberNames.RainRate, "Get");
+            }
         }
 
         public void Refresh()
         {
-            OCSimulator.Refresh();
+            this.ProcessCommand(
+            () =>
+            {
+                OCSimulator.Refresh();
+            }, DeviceType, MemberNames.Refresh, "Command");
         }
 
         public string SensorDescription(string PropertyName)
         {
-            return OCSimulator.SensorDescription(PropertyName);
+            return this.ProcessCommand(
+            () =>
+            {
+                return OCSimulator.SensorDescription(PropertyName);
+            }, DeviceType, MemberNames.SensorDescription, "Get");
         }
 
         public double SkyBrightness
         {
-            get { return OCSimulator.SkyBrightness(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.SkyBrightness();
+                }, DeviceType, MemberNames.SkyBrightness, "Get");
+            }
         }
 
         public double SkyQuality
         {
-            get { return OCSimulator.SkyQuality(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.SkyQuality();
+                }, DeviceType, MemberNames.SkyQuality, "Get");
+            }
         }
 
         public double StarFWHM
         {
-            get { return OCSimulator.StarFWHM(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.StarFWHM();
+                }, DeviceType, MemberNames.StarFWHM, "Get");
+            }
         }
 
         public double SkyTemperature
         {
-            get { return OCSimulator.SkyTemperature(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.SkyTemperature();
+                }, DeviceType, MemberNames.SkyTemperature, "Get");
+            }
         }
 
         public double Temperature
         {
-            get { return OCSimulator.Temperature(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.Temperature();
+                }, DeviceType, MemberNames.Temperature, "Get");
+            }
         }
 
         public double TimeSinceLastUpdate(string PropertyName)
         {
-            return OCSimulator.TimeSinceLastUpdate(PropertyName);
+            return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.TimeSinceLastUpdate(PropertyName);
+                }, DeviceType, MemberNames.TimeSinceLastUpdate, "Get");
         }
 
         public double WindDirection
         {
-            get { return OCSimulator.WindDirection(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.WindDirection();
+                }, DeviceType, MemberNames.WindDirection, "Get");
+            }
         }
 
         public double WindGust
         {
-            get { return OCSimulator.WindGust(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.WindGust();
+                }, DeviceType, MemberNames.WindGust, "Get");
+            }
         }
 
         public double WindSpeed
         {
-            get { return OCSimulator.WindSpeed(); }
+            get
+            {
+                return this.ProcessCommand(
+                () =>
+                {
+                    return OCSimulator.WindSpeed();
+                }, DeviceType, MemberNames.WindSpeed, "Get");
+            }
         }
 
-        #endregion ObservingConditions Implementation
+        #endregion IObservingConditionsV1 Implementation
 
         #region IObservingConditionsV2 implementation
 
@@ -314,27 +432,32 @@ namespace ASCOM.Simulators
         {
             get
             {
-                // Create an array list to hold the IStateValue entries
-                List<StateValue> deviceState = new List<StateValue>();
+                return this.ProcessCommand(
+                () =>
+                {
+                    // Create an array list to hold the IStateValue entries
+                    List<StateValue> deviceState = new List<StateValue>();
 
-                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.CloudCover), CloudCover)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.DewPoint), DewPoint)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Humidity), Humidity)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Pressure), Pressure)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.RainRate), RainRate)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyBrightness), SkyBrightness)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyQuality), SkyQuality)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyTemperature), SkyTemperature)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.StarFWHM), StarFWHM)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Temperature), Temperature)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindDirection), WindDirection)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindSpeed), WindSpeed)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindGust), WindGust)); } catch { }
-                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.CloudCover), CloudCover)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.DewPoint), DewPoint)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Humidity), Humidity)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Pressure), Pressure)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.RainRate), RainRate)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyBrightness), SkyBrightness)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyQuality), SkyQuality)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyTemperature), SkyTemperature)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.StarFWHM), StarFWHM)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Temperature), Temperature)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindDirection), WindDirection)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindSpeed), WindSpeed)); } catch { }
+                    try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindGust), WindGust)); } catch { }
+                    try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
-                return deviceState;
+                    return deviceState;
+                }, DeviceType, MemberNames.DeviceState, "Get");
             }
         }
-#endregion
+
+        #endregion IObservingConditionsV2 implementation
     }
 }
