@@ -270,6 +270,19 @@ namespace ASCOM.Simulators
         private static TrackingMode trackingMode;
         private static bool slewing;
 
+        /// <summary>
+        /// Synchronises access to the slew-engine state shared between the Kestrel
+        /// HTTP request threads (StartSlewAxes / SyncTo* / AbortSlew / Slewing / RA /
+        /// Dec) and the s_wTimer tick thread (MoveAxes -> DoSlew). These previously
+        /// used plain unsynchronised static fields (mountAxes, targetAxes, slewing,
+        /// SlewState), so StartSlewAxes' writes were not ordered against the timer
+        /// thread's reads: the tick can observe SlewState == SlewRaDec while still
+        /// seeing slewing == false, bail out of DoSlew, and never advance the slew, so
+        /// IsSlewing stays true indefinitely. Taking this lock on both sides restores
+        /// that ordering.
+        /// </summary>
+        private static readonly object hardwareLock = new object();
+
         private static DateTime lastUpdateTime;
 
         #endregion Private variables
@@ -357,6 +370,21 @@ namespace ASCOM.Simulators
         {
             try
             {
+                // Dispose the previously-created timer before allocating a new
+                // one. Init() runs on every Telescope (re)construction — including
+                // a "restart to a clean state" reset (e.g. issued between test or
+                // conformance runs). Without this the prior AutoReset timer is
+                // never stopped/unsubscribed; the runtime keeps it alive and it
+                // keeps firing M_wTimer_Tick on the shared static slew state, so
+                // every reset leaked another tick source racing the single slew
+                // engine.
+                if (s_wTimer != null)
+                {
+                    s_wTimer.Stop();
+                    s_wTimer.Elapsed -= M_wTimer_Tick;
+                    s_wTimer.Dispose();
+                }
+
                 s_wTimer = new System.Timers.Timer();
                 s_wTimer.Interval = (int)(SharedResources.TIMER_INTERVAL * 1000);
                 s_wTimer.Elapsed += M_wTimer_Tick;
@@ -630,11 +658,21 @@ namespace ASCOM.Simulators
                 SlewSettleTime = 0;
                 ChangePark(AtPark);
 
-                // invalid target position
-                targetRaDec = new Vector(double.NaN, double.NaN);
-                SlewState = SlewType.SlewNone;
+                // Reset the slew-engine state under hardwareLock so these writes
+                // are ordered against any still-in-flight M_wTimer_Tick. `slewing`
+                // in particular was never cleared on reset, so a slew left in
+                // flight by a prior Telescope instance could keep IsSlewing stuck
+                // true after a "restart to clean state".
+                lock (hardwareLock)
+                {
+                    // invalid target position
+                    targetRaDec = new Vector(double.NaN, double.NaN);
+                    SlewState = SlewType.SlewNone;
+                    slewing = false;
+                    rateMoveAxes = new Vector();
 
-                mountAxes = MountFunctions.ConvertAltAzmToAxes(altAzm); // Convert the start position AltAz coordinates into the current axes representation and set this as the simulator start position
+                    mountAxes = MountFunctions.ConvertAltAzmToAxes(altAzm); // Convert the start position AltAz coordinates into the current axes representation and set this as the simulator start position
+                }
                 LogMessage("TelescopeHardware New", string.Format("Startup mode: {0}, Azimuth: {1}, Altitude: {2}", startupMode, altAzm.X.ToString(CultureInfo.InvariantCulture), altAzm.Y.ToString(CultureInfo.InvariantCulture)));
 
                 LogMessage("TelescopeHardware New", "Successfully initialised hardware");
@@ -680,7 +718,16 @@ namespace ASCOM.Simulators
         //Update the Telescope Based on Timed Events
         private static void M_wTimer_Tick(object sender, EventArgs e)
         {
-            MoveAxes();
+            // Hold hardwareLock for the entire tick so MoveAxes / DoSlew see a
+            // consistent, ordered view of the slew state that HTTP request threads
+            // mutate (StartSlewAxes / AbortSlew / SyncTo*). MoveAxes is only ever
+            // called from here, so this also serialises any reentrant tick that
+            // System.Timers.Timer (AutoReset = true) fires on a second ThreadPool
+            // thread when a tick overruns TIMER_INTERVAL.
+            lock (hardwareLock)
+            {
+                MoveAxes();
+            }
         }
 
         /// <summary>
@@ -1278,7 +1325,24 @@ namespace ASCOM.Simulators
             set { altAzm.Y = value; }
         }
 
-        public static bool AtPark { get; private set; }
+        private static bool atPark;
+
+        /// <summary>
+        /// `true` once a park slew has completed. Written by <see cref="ChangePark"/>
+        /// — from the timer-tick completion path and from StartSlewAxes, both of
+        /// which hold <c>hardwareLock</c> — and read by the Alpaca `AtPark` poller
+        /// on a Kestrel request thread. The lock orders the tick's write against the
+        /// poller's read; without it a client polling `AtPark` right after `Park()`
+        /// can miss the completion on weak memory (AArch64) / under JIT register
+        /// caching and spin until its own deadline. Same race class as the
+        /// IsSlewing / RightAscension / Declination accessors; this closes the
+        /// park-side gap.
+        /// </summary>
+        public static bool AtPark
+        {
+            get { lock (hardwareLock) { return atPark; } }
+            private set { lock (hardwareLock) { atPark = value; } }
+        }
 
         public static double Azimuth
         {
@@ -1427,17 +1491,31 @@ namespace ASCOM.Simulators
 
         public static double Declination
         {
-            get { return currentRaDec.Y; }
-            set { currentRaDec.Y = value; }
+            get { lock (hardwareLock) { return currentRaDec.Y; } }
+            set { lock (hardwareLock) { currentRaDec.Y = value; } }
         }
 
         public static double RightAscension
         {
-            get { return currentRaDec.X; }
-            set { currentRaDec.X = value; }
+            get { lock (hardwareLock) { return currentRaDec.X; } }
+            set { lock (hardwareLock) { currentRaDec.X = value; } }
         }
 
-        public static SlewType SlewState { get; private set; }
+        private static SlewType slewStateField;
+
+        /// <summary>
+        /// The slew-engine state. Written under <c>hardwareLock</c> (timer tick,
+        /// StartSlewAxes, AbortSlew) and also read off the hardware thread — e.g.
+        /// `Telescope.cs` traffic logging reads it directly — so the accessor takes
+        /// the same lock for a consistent cross-thread view. (`private set` keeps
+        /// the writer internal; the lock is reentrant, so the tick writing it while
+        /// already holding the lock is fine.)
+        /// </summary>
+        public static SlewType SlewState
+        {
+            get { lock (hardwareLock) { return slewStateField; } }
+            private set { lock (hardwareLock) { slewStateField = value; } }
+        }
 
         public static SlewSpeed SlewSpeed { get; set; }
 
@@ -1591,36 +1669,48 @@ namespace ASCOM.Simulators
         {
             get
             {
-                if (SlewState != SlewType.SlewNone)
-                    return true;
-                if (slewing)
-                    return true;
-                if (rateMoveAxes.LengthSquared != 0)
-                    return true;
-                //if (rateRaDec.LengthSquared != 0) // Commented out by Peter 4th August 2018 because the Telescope specification says that RightAscensionRate and DeclinationRate do not affect the Slewing state
-                //    return true;
-                return slewing && rateMoveAxes.Y != 0 && rateMoveAxes.X != 0;
+                lock (hardwareLock)
+                {
+                    if (SlewState != SlewType.SlewNone)
+                        return true;
+                    if (slewing)
+                        return true;
+                    if (rateMoveAxes.LengthSquared != 0)
+                        return true;
+                    //if (rateRaDec.LengthSquared != 0) // Commented out by Peter 4th August 2018 because the Telescope specification says that RightAscensionRate and DeclinationRate do not affect the Slewing state
+                    //    return true;
+                    return slewing && rateMoveAxes.Y != 0 && rateMoveAxes.X != 0;
+                }
             }
         }
 
         public static void AbortSlew()
         {
-            slewing = false;
-            rateMoveAxes = new Vector();
-            rateRaDecOffsetInternal = new Vector();
-            SlewState = SlewType.SlewNone;
+            lock (hardwareLock)
+            {
+                slewing = false;
+                rateMoveAxes = new Vector();
+                rateRaDecOffsetInternal = new Vector();
+                SlewState = SlewType.SlewNone;
+            }
         }
 
         public static void SyncToTarget()
         {
-            mountAxes = MountFunctions.ConvertRaDecToAxes(targetRaDec, true);
-            UpdatePositions();
+            lock (hardwareLock)
+            {
+                mountAxes = MountFunctions.ConvertRaDecToAxes(targetRaDec, true);
+                UpdatePositions();
+            }
         }
 
         public static void SyncToAltAzm(double targetAzimuth, double targetAltitude)
         {
-            mountAxes = MountFunctions.ConvertAltAzmToAxes(new Vector(targetAzimuth, targetAltitude));
-            UpdatePositions();
+            lock (hardwareLock)
+            {
+                mountAxes = MountFunctions.ConvertAltAzmToAxes(new Vector(targetAzimuth, targetAltitude));
+                UpdatePositions();
+            }
         }
 
         public static void StartSlewRaDec(double rightAscension, double declination, bool doSideOfPier)
@@ -1661,10 +1751,17 @@ namespace ASCOM.Simulators
         /// <param name="targetPosition">The position.</param>
         public static void StartSlewAxes(Vector targetPosition, SlewType slewState)
         {
-            targetAxes = targetPosition;
-            SlewState = slewState;
-            slewing = true;
-            ChangePark(false);
+            // Order these writes against the timer thread's reads in DoSlew. Without
+            // the lock the tick can see slewing == false (stale) after SlewState has
+            // already become SlewRaDec, bail out of DoSlew, and wedge IsSlewing at
+            // true forever.
+            lock (hardwareLock)
+            {
+                targetAxes = targetPosition;
+                SlewState = slewState;
+                slewing = true;
+                ChangePark(false);
+            }
         }
 
         public static void Park()
