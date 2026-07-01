@@ -270,6 +270,18 @@ namespace ASCOM.Simulators
         private static TrackingMode trackingMode;
         private static bool slewing;
 
+        // Slew no-progress guard. Tracks per-tick slew progress so a slew that
+        // can make no headway — e.g. CheckAxisLimits
+        // keeps undoing a move that drives the primary axis into the hour-angle
+        // limit — is stopped instead of leaving IsSlewing stuck true forever.
+        private static double lastSlewProgressX;
+        private static double lastSlewProgressY;
+        private static int slewStallTicks;
+        // 5 * TIMER_INTERVAL(0.1 s) = 0.5 s of no real progress => give up.
+        // Tracking drift (~0.0004 deg/tick) is far below slewSpeedSlow/2, so a
+        // healthy slew (>= slewSpeedSlow/tick) never trips this.
+        private const int SLEW_STALL_TICKS = 5;
+
         /// <summary>
         /// Synchronises access to the slew-engine state shared between the Kestrel
         /// HTTP request threads (StartSlewAxes / SyncTo* / AbortSlew / Slewing / RA /
@@ -875,7 +887,7 @@ namespace ASCOM.Simulators
             // update the displayed values
             UpdatePositions();
 
-            // check and update slew state 
+            // check and update slew state
             switch (SlewState)
             {
                 case SlewType.SlewSettle:
@@ -885,6 +897,35 @@ namespace ASCOM.Simulators
                         SlewState = SlewType.SlewNone;
                     }
                     break;
+            }
+
+            // No-progress guard. If DoSlew did not finish the
+            // slew this tick (slewing still true) yet the axes did not actually
+            // advance, the slew is wedged — typically CheckAxisLimits is undoing a
+            // move into the hour-angle limit. A real mount stops at its limit; stop
+            // too, rather than reporting IsSlewing == true forever. Tracking drift
+            // (~0.0004 deg/tick) is far below slewSpeedSlow/2, so a healthy slew
+            // (which advances >= slewSpeedSlow/tick) never trips this.
+            if (slewing)
+            {
+                double progressed = Math.Abs(mountAxes.X - lastSlewProgressX)
+                                  + Math.Abs(mountAxes.Y - lastSlewProgressY);
+                if (progressed < slewSpeedSlow / 2.0)
+                {
+                    if (++slewStallTicks >= SLEW_STALL_TICKS)
+                    {
+                        slewing = false;
+                        SlewState = SlewType.SlewNone;
+                        slewStallTicks = 0;
+                        LogMessage("DoSlew", "Slew stopped: axis limit reached, target unreachable in this pier state");
+                    }
+                }
+                else
+                {
+                    slewStallTicks = 0;
+                }
+                lastSlewProgressX = mountAxes.X;
+                lastSlewProgressY = mountAxes.Y;
             }
 
             // List changes this cycle
@@ -1760,6 +1801,9 @@ namespace ASCOM.Simulators
                 targetAxes = targetPosition;
                 SlewState = slewState;
                 slewing = true;
+                slewStallTicks = 0;
+                lastSlewProgressX = mountAxes.X;
+                lastSlewProgressY = mountAxes.Y;
                 ChangePark(false);
             }
         }
@@ -1925,6 +1969,28 @@ namespace ASCOM.Simulators
                 if (delta < -180) delta += 360;
                 if (delta > 180) delta -= 360;
             }
+
+            // The shortest-path rotation above can drive the primary axis through
+            // the GEM hour-angle limit (CheckAxisLimits then
+            // undoes every step, so the slew never finishes and IsSlewing wedges
+            // forever). When that happens but the SAME target is reachable the
+            // other way round, take the longer rotation instead. This reaches the
+            // identical target (so the pier side is unchanged — no conformance
+            // impact) and is a no-op for any slew whose short path stays in range.
+            if (alignmentMode == AlignmentMode.GermanPolar)
+            {
+                double endShort = mountAxes.X + delta;
+                if (endShort < -hourAngleLimit || endShort > 180.0 + hourAngleLimit)
+                {
+                    double deltaLong = delta + (delta > 0 ? -360.0 : 360.0);
+                    double endLong = mountAxes.X + deltaLong;
+                    if (endLong >= -hourAngleLimit && endLong <= 180.0 + hourAngleLimit)
+                    {
+                        delta = deltaLong;
+                    }
+                }
+            }
+
             int signDelta = delta < 0 ? -1 : +1;
             delta = Math.Abs(delta);
 
