@@ -1,12 +1,17 @@
 using Blazored.Toast;
+using ASCOM.Alpaca.Simulators.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.FeatureManagement;
+using Microsoft.AspNetCore.Routing;
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace ASCOM.Alpaca.Simulators
@@ -33,6 +38,7 @@ namespace ASCOM.Alpaca.Simulators
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddBlazoredToast();
+            services.AddFeatureManagement();
 
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -76,7 +82,20 @@ namespace ASCOM.Alpaca.Simulators
             //Map Endpoints, primarily Blazor UI and REST Controllers
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                var controllerEndpoints = endpoints.MapControllers();
+
+                // Let the Blazor pages handle setup URLs unless the hidden API is enabled.
+                if (!Configuration.GetValue<bool>("FeatureManagement:HideAlpacaUI"))
+                {
+                    controllerEndpoints.Add(endpointBuilder =>
+                    {
+                        if (endpointBuilder.Metadata.OfType<ControllerActionDescriptor>().FirstOrDefault()?.ControllerTypeInfo == typeof(SetupController).GetTypeInfo())
+                        {
+                            endpointBuilder.Metadata.Add(new SuppressMatchingMetadata());
+                        }
+                    });
+                }
+
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
