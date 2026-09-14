@@ -143,6 +143,15 @@ namespace ASCOM.Alpaca.Razor
             app.MapControllers();
         }
 
+        /// <summary>
+        /// Configures the discovery service for the Alpaca server. 
+        /// </summary>
+        /// <param name="app">The app's application builder.</param>
+        /// <remarks>
+        /// NOTE: This method must be called after the server has started to ensure that the server addresses are available for parsing. 
+        /// If called before, the device will only listen on IPv4 addresses regardless of whether valid IPv6 addresses are bound.
+        /// This method starts the discovery service based on the server's address and port, and determines whether to limit discovery to localhost and allow IPv6 addresses.
+        /// </remarks>
         public static void ConfigureDiscovery(IApplicationBuilder app)
         {
             int port = DeviceManager.Configuration.ServerPort;
@@ -150,31 +159,75 @@ namespace ASCOM.Alpaca.Razor
             //Parse out addresses for the server and start discovery on IPv4 / IPv6 based on which addresses are in use
             try
             {
-                var serverAddressesFeature = app.ServerFeatures.Get<IServerAddressesFeature>();
+                // Get the server addresses from the server address feature
+                // NOTE: This is only available after the server has started, so ConfigureDiscovery must be called from a callback that runs after the server has started.
+                IServerAddressesFeature serverAddressesFeature = app.ServerFeatures.Get<IServerAddressesFeature>();
 
-                var Addresses = serverAddressesFeature.Addresses.ToArray();
+                string[] Addresses = serverAddressesFeature.Addresses.ToArray();
 
-                if (serverAddressesFeature.Addresses.Count > 0)
+                Logging.LogDebug($"Server Addresses: {string.Join(", ", Addresses)}, Address count: {serverAddressesFeature.Addresses.Count}");
+
+                // Check whether there are any addresses found
+                if (serverAddressesFeature.Addresses.Count > 0) // Some addresses are present
                 {
                     var serverAddress = serverAddressesFeature.Addresses.First();
                     bool localHostOnly = false;
                     bool ipv6 = false;
 
+                    Logging.LogInformation($"Running on address: {serverAddress}");
+
+                    // Try to create a URI from the server address
                     if (Uri.TryCreate(serverAddress, UriKind.RelativeOrAbsolute, out Uri serverUri))
                     {
                         try
                         {
+                            Logging.LogDebug($"  Server Address is valid Uri: {serverUri.AbsoluteUri}, Host: {serverUri.Host}, Port: {serverUri.Port}");
                             port = serverUri.Port;
-                            if (serverUri.Host.ToLowerInvariant().Contains("localhost") || IPAddress.IsLoopback(IPAddress.Parse(serverUri.Host)))
+
+                            // Test for loopback
+                            if (serverUri.Host.ToLowerInvariant().Contains("localhost") || IPAddress.IsLoopback(IPAddress.Parse(serverUri.Host))) // Is loopback address
                             {
+                                Logging.LogDebug($"  Server address is localhost, discovery will be limited to local host only.");
                                 localHostOnly = true;
 
+                                // Extract the IP address from the URI host name
                                 if (IPAddress.TryParse(serverUri.Host, out IPAddress address))
                                 {
-                                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+                                    Logging.LogDebug($"  LocalHost - Server Address is valid - Family: {address.AddressFamily}, Address: {address}, Linklocal: {address.IsIPv6LinkLocal}");
+
+                                    // Check whether this is an IPv6 address
+                                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6) // Is IPv6 address
                                     {
-                                        if (address.IsIPv6LinkLocal)
+                                        Logging.LogDebug($"  LocalHost - Server Address is IPv6");
+
+                                        // Check whether this address is LinkLocal
+                                        if (address.IsIPv6LinkLocal) // Address is linklocal
                                         {
+                                            Logging.LogDebug($"  LocalHost - Server Address is IPv6 LinkLocal");
+                                            localHostOnly = false;
+                                        }
+                                        ipv6 = true;
+                                    }
+                                }
+                            }
+                            else // Not a loopback address
+                            {
+                                Logging.LogDebug($"  Server Address is not localhost.");
+
+                                // Extract the IP address from the URI host name
+                                if (IPAddress.TryParse(serverUri.Host, out IPAddress address))
+                                {
+                                    Logging.LogDebug($"  Server Address is valid - Family: {address.AddressFamily}, Address: {address}, Linklocal: {address.IsIPv6LinkLocal}");
+
+                                    // Check whether this is an IPv6 address
+                                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6) // Is an IPv6 address
+                                    {
+                                        Logging.LogDebug($"  Server Address is IPv6");
+
+                                        // Check whether this address is LinkLocal
+                                        if (address.IsIPv6LinkLocal) // Address is linklocal
+                                        {
+                                            Logging.LogDebug($"  Server Address is IPv6 LinkLocal");
                                             localHostOnly = false;
                                         }
                                         ipv6 = true;
@@ -187,23 +240,30 @@ namespace ASCOM.Alpaca.Razor
                             Logging.LogError(ex.Message);
                         }
                     }
-                    else //Invalid Uri, simply parse out port
+                    else //Invalid URI, simply parse out port
                     {
+                        Logging.LogDebug($"  URI is invalid, looking for IP port.");
                         if (serverAddress.Contains(":"))
                         {
+                            Logging.LogDebug($"  URI contains :, parsing out port.");
+
                             if (int.TryParse(serverAddress.Split(':').Last(), out int result))
                             {
+                                Logging.LogDebug($"  Parsed port successfully: {result}");
                                 port = result;
                             }
                         }
 
                         ipv6 = serverAddress.Contains("*") || serverAddress.Contains("+");
-                    }
+                        Logging.LogDebug($"  IPv6 set to: {ipv6}");
+                        }
 
+                    Logging.LogInformation($"Starting Discovery with port: {port}, LocalHostOnly: {localHostOnly}, IPv6: {ipv6}");
                     DiscoveryManager.Start(port, localHostOnly, ipv6);
                 }
-                else
+                else // No addresses found
                 {
+                    Logging.LogInformation($"No server addresses found, starting discovery on IPv4 addresses only with default port: {port}");
                     DiscoveryManager.Start();
                 }
             }
@@ -211,7 +271,6 @@ namespace ASCOM.Alpaca.Razor
             {
                 Logging.LogError(ex.Message);
             }
-
         }
 
         public static void ConfigureAuthentication(IServiceCollection services)

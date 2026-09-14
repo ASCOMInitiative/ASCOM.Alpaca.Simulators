@@ -69,9 +69,6 @@ namespace ASCOM.Alpaca.Simulators
             //Start Swagger on the Swagger endpoints if enabled.
             Razor.StartupHelpers.ConfigureSwagger(app);
 
-            //Configure Discovery
-            Razor.StartupHelpers.ConfigureDiscovery(app);
-
             //Serve static files, mostly CSS
             app.UseStaticFiles();
 
@@ -98,6 +95,12 @@ namespace ASCOM.Alpaca.Simulators
 
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+            });
+
+            //Configure Discovery after the server has started and its addresses are available.
+            lifetime.ApplicationStarted.Register(() =>
+            {
+                Razor.StartupHelpers.ConfigureDiscovery(app);
             });
 
             //Put code here that needs to run on startup
