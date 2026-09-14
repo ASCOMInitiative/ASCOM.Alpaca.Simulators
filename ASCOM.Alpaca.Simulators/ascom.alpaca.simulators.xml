@@ -2008,7 +2008,7 @@
             <response code="400" examples="Error message describing why the command cannot be processed">Method or parameter value error, check error message</response>
             <response code="500" examples="Error message describing why the command cannot be processed">Server internal error, check error message</response>
         </member>
-        <member name="M:ASCOM.Alpaca.Simulators.Controllers.SetupController.ServerSetup(System.UInt32)">
+        <member name="M:ASCOM.Alpaca.Simulators.Controllers.SetupController.ServerSetup">
             <summary>
             Primary browser web page for the overall collection of devices and the Alpaca service
             </summary>
