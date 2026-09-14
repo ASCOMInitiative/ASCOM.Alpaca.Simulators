@@ -28,7 +28,7 @@
     <DocumentationFile>.\ASCOM.Alpaca.Razor.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>0.6.0-alpha02y</Version>
+    <Version>0.6.0-alpha03</Version>
   </PropertyGroup>
 
   <Target Name="_ResolveCopyLocalNuGetPkgXmls" AfterTargets="ResolveReferences">
