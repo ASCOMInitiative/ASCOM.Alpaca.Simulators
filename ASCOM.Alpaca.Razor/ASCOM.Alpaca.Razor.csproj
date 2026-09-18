@@ -16,10 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASCOM.Alpaca.Device" Version="4.1.0-rc.49" />
-    <PackageReference Include="ASCOM.Common.Components" Version="4.1.0-rc.49" />
+    <PackageReference Include="ASCOM.Alpaca.Device" Version="4.1.0-rc.63" />
+    <PackageReference Include="ASCOM.Common.Components" Version="4.1.0-rc.63" />
     <PackageReference Include="ASCOM.Exception.Library" Version="7.1.2" />
-    <PackageReference Include="ASCOM.Tools" Version="4.1.0-rc.49" />
+    <PackageReference Include="ASCOM.Tools" Version="4.1.0-rc.63" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="10.1.7" />
   </ItemGroup>
@@ -28,7 +28,7 @@
     <DocumentationFile>.\ASCOM.Alpaca.Razor.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>0.6.0-alpha02z3</Version>
+    <Version>0.6.0-alpha02z9</Version>
   </PropertyGroup>
 
   <Target Name="_ResolveCopyLocalNuGetPkgXmls" AfterTargets="ResolveReferences">
