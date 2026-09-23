@@ -16,9 +16,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASCOM.Com.Components" Version="4.1.0-rc.63" />
+    <PackageReference Include="ASCOM.Com.Components" Version="4.1.0-rc.71" />
     <PackageReference Include="ASCOM.DeviceInterfaces" Version="7.1.2" />
-    <PackageReference Include="ASCOM.Tools" Version="4.1.0-rc.63" />
+    <PackageReference Include="ASCOM.Tools" Version="4.1.0-rc.71" />
     <PackageReference Include="Costura.Fody" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
