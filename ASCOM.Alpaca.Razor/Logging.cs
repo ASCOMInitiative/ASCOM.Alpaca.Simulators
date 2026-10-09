@@ -71,6 +71,18 @@ namespace ASCOM.Alpaca
             }
         }
 
+        internal static void LogDebug(string message)
+        {
+            try
+            {
+                Log.LogDebug(message);
+            }
+            catch
+            {
+                //Log should never throw.
+            }
+        }
+
         internal static void LogAPICall(IPAddress remoteIpAddress, string request, uint clientID, uint clientTransactionID, uint transactionID)
         {
             LogVerbose($"Transaction: {transactionID} - {remoteIpAddress} ({clientID}, {clientTransactionID}) requested {request}");

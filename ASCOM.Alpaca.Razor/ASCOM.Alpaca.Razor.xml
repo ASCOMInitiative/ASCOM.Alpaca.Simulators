@@ -4040,5 +4040,16 @@
             A server wide Transaction ID Counter
             </summary>
         </member>
+        <member name="M:ASCOM.Alpaca.Razor.StartupHelpers.ConfigureDiscovery(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Configures the discovery service for the Alpaca server. 
+            </summary>
+            <param name="app">The app's application builder.</param>
+            <remarks>
+            NOTE: This method must be called after the server has started to ensure that the server addresses are available for parsing. 
+            If called before, the device will only listen on IPv4 addresses regardless of whether valid IPv6 addresses are bound.
+            This method starts the discovery service based on the server's address and port, and determines whether to limit discovery to localhost and allow IPv6 addresses.
+            </remarks>
+        </member>
     </members>
 </doc>

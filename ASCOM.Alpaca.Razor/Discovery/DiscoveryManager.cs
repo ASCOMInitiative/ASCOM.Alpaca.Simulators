@@ -71,9 +71,10 @@ namespace ASCOM.Alpaca
 
         public static void Start()
         {
-            if (DeviceManager.Configuration.AllowDiscovery)
+            // Check whether discovery is allowed
+            if (DeviceManager.Configuration.AllowDiscovery) // Discovery is allowed
             {
-                Logging.LogInformation("Starting discovery responder from defaults");
+                Logging.LogDebug($"Starting discovery responder from defaults: Port: {DeviceManager.Configuration.ServerPort}, Allow IPv4: true, Allow IPv6:false");
 
                 DiscoveryResponder = new Responder(DeviceManager.Configuration.ServerPort, true, false, Logging.Log)
                 {
@@ -81,25 +82,29 @@ namespace ASCOM.Alpaca
                     LocalRespondOnlyToLocalHost = DeviceManager.Configuration.LocalRespondOnlyToLocalHost
                 };
             }
+            else
+                Logging.LogDebug($"DiscoveryManager.Start - Discovery is disabled in configuration, not listening on port: {DeviceManager.Configuration.ServerPort}");
         }
 
         public static void Start(int port, bool localHostOnly, bool ipv6)
         {
             if (DeviceManager.Configuration.AllowDiscovery)
             {
-                Logging.LogInformation($"Starting Discovery on port: 32227");
-
-                if (!Dns.GetHostAddresses(Dns.GetHostName()).Any(o => o.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6))
+                if (!Dns.GetHostAddresses(Dns.GetHostName()).Any(o => o.AddressFamily == AddressFamily.InterNetworkV6))
                 {
                     ipv6 = false;
+                    Logging.LogDebug($"DiscoveryManager.Start - No IPv6 addresses found, IPv6 discovery on port: {port} is not available.");
                 }
 
+                Logging.LogDebug($"DiscoveryManager.Start - Starting to listen on port: {port} with IPv6: {ipv6}, AllowRemoteAccess: {!localHostOnly} and LocalRespondOnlyToLocalHost: {DeviceManager.Configuration.LocalRespondOnlyToLocalHost}");
                 DiscoveryResponder = new Responder(port, true, ipv6, Logging.Log)
                 {
                     AllowRemoteAccess = !localHostOnly,
                     LocalRespondOnlyToLocalHost = DeviceManager.Configuration.LocalRespondOnlyToLocalHost
                 };
             }
+            else
+                Logging.LogDebug($"DiscoveryManager.Start - Discovery is disabled in configuration, not listening on port: {port}");
         }
 
         public static void Stop()
