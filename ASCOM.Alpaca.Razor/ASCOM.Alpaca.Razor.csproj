@@ -28,8 +28,28 @@
     <DocumentationFile>.\ASCOM.Alpaca.Razor.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>0.6.0-alpha02zn</Version>
+    <Version>0.6.0-alpha02zr</Version>
+    <Authors>Daniel Van Noord</Authors>
+    <Copyright>Copyright (c)Daniel Van Noord 2026</Copyright>
+    <Description>
+      ASCOM Alpaca device templates.
+    </Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>ASCOMBoarderless.png</PackageIcon>
+    <PackageIconUrl>https://download.ascom-standards.org/assets/ASCOMBoarderless.png</PackageIconUrl>
+    <PackageReleaseNotes>
+      See README.md for full details of changes in this release.
+    </PackageReleaseNotes>
+    <PackageId>ASCOM.Alpaca.Razor</PackageId>
+    <RepositoryUrl>https://www.myget.org/F/ascom-initiative/api/v3/index.json</RepositoryUrl>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="ASCOMBoarderless.png" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <Target Name="_ResolveCopyLocalNuGetPkgXmls" AfterTargets="ResolveReferences">
     <ItemGroup>
