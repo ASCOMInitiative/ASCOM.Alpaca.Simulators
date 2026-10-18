@@ -734,9 +734,9 @@ namespace ASCOM.Simulators
                                 change.Y += (SideOfPier == PointingState.Normal ? +rateRaDecOffsetInternal.Y : -rateRaDecOffsetInternal.Y) * timeInSecondsSinceLastUpdate; // Add or subtract declination rate depending on pointing state
                             }
 
-                            TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"RA internal offset rate: {rateRaDecOffsetInternal.X}, Dec internal offset rate: {rateRaDecOffsetInternal.Y}. " +
-                                $"Total change this interval: {change.X}, {change.Y}. Time since last update: {timeInSecondsSinceLastUpdate}"
-                                );
+                            // TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"RA internal offset rate: {rateRaDecOffsetInternal.X}, Dec internal offset rate: {rateRaDecOffsetInternal.Y}. " +
+                            //    $"Total change this interval: {change.X}, {change.Y}. Time since last update: {timeInSecondsSinceLastUpdate}"
+                            //    );
                             break;
 
                         case AlignmentMode.AltAz: // In Alt/Az aligned mounts the HA change moves both RA (primary) and Dec (secondary) axes so both need to be updated
@@ -751,16 +751,16 @@ namespace ASCOM.Simulators
                             break;
                     }
 
-                    TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. HA change {haChange} degrees. Alignment mode: {alignmentMode}.");
-                    TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Movement - Primary axis: {change.X} degrees, Secondary axis: {change.Y} degrees.");
-                    TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Movement rate - Primary axis: {change.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second, " +
-                        $"Secondary axis: {change.Y * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second");
-                    TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Movement includes RightAscensionRate/DeclinationRate movement of: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees, {rateRaDecOffsetInternal.Y * timeInSecondsSinceLastUpdate} degrees.");
+                    // TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. HA change {haChange} degrees. Alignment mode: {alignmentMode}.");
+                    // TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Movement - Primary axis: {change.X} degrees, Secondary axis: {change.Y} degrees.");
+                    // TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Movement rate - Primary axis: {change.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second, " +
+                    //    $"Secondary axis: {change.Y * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second");
+                    // TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Movement includes RightAscensionRate/DeclinationRate movement of: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees, {rateRaDecOffsetInternal.Y * timeInSecondsSinceLastUpdate} degrees.");
                 } // Mount is tracking
                 else // Mount is not tracking
                 {
                     // No axis change
-                    TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Tracking disabled - no changes.Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
+                    // TL.LogMessage(LogLevel.Verbose, "MoveAxes", $"Tracking disabled - no changes.Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
                 } // Mount is not tracking
 
                 // Move towards the target position if slewing
@@ -808,7 +808,7 @@ namespace ASCOM.Simulators
                     default:
                         break;
                 }
-                TL.LogMessage(LogLevel.Verbose, "MoveAxes MoveAxis", $"Primary axis move rate: {rateMoveAxes.X}, Secondary axis move rate: {rateMoveAxes.Y}. Applied changes - Primary axis: {change.X}, Secondary axis: {change.Y}. Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
+                // TL.LogMessage(LogLevel.Verbose, "MoveAxes MoveAxis", $"Primary axis move rate: {rateMoveAxes.X}, Secondary axis move rate: {rateMoveAxes.Y}. Applied changes - Primary axis: {change.X}, Secondary axis: {change.Y}. Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
             } // MoveAxis is active
 
             // handle HC button moves
@@ -839,13 +839,13 @@ namespace ASCOM.Simulators
             }
 
             // List changes this cycle
-            TL.LogMessage(LogLevel.Verbose, $"MoveAxes (Final)", $"RA: {currentRaDec.X.ToHMS()}, Dec: {currentRaDec.Y.ToDMS()}, Hour angle: {Utilities.ConditionHA(SiderealTime - currentRaDec.X).ToHMS()}, Sidereal Time: {SiderealTime.ToHMS()}");
-            TL.LogMessage(LogLevel.Verbose, $"MoveAxes (Final)", $"Azimuth: {altAzm.X.ToDMS()}, Altitude: {altAzm.Y.ToDMS()}, Pointing state: {SideOfPier}");
-            TL.LogMessage(LogLevel.Verbose, $"MoveAxes (Final)",
-              $"Primary axis angle:  {mountAxes.X.ToDMS()}, Secondary axis angle:  {mountAxes.Y.ToDMS()}, " +
-              $"Primary axis change: {change.X.ToDMS()}, Secondary axis change: {change.Y.ToDMS()}."
-              );
-            TL.BlankLine(LogLevel.Verbose);
+            // TL.LogMessage(LogLevel.Verbose, $"MoveAxes (Final)", $"RA: {currentRaDec.X.ToHMS()}, Dec: {currentRaDec.Y.ToDMS()}, Hour angle: {Utilities.ConditionHA(SiderealTime - currentRaDec.X).ToHMS()}, Sidereal Time: {SiderealTime.ToHMS()}");
+            // TL.LogMessage(LogLevel.Verbose, $"MoveAxes (Final)", $"Azimuth: {altAzm.X.ToDMS()}, Altitude: {altAzm.Y.ToDMS()}, Pointing state: {SideOfPier}");
+            // TL.LogMessage(LogLevel.Verbose, $"MoveAxes (Final)",
+            //  $"Primary axis angle:  {mountAxes.X.ToDMS()}, Secondary axis angle:  {mountAxes.Y.ToDMS()}, " +
+            //  $"Primary axis change: {change.X.ToDMS()}, Secondary axis change: {change.Y.ToDMS()}."
+            //  );
+           // TL.BlankLine(LogLevel.Verbose);
         }
 
         #endregion Initialiser, Simulator start and timer functions

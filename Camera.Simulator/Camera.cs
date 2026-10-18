@@ -1342,6 +1342,8 @@ namespace ASCOM.Simulators
         {
             get
             {
+                throw new PropertyNotImplementedException("ImageArrayVariant", false);
+
                 CheckConnected("Can't read ImageArrayVariant when not connected");
                 if (!imageReady)
                 {
