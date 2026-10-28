@@ -580,10 +580,16 @@ namespace ASCOM.Simulators
                     if (this.AbsoluteSetting.Value)
                     {
                         this.target = this.PositionSetting.Value;
+
+                        // Move straight to Idle state
+                        this.motorState = MotorState.Idle;
                     }
                     else
                     {
                         this.PositionSetting.Value = 0;
+
+                        // Move straight to Idle state.
+                        this.motorState = MotorState.Idle;
                     }
                 }, DeviceType, MemberNames.Halt, "Command");
         }
