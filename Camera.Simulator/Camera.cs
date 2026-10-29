@@ -1771,9 +1771,9 @@ namespace ASCOM.Simulators
             {
                 lastError = "Incorrect Start Y position";
                 Log.LogMessage("StartExposure", "Incorrect Start Y {0}", startY);
-                throw new ASCOM.InvalidValueException("StartExposure StartX",
-                                                    startX.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / binX));
+                throw new ASCOM.InvalidValueException("StartExposure StartY",
+                                                    startY.ToString(CultureInfo.InvariantCulture),
+                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraYSize / binY));
             }
 
             // Check that the acquisition is at least 1 pixel in size and fits in the camera area
