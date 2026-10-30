@@ -57,7 +57,7 @@
             <p>Step size @Device.StepSize (4 steps/sec.)</p>
             <div>
                 <label for="canreverse">Can Reverse</label>
-                <input name="canreverse" id="canreverse" type="checkbox" @bind="CanReverse" />
+                <input name="canreverse" id="canreverse" type="checkbox" @bind="CanReverse" disabled="@(InterfaceVersion >= 3)" />
             </div>
 
             <label for="reverse">Reverse</label>
@@ -185,9 +185,18 @@
 
     short InterfaceVersion
     {
-        get;
-        set;
+        get => _interfaceVersion;
+        set
+        {
+            _interfaceVersion = value;
+            if (value >=3)
+            {
+                CanReverse = true;
+            }
+        }
     }
+
+    private short _interfaceVersion;
     #endregion
 
     public void Reset()
