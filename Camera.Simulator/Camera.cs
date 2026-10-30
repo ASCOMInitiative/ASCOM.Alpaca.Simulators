@@ -70,7 +70,7 @@ namespace ASCOM.Simulators
         private bool connecting;
 
         // Value returned through the Name property
-        private const string DEVICE_NAME="Alpaca Camera Simulator";
+        private const string DEVICE_NAME = "Alpaca Camera Simulator";
 
         #region Profile string constants
 
@@ -2292,9 +2292,14 @@ namespace ASCOM.Simulators
                 {
                     Log.LogMessage("ReadoutMode", "PropertyNotImplemented because readoutModes == null || readoutModes.Count < 1");
                     throw new ASCOM.PropertyNotImplementedException("ReadoutMode", false);
-                    //if (canFastReadout)
-                    //    throw new PropertyNotImplementedException("ReadoutMode", false);
                 }
+
+                if (canFastReadout)
+                {
+                    Log.LogMessage("ReadoutMode", "PropertyNotImplemented canFastReadout is true");
+                    throw new PropertyNotImplementedException("ReadoutMode", false);
+                }
+
                 var rm = readoutMode;
                 Log.LogMessage("ReadoutMode", "get {0}, mode {1}", rm, readoutModes[rm]);
 
@@ -2310,6 +2315,8 @@ namespace ASCOM.Simulators
                     Log.LogMessage("ReadoutMode", "PropertyNotImplemented readoutModes == null || readoutModes.Count < 1");
                     throw new PropertyNotImplementedException("ReadoutMode", true);
                 }
+
+                // If CanFastReadout is True return a not implemented exception
                 if (canFastReadout)
                 {
                     Log.LogMessage("ReadoutMode", "PropertyNotImplemented canFastReadout is true");
@@ -2335,6 +2342,14 @@ namespace ASCOM.Simulators
             {
                 CheckSupportedInThisInterfaceVersion("ReadoutModes", 2);
                 CheckConnected("ReadoutModes");
+
+                // If CanFastReadout is True return a not implemented exception
+                if (canFastReadout)
+                {
+                    Log.LogMessage("ReadoutModes", "PropertyNotImplemented canFastReadout is true");
+                    throw new PropertyNotImplementedException("ReadoutModes", false);
+                }
+
                 Log.LogMessage("ReadoutModes", "ReadoutModes {0}", readoutModes.Count);
                 foreach (var item in readoutModes)
                 {
@@ -2499,7 +2514,7 @@ namespace ASCOM.Simulators
 
         #endregion ICameraV3 members
 
-#region ICameraV4 members
+        #region ICameraV4 members
 
         /// <summary>
         /// Connect to the telescope asynchronously
@@ -2593,7 +2608,7 @@ namespace ASCOM.Simulators
                 try { deviceState.Add(new StateValue(nameof(ICameraV4.CoolerPower), CoolerPower)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(ICameraV4.HeatSinkTemperature), HeatSinkTemperature)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(ICameraV4.ImageReady), ImageReady)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ICameraV4.IsPulseGuiding), IsPulseGuiding)); } catch(Exception ex) { Log.log.Log(LogLevel.Debug,$"IsPulseGuiding exception - {ex.Message}\r\n{ex}");}
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.IsPulseGuiding), IsPulseGuiding)); } catch (Exception ex) { Log.log.Log(LogLevel.Debug, $"IsPulseGuiding exception - {ex.Message}\r\n{ex}"); }
                 try { deviceState.Add(new StateValue(nameof(ICameraV4.PercentCompleted), PercentCompleted)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
@@ -2602,7 +2617,7 @@ namespace ASCOM.Simulators
             }
         }
 
-#endregion
+        #endregion
 
         #region Private
 
