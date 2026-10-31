@@ -123,7 +123,7 @@ namespace ASCOM.Simulators
         /// <summary>
         /// Gets the stored interface version to use.
         /// </summary>
-        public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-2", 2);
+        public Setting<short> InterfaceVersionSetting { get; } = new Setting<short>("InterfaceVersion", "The ASCOM Interface Version, allowed values are 1-2", 3);
 
         /// <summary>
         /// Gets an interface version for V1 drivers that would throw on a InterfaceVersion Call.
@@ -552,6 +552,10 @@ namespace ASCOM.Simulators
             // Validate the id parameter
             Validate("SetAsync", id);
 
+            // Validate that this is an asynchronous switch
+            if (!switches[id].CanAsync)
+                throw new MethodNotImplementedException($"SetAsync - Switch {id} does not support asynchronous operation.");
+
             // Convert the bool value to an appropriate double value representing true or false
             SetAsyncValue(id, state ? switches[id].Maximum : switches[id].Minimum);
         }
@@ -560,6 +564,10 @@ namespace ASCOM.Simulators
         {
             // Validate the id parameter
             Validate("SetAsyncValue", id);
+
+            // Validate that this is an asynchronous switch
+            if (!switches[id].CanAsync)
+                throw new MethodNotImplementedException($"SetAsyncValue - Switch {id} does not support asynchronous operation.");
 
             // Validate the incoming state value
             Validate("SetAsyncValue", id, value);
@@ -642,6 +650,10 @@ namespace ASCOM.Simulators
         {
             // Validate the id parameter
             Validate("StateChangeComplete", id);
+
+            // Validate that this is an asynchronous switch
+            if (!switches[id].CanAsync)
+                throw new MethodNotImplementedException($"StateChangeComplete - Switch {id} does not support asynchronous operation.");
 
             // Throw any exception from the async process (Only OperationCanelledException in this simulator)
             if (!(switches[id].AsyncException is null)) // There is an exception to throw
